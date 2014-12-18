@@ -191,6 +191,8 @@ public class ServerEngine implements IDeviceServer {
             queryString = "SELECT * from followme WHERE kopterId = " +deviceId + " AND sent = 0" ;
             rs_1 = st_1.executeQuery(queryString);
             FollowMeData data = new FollowMeData();
+            data.kopterID=-2;
+            
             if (rs_1.next()){
                 data.kopterID = rs_1.getInt("kopterId");
                 data.bearing = rs_1.getInt("bearing");
