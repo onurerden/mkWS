@@ -5,6 +5,7 @@
  */
 package mkws;
 
+import com.google.gson.Gson;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -174,7 +175,7 @@ public class ServerEngine implements IDeviceServer {
     @Override
     public String getTask(int deviceId) {
         
-        String output = "";
+        String output = "-1";
         String queryString = "";
         
         Credentials cr = new Credentials();
@@ -199,6 +200,10 @@ public class ServerEngine implements IDeviceServer {
                 data.time = rs_1.getTimestamp("time");
                 data.followMeDeviceId = rs_1.getInt("followMeDeviceId");
             }
+            
+            Gson json = new Gson();
+            
+            output=json.toJson(data);
             
             
             
