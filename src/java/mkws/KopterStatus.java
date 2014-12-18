@@ -26,6 +26,7 @@ public class KopterStatus {
     double kopterSpeed; //in m/s
     int kopterRcSignal;
     double kopterVario; //in m/s
+    int kopterId;
 
     // NC flags
     boolean flNC_FLAG_FREE = false; //0b00000001
@@ -47,7 +48,7 @@ public class KopterStatus {
     boolean flFC_STATUS_LOWBAT = false;//                     0x20
     boolean flFC_STATUS_VARIO_TRIM_UP = false;//             0x40
     boolean flFC_STATUS_VARIO_TRIM_DOWN = false;//             0x80
-    String ncStatusFlags1 = "00000000";
+    String fcStatusFlags1 = "00000000";
 
     //FCStatusFlags-2
     boolean flFC_STATUS2_CAREFREE_ACTIVE = false;//             0x01
@@ -58,7 +59,7 @@ public class KopterStatus {
     boolean flFC_STATUS2_RES1 = false;//                       0x20
     boolean flFC_STATUS2_RES2 = false;//                       0x40
     boolean flFC_STATUS2_RES3 = false;//                       0x80
-    String ncStatusFlags2 = "00000000";
+    String fcStatusFlags2 = "00000000";
 
     //parser methods
     void parseFlagsNC(String flString) {

@@ -34,6 +34,7 @@ public class SentStatus extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String jsonString = request.getParameter("jsonstatus");
+        System.out.println(jsonString);
         response.setContentType("text/json");
         PrintWriter out = response.getWriter();
         ServerEngine server = new ServerEngine();

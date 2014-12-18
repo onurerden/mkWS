@@ -170,20 +170,49 @@ public class ServerEngine implements IDeviceServer {
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1 = null;
+        System.out.println(jsonStatus);
         String queryString = "";
         
         KopterStatus status = new KopterStatus();
+        
         Gson jsonObject = new Gson();
         status = jsonObject.fromJson(jsonStatus,KopterStatus.class);
         
-        System.out.println(status.batteryCapacity);
+        
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+        queryString = "INSERT INTO `kopterstatus`(`kopterId`, `altitude`,"+
+                "`latitude`, `longtitude`, `kopterErrorCode`, `gsmSignalStrength`, "+
+                "`kopterVoltage`, `gpsSatCount`, `batteryCurrent`, `batteryCapacity`, "+
+                "`kopterSpeed`, `kopterRcSignal`, `kopterVario`, `ncFlags`, `fcFlags1`,"+
+                "`fcFlags2`, `updateTime`) VALUES (" + 
+                status.kopterId + ", "+
+                status.kopterAltitude + ", "+
+                status.kopterLatitude + ", "+
+                status.kopterLongtitude + ", "+
+                status.kopterErrorCode + ", "+
+                status.gsmSignalStrength + ", "+
+                status.kopterVoltage + ", "+
+                status.gpsSatCount + ", "+
+                status.batteryCurrent + ", "+
+                status.batteryCapacity+ ", "+
+                status.kopterSpeed + ", "+
+                status.kopterRcSignal + ", "+
+                status.kopterVario + ", '"+
+                status.flagsNC + "', '"+
+                status.fcStatusFlags1 + "', '"+
+                status.fcStatusFlags2 + "', '" +
+                timeStamp + "')";
         
         
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
             st_1 = con_1.createStatement();
+            System.out.println(queryString);
+            result=-2;
             result = st_1.executeUpdate(queryString);
+            
+            
             
             
         } catch (ClassNotFoundException ex) {
@@ -214,7 +243,8 @@ public class ServerEngine implements IDeviceServer {
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
             st_1 = con_1.createStatement();
 
-            queryString = "SELECT * from followme WHERE kopterId = " + deviceId + " AND sent = 0";
+            queryString = "SELECT * from followme WHERE kopterId = " + deviceId + " AND sent = 0 ORDER BY time DESC LIMIT 1";
+            System.out.println(queryString);
             rs_1 = st_1.executeQuery(queryString);
             FollowMeData data = new FollowMeData();
             data.kopterID = -2;
