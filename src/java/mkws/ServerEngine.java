@@ -172,8 +172,47 @@ public class ServerEngine implements IDeviceServer {
     }
 
     @Override
-    public String getTask(int deviceID) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String getTask(int deviceId) {
+        
+        String output = "";
+        String queryString = "";
+        
+        Credentials cr = new Credentials();
+        Connection con_1 = null;
+        Statement st_1 = null;
+        ResultSet rs_1 = null;
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+            st_1 = con_1.createStatement();
+
+            queryString = "SELECT * from followme WHERE kopterId = " +deviceId + " AND sent = 0" ;
+            rs_1 = st_1.executeQuery(queryString);
+            FollowMeData data = new FollowMeData();
+            if (rs_1.next()){
+                data.kopterID = rs_1.getInt("kopterId");
+                data.bearing = rs_1.getInt("bearing");
+                data.lat = rs_1.getDouble("latitude");
+                data.lng = rs_1.getDouble("longitude");
+                data.event = rs_1.getInt("event");
+                data.time = rs_1.getTimestamp("time");
+                data.followMeDeviceId = rs_1.getInt("followMeDeviceId");
+            }
+            
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return output;
     }
 
     public enum Device {

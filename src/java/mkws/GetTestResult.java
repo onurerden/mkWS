@@ -64,7 +64,7 @@ public class GetTestResult extends HttpServlet {
             String sql_1 = "SELECT * from followme where kopterID = " + kopterID + " AND sent = 0";
             rs_1 = st_1.executeQuery(sql_1);
 
-            KopterData data = new KopterData();
+            FollowMeData data = new FollowMeData();
             data.kopterID = kopterID;
             while (rs_1.next()) {
                 data.lat = rs_1.getDouble("latitude");
