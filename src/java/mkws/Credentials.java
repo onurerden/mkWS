@@ -1,0 +1,25 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package mkws;
+
+/**
+ *
+ * @author oerden
+ */
+public class Credentials {
+    String server = "localhost";
+    String database = "mk";
+    String dbUserName = "onur";
+    String dbPassword = "19861986";
+    
+    
+public String getMysqlConnectionString(){
+    String connectionString = new String();
+    connectionString = "jdbc:mysql://"+ server +"/"+database ;
+    return connectionString;
+}
+}
