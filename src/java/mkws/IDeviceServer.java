@@ -21,7 +21,7 @@ public interface IDeviceServer {
     //-1 ise db erişim hatası. -2 ya da -3 ise kaydı yok ancak yine de kayıt edilemedi.
 
     int sendStatus(String jsonStatus);
-    //gelecek olan json KopterStatus sınıfındaki gibi olmalıdır.
+    //gelecek olan json KopterStatus sınıfındaki gibi olmalıdır. (parametre adı jsonstatus)
     //dönüş 1 ise başarılı işlem gerçekleştimiştir; dönüş 0 ise data kaydedilmemiştir.
     //dönüş -1 ise db bağlantısında sıkıntı bulunmaktadır.
 
@@ -31,9 +31,10 @@ public interface IDeviceServer {
     //-2 gelirse söz konusu kopter ID için bir konum bilgisi yoktur.
     //-1 db connection Error
 
-    int sendFollowMeData(String json);
+    int sendFollowMeData(String jsonfollowme);
     //Yalnızca followMeDevice tarafından kullanılır.
-    //FollowMeData sınıfındaki objeyi json olarak gonderir.
+    //FollowMeData sınıfındaki objeyi json olarak (parametre adı jsonfollowme) gonderir.
     //Başarılı gönderim halinde 0, hatalı json -2, db erişim hatası -1
+    //
 
 }

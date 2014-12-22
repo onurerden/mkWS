@@ -172,49 +172,44 @@ public class ServerEngine implements IDeviceServer {
         Statement st_1 = null;
         System.out.println(jsonStatus);
         String queryString = "";
-        
+
         KopterStatus status = new KopterStatus();
-        
+
         Gson jsonObject = new Gson();
-        status = jsonObject.fromJson(jsonStatus,KopterStatus.class);
-        
-        
+        status = jsonObject.fromJson(jsonStatus, KopterStatus.class);
+
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
-        queryString = "INSERT INTO `kopterstatus`(`kopterId`, `altitude`,"+
-                "`latitude`, `longtitude`, `kopterErrorCode`, `gsmSignalStrength`, "+
-                "`kopterVoltage`, `gpsSatCount`, `batteryCurrent`, `batteryCapacity`, "+
-                "`kopterSpeed`, `kopterRcSignal`, `kopterVario`, `ncFlags`, `fcFlags1`,"+
-                "`fcFlags2`, `updateTime`) VALUES (" + 
-                status.kopterId + ", "+
-                status.kopterAltitude + ", "+
-                status.kopterLatitude + ", "+
-                status.kopterLongtitude + ", "+
-                status.kopterErrorCode + ", "+
-                status.gsmSignalStrength + ", "+
-                status.kopterVoltage + ", "+
-                status.gpsSatCount + ", "+
-                status.batteryCurrent + ", "+
-                status.batteryCapacity+ ", "+
-                status.kopterSpeed + ", "+
-                status.kopterRcSignal + ", "+
-                status.kopterVario + ", '"+
-                status.flagsNC + "', '"+
-                status.fcStatusFlags1 + "', '"+
-                status.fcStatusFlags2 + "', '" +
-                timeStamp + "')";
-        
-        
+        queryString = "INSERT INTO `kopterstatus`(`kopterId`, `altitude`,"
+                + "`latitude`, `longtitude`, `kopterErrorCode`, `gsmSignalStrength`, "
+                + "`kopterVoltage`, `gpsSatCount`, `batteryCurrent`, `batteryCapacity`, "
+                + "`kopterSpeed`, `kopterRcSignal`, `kopterVario`, `ncFlags`, `fcFlags1`,"
+                + "`fcFlags2`, `updateTime`) VALUES ("
+                + status.kopterId + ", "
+                + status.kopterAltitude + ", "
+                + status.kopterLatitude + ", "
+                + status.kopterLongtitude + ", "
+                + status.kopterErrorCode + ", "
+                + status.gsmSignalStrength + ", "
+                + status.kopterVoltage + ", "
+                + status.gpsSatCount + ", "
+                + status.batteryCurrent + ", "
+                + status.batteryCapacity + ", "
+                + status.kopterSpeed + ", "
+                + status.kopterRcSignal + ", "
+                + status.kopterVario + ", '"
+                + status.flagsNC + "', '"
+                + status.fcStatusFlags1 + "', '"
+                + status.fcStatusFlags2 + "', '"
+                + timeStamp + "')";
+
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
             st_1 = con_1.createStatement();
             System.out.println(queryString);
-            result=-2;
+            result = -2;
             result = st_1.executeUpdate(queryString);
-            
-            
-            
-            
+
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
@@ -229,6 +224,7 @@ public class ServerEngine implements IDeviceServer {
 
     @Override
     public String getTask(int deviceId) {
+//        return "not implemented";
 
         String output = "-1";
         String queryString = "";
@@ -243,14 +239,15 @@ public class ServerEngine implements IDeviceServer {
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
             st_1 = con_1.createStatement();
 
-            queryString = "SELECT * from followme WHERE kopterId = " + deviceId + " AND sent = 0 ORDER BY time DESC LIMIT 1";
+            
+            queryString = "SELECT * from followme WHERE followMeDeviceId = " + getMatchedDevice(deviceId) + " AND sent = 0 ORDER BY time DESC LIMIT 1";
             System.out.println(queryString);
             rs_1 = st_1.executeQuery(queryString);
             FollowMeData data = new FollowMeData();
-            data.kopterID = -2;
+
 
             if (rs_1.next()) {
-                data.kopterID = rs_1.getInt("kopterId");
+                //data.kopterID = rs_1.getInt("kopterId");
                 data.bearing = rs_1.getInt("bearing");
                 data.lat = rs_1.getDouble("latitude");
                 data.lng = rs_1.getDouble("longitude");
@@ -274,6 +271,89 @@ public class ServerEngine implements IDeviceServer {
         }
 
         return output;
+    }
+
+    @Override
+    public int sendFollowMeData(String json) {
+        FollowMeData data = new FollowMeData();
+        Gson gson = new Gson();
+
+        try {
+            data = gson.fromJson(json, FollowMeData.class);
+        } catch (Exception ex) {
+            System.out.println("FollowMeData parse error: " + ex.toString());
+            return -2;
+        }
+
+        Credentials cr = new Credentials();
+        Connection con_1 = null;
+        Statement st_1 = null;
+        ResultSet rs_1 = null;
+        String queryString = "";
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+            st_1 = con_1.createStatement();
+
+            queryString = "INSERT INTO followme (`latitude`, `longitude`, `bearing`, `event`, `time`, `followMeDeviceId`, `sent`) VALUES ("
+                    + "'" + data.lat + "', "
+                    + "'" + data.lng + "', "
+                    + "'" + data.bearing + "', "
+                    + "'" + data.event + "', "
+                    + "'" + timeStamp + "', "
+                    + "'" + data.followMeDeviceId + "', "
+                    + "'" + "0" + "')";
+
+            System.out.println(queryString);
+            st_1.executeUpdate(queryString);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            return -1;
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return 0;
+    }
+    
+    private int getMatchedDevice(int deviceId){
+        int matchedFollowMeDevice = -1;
+        
+        Credentials cr = new Credentials();
+        Connection con_1 = null;
+        Statement st_1 = null;
+        ResultSet rs_1 = null;
+        String queryString = "SELECT followMeDeviceId from devicematching WHERE kopterId = "+ deviceId+ " ORDER BY 'id' DESC LIMIT 1";
+        
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+            st_1 = con_1.createStatement();
+            
+            rs_1 = st_1.executeQuery(queryString);
+            
+            while (rs_1.next()){
+                matchedFollowMeDevice = rs_1.getInt(1);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return matchedFollowMeDevice;
     }
 
     public enum Device {

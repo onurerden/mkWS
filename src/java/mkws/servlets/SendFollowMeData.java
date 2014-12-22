@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mkws;
 
-import com.google.gson.Gson;
+package mkws.servlets;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -13,20 +13,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import mkws.ServerEngine;
 
 /**
  *
  * @author oerden
  */
-@WebServlet(name = "GetTestResult", urlPatterns = {"/GetTestResult"})
-public class GetTestResult extends HttpServlet {
+@WebServlet(name = "SendFollowMeData", urlPatterns = {"/SendFollowMeData"})
+public class SendFollowMeData extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,64 +31,24 @@ public class GetTestResult extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    public static String url = "jdbc:mysql://localhost/mk";
-    public static String user = "onur";
-    public static String password = "19861986";
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //response.setContentType("text/html;charset=UTF-8");
         response.setContentType("text/json");
         PrintWriter out = response.getWriter();
+        int i = 0;
         try {
             /* TODO output your page here. You may use following sample code. */
-
-            int kopterID = 1;
-            try {
-                kopterID = Integer.parseInt(request.getParameter("kopterID"));
-            } catch (Exception e) {
-                System.out.println(e.toString());
-            }
-            Connection con_1 = null;
-            Statement st_1 = null;
-            ResultSet rs_1 = null;
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(url, user, password);
-            st_1 = con_1.createStatement();
-            String sql_1 = "SELECT * from followme where kopterID = " + kopterID + " AND sent = 0";
-            rs_1 = st_1.executeQuery(sql_1);
-
-            FollowMeData data = new FollowMeData();
-            //data.kopterID = kopterID;
-            while (rs_1.next()) {
-                data.lat = rs_1.getDouble("latitude");
-                data.lng = rs_1.getDouble("longitude");
-                data.bearing = rs_1.getInt("bearing");
-            }
-
-            Gson jsonobject = new Gson();
-
-            String json = jsonobject.toJson(data);
-
-            out.println(json);
-            System.out.println(json);
-            con_1.close();
             
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(GetTestResult.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex.toString());
-        } catch (InstantiationException ex) {
-            Logger.getLogger(GetTestResult.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex.toString());
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(GetTestResult.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex.toString());
-        } catch (SQLException ex) {
-            Logger.getLogger(GetTestResult.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex.toString());
+        String jsonString = request.getParameter("jsonfollowme");
+        System.out.println(jsonString);
+        
+        ServerEngine server = new ServerEngine();
+        i=server.sendFollowMeData(jsonString);
+        
+        out.println(i);
+        
         } finally {
             out.close();
-
         }
     }
 
