@@ -187,7 +187,7 @@ public class ServerEngine implements IDeviceServer {
                 + status.kopterId + ", "
                 + status.kopterAltitude + ", "
                 + status.kopterLatitude + ", "
-                + status.kopterLongtitude + ", "
+                + status.kopterLongitude + ", "
                 + status.kopterErrorCode + ", "
                 + status.gsmSignalStrength + ", "
                 + status.kopterVoltage + ", "
@@ -354,6 +354,63 @@ public class ServerEngine implements IDeviceServer {
         }
         
         return matchedFollowMeDevice;
+    }
+
+    @Override
+    public String getKopterStatus(int deviceId) {
+     System.out.println("Looking for KopterStatus " + deviceId );
+     String kopterStatusString ="-2";
+     KopterStatus status= new KopterStatus();
+     
+        Credentials cr = new Credentials();
+        Connection con_1 = null;
+        Statement st_1 = null;
+        ResultSet rs_1 = null;
+        String queryString = "SELECT * from kopterstatus WHERE kopterId = "+ deviceId+ " ORDER BY 'id' DESC LIMIT 1";
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+            st_1 = con_1.createStatement();
+            System.out.println(queryString);
+            rs_1 = st_1.executeQuery(queryString);
+            System.out.println("KopterStatus found for " + deviceId);
+            
+            if (rs_1.next()){
+                status.kopterId = rs_1.getInt("kopterId");
+                status.kopterAltitude = rs_1.getInt("altitude");
+                status.kopterLatitude = rs_1.getDouble("latitude");
+                status.kopterLongitude = rs_1.getDouble("longitude");
+                status.kopterErrorCode = rs_1.getInt("kopterErrorCode");
+                status.gsmSignalStrength = rs_1.getInt("gsmSignalStrength");
+                status.kopterVoltage = rs_1.getInt("kopterVoltage");
+                status.gpsSatCount = rs_1.getInt("gpsSatCount");
+                status.batteryCurrent = rs_1.getInt("batteryCurrent");
+                status.batteryCapacity = rs_1.getInt("batteryCapacity");
+                status.kopterSpeed = rs_1.getDouble("kopterSpeed");
+                status.kopterRcSignal = rs_1.getInt("kopterRcSignal");
+                status.kopterVario = rs_1.getInt("kopterVario");
+                status.flagsNC = rs_1.getString("ncFlags");
+                
+                System.out.println("All values Set");
+                
+                Gson gson = new Gson();
+                kopterStatusString = gson.toJson(status, KopterStatus.class);
+                
+            }
+            con_1.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            return "-1";
+        } catch (InstantiationException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+        }
+     
+     return kopterStatusString;
+        
     }
 
     public enum Device {

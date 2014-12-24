@@ -24,6 +24,9 @@ public interface IDeviceServer {
     //gelecek olan json KopterStatus sınıfındaki gibi olmalıdır. (parametre adı jsonstatus)
     //dönüş 1 ise başarılı işlem gerçekleştimiştir; dönüş 0 ise data kaydedilmemiştir.
     //dönüş -1 ise db bağlantısında sıkıntı bulunmaktadır.
+    
+    String getKopterStatus(int deviceId);
+    //Kopter'in son bilinen durumunu bildirir. hata çıkmazsa json formatında KopterStatus döner
 
     String getTask(int deviceID);
     //yalnizca mk tarafindan kullanilir. koptere iletilecek yeni bir 

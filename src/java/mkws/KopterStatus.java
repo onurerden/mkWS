@@ -13,10 +13,10 @@ public class KopterStatus {
 
     int kopterHeading;  //in degree
     int kopterAltitude; //in meters
-    long kopterLatitude;
-    long kopterLongtitude;
-    long homeLatitude;
-    long homeLongtitude;
+    double kopterLatitude;
+    double kopterLongitude;
+    double homeLatitude;
+    double homeLongitude;
     int kopterErrorCode;
     int gsmSignalStrength;
     int kopterVoltage; //in mV
