@@ -209,6 +209,7 @@ public class ServerEngine implements IDeviceServer {
             System.out.println(queryString);
             result = -2;
             result = st_1.executeUpdate(queryString);
+            con_1.close();
 
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
@@ -259,7 +260,7 @@ public class ServerEngine implements IDeviceServer {
             Gson json = new Gson();
 
             output = json.toJson(data);
-
+            con_1.close();
         } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
@@ -307,6 +308,7 @@ public class ServerEngine implements IDeviceServer {
 
             System.out.println(queryString);
             st_1.executeUpdate(queryString);
+            con_1.close();
 
         } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
@@ -342,6 +344,7 @@ public class ServerEngine implements IDeviceServer {
             while (rs_1.next()){
                 matchedFollowMeDevice = rs_1.getInt(1);
             }
+            con_1.close();
             
         } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
