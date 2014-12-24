@@ -27,6 +27,7 @@ public interface IDeviceServer {
     
     String getKopterStatus(int deviceId);
     //Kopter'in son bilinen durumunu bildirir. hata çıkmazsa json formatında KopterStatus döner
+    //-1 db hatası hatası. -2 Koptere ait durum bilgisi yok.
 
     String getTask(int deviceID);
     //yalnizca mk tarafindan kullanilir. koptere iletilecek yeni bir 
