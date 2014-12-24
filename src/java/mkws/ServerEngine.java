@@ -180,7 +180,7 @@ public class ServerEngine implements IDeviceServer {
 
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         queryString = "INSERT INTO `kopterstatus`(`kopterId`, `altitude`,"
-                + "`latitude`, `longtitude`, `kopterErrorCode`, `gsmSignalStrength`, "
+                + "`latitude`, `longtitude`, `heading`, `kopterErrorCode`, `gsmSignalStrength`, "
                 + "`kopterVoltage`, `gpsSatCount`, `batteryCurrent`, `batteryCapacity`, "
                 + "`kopterSpeed`, `kopterRcSignal`, `kopterVario`, `ncFlags`, `fcFlags1`,"
                 + "`fcFlags2`, `updateTime`) VALUES ("
@@ -188,6 +188,7 @@ public class ServerEngine implements IDeviceServer {
                 + status.kopterAltitude + ", "
                 + status.kopterLatitude + ", "
                 + status.kopterLongitude + ", "
+                + status.kopterHeading + ", "
                 + status.kopterErrorCode + ", "
                 + status.gsmSignalStrength + ", "
                 + status.kopterVoltage + ", "
@@ -383,6 +384,7 @@ public class ServerEngine implements IDeviceServer {
                 status.kopterAltitude = rs_1.getInt("altitude");
                 status.kopterLatitude = rs_1.getDouble("latitude");
                 status.kopterLongitude = rs_1.getDouble("longitude");
+                status.kopterHeading = rs_1.getInt("heading");
                 status.kopterErrorCode = rs_1.getInt("kopterErrorCode");
                 status.gsmSignalStrength = rs_1.getInt("gsmSignalStrength");
                 status.kopterVoltage = rs_1.getInt("kopterVoltage");
