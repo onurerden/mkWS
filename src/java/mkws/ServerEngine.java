@@ -180,7 +180,7 @@ public class ServerEngine implements IDeviceServer {
 
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         queryString = "INSERT INTO `kopterstatus`(`kopterId`, `altitude`,"
-                + "`latitude`, `longtitude`, `heading`, `kopterErrorCode`, `gsmSignalStrength`, "
+                + "`latitude`, `longitude`, `heading`, `kopterErrorCode`, `gsmSignalStrength`, "
                 + "`kopterVoltage`, `gpsSatCount`, `batteryCurrent`, `batteryCapacity`, "
                 + "`kopterSpeed`, `kopterRcSignal`, `kopterVario`, `ncFlags`, `fcFlags1`,"
                 + "`fcFlags2`, `updateTime`) VALUES ("
@@ -202,7 +202,7 @@ public class ServerEngine implements IDeviceServer {
                 + status.fcStatusFlags1 + "', '"
                 + status.fcStatusFlags2 + "', '"
                 + timeStamp + "')";
-
+        //System.out.println(queryString);
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
@@ -241,12 +241,10 @@ public class ServerEngine implements IDeviceServer {
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
             st_1 = con_1.createStatement();
 
-            
             queryString = "SELECT * from followme WHERE followMeDeviceId = " + getMatchedDevice(deviceId) + " AND sent = 0 ORDER BY time DESC LIMIT 1";
             System.out.println(queryString);
             rs_1 = st_1.executeQuery(queryString);
             FollowMeData data = new FollowMeData();
-
 
             if (rs_1.next()) {
                 //data.kopterID = rs_1.getInt("kopterId");
@@ -324,29 +322,28 @@ public class ServerEngine implements IDeviceServer {
 
         return 0;
     }
-    
-    private int getMatchedDevice(int deviceId){
+
+    private int getMatchedDevice(int deviceId) {
         int matchedFollowMeDevice = -1;
-        
+
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1 = null;
         ResultSet rs_1 = null;
-        String queryString = "SELECT followMeDeviceId from devicematching WHERE kopterId = "+ deviceId+ " ORDER BY 'id' DESC LIMIT 1";
-        
+        String queryString = "SELECT followMeDeviceId from devicematching WHERE kopterId = " + deviceId + " ORDER BY 'id' DESC LIMIT 1";
 
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
             st_1 = con_1.createStatement();
-            
+
             rs_1 = st_1.executeQuery(queryString);
-            
-            while (rs_1.next()){
+
+            while (rs_1.next()) {
                 matchedFollowMeDevice = rs_1.getInt(1);
             }
             con_1.close();
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
@@ -356,21 +353,21 @@ public class ServerEngine implements IDeviceServer {
         } catch (IllegalAccessException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return matchedFollowMeDevice;
     }
 
     @Override
     public String getKopterStatus(int deviceId) {
-     System.out.println("Looking for KopterStatus " + deviceId );
-     String kopterStatusString ="-2";
-     KopterStatus status= new KopterStatus();
-     
+        System.out.println("Looking for KopterStatus " + deviceId);
+        String kopterStatusString = "-2";
+        KopterStatus status = new KopterStatus();
+
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1 = null;
         ResultSet rs_1 = null;
-        String queryString = "SELECT * from kopterstatus WHERE kopterId = "+ deviceId+ " ORDER BY 'id' DESC LIMIT 1";
+        String queryString = "SELECT * from kopterstatus WHERE kopterId = " + deviceId + " ORDER BY 'id' DESC LIMIT 1";
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
@@ -378,8 +375,8 @@ public class ServerEngine implements IDeviceServer {
             System.out.println(queryString);
             rs_1 = st_1.executeQuery(queryString);
             System.out.println("KopterStatus found for " + deviceId);
-            
-            if (rs_1.next()){
+
+            if (rs_1.next()) {
                 status.kopterId = rs_1.getInt("kopterId");
                 status.kopterAltitude = rs_1.getInt("altitude");
                 status.kopterLatitude = rs_1.getDouble("latitude");
@@ -395,12 +392,12 @@ public class ServerEngine implements IDeviceServer {
                 status.kopterRcSignal = rs_1.getInt("kopterRcSignal");
                 status.kopterVario = rs_1.getInt("kopterVario");
                 status.flagsNC = rs_1.getString("ncFlags");
-                
+
                 System.out.println("All values Set");
-                
+
                 Gson gson = new Gson();
                 kopterStatusString = gson.toJson(status, KopterStatus.class);
-                
+
             }
             con_1.close();
         } catch (SQLException ex) {
@@ -413,9 +410,9 @@ public class ServerEngine implements IDeviceServer {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
-     
-     return kopterStatusString;
-        
+
+        return kopterStatusString;
+
     }
 
     public enum Device {
