@@ -19,8 +19,8 @@ import mkws.ServerEngine;
  *
  * @author oerden
  */
-@WebServlet(name = "SentStatus", urlPatterns = {"/SentStatus"})
-public class SentStatus extends HttpServlet {
+@WebServlet(name = "SendStatus", urlPatterns = {"/SendStatus"})
+public class SendStatus extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
