@@ -392,6 +392,7 @@ public class ServerEngine implements IDeviceServer {
                 status.kopterRcSignal = rs_1.getInt("kopterRcSignal");
                 status.kopterVario = rs_1.getInt("kopterVario");
                 status.flagsNC = rs_1.getString("ncFlags");
+                status.updateTime = rs_1.getTimestamp("updateTime");
 
                 System.out.println("All values Set");
 

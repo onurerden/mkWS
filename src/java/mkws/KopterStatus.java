@@ -5,6 +5,8 @@
  */
 package mkws;
 
+import java.sql.Timestamp;
+
 /**
  *
  * @author oerden
@@ -27,6 +29,7 @@ public class KopterStatus {
     int kopterRcSignal;
     double kopterVario; //in m/s
     int kopterId;
+    Timestamp updateTime;
 
     // NC flags
     boolean flNC_FLAG_FREE = false; //0b00000001
