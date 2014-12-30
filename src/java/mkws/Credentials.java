@@ -12,7 +12,7 @@ package mkws;
 public class Credentials {
 
     String server = "127.8.64.130:3306";
-    //  String server = "localhost:3306";
+ //   String server = "localhost:3306";
     String database = "mk";
 //    String dbUserName = "adminGStcLXX";
 //    String dbPassword = "Wc_flbnyklZt";

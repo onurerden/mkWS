@@ -367,7 +367,7 @@ public class ServerEngine implements IDeviceServer {
         Connection con_1 = null;
         Statement st_1 = null;
         ResultSet rs_1 = null;
-        String queryString = "SELECT * from kopterstatus WHERE kopterId = " + deviceId + " ORDER BY 'id' DESC LIMIT 1";
+        String queryString = "SELECT * from kopterstatus WHERE kopterId = " + deviceId + " ORDER BY `kopterstatus`.`id` DESC LIMIT 1";
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
@@ -413,6 +413,51 @@ public class ServerEngine implements IDeviceServer {
 
         return kopterStatusString;
 
+    }
+
+    @Override
+    public String getFollowMeData(int deviceId) {
+        String jsonString = "";
+        System.out.println("Looking for FollowMeData " + deviceId);
+        FollowMeData data = new FollowMeData();
+        Credentials cr = new Credentials();
+        Connection con_1 = null;
+        Statement st_1 = null;
+        ResultSet rs_1 = null;
+        String queryString = "SELECT * from followme WHERE followMeDeviceId = "+ deviceId+" ORDER BY `followme`.`id` DESC LIMIT 1";
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+            st_1 = con_1.createStatement();
+            System.out.println(queryString);
+            rs_1 = st_1.executeQuery(queryString);
+            System.out.println("FollowMeData found for " + deviceId);
+
+            if (rs_1.next()) {
+                data.setBearing(rs_1.getInt("bearing"));
+                data.setEvent(rs_1.getInt("event"));
+                data.setLat(rs_1.getDouble("latitude"));
+                data.setLon(rs_1.getDouble("longitude"));
+                data.setTime(rs_1.getTimestamp("time"));
+                data.setFollowMeDeviceId(deviceId);
+                
+                Gson gson = new Gson();
+                jsonString = gson.toJson(data, FollowMeData.class);
+
+            }
+            con_1.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            return "-1";
+        } catch (InstantiationException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return jsonString;
     }
 
     public enum Device {
