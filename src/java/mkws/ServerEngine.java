@@ -458,13 +458,13 @@ public class ServerEngine implements IDeviceServer {
             } else {
                 ArrayList<FollowMeData> datas = new ArrayList<FollowMeData>();
                 while (rs_1.next()) {
-
+                    data = new FollowMeData();
                     data.setBearing(rs_1.getInt("bearing"));
                     data.setEvent(rs_1.getInt("event"));
                     data.setLat(rs_1.getDouble("latitude"));
                     data.setLon(rs_1.getDouble("longitude"));
                     data.setTime(rs_1.getTimestamp("time"));
-                    data.setFollowMeDeviceId(deviceId);
+                    data.setFollowMeDeviceId(rs_1.getInt("followMeDeviceId"));
                     datas.add(data);
                 }
 
