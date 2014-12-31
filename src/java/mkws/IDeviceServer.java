@@ -43,5 +43,7 @@ public interface IDeviceServer {
     
     String getFollowMeData(int deviceId);
     //deviceId'si verilen FollowMe cihazının bilgileri döndürülür.
+    //deviceId 0 girilirse tüm followme cihazlarına ait bilgiler array olarak döndürülür.
+    //SQL hatası -1
 
 }

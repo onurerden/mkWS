@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -425,8 +426,15 @@ public class ServerEngine implements IDeviceServer {
         Connection con_1 = null;
         Statement st_1 = null;
         ResultSet rs_1 = null;
-        String queryString = "SELECT * from followme WHERE followMeDeviceId = "+ deviceId+" ORDER BY `followme`.`id` DESC LIMIT 1";
-        
+        String queryString = "";
+        if (deviceId == 0) {
+            queryString = "SELECT * from followme f INNER JOIN "
+                    + "(SELECT max(id) AS maksimum_id from followme "
+                    + "GROUP BY followMeDeviceId) AS s "
+                    + "ON s.maksimum_id = f.id";
+        } else {
+            queryString = "SELECT * from followme WHERE followMeDeviceId = " + deviceId + " ORDER BY `followme`.`id` DESC LIMIT 1";
+        }
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
@@ -434,18 +442,34 @@ public class ServerEngine implements IDeviceServer {
             System.out.println(queryString);
             rs_1 = st_1.executeQuery(queryString);
             System.out.println("FollowMeData found for " + deviceId);
+            if (deviceId != 0) {
+                if (rs_1.next()) {
+                    data.setBearing(rs_1.getInt("bearing"));
+                    data.setEvent(rs_1.getInt("event"));
+                    data.setLat(rs_1.getDouble("latitude"));
+                    data.setLon(rs_1.getDouble("longitude"));
+                    data.setTime(rs_1.getTimestamp("time"));
+                    data.setFollowMeDeviceId(deviceId);
 
-            if (rs_1.next()) {
-                data.setBearing(rs_1.getInt("bearing"));
-                data.setEvent(rs_1.getInt("event"));
-                data.setLat(rs_1.getDouble("latitude"));
-                data.setLon(rs_1.getDouble("longitude"));
-                data.setTime(rs_1.getTimestamp("time"));
-                data.setFollowMeDeviceId(deviceId);
-                
+                    Gson gson = new Gson();
+                    jsonString = gson.toJson(data, FollowMeData.class);
+                }
+
+            } else {
+                ArrayList<FollowMeData> datas = new ArrayList<FollowMeData>();
+                while (rs_1.next()) {
+
+                    data.setBearing(rs_1.getInt("bearing"));
+                    data.setEvent(rs_1.getInt("event"));
+                    data.setLat(rs_1.getDouble("latitude"));
+                    data.setLon(rs_1.getDouble("longitude"));
+                    data.setTime(rs_1.getTimestamp("time"));
+                    data.setFollowMeDeviceId(deviceId);
+                    datas.add(data);
+                }
+
                 Gson gson = new Gson();
-                jsonString = gson.toJson(data, FollowMeData.class);
-
+                jsonString = gson.toJson(datas);
             }
             con_1.close();
         } catch (SQLException ex) {
@@ -453,10 +477,13 @@ public class ServerEngine implements IDeviceServer {
             return "-1";
         } catch (InstantiationException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            return "-2";
         } catch (IllegalAccessException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            return "-3";
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            return "-4";
         }
         return jsonString;
     }
