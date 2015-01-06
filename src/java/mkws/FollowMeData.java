@@ -20,7 +20,17 @@ public class FollowMeData {
     Timestamp time;
     int event = 0;
     int followMeDeviceId;
+    String name="";
 
+    
+    public void setName(String newName){
+        name = newName;
+    }
+    
+    public String getName(){
+        return this.name;
+    }
+    
     public void setLat(double latitude) {
         this.lat = latitude;
     }
