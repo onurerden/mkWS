@@ -428,12 +428,21 @@ public class ServerEngine implements IDeviceServer {
         ResultSet rs_1 = null;
         String queryString = "";
         if (deviceId == 0) {
-            queryString = "SELECT * from followme f INNER JOIN "
-                    + "(SELECT max(id) AS maksimum_id from followme "
-                    + "GROUP BY followMeDeviceId) AS s "
-                    + "ON s.maksimum_id = f.id";
+//            queryString = "SELECT * from followme f INNER JOIN "
+//                    + "(SELECT max(id) AS maksimum_id from followme "
+//                    + "GROUP BY followMeDeviceId) AS s "
+//                    + "ON s.maksimum_id = f.id";
+            queryString = "SELECT * from followme f "
+                    + "INNER JOIN (SELECT max(id) AS maksimum_id from followme "
+                    + "GROUP BY followMeDeviceId) AS s ON s.maksimum_id = f.id "
+                    + "INNER JOIN mk.followmedevices AS d ON f.followMeDeviceId = d.id";
+            
         } else {
-            queryString = "SELECT * from followme WHERE followMeDeviceId = " + deviceId + " ORDER BY `followme`.`id` DESC LIMIT 1";
+            queryString = "SELECT * from followme AS f "
+                    + "INNER JOIN followmedevices AS d "
+                    + "ON f.followMeDeviceId = d.id "
+                    + "WHERE f.followMeDeviceId = " +deviceId
+                    + " ORDER BY f.`id` DESC LIMIT 1";
         }
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -450,6 +459,7 @@ public class ServerEngine implements IDeviceServer {
                     data.setLon(rs_1.getDouble("longitude"));
                     data.setTime(rs_1.getTimestamp("time"));
                     data.setFollowMeDeviceId(deviceId);
+                    data.setName(rs_1.getString("name"));
 
                     Gson gson = new Gson();
                     jsonString = gson.toJson(data, FollowMeData.class);
@@ -465,6 +475,7 @@ public class ServerEngine implements IDeviceServer {
                     data.setLon(rs_1.getDouble("longitude"));
                     data.setTime(rs_1.getTimestamp("time"));
                     data.setFollowMeDeviceId(rs_1.getInt("followMeDeviceId"));
+                    data.setName(rs_1.getString("name"));
                     datas.add(data);
                 }
 
