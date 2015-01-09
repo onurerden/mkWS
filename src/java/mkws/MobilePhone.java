@@ -19,4 +19,5 @@ public String name = "";
 public Date registerDate = new Date();
 public String uid = "000000-0000000000000000-00000000";
 
+
 }

@@ -432,17 +432,18 @@ public class ServerEngine implements IDeviceServer {
 //                    + "(SELECT max(id) AS maksimum_id from followme "
 //                    + "GROUP BY followMeDeviceId) AS s "
 //                    + "ON s.maksimum_id = f.id";
-            queryString = "SELECT * from followme f "
+            queryString = "SELECT * from followme "
                     + "INNER JOIN (SELECT max(id) AS maksimum_id from followme "
-                    + "GROUP BY followMeDeviceId) AS s ON s.maksimum_id = f.id "
-                    + "INNER JOIN mk.followmedevices AS d ON f.followMeDeviceId = d.id";
+                    + "GROUP BY followMeDeviceId) AS s ON s.maksimum_id = followme.id "
+                    + "INNER JOIN mk.followmedevices AS d ON followme.followMeDeviceId = d.id "
+                    + "WHERE followme.time > DATE_SUB(CURRENT_TIMESTAMP(),INTERVAL 1 HOUR)";
             
         } else {
-            queryString = "SELECT * from followme AS f "
+            queryString = "SELECT * from followme "
                     + "INNER JOIN followmedevices AS d "
-                    + "ON f.followMeDeviceId = d.id "
-                    + "WHERE f.followMeDeviceId = " +deviceId
-                    + " ORDER BY f.`id` DESC LIMIT 1";
+                    + "ON followme.followMeDeviceId = d.id "
+                    + "WHERE followme.followMeDeviceId = " +deviceId
+                    + " ORDER BY followme.`id` DESC LIMIT 1";
         }
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
