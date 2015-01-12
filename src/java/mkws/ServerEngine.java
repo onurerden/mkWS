@@ -68,9 +68,9 @@ public class ServerEngine implements IDeviceServer {
                         kopter.uid = rs_1.getString("uid");
 
                         System.out.println("query device uid = " + kopter.uid + " device type mk");
-                        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+                        //String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
                         Statement st_2 = con_1.createStatement();
-                        st_2.executeUpdate("UPDATE kopter SET latestTouch = '" + timeStamp + "' WHERE id = " + kopter.id);
+                        st_2.executeUpdate("UPDATE kopter SET latestTouch = NOW() WHERE id = " + kopter.id);
 
                         deviceId = kopter.id;
                     }
@@ -125,7 +125,7 @@ public class ServerEngine implements IDeviceServer {
             } catch (Exception ex) {
                 System.out.println("Device Enumeration cannot be done.");
             }
-            String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+            //String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
             switch (device) {
                 case mk: {
@@ -133,7 +133,7 @@ public class ServerEngine implements IDeviceServer {
                     break;
                 }
                 case mp: {
-                    queryString = "INSERT INTO `followmedevices`(`UID`, `name`, `registerDate`) VALUES ('" + uid + "', '" + name + "', '" + timeStamp + "')";;
+                    queryString = "INSERT INTO `followmedevices`(`UID`, `name`, `registerDate`) VALUES ('" + uid + "', '" + name + "', NOW())";;
                     break;
                 }
             }
@@ -179,7 +179,7 @@ public class ServerEngine implements IDeviceServer {
         Gson jsonObject = new Gson();
         status = jsonObject.fromJson(jsonStatus, KopterStatus.class);
 
-        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+        //String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         queryString = "INSERT INTO `kopterstatus`(`kopterId`, `altitude`,"
                 + "`latitude`, `longitude`, `heading`, `kopterErrorCode`, `gsmSignalStrength`, "
                 + "`kopterVoltage`, `gpsSatCount`, `batteryCurrent`, `batteryCapacity`, "
@@ -201,8 +201,8 @@ public class ServerEngine implements IDeviceServer {
                 + status.kopterVario + ", '"
                 + status.flagsNC + "', '"
                 + status.fcStatusFlags1 + "', '"
-                + status.fcStatusFlags2 + "', '"
-                + timeStamp + "')";
+                + status.fcStatusFlags2 + "', "
+                +"NOW())";
         //System.out.println(queryString);
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -291,7 +291,7 @@ public class ServerEngine implements IDeviceServer {
         Statement st_1 = null;
         ResultSet rs_1 = null;
         String queryString = "";
-        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+        //String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
@@ -302,7 +302,7 @@ public class ServerEngine implements IDeviceServer {
                     + "'" + data.lng + "', "
                     + "'" + data.bearing + "', "
                     + "'" + data.event + "', "
-                    + "'" + timeStamp + "', "
+                    + "NOW(), "
                     + "'" + data.followMeDeviceId + "', "
                     + "'" + "0" + "')";
 
