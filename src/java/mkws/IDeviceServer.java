@@ -60,6 +60,6 @@ public interface IDeviceServer {
     int getRouteId(int deviceId);
     //followMeDevice tarafından çağrılır. İlgili followMeDevice'ının session rotasını çıkartmak 
     //amacıyla kullanılır. Bu fonksiyon sonrasında dönen integer, FollowMeData'sındaki route değişkenine
-    //girilmelidir.
+    //girilmelidir. -1 ise db hatası, -2 ise deviceId parametresi Integer değil.
 
 }

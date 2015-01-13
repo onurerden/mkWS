@@ -202,7 +202,7 @@ public class ServerEngine implements IDeviceServer {
                 + status.flagsNC + "', '"
                 + status.fcStatusFlags1 + "', '"
                 + status.fcStatusFlags2 + "', "
-                +"NOW())";
+                + "NOW())";
         //System.out.println(queryString);
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -297,14 +297,17 @@ public class ServerEngine implements IDeviceServer {
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
             st_1 = con_1.createStatement();
 
-            queryString = "INSERT INTO followme (`latitude`, `longitude`, `bearing`, `event`, `time`, `followMeDeviceId`, `sent`) VALUES ("
-                    + "'" + data.lat + "', "
-                    + "'" + data.lng + "', "
-                    + "'" + data.bearing + "', "
-                    + "'" + data.event + "', "
+            queryString = "INSERT INTO followme "
+                    + "(`latitude`, `longitude`, `bearing`, `event`, `time`, `followMeDeviceId`, `sent`,`routeId` ) "
+                    + "VALUES ("
+                    + "'" + data.getLat() + "', "
+                    + "'" + data.getLon() + "', "
+                    + "'" + data.getBearing() + "', "
+                    + "'" + data.getEvent()+ "', "
                     + "NOW(), "
-                    + "'" + data.followMeDeviceId + "', "
-                    + "'" + "0" + "')";
+                    + "'" + data.getFollowMeDeviceId() + "', "
+                    + "'0', "
+                    + "'" + data.getRouteId() + "')";
 
             System.out.println(queryString);
             st_1.executeUpdate(queryString);
@@ -437,12 +440,12 @@ public class ServerEngine implements IDeviceServer {
                     + "GROUP BY followMeDeviceId) AS s ON s.maksimum_id = followme.id "
                     + "INNER JOIN mk.followmedevices AS d ON followme.followMeDeviceId = d.id "
                     + "WHERE followme.time > DATE_SUB(CURRENT_TIMESTAMP(),INTERVAL 1 HOUR)";
-            
+
         } else {
             queryString = "SELECT * from followme "
                     + "INNER JOIN followmedevices AS d "
                     + "ON followme.followMeDeviceId = d.id "
-                    + "WHERE followme.followMeDeviceId = " +deviceId
+                    + "WHERE followme.followMeDeviceId = " + deviceId
                     + " ORDER BY followme.`id` DESC LIMIT 1";
         }
         try {
@@ -461,6 +464,7 @@ public class ServerEngine implements IDeviceServer {
                     data.setTime(rs_1.getTimestamp("time"));
                     data.setFollowMeDeviceId(deviceId);
                     data.setName(rs_1.getString("name"));
+                    data.setRouteId(rs_1.getInt("routeId"));
 
                     Gson gson = new Gson();
                     jsonString = gson.toJson(data, FollowMeData.class);
@@ -477,6 +481,7 @@ public class ServerEngine implements IDeviceServer {
                     data.setTime(rs_1.getTimestamp("time"));
                     data.setFollowMeDeviceId(rs_1.getInt("followMeDeviceId"));
                     data.setName(rs_1.getString("name"));
+                    data.setRouteId(rs_1.getInt("routeId"));
                     datas.add(data);
                 }
 
@@ -498,6 +503,50 @@ public class ServerEngine implements IDeviceServer {
             return "-4";
         }
         return jsonString;
+    }
+
+    @Override
+    public int getRouteId(int deviceId) {
+        int routeId = -1;
+        Credentials cr = new Credentials();
+        Connection con_1 = null;
+        Statement st_1 = null;
+        ResultSet rs_1 = null;
+        String queryString = "INSERT INTO route SET followMeDeviceId = " + deviceId + " , time = NOW()";
+        Statement st_2 = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+            st_1 = con_1.createStatement();
+            System.out.println(queryString);
+            st_1.executeUpdate(queryString);
+            System.out.println("routeId for deviceId = " + deviceId + " is created.");
+
+            st_2 = con_1.createStatement();
+            queryString = "SELECT MAX(id) AS maxId from mk.route WHERE followMeDeviceId = " + deviceId;
+            System.out.println(queryString);
+            rs_1 = st_2.executeQuery(queryString);
+
+            while (rs_1.next()) {
+                routeId = rs_1.getInt("maxId");
+                System.out.println("New routeId for deviceId = " + deviceId + "is " + routeId);
+            }
+
+        } catch (SQLException ex) {
+            return -1;
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            return -1;
+        } catch (InstantiationException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            return -1;
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            return -1;
+        }
+
+        return routeId;
     }
 
     public enum Device {

@@ -21,6 +21,7 @@ public class FollowMeData {
     int event = 0;
     int followMeDeviceId;
     String name="";
+    int routeId=0;
 
     
     public void setName(String newName){
@@ -77,6 +78,13 @@ public class FollowMeData {
 
     public int getFollowMeDeviceId() {
         return this.followMeDeviceId;
+    }
+    
+    public int getRouteId(){
+        return this.routeId;
+    }
+    public void setRouteId(int routeId){
+        this.routeId = routeId;
     }
 
 }
