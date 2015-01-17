@@ -19,8 +19,8 @@ import mkws.ServerEngine;
  *
  * @author oerden
  */
-@WebServlet(name = "getRouteId", urlPatterns = {"/getRouteId"})
-public class getRouteId extends HttpServlet {
+@WebServlet(name = "getTask", urlPatterns = {"/getTask"})
+public class GetTask extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,18 +33,15 @@ public class getRouteId extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("text/json");
+        String deviceId = request.getParameter("deviceId");
         PrintWriter out = response.getWriter();
-        
         try {
-            int deviceId = Integer.parseInt(request.getParameter("deviceId"));
-            ServerEngine server = new ServerEngine();
             /* TODO output your page here. You may use following sample code. */
-            
-            out.println(server.getRouteId(deviceId));
-            
-        } catch (NumberFormatException e){
-            out.println(-2);
+            String output = "";
+            ServerEngine server = new ServerEngine();
+            output = server.getTask(Integer.parseInt(deviceId));
+            out.println(output);
         } finally {
             out.close();
         }

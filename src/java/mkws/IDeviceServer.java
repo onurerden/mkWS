@@ -65,5 +65,12 @@ public interface IDeviceServer {
     //followMeDevice tarafından çağrılır. İlgili followMeDevice'ının session rotasını çıkartmak 
     //amacıyla kullanılır. Bu fonksiyon sonrasında dönen integer, FollowMeData'sındaki route değişkenine
     //girilmelidir. -1 ise db hatası, -2 ise deviceId parametresi Integer değil.
+    
+    int sendLog(String jsonLog);
+    //DeviceType DeviceTypes.java dosyasındaki gibi olacaktır.
+    //logType hata mesajları için 1, bilgi mesajları için 2, diğer mesajlar için 99 olacaktır.
+    //logMessage için bir kısıtlama yoktur, istenen şey yazılabilir.
+    //başarılı gönderim halinde 0, hatalı json -2, db erişim hatası -1 dönüş yapar.
+    
 
 }

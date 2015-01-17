@@ -11,11 +11,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 /**
  *
@@ -28,19 +27,21 @@ public class ServerEngine implements IDeviceServer {
         int deviceId = -1;
         String queryString = "";
 
-        Device device = Device.other;
+        //Device device = Device.other;
+        DeviceTypes device = DeviceTypes.OTHER;
+                
         try {
-            device = Device.valueOf(deviceType.toLowerCase());
+            device = DeviceTypes.valueOf(deviceType.toUpperCase());
         } catch (Exception ex) {
 
         }
-
+        
         switch (device) {
-            case mk: {
+            case MK: {
                 queryString = "SELECT * from kopter where UID = '" + uid + "'";
                 break;
             }
-            case mp: {
+            case MP: {
                 queryString = "SELECT * from followmedevices where UID = '" + uid + "'";
                 break;
             }
@@ -58,7 +59,7 @@ public class ServerEngine implements IDeviceServer {
             rs_1 = st_1.executeQuery(queryString);
 
             switch (device) {
-                case mk: {
+                case MK: {
                     deviceId = -2;
                     if (rs_1.next()) {
                         MKopter kopter = new MKopter();
@@ -76,7 +77,7 @@ public class ServerEngine implements IDeviceServer {
                     }
                     break;
                 }
-                case mp: {
+                case MP: {
                     deviceId = -3;
                     if (rs_1.next()) {
                         MobilePhone phone = new MobilePhone();
@@ -119,21 +120,21 @@ public class ServerEngine implements IDeviceServer {
         if ((deviceId == -2) || (deviceId == -3)) {
             String queryString = "";
 
-            Device device = Device.other;
+            DeviceTypes device = DeviceTypes.OTHER;
             try {
-                device = Device.valueOf(deviceType.toLowerCase());
+                device = DeviceTypes.valueOf(deviceType.toUpperCase());
             } catch (Exception ex) {
                 System.out.println("Device Enumeration cannot be done.");
             }
             //String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
             switch (device) {
-                case mk: {
+                case MK: {
                     queryString = "INSERT INTO `kopter`(`UID`, `name`, `active`) VALUES ('" + uid + "', '" + name + "', 1)";
                     break;
                 }
-                case mp: {
-                    queryString = "INSERT INTO `followmedevices`(`UID`, `name`, `registerDate`) VALUES ('" + uid + "', '" + name + "', NOW())";;
+                case MP: {
+                    queryString = "INSERT INTO `followmedevices`(`UID`, `name`, `registerDate`) VALUES ('" + uid + "', '" + name + "', NOW())";
                     break;
                 }
             }
@@ -141,7 +142,7 @@ public class ServerEngine implements IDeviceServer {
             Credentials cr = new Credentials();
             Connection con_1 = null;
             Statement st_1 = null;
-            ResultSet rs_1 = null;
+            //ResultSet rs_1 = null;
             try {
                 Class.forName("com.mysql.jdbc.Driver").newInstance();
                 con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
@@ -556,8 +557,66 @@ public class ServerEngine implements IDeviceServer {
         return 1;
     }
 
-    public enum Device {
-
-        mk, mp, other;
+    @Override
+    public int sendLog(String jsonLog) {
+      int status = -2;
+             LogMessage msg = new LogMessage();
+             Gson gson = new Gson();
+             
+             try {
+             msg = gson.fromJson(jsonLog, LogMessage.class);
+        } catch (Exception ex) {
+            System.out.println("LogMessage Parse error: " + ex.toString());
+            return -2;
+        }
+             
+        Credentials cr = new Credentials();
+        Connection con_1 = null;
+        Statement st_1 = null;
+        String query = "INSERT INTO mk.logs SET logLevel = " + msg.logType + ", logMessage = " + msg.logMessage +", ";
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+            st_1 = con_1.createStatement();
+            
+            DeviceTypes deviceType = DeviceTypes.valueOf(msg.deviceType.toUpperCase());
+            switch (deviceType){
+                case MK: {
+                    query=query + "kopterId = "+msg.deviceId ;
+                }
+                case MP: {
+                    query=query + "followMeDeviceId = "+ msg.deviceId;
+                }
+                default: {
+                    query=query + "";
+                    
+                }
+            st_1.execute(query);
+                status=0;
+            }
+            
+        }   catch (ClassNotFoundException ex){
+            
+        } catch (IllegalAccessException ex) {
+            status = -1;
+        } catch (InstantiationException ex) {
+            status = -1;
+        } catch (SQLException ex) {
+            status = -1;
+        } finally {
+          try {
+              con_1.close();
+          } catch (SQLException ex) {
+              
+          }
+        }
+        
+             
+        return status;
     }
+
+//    public enum Device {
+//
+//        mk, mp, other;
+//    }
 }
