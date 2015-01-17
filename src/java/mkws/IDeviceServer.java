@@ -67,8 +67,9 @@ public interface IDeviceServer {
     //girilmelidir. -1 ise db hatası, -2 ise deviceId parametresi Integer değil.
     
     int sendLog(String logJson);
-    //DeviceType DeviceTypes.java dosyasındaki gibi olacaktır.
-    //logType hata mesajları için 1, bilgi mesajları için 2, diğer mesajlar için 99 olacaktır.
+    //DeviceType DeviceTypes.java dosyasındaki gibi olacaktır. (MK ya da MP)
+    //LogMessage.java cinsi obje json olarak gönderilir.
+    //logLevel hata mesajları için 1, bilgi mesajları için 2, diğer mesajlar için 99 olacaktır.
     //logMessage için bir kısıtlama yoktur, istenen şey yazılabilir.
     //başarılı gönderim halinde 0, hatalı json -2, db erişim hatası -1 dönüş yapar.
     
