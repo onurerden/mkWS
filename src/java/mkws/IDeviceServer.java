@@ -72,7 +72,7 @@ public interface IDeviceServer {
     //logLevel hata mesajları için 1, bilgi mesajları için 2, diğer mesajlar için 99 olacaktır.
     //logMessage için bir kısıtlama yoktur, istenen şey yazılabilir.
     //başarılı gönderim halinde 0, hatalı json -2, db erişim hatası -1 dönüş yapar.
-    //sendLog
+    
     
 
 }
