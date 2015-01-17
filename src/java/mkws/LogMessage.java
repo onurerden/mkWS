@@ -13,7 +13,7 @@ package mkws;
 public class LogMessage {
     int deviceId;
     String deviceType; //MK or MP
-    int logType; //hata mesajı 1, bilgi mesajı 2, diğer 99
+    int logLevel; //hata mesajı 1, bilgi mesajı 2, diğer 99
     String logMessage;  //250 char max
     
     

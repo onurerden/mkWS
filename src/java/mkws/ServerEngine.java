@@ -558,13 +558,13 @@ public class ServerEngine implements IDeviceServer {
     }
 
     @Override
-    public int sendLog(String jsonLog) {
+    public int sendLog(String logJson) {
       int status = -2;
              LogMessage msg = new LogMessage();
              Gson gson = new Gson();
              
              try {
-             msg = gson.fromJson(jsonLog, LogMessage.class);
+             msg = gson.fromJson(logJson, LogMessage.class);
         } catch (Exception ex) {
             System.out.println("LogMessage Parse error: " + ex.toString());
             return -2;
@@ -573,7 +573,7 @@ public class ServerEngine implements IDeviceServer {
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1 = null;
-        String query = "INSERT INTO mk.logs SET logLevel = " + msg.logType + ", logMessage = " + msg.logMessage +", ";
+        String query = "INSERT INTO mk.logs SET logLevel = '" + msg.logLevel + "', logMessage = '" + msg.logMessage +"', ";
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
@@ -582,15 +582,16 @@ public class ServerEngine implements IDeviceServer {
             DeviceTypes deviceType = DeviceTypes.valueOf(msg.deviceType.toUpperCase());
             switch (deviceType){
                 case MK: {
-                    query=query + "kopterId = "+msg.deviceId ;
+                    query=query + "kopterId = '"+msg.deviceId +"'";
                 }
                 case MP: {
-                    query=query + "followMeDeviceId = "+ msg.deviceId;
+                    query=query + "followMeDeviceId = '"+ msg.deviceId+"'";
                 }
                 default: {
                     query=query + "";
                     
                 }
+                System.out.println(query);
             st_1.execute(query);
                 status=0;
             }
