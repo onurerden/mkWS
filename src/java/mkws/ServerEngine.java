@@ -549,6 +549,13 @@ public class ServerEngine implements IDeviceServer {
         return routeId;
     }
 
+    @Override
+    public int setTask(int kopterId, int followMeDeviceId) {
+        
+        
+        return 1;
+    }
+
     public enum Device {
 
         mk, mp, other;

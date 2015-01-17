@@ -34,6 +34,7 @@ public interface IDeviceServer {
     //gorev varsa json formatinda cevap donulur.
     //-2 gelirse söz konusu kopter ID için bir konum bilgisi yoktur.
     //-1 db connection Error
+    //
     //GetTask içinde gelen veri :
     //      1 ise followme
     //      2 ise lookatme
@@ -46,6 +47,9 @@ public interface IDeviceServer {
     //comehome event'inde koptere, kopterStatus'tan alınan home pozisyonu (enlem,boylam) Waypoint olarak
     //          gönderilir. Home'a göre bearing hesaplanır.
 
+    int setTask(int kopterId, int followMeDeviceId);
+    //Değerler ile ilgili açıklamalar getTask() metodu içerisinde yapılmıştır.
+    
     int sendFollowMeData(String jsonfollowme);
     //Yalnızca followMeDevice tarafından kullanılır.
     //FollowMeData sınıfındaki objeyi json olarak (parametre adı jsonfollowme) gonderir.
