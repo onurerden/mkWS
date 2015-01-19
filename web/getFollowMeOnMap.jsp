@@ -110,7 +110,7 @@
     
 </jsp:useBean>
     
-<p>toplam =  <jsp:getProperty name="toplam" property="toplam"/>
+<p>Deneme toplam =  <jsp:getProperty name="toplam" property="toplam"/>
 </body>
 
 </html>
