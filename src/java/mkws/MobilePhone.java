@@ -6,7 +6,7 @@
 
 package mkws;
 
-import com.mysql.jdbc.JDBC4DatabaseMetaData;
+//import com.mysql.jdbc.JDBC4DatabaseMetaData;
 import java.util.Date;
 
 /**

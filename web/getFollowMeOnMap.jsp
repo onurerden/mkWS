@@ -20,24 +20,34 @@
           - 'load' = package.full - full package;
 	      - 'lang' = en-US - American English.
     -->
+    
+    <jsp:useBean
+    id = "routeBean" class= "mkws.GetRoutePoints">
+    
+</jsp:useBean>
+    
+
+    
+    
+    
     <script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=en-US"
             type="text/javascript"></script>
     <script type="text/javascript">
+        
+        
         // Initializes the map as soon as the API is loaded and DOM is ready
         ymaps.ready(init);
 
         function init () {
             var myMap = new ymaps.Map("map", {
-                    center: [38.440817,27.192678],
-                    zoom: 13
+            center: [38.425218, 27.151823],        
+            zoom: 10
                 }),
 
                 // A polyline
                 myPolyline = new ymaps.Polyline([
                     // The coordinates of polyline vertices.
-                    [38.425218, 27.151823],
-                    [38.445388, 27.173281],
-                    [38.455874, 27.203665]
+                    <jsp:getProperty name="routeBean" property="routePoints"/>
                 ], {
                     // The balloon content
                     balloonContent: "Polyline"
@@ -94,6 +104,13 @@
 <h2>Defining the style of polylines</h2>
 
 <div id="map" style="width:600px;height:400px"></div>
+<br/>
+<jsp:useBean
+    id = "toplam" class= "mkws.DenemeToplama">
+    
+</jsp:useBean>
+    
+<p>toplam =  <jsp:getProperty name="toplam" property="toplam"/>
 </body>
 
 </html>
