@@ -44,7 +44,7 @@ Connection con_1 = null;
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(),cr.dbUserName , cr.dbPassword);
             st_1 = con_1.createStatement();
-            String query = "SELECT latitude, longitude FROM followMe WHERE routeId = 45";
+            String query = "SELECT latitude, longitude FROM followme WHERE routeId = 45";
             rs_1 = st_1.executeQuery(query);
             
             while(rs_1.next()){
