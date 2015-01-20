@@ -1,3 +1,5 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <%-- 
     Document   : getFollowMeOnMap
     Created on : 13.Oca.2015, 11:43:06
@@ -64,7 +66,7 @@
                         coordinates: <jsp:getProperty name="routeBean" property="routeStartPoint"/>
                     },
                 properties: {
-                        iconContent: "Ba∫langπÁ"}
+                        iconContent: "Ba≈ülangƒ±√ß"}
             }, {preset: 'twirl#greenStretchyIcon'});
 
 myEndPoint = new ymaps.GeoObject({
@@ -73,7 +75,7 @@ myEndPoint = new ymaps.GeoObject({
                         coordinates: <jsp:getProperty name="routeBean" property="routeEndPoint"/>
                     },
                 properties: {
-                        iconContent: "Biti∫"}
+                        iconContent: "Biti≈ü"}
             }, {preset: 'twirl#redStretchyIcon'});
 
                 // Adds geo objects to the map 
