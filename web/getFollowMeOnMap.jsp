@@ -86,6 +86,7 @@ myEndPoint = new ymaps.GeoObject({
 
                 myMap.controls.add('mapTools');
                 myMap.controls.add('typeSelector');
+                myMap.controls.add('smallZoomControl');
 
             }
         </script>
