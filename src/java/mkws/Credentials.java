@@ -16,8 +16,8 @@ public class Credentials {
     String database = "mk";
 //    String dbUserName = "adminGStcLXX";
 //    String dbPassword = "Wc_flbnyklZt";
-    String dbUserName = "onur";
-    String dbPassword = "19861986";
+    public String dbUserName = "onur";
+    public String dbPassword = "19861986";
 
     public String getMysqlConnectionString() {
         String connectionString = new String();
