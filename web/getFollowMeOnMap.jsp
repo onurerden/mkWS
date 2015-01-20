@@ -22,14 +22,13 @@
 
         <jsp:useBean
             id = "routeBean" class= "mkws.webbeans.GetRoutePoints">
-
         </jsp:useBean>
+        
         <jsp:setProperty name="routeBean" property = "routeId" value="${param.routeId}"/>
     
         <script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=en-US"
         type="text/javascript"></script>
         <script type="text/javascript">
-
 
             // Initializes the map as soon as the API is loaded and DOM is ready
             ymaps.ready(init);
@@ -98,12 +97,7 @@ myEndPoint = new ymaps.GeoObject({
         <div id="map" style="width:auto; height:500px"></div>
 
         <br/>
-        <jsp:useBean
-            id = "toplam" class= "mkws.DenemeToplama">
-
-        </jsp:useBean>
-
-        <p>toplam =  <jsp:getProperty name="toplam" property="toplam"/>
+        
     </body>
 
 </html>
