@@ -15,6 +15,7 @@
     <h1>Hello World!</h1>
     <a href="/mkWS/GetRegisteredData?device=mk">Kopters</a><br>
     <a href="/mkWS/GetRegisteredData?device=mp">Devices</a>
+    <a href="/mkWS/latestRoutes.jsp">Latest Routes</a>
     
 </body>
 </html>
