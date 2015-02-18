@@ -45,24 +45,19 @@ public class GetRouteDetails {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
             st_1 = con_1.createStatement();
-            String query = "SELECT latitude, longitude, name, followMeDeviceId, route.time FROM (followme "
-                    + "INNER JOIN "
-                    + "followmedevices "
-                    + "ON "
-                    + "followme.followMeDeviceId = followmedevices.id) "
-                    + "INNER JOIN route "
-                    + "ON followme.routeId = route.id "
-                    + "WHERE routeId = " + routeId + " "
-                    + "ORDER BY followme.id asc";
+            String query = "SELECT latitude, longitude, followMeDeviceId from followme WHERE routeId = " + routeId + " "
+                    + "ORDER BY followme.id ASC";
 
             rs_1 = st_1.executeQuery(query);
 
             while (rs_1.next()) {
                 points.add("[" + rs_1.getString("latitude") + "," + rs_1.getString("longitude") + "],");
                 this.routePoints = this.routePoints + "[" + rs_1.getString("latitude") + "," + rs_1.getString("longitude") + "],";
-                this.deviceName = rs_1.getString("name");
-                this.deviceId = rs_1.getInt("followMeDeviceId");
-                this.routeCreationDate = rs_1.getTimestamp("time");
+prepareRouteDetails(this.routeId);
+this.deviceName = deviceNameFromId(this.deviceId);
+//  this.deviceName = rs_1.getString("name");
+              //  this.deviceId = rs_1.getInt("followMeDeviceId");
+              //  this.routeCreationDate = rs_1.getTimestamp("time");
             }
 
             if (!points.isEmpty()) {
@@ -114,4 +109,53 @@ public class GetRouteDetails {
         return this.routeCreationDate;
     }
 
+    private String deviceNameFromId(int id){
+        String name ="";
+        Credentials cr = new Credentials();
+        
+        Connection con_1 = null;
+        Statement st_1 = null;
+        ResultSet rs_1 = null;
+        try {
+            /* TODO output your page here. You may use following sample code. */
+
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+            st_1 = con_1.createStatement();
+            String query = "SELECT name from followmedevices where id = " +id;
+        rs_1 = st_1.executeQuery(query);
+
+            while (rs_1.next()) {
+            name = rs_1.getString("name");
+            }
+        }catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException e){
+            
+        }
+        return name;
+    }
+    private void prepareRouteDetails(int id){
+        
+        Credentials cr = new Credentials();
+        
+        Connection con_1 = null;
+        Statement st_1 = null;
+        ResultSet rs_1 = null;
+        try {
+            /* TODO output your page here. You may use following sample code. */
+
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+            st_1 = con_1.createStatement();
+            String query = "SELECT followMeDeviceId, time from route where id = " +id;
+        rs_1 = st_1.executeQuery(query);
+
+            while (rs_1.next()) {
+            this.deviceId = rs_1.getInt("followMeDeviceId");
+            this.routeCreationDate = rs_1.getTimestamp("time");
+            }
+        }catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException e){
+            
+        }
+        
+    }
 }

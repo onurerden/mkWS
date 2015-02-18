@@ -94,7 +94,8 @@
 
     <body>
         <h2>Route Id: <% out.println(Integer.parseInt(request.getParameter("routeId")));%> </h2>
-
+Device Name : <jsp:getProperty name="routeBean" property="deviceName"/> <br/>
+Route Date : <jsp:getProperty name="routeBean" property="routeCreationDate"/> <br/>
         <div id="map" style="width:auto; height:500px"></div>
 
         <br/>
