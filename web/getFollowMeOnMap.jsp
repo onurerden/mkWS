@@ -21,7 +21,7 @@
         -->
 
         <jsp:useBean
-            id = "routeBean" class= "mkws.webbeans.GetRoutePoints">
+            id = "routeBean" class= "mkws.webbeans.GetRouteDetails">
         </jsp:useBean>
 
         <jsp:setProperty name="routeBean" property = "routeId" value="${param.routeId}"/>
