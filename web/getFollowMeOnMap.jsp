@@ -98,8 +98,8 @@
         <div id="map" style="width:auto; height:500px"></div>
 
         <br/>
-        <a href="/mkWS/getFollowMeOnMap.jsp?routeId="<% out.println(Integer.parseInt(request.getParameter("routeId")) - 1);%> > Önceki </a>
-        <a href="/mkWS/getFollowMeOnMap.jsp?routeId="<% out.println(Integer.parseInt(request.getParameter("routeId")) + 1);%> > Sonraki </a>        
+        <a href="/mkWS/getFollowMeOnMap.jsp?routeId=<% out.println(Integer.parseInt(request.getParameter("routeId")) - 1);%> "> Önceki </a>
+        <a href="/mkWS/getFollowMeOnMap.jsp?routeId=<% out.println(Integer.parseInt(request.getParameter("routeId")) + 1);%> "> Sonraki </a>        
     </body>
 
 </html>
