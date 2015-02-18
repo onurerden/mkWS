@@ -45,7 +45,7 @@ public class GetRouteDetails {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
             st_1 = con_1.createStatement();
-            String query = "SELECT latitude, longitude, name, route.time FROM (followme "
+            String query = "SELECT latitude, longitude, name, followMeDeviceId, route.time FROM (followme "
                     + "INNER JOIN "
                     + "followmedevices "
                     + "ON "
