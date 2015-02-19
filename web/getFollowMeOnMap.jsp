@@ -1,4 +1,8 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%--<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
+--%>
 
 <%-- 
     Document   : getFollowMeOnMap
@@ -38,26 +42,26 @@
                     center: <jsp:getProperty name="routeBean" property="routeStartPoint"/>
                     zoom: 15
                 }),
-                        // A polyline
-                        myPolyline = new ymaps.Polyline([
-                            // The coordinates of polyline vertices.
+                // A polyline
+                myPolyline = new ymaps.Polyline([
+                    // The coordinates of polyline vertices.
 
 
             <jsp:getProperty name="routeBean" property="routePoints"/>
-                        ], {
-                            // The balloon content
-                            balloonContent: "FollowMe Device Route for device: <jsp:getProperty name="routeBean" property="routeId"/>"
-                        }, {
-                            // Balloon options
-                            // Disabling the "Close" button
-                            balloonHasCloseButton: false,
-                            // The line width
-                            strokeWidth: 4,
-                            // The line transparency
-                            strokeOpacity: 0.8,
-                            // Defines the color of the line - white
-                            strokeColor: "#FF0000"
-                        });
+                ], {
+                    // The balloon content
+                    balloonContent: "FollowMe Device Route for device: <jsp:getProperty name="routeBean" property="routeId"/>"
+                }, {
+                    // Balloon options
+                    // Disabling the "Close" button
+                    balloonHasCloseButton: false,
+                    // The line width
+                    strokeWidth: 4,
+                    // The line transparency
+                    strokeOpacity: 0.8,
+                    // Defines the color of the line - white
+                    strokeColor: "#FF0000"
+                });
 
                 myStartPoint = new ymaps.GeoObject({
                     geometry: {
@@ -94,8 +98,22 @@
 
     <body>
         <h2>Route Id: <% out.println(Integer.parseInt(request.getParameter("routeId")));%> </h2>
-Device Name : <jsp:getProperty name="routeBean" property="deviceName"/> <br/>
-Route Date : <jsp:getProperty name="routeBean" property="routeCreationDate"/> <br/>
+        <b>Device Name :</b> <i><jsp:getProperty name="routeBean" property="deviceName"/> </i><br/>
+        <b>Route Date : </b> <i><jsp:getProperty name="routeBean" property="routeCreationDate"/> </i><br/>
+        <b>Route length: </b> <i> 
+            <c:choose> 
+                <c:when test="${routeBean.getRouteLength()>1}">
+                    <fmt:formatNumber type="number" maxFractionDigits="2" value="<%= routeBean.getRouteLength()%>" /> km
+                </c:when>
+                <c:otherwise>
+                    <fmt:formatNumber type="number" maxFractionDigits="2" value="<%= routeBean.getRouteLength()*1000%>" /> m
+                </c:otherwise>
+            </c:choose>
+            
+        
+        </i><br/>
+        <br/>
+        
         <div id="map" style="width:auto; height:500px"></div>
 
         <br/>
