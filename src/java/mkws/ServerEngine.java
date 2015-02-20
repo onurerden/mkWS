@@ -263,12 +263,16 @@ public class ServerEngine implements IDeviceServer {
             output = json.toJson(data);
             con_1.close();
         } catch (SQLException ex) {
+            output = "-2";
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
+            output = "-2";
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
+            output = "-2";
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
+            output = "-2";
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
 

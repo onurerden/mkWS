@@ -31,9 +31,9 @@ public interface IDeviceServer {
 
     String getTask(int deviceID);
     //yalnizca mk tarafindan kullanilir. koptere iletilecek yeni bir 
-    //gorev varsa json formatinda cevap donulur.
-    //-2 gelirse söz konusu kopter ID için bir konum bilgisi yoktur.
-    //-1 db connection Error
+    //gorev varsa FollowMeData objesi json formatinda cevap donulur.
+    //-1 gelirse söz konusu kopter ID için bir konum bilgisi yoktur.
+    //-2 db connection Error
     //
     //GetTask içinde gelen veri :
     //      1 ise followme
