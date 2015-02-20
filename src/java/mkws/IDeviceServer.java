@@ -54,8 +54,7 @@ public interface IDeviceServer {
     //Yalnızca followMeDevice tarafından kullanılır.
     //FollowMeData sınıfındaki objeyi json olarak (parametre adı jsonfollowme) gonderir.
     //Başarılı gönderim halinde 0, hatalı json -2, db erişim hatası -1
-    //
-    
+        
     String getFollowMeData(int deviceId);
     //deviceId'si verilen FollowMe cihazının bilgileri döndürülür.
     //deviceId 0 girilirse tüm followme cihazlarına ait bilgiler array olarak döndürülür.
@@ -73,6 +72,4 @@ public interface IDeviceServer {
     //logMessage için bir kısıtlama yoktur, istenen şey yazılabilir.
     //başarılı gönderim halinde 0, hatalı json -2, db erişim hatası -1 dönüş yapar.
     
-    
-
 }
