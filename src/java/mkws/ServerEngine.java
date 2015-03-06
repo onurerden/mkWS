@@ -116,6 +116,9 @@ public class ServerEngine implements IDeviceServer {
         //    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         int deviceId = -1;
         deviceId = touchServer(uid, deviceType);
+        if (name.length()==0){
+            name = "defaultName";
+        }
 
         if ((deviceId == -2) || (deviceId == -3)) {
             String queryString = "";
