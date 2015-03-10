@@ -182,6 +182,9 @@ public class ServerEngine implements IDeviceServer {
 
         Gson jsonObject = new Gson();
         status = jsonObject.fromJson(jsonStatus, KopterStatus.class);
+        if (status.kopterVario>32768){
+            status.kopterAltitude = status.kopterAltitude-65536;
+        }
 
         //String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         queryString = "INSERT INTO `kopterstatus`(`kopterId`, `altitude`,"
