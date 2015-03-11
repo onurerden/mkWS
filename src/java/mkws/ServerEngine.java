@@ -564,6 +564,24 @@ public class ServerEngine implements IDeviceServer {
     @Override
     public int setTask(int kopterId, int followMeDeviceId) {
         
+        Credentials cr = new Credentials();
+        Connection con_1 = null;
+        Statement st_1 = null;
+        ResultSet rs_1 = null;
+        String queryString = "";
+        //String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+            st_1 = con_1.createStatement();
+            queryString = "INSERT INTO devicematching SET kopterId =" + kopterId+" followMeDeviceId =" +followMeDeviceId; 
+        
+            st_1.executeUpdate(queryString);
+            
+        }catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex){
+            
+        }
+        
         
         return 1;
     }
