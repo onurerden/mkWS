@@ -574,7 +574,7 @@ public class ServerEngine implements IDeviceServer {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
             st_1 = con_1.createStatement();
-            queryString = "INSERT INTO devicematching SET kopterId =" + kopterId+", followMeDeviceId =" +followMeDeviceId; 
+            queryString = "INSERT INTO devicematching SET kopterId =" + kopterId +", followMeDeviceId =" +followMeDeviceId; 
         
             st_1.executeUpdate(queryString);
             
