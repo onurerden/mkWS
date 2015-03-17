@@ -17,14 +17,15 @@
 
             Statement statement = connection.createStatement() ;
             ResultSet resultset = 
-                statement.executeQuery("SELECT route.id, followmedevices.name, route.time FROM  `route` "
+                statement.executeQuery("SELECT route.id, followmedevices.name, route.time FROM  route "
                         + "INNER JOIN followmedevices ON route.followMeDeviceId = followmedevices.id "
-                        + "ORDER BY TİME DESC ") ; 
+                        + "ORDER BY time DESC") ; 
         %>
 <div class="row">
 	<div id="breadcrumb" class="col-xs-12">
 		<ol class="breadcrumb">
 			<li><a href="index.html">Home</a></li>
+                        <li><a href="mkWS/getFollowMeOnMap.jsp?routeId=171">Home</a></li>
 			<li><a href="#">Routes</a></li>
 		</ol>
 	</div>
@@ -52,7 +53,15 @@
 			</div>
 			<div class="box-content">
 				<p>Routes defined in mkWS system listed below:</p>
+                                <a href="mkWS/getFollowMeOnMap.jsp?routeId=171" class="ajax-link">routes</a>
+                             <!--   <a href ="#" onclick="load_home()"> HOME </a> </div>
+            <script>
+                                function load_home(){
+document.getElementById("content").innerHTML='<object type="text/html" data="mkWS/getFollowMeOnMap.jsp?routeId=171" ></object>';
+}
+        </script> -->
 				<table class="table">
+                               
 					<thead>
                                             <tr>
                             <th>Route Id</th>
