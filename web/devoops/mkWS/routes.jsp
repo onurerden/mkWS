@@ -5,7 +5,22 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="mkws.Credentials"%>
+<%@ page import="java.sql.*" %>
+<%// Class.forName("sun.jdbc.odbc.JdbcOdbcDriver"); %>
+<% Class.forName("com.mysql.jdbc.Driver").newInstance(); %>
+<% 
+    Credentials cr = new Credentials();
+            Connection connection = DriverManager.getConnection(
+                //cr.getMysqlConnectionString(),cr.getDbUserName(),cr.getDbPassword());
+                cr.getMysqlConnectionString(),cr.getDbUserName(),cr.getDbPassword());
 
+            Statement statement = connection.createStatement() ;
+            ResultSet resultset = 
+                statement.executeQuery("SELECT route.id, followmedevices.name, route.time FROM  `route` "
+                        + "INNER JOIN followmedevices ON route.followMeDeviceId = followmedevices.id "
+                        + "ORDER BY TİME DESC ") ; 
+        %>
 <div class="row">
 	<div id="breadcrumb" class="col-xs-12">
 		<ol class="breadcrumb">
@@ -39,37 +54,24 @@
 				<p>Routes defined in mkWS system listed below:</p>
 				<table class="table">
 					<thead>
-						<tr>
-							<th>#</th>
-							<th>Route Id</th>
-							<th>Route Length</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>1</td>
-							<td>Firefox</td>
-							<td>Mozilla</td>
+                                            <tr>
+                            <th>Route Id</th>
+                            <th>Device Name</th>
+                            <th>DateTime</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+						<% while (resultset.next()) {%>
+                        <tr>
+                            <td><%= resultset.getInt("id")%></td>
+                            <td><%= resultset.getString("name")%></td>
+                            <td><%= resultset.getTimestamp("time")%></td>
+                            
 
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>Chrome</td>
-							<td>Google</td>
-
-						</tr>
-						<tr>
-							<td>3</td>
-							<td>Internet Explorer</td>
-							<td>Microsoft</td>
-
-						</tr>
-						<tr>
-							<td>4</td>
-							<td>Safari</td>
-							<td>Apple</td>
-
-						</tr>
+                        </tr>
+                        <% }%>
+						
 					</tbody>
 				</table>
 			</div>
