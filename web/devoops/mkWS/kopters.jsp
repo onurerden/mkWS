@@ -7,11 +7,13 @@
 <%@page import="mkws.Credentials"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*" %>
-<% Class.forName("sun.jdbc.odbc.JdbcOdbcDriver"); %>
+<%// Class.forName("sun.jdbc.odbc.JdbcOdbcDriver"); %>
+<% Class.forName("com.mysql.jdbc.Driver").newInstance(); %>
 <% 
     Credentials cr = new Credentials();
             Connection connection = DriverManager.getConnection(
-                cr.getMysqlConnectionString(),cr.dbUserName,cr.dbPassword);
+                //cr.getMysqlConnectionString(),cr.getDbUserName(),cr.getDbPassword());
+                cr.getMysqlConnectionString(),"onur","19861986");
 
             Statement statement = connection.createStatement() ;
             ResultSet resultset = 
@@ -60,10 +62,10 @@
 					<tbody>
                                             <% while(resultset.next()){ %>
 						<tr>
-							<td><%= resultset.getInt(1) %></td>
-							<td><%= resultset.getString(3) %></td>
-							<td><%= resultset.getString(2) %></td>
-							<td><%= resultset.getTimestamp(5) %></td>
+							<td><%= resultset.getInt("id") %></td>
+							<td><%= resultset.getString("name") %></td>
+							<td><%= resultset.getString("UID") %></td>
+							<td><%= resultset.getTimestamp("latestTouch") %></td>
 
 						</tr>
                                                 <% }%>
