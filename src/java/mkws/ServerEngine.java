@@ -53,7 +53,7 @@ public class ServerEngine implements IDeviceServer {
         ResultSet rs_1 = null;
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
 
             rs_1 = st_1.executeQuery(queryString);
@@ -148,7 +148,7 @@ public class ServerEngine implements IDeviceServer {
             //ResultSet rs_1 = null;
             try {
                 Class.forName("com.mysql.jdbc.Driver").newInstance();
-                con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+                con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
                 st_1 = con_1.createStatement();
 
                 st_1.executeUpdate(queryString, Statement.RETURN_GENERATED_KEYS);
@@ -213,7 +213,7 @@ public class ServerEngine implements IDeviceServer {
         //System.out.println(queryString);
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             System.out.println(queryString);
             result = -2;
@@ -246,7 +246,7 @@ public class ServerEngine implements IDeviceServer {
 
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
 
             queryString = "SELECT * from followme WHERE followMeDeviceId = " + getMatchedDevice(deviceId) + " AND sent = 0 ORDER BY time DESC LIMIT 1";
@@ -306,7 +306,7 @@ public class ServerEngine implements IDeviceServer {
         //String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
 
             queryString = "INSERT INTO followme "
@@ -350,7 +350,7 @@ public class ServerEngine implements IDeviceServer {
 
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
 
             rs_1 = st_1.executeQuery(queryString);
@@ -386,7 +386,7 @@ public class ServerEngine implements IDeviceServer {
         String queryString = "SELECT * from kopterstatus WHERE kopterId = " + deviceId + " ORDER BY `kopterstatus`.`id` DESC LIMIT 1";
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             System.out.println(queryString);
             rs_1 = st_1.executeQuery(queryString);
@@ -462,7 +462,7 @@ public class ServerEngine implements IDeviceServer {
         }
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             System.out.println(queryString);
             rs_1 = st_1.executeQuery(queryString);
@@ -528,7 +528,7 @@ public class ServerEngine implements IDeviceServer {
         Statement st_2 = null;
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             System.out.println(queryString);
             st_1.executeUpdate(queryString);
@@ -572,7 +572,7 @@ public class ServerEngine implements IDeviceServer {
         //String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             queryString = "INSERT INTO devicematching SET kopterId =" + kopterId +", followMeDeviceId =" +followMeDeviceId; 
         
@@ -605,7 +605,7 @@ public class ServerEngine implements IDeviceServer {
         String query = "INSERT INTO mk.logs SET logLevel = '" + msg.logLevel + "', logMessage = '" + msg.logMessage +"', ";
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             
             DeviceTypes deviceType = DeviceTypes.valueOf(msg.deviceType.toUpperCase());

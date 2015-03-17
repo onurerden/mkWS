@@ -16,12 +16,18 @@ public class Credentials {
     String database = "mk";
 //    String dbUserName = "adminGStcLXX";
 //    String dbPassword = "Wc_flbnyklZt";
-    public String dbUserName = "onur";
-    public String dbPassword = "19861986";
+    private String dbUserName = "onur";
+    private String dbPassword = "19861986";
 
     public String getMysqlConnectionString() {
         String connectionString = new String();
         connectionString = "jdbc:mysql://" + server + "/" + database;
         return connectionString;
+    }
+    public String getDbUserName(){
+        return this.dbUserName;
+    }
+    public String getDbPassword(){
+        return this.dbPassword;
     }
 }

@@ -53,7 +53,7 @@ public class GetRouteDetails {
             /* TODO output your page here. You may use following sample code. */
 
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             String query = "SELECT latitude, longitude, followMeDeviceId from followme WHERE routeId = " + routeId + " "
                     + "ORDER BY followme.id ASC";
@@ -165,7 +165,7 @@ public class GetRouteDetails {
             /* TODO output your page here. You may use following sample code. */
 
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             String query = "SELECT name from followmedevices where id = " + id;
             rs_1 = st_1.executeQuery(query);
@@ -190,7 +190,7 @@ public class GetRouteDetails {
             /* TODO output your page here. You may use following sample code. */
 
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.dbUserName, cr.dbPassword);
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             String query = "SELECT followMeDeviceId, time from route where id = " + id;
             rs_1 = st_1.executeQuery(query);

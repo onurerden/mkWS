@@ -62,7 +62,7 @@ public class GetRegisteredData extends HttpServlet {
             Statement st_1 = null;
             ResultSet rs_1 = null;
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(),cr.dbUserName , cr.dbPassword);
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(),cr.getDbUserName() , cr.getDbPassword());
             st_1 = con_1.createStatement();
 
             Terminal term = Terminal.other;
