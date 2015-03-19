@@ -14,7 +14,7 @@
     <div id="main" class="container-fluid">
         <div class="row">
             <%@ include file="nav.jsp" %>                                                 
-            <div class="col-xs-12 col-sm-10">
+            <div id="content" class="col-xs-12 col-sm-10">
 
 
                 <%// Class.forName("sun.jdbc.odbc.JdbcOdbcDriver"); %>
@@ -102,3 +102,4 @@
     </div>
 </body>
 </html>    
+<%@ include file="foot.jsp" %> 

@@ -4,6 +4,8 @@
     Author     : oerden
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="mkws.Credentials"%>
 <%@ page import="java.sql.*" %>
@@ -15,7 +17,7 @@
 <div id="main" class="container-fluid">
                                             <div class="row">
 <%@ include file="nav.jsp" %>                                                 
-                                                <div class="col-xs-12 col-sm-10">
+                                                <div id="content" class="col-xs-12 col-sm-10">
 <jsp:useBean
             id = "routeBean" class= "mkws.webbeans.GetRouteDetails">
         </jsp:useBean>
@@ -30,7 +32,7 @@
 	</div>
 </div>
 <div class="row">
-    <div id="kopters" class="col-xs-9">
+    <div id="kopters" class="col-xs-8">
         <div class="box">
 			<div class="box-header">
 				<div class="box-name">
@@ -57,7 +59,7 @@
 			</div>
     </div>
     </div>
-    <div id="kopters" class="col-xs-3">
+    <div id="details" class="col-xs-4">
         <div class="box">
 			<div class="box-header">
 				<div class="box-name">
@@ -77,7 +79,22 @@
 				</div>
 				<div class="no-move"></div>
 			</div>
-			<div class="box-content">
+			<div class="box-content" style="width:auto; height:430px">
+                            <h2>Route Id: <% out.println(Integer.parseInt(request.getParameter("routeId")));%> </h2>
+        <b>Device Name :</b> <i><jsp:getProperty name="routeBean" property="deviceName"/> </i><br/>
+        <b>Route Date : </b> <i><jsp:getProperty name="routeBean" property="routeCreationDate"/> </i><br/>
+        <b>Route length: </b>
+                <c:choose> 
+                <c:when test="${routeBean.getRouteLength()>1}">
+                    <fmt:formatNumber type="number" maxFractionDigits="2" value="<%= routeBean.getRouteLength()%>" /> km
+                </c:when>
+                <c:otherwise>
+                    <fmt:formatNumber type="number" maxFractionDigits="2" value="<%= routeBean.getRouteLength()*1000%>" /> m
+                </c:otherwise>
+            </c:choose>   
+             
+            
+               
                         </div>
     
     </div>
@@ -151,3 +168,4 @@
                     </div>
 </body>
 </html>
+<%@include file="foot.jsp" %>

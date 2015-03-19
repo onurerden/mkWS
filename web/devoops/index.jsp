@@ -12,7 +12,7 @@
 <div id="main" class="container-fluid">
                                             <div class="row">
 <%@ include file="nav.jsp" %>                                                 
-                                                <div class="col-xs-12 col-sm-10">
+                                                <div id="content" class="col-xs-12 col-sm-10">
                                                   <div class="row">
                     <div id="breadcrumb" class="col-xs-12">
                         <ol class="breadcrumb">
@@ -49,5 +49,7 @@
                                                 </div>
                                                 </div>
 </div>
-</body>
+
+<%@ include file="foot.jsp" %> 
+                                        </body>
 </html>
