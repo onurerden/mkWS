@@ -9,6 +9,13 @@
 <%@ page import="java.sql.*" %>
 <%// Class.forName("sun.jdbc.odbc.JdbcOdbcDriver"); %>
 
+<html>
+<%@ include file="head.jsp" %> 
+
+<div id="main" class="container-fluid">
+                                            <div class="row">
+<%@ include file="nav.jsp" %>                                                 
+                                                <div class="col-xs-12 col-sm-10">
 <jsp:useBean
             id = "routeBean" class= "mkws.webbeans.GetRouteDetails">
         </jsp:useBean>
@@ -28,7 +35,7 @@
 			<div class="box-header">
 				<div class="box-name">
 					<i class="fa fa-table"></i>
-					<span>Route</span>
+					<span>Route Map</span>
 				</div>
 				<div class="box-icons">
 					<a class="collapse-link">
@@ -44,7 +51,7 @@
 				<div class="no-move"></div>
 			</div>
 			<div class="box-content">
-				<div id="map" style="width:auto; height:400">
+				<div id="map" style="width:auto; height:400px">
                                 
                                 </div>
 			</div>
@@ -55,7 +62,7 @@
 			<div class="box-header">
 				<div class="box-name">
 					<i class="fa fa-table"></i>
-					<span>Route</span>
+					<span>Details</span>
 				</div>
 				<div class="box-icons">
 					<a class="collapse-link">
@@ -76,8 +83,7 @@
     </div>
     </div>
 </div>
-
-        <script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=en-US"
+<script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=en-US"
         type="text/javascript"></script>
         <script type="text/javascript">
 
@@ -141,3 +147,7 @@
 
             }
         </script>
+                    
+                    </div>
+</body>
+</html>

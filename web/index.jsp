@@ -14,8 +14,10 @@
 <body>
     <h1>Hello World!</h1>
     <a href="/mkWS/GetRegisteredData?device=mk">Kopters</a><br>
-    <a href="/mkWS/GetRegisteredData?device=mp">Devices</a>
-    <a href="/mkWS/latestRoutes.jsp">Latest Routes</a>
+    <a href="/mkWS/GetRegisteredData?device=mp">Devices</a><br>
+    <a href="/mkWS/latestRoutes.jsp">Latest Routes</a><br>
+    <a href="devoops/index.html">devoops</a><br>
+    
     
 </body>
 </html>

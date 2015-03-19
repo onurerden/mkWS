@@ -1,6 +1,12 @@
+<%-- 
+    Document   : head
+    Created on : 19.Mar.2015, 14:25:21
+    Author     : oerden
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="en">
-    <head>
+<head>
         <meta charset="utf-8">
     <title>DevOOPS</title>
     <meta name="description" content="description">
@@ -20,9 +26,8 @@
                                                         <script src="http://getbootstrap.com/docs-assets/js/html5shiv.js"></script>
                                                         <script src="http://getbootstrap.com/docs-assets/js/respond.min.js"></script>
                                         <![endif]-->
-                                        </head>
-                                        <body>
-                                            <!--Start Header-->
+                                    </head><body>
+                                        <!--Start Header-->
                                         <div id="screensaver">
                                             <canvas id="canvas"></canvas>
                                             <i class="fa fa-lock" id="screen_unlock"></i>
@@ -140,69 +145,3 @@
                                             </div>
                                         </header>
                                         <!--End Header-->
-                                        <!--Start Container-->
-                                        <div id="main" class="container-fluid">
-                                            <div class="row">
-                                                <div id="sidebar-left" class="col-xs-2 col-sm-2">
-                                                    <ul class="nav main-menu">
-
-                                                        <li>
-                                                            <a href="ajax/dashboard.html" class="active ajax-link">
-                                                                <i class="fa fa-list"></i>
-                                                                <span class="hidden-xs">Dashboard</span>
-                                                            </a>
-                                                        </li>    
-                                                        <li>
-                                                            <a href="mkWS/kopters.jsp" class="ajax-link">
-                                                                <i class="fa fa-cog"></i>
-                                                                <span class="hidden-xs">Kopters</span>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="mkWS/getFollowMeOnMap.jsp?routeId=171" class="ajax-link">routes</a>
-
-                                                        </li>
-                                                        <li>
-                                                            <a href="mkWS/followMeDevices.jsp" class="ajax-link">
-                                                                <i class="fa fa-bullseye"></i>
-                                                                <span class="hidden-xs">FollowMeDevices</span>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="mkWS/routes.jsp" class="ajax-link">
-                                                                <i class="fa fa-map-marker"></i>
-                                                                <span class="hidden-xs">Routes</span>
-                                                            </a>
-                                                        </li>
-
-
-
-                                                    </ul>
-                                                </div>
-                                                <!--Start Content-->
-                                                <div id="content" class="col-xs-12 col-sm-10">
-                                                    <div class="preloader">
-                                                        <img src="img/devoops_getdata.gif" class="devoops-getdata" alt="preloader"/>
-                                                    </div>
-                                                    <div id="ajax-content"></div>
-                                                </div>
-                                                <!--End Content-->
-                                            </div>
-                                        </div>
-                                        <!--End Container-->
-                                        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-                                        <!--<script src="http://code.jquery.com/jquery.js"></script>-->
-                                        <script src="plugins/jquery/jquery-2.1.0.min.js"></script>
-                                        <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
-                                        <!-- Include all compiled plugins (below), or include individual files as needed -->
-                                        <script src="plugins/bootstrap/bootstrap.min.js"></script>
-                                        <script src="plugins/justified-gallery/jquery.justifiedgallery.min.js"></script>
-                                        <script src="plugins/tinymce/tinymce.min.js"></script>
-                                        <script src="plugins/tinymce/jquery.tinymce.min.js"></script>
-                                        <!-- All functions for this theme + document.ready processing -->
-                                        <script src="js/devoops.js"></script>
-                                        <script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=en-US"
-                                        type="text/javascript"></script>
-
-                                        </body>
-                                        </html>

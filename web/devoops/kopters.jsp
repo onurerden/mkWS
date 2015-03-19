@@ -3,9 +3,19 @@
     Created on : 17.Mar.2015, 15:03:08
     Author     : oerden
 --%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="mkws.Credentials"%>
 <%@ page import="java.sql.*" %>
+
+<html>
+<%@ include file="head.jsp" %> 
+
+<div id="main" class="container-fluid">
+                                            <div class="row">
+<%@ include file="nav.jsp" %>                                                 
+                                                <div class="col-xs-12 col-sm-10">
+
 <%// Class.forName("sun.jdbc.odbc.JdbcOdbcDriver"); %>
 <% Class.forName("com.mysql.jdbc.Driver").newInstance(); %>
 <% 
@@ -21,7 +31,7 @@
 <div class="row">
 	<div id="breadcrumb" class="col-xs-12">
 		<ol class="breadcrumb">
-			<li><a href="index.html">Home</a></li>
+			<li><a href="index.jsp">Home</a></li>
 			<li><a href="#">Kopters</a></li>
 		</ol>
 	</div>
@@ -75,3 +85,8 @@
     </div>
     </div>
 </div>
+</div>
+                                                </div>
+</div>
+</body>
+</html>
