@@ -43,6 +43,7 @@
                                 <div class="no-move"></div>
                             </div>
                             <div class="box-content">
+                                denemedir, şöyle denemedir böyle denemedir
                             </div>
                         </div>
                     </div>

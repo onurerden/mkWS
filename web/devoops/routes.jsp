@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div id="kopters" class="col-xs-12">
+                    <div id="routes" class="col-xs-12">
                         <div class="box">
                             <div class="box-header">
                                 <div class="box-name">
