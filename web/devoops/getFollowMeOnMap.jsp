@@ -17,22 +17,23 @@
 <div id="main" class="container-fluid">
                                             <div class="row">
 <%@ include file="nav.jsp" %>                                                 
-                                                <div id="content" class="col-xs-12 col-sm-10">
+                                                <div id="content" class="col-xs-12 col-md-10">
 <jsp:useBean
             id = "routeBean" class= "mkws.webbeans.GetRouteDetails">
         </jsp:useBean>
 <jsp:setProperty name="routeBean" property = "routeId" value="${param.routeId}"/>
 
         <div class="row">
-	<div id="breadcrumb" class="col-xs-12">
+	<div id="breadcrumb" class="col-md-12">
 		<ol class="breadcrumb">
 			<li><a href="../index.html">Home</a></li>
 			<li><a href="routes.jsp">Routes</a></li>
+			<li><a href="#">Route #<% out.println(Integer.parseInt(request.getParameter("routeId")));%></a></li>
 		</ol>
 	</div>
 </div>
 <div class="row">
-    <div id="kopters" class="col-xs-8">
+    <div id="kopters" class="col-md-8">
         <div class="box">
 			<div class="box-header">
 				<div class="box-name">
@@ -59,7 +60,7 @@
 			</div>
     </div>
     </div>
-    <div id="details" class="col-xs-4">
+    <div id="details" class="col-md-4">
         <div class="box">
 			<div class="box-header">
 				<div class="box-name">

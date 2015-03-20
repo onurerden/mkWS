@@ -14,7 +14,7 @@
 <%@ include file="nav.jsp" %>                                                 
                                                 <div id="content" class="col-xs-12 col-sm-10">
                                                   <div class="row">
-                    <div id="breadcrumb" class="col-xs-12">
+                    <div id="breadcrumb" class="col-md-12">
                         <ol class="breadcrumb">
                             <li><a href="#">Home</a></li>
                             

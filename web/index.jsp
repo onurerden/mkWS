@@ -16,7 +16,7 @@
     <a href="/mkWS/GetRegisteredData?device=mk">Kopters</a><br>
     <a href="/mkWS/GetRegisteredData?device=mp">Devices</a><br>
     <a href="/mkWS/latestRoutes.jsp">Latest Routes</a><br>
-    <a href="devoops/index.html">devoops</a><br>
+    <a href="devoops/index.jsp">devoops</a><br>
     
     
 </body>

@@ -27,8 +27,10 @@
 
                     Statement statement = connection.createStatement();
                     ResultSet resultset
-                            = statement.executeQuery("SELECT route.id, followmedevices.name, route.time FROM  route "
-                                    + "INNER JOIN followmedevices ON route.followMeDeviceId = followmedevices.id "
+                            = statement.executeQuery("SELECT followme.routeId, followmedevices.name, route.time FROM  followme "
+                                    + "INNER JOIN followmedevices ON followme.followMeDeviceId = followmedevices.id "
+                                    + "INNER JOIN route ON followme.routeId = route.id "
+                                    + "GROUP BY followme.routeId "
                                     + "ORDER BY time DESC");
                 %>
                 <div class="row">
@@ -81,8 +83,8 @@
                                     <tbody>
                                         <% while (resultset.next()) {%>
                                         <tr>
-                                            <td><a href="getFollowMeOnMap.jsp?routeId=<%= resultset.getInt("id")%>">
-                                                    <%= resultset.getInt("id")%></a></td>
+                                            <td><a href="getFollowMeOnMap.jsp?routeId=<%= resultset.getInt("routeId")%>">
+                                                    <%= resultset.getInt("routeId")%></a></td>
                                             <td><%= resultset.getString("name")%></td>
                                             <td><%= resultset.getTimestamp("time")%></td>
 
