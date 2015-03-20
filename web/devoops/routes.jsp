@@ -7,7 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="mkws.Credentials"%>
 <%@ page import="java.sql.*" %>
-
+<!DOCTYPE html>
 <html>
     <%@ include file="head.jsp" %> 
 
@@ -15,8 +15,7 @@
         <div class="row">
             <%@ include file="nav.jsp" %>                                                 
             <div id="content" class="col-xs-12 col-sm-10">
-
-
+               
                 <%// Class.forName("sun.jdbc.odbc.JdbcOdbcDriver"); %>
                 <% Class.forName("com.mysql.jdbc.Driver").newInstance(); %>
                 <% 
@@ -98,6 +97,7 @@
                         </div>
                     </div>
                 </div>
+                
 
             </div>
         </div>

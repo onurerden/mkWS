@@ -7,17 +7,17 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-<%@ include file="head.jsp" %> 
+    <%@ include file="head.jsp" %> 
 
-<div id="main" class="container-fluid">
-                                            <div class="row">
-<%@ include file="nav.jsp" %>                                                 
-                                                <div id="content" class="col-xs-12 col-sm-10">
-                                                  <div class="row">
+    <div id="main" class="container-fluid">
+        <div class="row">
+            <%@ include file="nav.jsp" %>                                                 
+            <div id="content" class="col-xs-12 col-sm-10">
+                <div class="row">
                     <div id="breadcrumb" class="col-md-12">
                         <ol class="breadcrumb">
                             <li><a href="#">Home</a></li>
-                            
+
                         </ol>
                     </div>
                 </div>
@@ -46,10 +46,10 @@
                             </div>
                         </div>
                     </div>
-                                                </div>
-                                                </div>
-</div>
+                </div>
+            </div>
+        </div>
 
-<%@ include file="foot.jsp" %> 
-                                        </body>
+        <%@ include file="foot.jsp" %> 
+    </body>
 </html>

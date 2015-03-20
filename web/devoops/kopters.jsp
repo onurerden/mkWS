@@ -3,7 +3,7 @@
     Created on : 17.Mar.2015, 15:03:08
     Author     : oerden
 --%>
-
+<!DOCTYPE html>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="mkws.Credentials"%>
 <%@ page import="java.sql.*" %>

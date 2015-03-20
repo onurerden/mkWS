@@ -10,7 +10,7 @@
 <%@page import="mkws.Credentials"%>
 <%@ page import="java.sql.*" %>
 <%// Class.forName("sun.jdbc.odbc.JdbcOdbcDriver"); %>
-
+<!DOCTYPE html>
 <html>
 <%@ include file="head.jsp" %> 
 
@@ -167,6 +167,6 @@
         </script>
                     
                     </div>
+                        <%@include file="foot.jsp" %>
 </body>
 </html>
-<%@include file="foot.jsp" %>

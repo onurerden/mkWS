@@ -181,6 +181,7 @@ a.show-sidebar:hover {
 #search {
   position: relative;
   margin-left: 20px;
+  
 }
 #search > input {
   width: 80%;
