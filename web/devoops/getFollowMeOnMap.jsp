@@ -43,130 +43,136 @@
                                     <a class="collapse-link">
                                         <i class="fa fa-chevron-up"></i>
                                     </a>
-                                    <a class="expand-link">
-                                        <i class="fa fa-expand"></i>
-                                    </a>
+                                    
                                     <a class="close-link">
                                         <i class="fa fa-times"></i>
                                     </a>
                                 </div>
                                 <div class="no-move"></div>
                             </div>
-                            <div class="box-content">
-                                <div id="map" style="width:100; height:400px">
 
-                                </div>
+                            <div id="yandex" class="box-content" style="height:430px">
+
                             </div>
                         </div>
                     </div>
-                    <div id="details" class="col-xs-4">
-                        <div class="box">
-                            <div class="box-header">
-                                <div class="box-name">
-                                    <i class="fa fa-table"></i>
-                                    <span>Details</span>
-                                </div>
-                                <div class="box-icons">
-                                    <a class="collapse-link">
-                                        <i class="fa fa-chevron-up"></i>
-                                    </a>
-                                    <a class="expand-link">
-                                        <i class="fa fa-expand"></i>
-                                    </a>
-                                    <a class="close-link">
-                                        <i class="fa fa-times"></i>
-                                    </a>
-                                </div>
-                                <div class="no-move"></div>
+                
+
+                <div id="details" class="col-xs-4">
+                    <div class="box">
+                        <div class="box-header">
+                            <div class="box-name">
+                                <i class="fa fa-table"></i>
+                                <span>Details</span>
                             </div>
-                            <div class="box-content" style="width:auto; height:430px">
-                                <h2>Route Id: <% out.println(Integer.parseInt(request.getParameter("routeId")));%> </h2>
-                                <b>Device Name :</b> <i><jsp:getProperty name="routeBean" property="deviceName"/> </i><br/>
-                                <b>Route Date : </b> <i><jsp:getProperty name="routeBean" property="routeCreationDate"/> </i><br/>
-                                <b>Route length: </b>
-                                <c:choose> 
-                                    <c:when test="${routeBean.getRouteLength()>1}">
-                                        <fmt:formatNumber type="number" maxFractionDigits="2" value="<%= routeBean.getRouteLength()%>" /> km
-                                    </c:when>
-                                    <c:otherwise>
-                                        <fmt:formatNumber type="number" maxFractionDigits="2" value="<%= routeBean.getRouteLength() * 1000%>" /> m
-                                    </c:otherwise>
-                                </c:choose>   
-
-
-
+                            <div class="box-icons">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                               
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
                             </div>
+                            <div class="no-move"></div>
+                        </div>
+                        <div class="box-content" style="width:auto; height:430px">
+                            <h2>Route Id: <% out.println(Integer.parseInt(request.getParameter("routeId")));%> </h2>
+                            <b>Device Name :</b> <i><jsp:getProperty name="routeBean" property="deviceName"/> </i><br/>
+                            <b>Route Date : </b> <i><jsp:getProperty name="routeBean" property="routeCreationDate"/> </i><br/>
+                            <b>Route length: </b>
+                            <c:choose> 
+                                <c:when test="${routeBean.getRouteLength()>1}">
+                                    <fmt:formatNumber type="number" maxFractionDigits="2" value="<%= routeBean.getRouteLength()%>" /> km
+                                </c:when>
+                                <c:otherwise>
+                                    <fmt:formatNumber type="number" maxFractionDigits="2" value="<%= routeBean.getRouteLength() * 1000%>" /> m
+                                </c:otherwise>
+                            </c:choose>   
+
+
 
                         </div>
+
                     </div>
                 </div>
-                <script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=en-US"
-                type="text/javascript"></script>
-                <script type="text/javascript">
+                            </div>
+            </div>
+        </div>
+    </div>       
+    <script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=en-US"
+    type="text/javascript"></script>
+    <script type="text/javascript">
 
-                    // Initializes the map as soon as the API is loaded and DOM is ready
-                    ymaps.ready(init);
+        // Initializes the map as soon as the API is loaded and DOM is ready
+        ymaps.ready(init);
 
-                    function init() {
-                        var myMap = new ymaps.Map("map", {
-                            center: <jsp:getProperty name="routeBean" property="routeStartPoint"/>
-                            zoom: 15
-                        }),
-                        // A polyline
-                        myPolyline = new ymaps.Polyline([
-                            // The coordinates of polyline vertices.
+        function init() {
+            var myMap = new ymaps.Map("yandex", {
+                
+            //    center: <jsp:getProperty name="routeBean" property="routeStartPoint"/>
+            //    zoom: 15,
+                        bounds:<jsp:getProperty name="routeBean" property="mapBounds"/>
+            }),
+            // A polyline
+            myPolyline = new ymaps.Polyline([
+                // The coordinates of polyline vertices.
 
 
-                    <jsp:getProperty name="routeBean" property="routePoints"/>
-                        ], {
-                            // The balloon content
-                            balloonContent: "FollowMe Device Route for device: <jsp:getProperty name="routeBean" property="routeId"/>"
-                        }, {
-                            // Balloon options
-                            // Disabling the "Close" button
-                            balloonHasCloseButton: false,
-                            // The line width
-                            strokeWidth: 4,
-                            // The line transparency
-                            strokeOpacity: 0.8,
-                            // Defines the color of the line - white
-                            strokeColor: "#FF0000"
-                        });
+        <jsp:getProperty name="routeBean" property="routePoints"/>
+            ], {
+                // The balloon content
+                balloonContent: "FollowMe Device Route for device: <jsp:getProperty name="routeBean" property="routeId"/>"
+            }, {
+                // Balloon options
+                // Disabling the "Close" button
+                balloonHasCloseButton: false,
+                // The line width
+                strokeWidth: 4,
+                // The line transparency
+                strokeOpacity: 0.8,
+                // Defines the color of the line - white
+                strokeColor: "#FF0000"
+            });
 
-                        myStartPoint = new ymaps.GeoObject({
-                            geometry: {
-                                type: "Point",
-                                coordinates: <jsp:getProperty name="routeBean" property="routeStartPoint"/>
-                            },
-                            properties: {
-                                iconContent: "Başlangıç"}
-                        }, {preset: 'twirl#greenStretchyIcon'});
+            myStartPoint = new ymaps.GeoObject({
+                geometry: {
+                    type: "Point",
+                    coordinates: <jsp:getProperty name="routeBean" property="routeStartPoint"/>
+                },
+                properties: {
+                    iconContent: "Başlangıç"}
+            }, {preset: 'twirl#greenStretchyIcon'});
 
-                        myEndPoint = new ymaps.GeoObject({
-                            geometry: {
-                                type: "Point",
-                                coordinates: <jsp:getProperty name="routeBean" property="routeEndPoint"/>
-                            },
-                            properties: {
-                                iconContent: "Bitiş"}
-                        }, {preset: 'twirl#redStretchyIcon'});
+            myEndPoint = new ymaps.GeoObject({
+                geometry: {
+                    type: "Point",
+                    coordinates: <jsp:getProperty name="routeBean" property="routeEndPoint"/>
+                },
+                properties: {
+                    iconContent: "Bitiş"}
+            }, {preset: 'twirl#redStretchyIcon'});
 
-                        // Adds geo objects to the map 
+            // Adds geo objects to the map 
 
-                        myMap.geoObjects
-                                .add(myPolyline)
-                                .add(myStartPoint)
-                                .add(myEndPoint);
+            myMap.geoObjects
+                    .add(myPolyline)
+                    .add(myStartPoint)
+                    .add(myEndPoint);
 
-                        myMap.controls.add('mapTools');
-                        myMap.controls.add('typeSelector');
-                        myMap.controls.add('smallZoomControl');
-
-                    }
-                </script>
-
-         
             
-            </body>
-            </html>
+                
+            myMap.controls.add('mapTools');
+            myMap.controls.add('typeSelector');
+            myMap.controls.add('smallZoomControl');
+            myMap.copyrights.add('&copy; Belkopter Team');
+            myMap.setZoom(myMap.getZoom()-1);
+
+        }
+    </script>
+
+
+
+</body>
+</html>
 <%@include file="foot.jsp" %>

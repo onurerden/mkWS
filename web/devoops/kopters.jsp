@@ -71,7 +71,7 @@
                                     <tbody>
                                         <% while (resultset.next()) {%>
                                         <tr>
-                                            <td><%= resultset.getInt("id")%></td>
+                                            <td><a href="kopterStatus.jsp?kopterId=<%= resultset.getInt("id")%>"><%= resultset.getInt("id")%></a></td>
                                             <td><%= resultset.getString("name")%></td>
                                             <td><%= resultset.getString("UID")%></td>
                                             <td><%= resultset.getTimestamp("latestTouch")%></td>

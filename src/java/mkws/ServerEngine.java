@@ -182,8 +182,8 @@ public class ServerEngine implements IDeviceServer {
 
         Gson jsonObject = new Gson();
         status = jsonObject.fromJson(jsonStatus, KopterStatus.class);
-        if (status.kopterVario>32768){
-            status.kopterVario = status.kopterVario-65536;
+        if (status.getKopterVario()>32768){
+            status.kopterVario = status.getKopterVario()-65536;
         }
 
         //String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
@@ -192,20 +192,20 @@ public class ServerEngine implements IDeviceServer {
                 + "`kopterVoltage`, `gpsSatCount`, `batteryCurrent`, `batteryCapacity`, "
                 + "`kopterSpeed`, `kopterRcSignal`, `kopterVario`, `ncFlags`, `fcFlags1`,"
                 + "`fcFlags2`, `updateTime`) VALUES ("
-                + status.kopterId + ", "
-                + status.kopterAltitude + ", "
-                + status.kopterLatitude + ", "
-                + status.kopterLongitude + ", "
-                + status.kopterHeading + ", "
-                + status.kopterErrorCode + ", "
-                + status.gsmSignalStrength + ", "
-                + status.kopterVoltage + ", "
-                + status.gpsSatCount + ", "
-                + status.batteryCurrent + ", "
-                + status.batteryCapacity + ", "
-                + status.kopterSpeed + ", "
-                + status.kopterRcSignal + ", "
-                + status.kopterVario + ", '"
+                + status.getKopterId() + ", "
+                + status.getKopterAltitude() + ", "
+                + status.getKopterLatitude() + ", "
+                + status.getKopterLongitude() + ", "
+                + status.getKopterHeading() + ", "
+                + status.getKopterErrorCode() + ", "
+                + status.getGsmSignalStrength() + ", "
+                + status.getKopterVoltage() + ", "
+                + status.getGpsSatCount() + ", "
+                + status.getBatteryCurrent() + ", "
+                + status.getBatteryCapacity() + ", "
+                + status.getKopterSpeed() + ", "
+                + status.getKopterRcSignal() + ", "
+                + status.getKopterVario() + ", '"
                 + status.flagsNC + "', '"
                 + status.fcStatusFlags1 + "', '"
                 + status.fcStatusFlags2 + "', "
@@ -408,7 +408,7 @@ public class ServerEngine implements IDeviceServer {
                 status.kopterRcSignal = rs_1.getInt("kopterRcSignal");
                 status.kopterVario = rs_1.getInt("kopterVario");
                 status.flagsNC = rs_1.getString("ncFlags");
-                status.updateTime = rs_1.getTimestamp("updateTime");
+                status.setUpdateTime(rs_1.getTimestamp("updateTime"));
 
                 System.out.println("All values Set");
 

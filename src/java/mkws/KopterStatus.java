@@ -13,23 +13,23 @@ import java.sql.Timestamp;
  */
 public class KopterStatus {
 
-    int kopterHeading;  //in degree
-    int kopterAltitude; //in meters
-    double kopterLatitude;
-    double kopterLongitude;
-    double homeLatitude;
-    double homeLongitude;
-    int kopterErrorCode;
-    int gsmSignalStrength;
-    int kopterVoltage; //in mV
-    int gpsSatCount;
-    double batteryCurrent; //in mA
-    int batteryCapacity; //in mAh
-    double kopterSpeed; //in m/s
-    int kopterRcSignal;
-    double kopterVario; //in m/s
-    int kopterId;
-    Timestamp updateTime;
+    public int kopterHeading;  //in degree
+    public int kopterAltitude; //in meters
+    public double kopterLatitude;
+    public double kopterLongitude;
+    public double homeLatitude;
+    public double homeLongitude;
+    public int kopterErrorCode;
+    public int gsmSignalStrength;
+    public int kopterVoltage; //in mV
+    public int gpsSatCount;
+    public double batteryCurrent; //in mA
+    public int batteryCapacity; //in mAh
+    public double kopterSpeed; //in m/s
+    public int kopterRcSignal;
+    public double kopterVario; //in m/s
+    public int kopterId;
+    public Timestamp updateTime;
 
     // NC flags
     boolean flNC_FLAG_FREE = false; //0b00000001
@@ -200,5 +200,131 @@ public class KopterStatus {
         } else {
             flFC_STATUS2_RES3 = true;
         }
+    }
+
+    /**
+     * @return the kopterHeading
+     */
+    public int getKopterHeading() {
+        return kopterHeading;
+    }
+
+    /**
+     * @return the kopterAltitude
+     */
+    public int getKopterAltitude() {
+        return kopterAltitude;
+    }
+
+    /**
+     * @return the kopterLatitude
+     */
+    public double getKopterLatitude() {
+        return kopterLatitude;
+    }
+
+    /**
+     * @return the kopterLongitude
+     */
+    public double getKopterLongitude() {
+        return kopterLongitude;
+    }
+
+    /**
+     * @return the homeLatitude
+     */
+    public double getHomeLatitude() {
+        return homeLatitude;
+    }
+
+    /**
+     * @return the homeLongitude
+     */
+    public double getHomeLongitude() {
+        return homeLongitude;
+    }
+
+    /**
+     * @return the kopterErrorCode
+     */
+    public int getKopterErrorCode() {
+        return kopterErrorCode;
+    }
+
+    /**
+     * @return the gsmSignalStrength
+     */
+    public int getGsmSignalStrength() {
+        return gsmSignalStrength;
+    }
+
+    /**
+     * @return the kopterVoltage
+     */
+    public int getKopterVoltage() {
+        return kopterVoltage;
+    }
+
+    /**
+     * @return the gpsSatCount
+     */
+    public int getGpsSatCount() {
+        return gpsSatCount;
+    }
+
+    /**
+     * @return the batteryCurrent
+     */
+    public double getBatteryCurrent() {
+        return batteryCurrent;
+    }
+
+    /**
+     * @return the batteryCapacity
+     */
+    public int getBatteryCapacity() {
+        return batteryCapacity;
+    }
+
+    /**
+     * @return the kopterSpeed
+     */
+    public double getKopterSpeed() {
+        return kopterSpeed;
+    }
+
+    /**
+     * @return the kopterRcSignal
+     */
+    public int getKopterRcSignal() {
+        return kopterRcSignal;
+    }
+
+    /**
+     * @return the kopterVario
+     */
+    public double getKopterVario() {
+        return kopterVario;
+    }
+
+    /**
+     * @return the kopterId
+     */
+    public int getKopterId() {
+        return kopterId;
+    }
+
+    /**
+     * @return the updateTime
+     */
+    public Timestamp getUpdateTime() {
+        return updateTime;
+    }
+
+    /**
+     * @param updateTime the updateTime to set
+     */
+    public void setUpdateTime(Timestamp updateTime) {
+        this.updateTime = updateTime;
     }
 }

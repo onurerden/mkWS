@@ -30,11 +30,12 @@ public class GetRouteDetails {
     private int deviceId = -1;
     private Timestamp routeCreationDate;
     private double routeLength = 0;
+    private String mapBounds = "";
 
     class Koordinat {
 
-        public double enlem;
-        public double boylam;
+        public double enlem = 0;
+        public double boylam = 0;
     }
 
     List<Koordinat> noktalar = new ArrayList<Koordinat>();
@@ -49,6 +50,12 @@ public class GetRouteDetails {
         Connection con_1 = null;
         Statement st_1 = null;
         ResultSet rs_1 = null;
+        Koordinat minBounds = new Koordinat();
+        minBounds.boylam = 99;
+        minBounds.enlem = 99;
+        Koordinat maxBounds = new Koordinat();
+        maxBounds.boylam = -99;
+        maxBounds.enlem = -99;
         try {
             /* TODO output your page here. You may use following sample code. */
 
@@ -67,7 +74,24 @@ public class GetRouteDetails {
                 yeniNokta.enlem = Double.parseDouble(rs_1.getString("latitude"));
                 yeniNokta.boylam = Double.parseDouble(rs_1.getString("longitude"));
                 noktalar.add(yeniNokta);
-                
+
+//Set Bounds
+                if (yeniNokta.enlem < minBounds.enlem) {
+                    minBounds.enlem = yeniNokta.enlem;
+                }
+                if (yeniNokta.boylam < minBounds.boylam) {
+                    minBounds.boylam = yeniNokta.boylam;
+                }
+                if (yeniNokta.enlem > maxBounds.enlem) {
+                    maxBounds.enlem = yeniNokta.enlem;
+                }
+                if (yeniNokta.boylam > maxBounds.boylam) {
+                    maxBounds.boylam = yeniNokta.boylam;
+                }
+
+                this.mapBounds= "[["+minBounds.enlem+","+minBounds.boylam+"],"
+                        + "["+maxBounds.enlem+","+maxBounds.boylam+"]]";
+
 //  this.deviceName = rs_1.getString("name");
                 //  this.deviceId = rs_1.getInt("followMeDeviceId");
                 //  this.routeCreationDate = rs_1.getTimestamp("time");
@@ -204,5 +228,8 @@ public class GetRouteDetails {
         }
         calculateRouteLength();
 
+    }
+    public String getMapBounds(){
+        return this.mapBounds;
     }
 }
