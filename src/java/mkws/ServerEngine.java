@@ -203,7 +203,7 @@ public class ServerEngine implements IDeviceServer {
                 + "`latitude`, `longitude`, `heading`, `kopterErrorCode`, `gsmSignalStrength`, "
                 + "`kopterVoltage`, `gpsSatCount`, `batteryCurrent`, `batteryCapacity`, "
                 + "`kopterSpeed`, `kopterRcSignal`, `kopterVario`, `ncFlags`, `fcFlags1`,"
-                + "`fcFlags2`, `updateTime`) VALUES ("
+                + "`fcFlags2`, `updateTime`,`sessionId`) VALUES ("
                 + status.getKopterId() + ", "
                 + status.getKopterAltitude() + ", "
                 + status.getKopterLatitude() + ", "
@@ -221,7 +221,8 @@ public class ServerEngine implements IDeviceServer {
                 + status.flagsNC + "', '"
                 + status.fcStatusFlags1 + "', '"
                 + status.fcStatusFlags2 + "', "
-                + "NOW())";
+                + "NOW(), "
+                + status.getSessionId() +")";
         //System.out.println(queryString);
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -321,7 +322,7 @@ public class ServerEngine implements IDeviceServer {
             st_1 = con_1.createStatement();
             
             queryString = "INSERT INTO followme "
-                    + "(`latitude`, `longitude`, `bearing`, `event`, `time`, `followMeDeviceId`, `sent`,`routeId` ) "
+                    + "(`latitude`, `longitude`, `bearing`, `event`, `time`, `followMeDeviceId`, `sent`,`routeId`,`sessionId` ) "
                     + "VALUES ("
                     + "'" + data.getLat() + "', "
                     + "'" + data.getLon() + "', "
@@ -330,7 +331,8 @@ public class ServerEngine implements IDeviceServer {
                     + "NOW(), "
                     + "'" + data.getFollowMeDeviceId() + "', "
                     + "'0', "
-                    + "'" + data.getRouteId() + "')";
+                    + "'" + data.getRouteId() + "', "
+                    + "'" + data.getSessionId() + "')";
             
             System.out.println(queryString);
             st_1.executeUpdate(queryString);
@@ -420,6 +422,7 @@ public class ServerEngine implements IDeviceServer {
                 status.kopterVario = rs_1.getInt("kopterVario");
                 status.flagsNC = rs_1.getString("ncFlags");
                 status.setUpdateTime(rs_1.getTimestamp("updateTime"));
+                status.setSessionId(rs_1.getInt("sessionId"));
                 
                 System.out.println("All values Set");
                 
@@ -488,6 +491,7 @@ public class ServerEngine implements IDeviceServer {
                     data.setFollowMeDeviceId(deviceId);
                     data.setName(rs_1.getString("name"));
                     data.setRouteId(rs_1.getInt("routeId"));
+                    data.setSessionId(rs_1.getInt("sessionId"));
                     
                     Gson gson = new Gson();
                     jsonString = gson.toJson(data, FollowMeData.class);
@@ -505,6 +509,7 @@ public class ServerEngine implements IDeviceServer {
                     data.setFollowMeDeviceId(rs_1.getInt("followMeDeviceId"));
                     data.setName(rs_1.getString("name"));
                     data.setRouteId(rs_1.getInt("routeId"));
+                    data.setSessionId(rs_1.getInt("sessionId"));
                     datas.add(data);
                 }
                 

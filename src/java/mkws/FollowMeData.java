@@ -20,19 +20,18 @@ public class FollowMeData {
     Timestamp time;
     int event = 0;
     int followMeDeviceId;
-    String name="";
-    int routeId=0;
-    int sessionId=-1;
+    String name = "";
+    int routeId = 0;
+    int sessionId = -1;
 
-    
-    public void setName(String newName){
+    public void setName(String newName) {
         name = newName;
     }
-    
-    public String getName(){
+
+    public String getName() {
         return this.name;
     }
-    
+
     public void setLat(double latitude) {
         this.lat = latitude;
     }
@@ -80,12 +79,20 @@ public class FollowMeData {
     public int getFollowMeDeviceId() {
         return this.followMeDeviceId;
     }
-    
-    public int getRouteId(){
+
+    public int getRouteId() {
         return this.routeId;
     }
-    public void setRouteId(int routeId){
+
+    public void setRouteId(int routeId) {
         this.routeId = routeId;
     }
 
+    public int getSessionId() {
+        return this.sessionId;
+    }
+
+    public void setSessionId(int id) {
+        this.sessionId = id;
+    }
 }
