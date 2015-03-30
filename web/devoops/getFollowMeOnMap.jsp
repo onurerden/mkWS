@@ -10,6 +10,7 @@
 <%@page import="mkws.Credentials"%>
 <%@ page import="java.sql.*" %>
 
+<c:set var="selectedMenu" value="routes"/>
 <html>
     <%@ include file="head.jsp" %> 
 

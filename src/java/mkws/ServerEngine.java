@@ -529,6 +529,12 @@ public class ServerEngine implements IDeviceServer {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
             return "-4";
+        }finally{
+            try {
+                con_1.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return jsonString;
     }
@@ -572,6 +578,12 @@ public class ServerEngine implements IDeviceServer {
         } catch (IllegalAccessException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
             return -1;
+        }finally{
+            try {
+                con_1.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         return routeId;
@@ -596,6 +608,12 @@ public class ServerEngine implements IDeviceServer {
             
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
             
+        }finally{
+            try {
+                con_1.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         return 1;

@@ -328,10 +328,14 @@ public class KopterStatus {
     public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
     }
-public void setSessionId(int id){
-    this.sessionId=id;
-}
-public int getSessionId(){
-    return this.sessionId;
-}
+
+    public void setSessionId(int id) {
+        this.sessionId = id;
+    }
+
+    public int getSessionId() {
+        return this.sessionId;
+    }
+
+
 }

@@ -39,6 +39,8 @@ public class GetKopterStatus extends KopterStatus {
         this.kopterVario = ks.getKopterVario();
         this.kopterVoltage = ks.getKopterVoltage();
         this.setUpdateTime(ks.getUpdateTime());
+        this.setSessionId(ks.getSessionId());
+        
 
     }
 

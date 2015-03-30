@@ -3,11 +3,14 @@
     Created on : 17.Mar.2015, 15:03:08
     Author     : oerden
 --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="mkws.Credentials"%>
 <%@ page import="java.sql.*" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<c:set var="selectedMenu" value="kopters"/>
 <html>
     <%@ include file="head.jsp" %> 
 

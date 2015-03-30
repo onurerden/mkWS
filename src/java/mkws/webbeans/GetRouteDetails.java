@@ -13,6 +13,8 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mkws.Credentials;
 
 /**
@@ -199,6 +201,12 @@ public class GetRouteDetails {
             }
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException e) {
 
+        }finally{
+            try {
+                con_1.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(GetRouteDetails.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return name;
     }
@@ -225,6 +233,12 @@ public class GetRouteDetails {
             }
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException e) {
 
+        }finally{
+            try {
+                con_1.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(GetRouteDetails.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         calculateRouteLength();
 

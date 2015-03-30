@@ -7,7 +7,9 @@
 <%@page import="mkws.Credentials"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
+<c:set var="selectedMenu" value="followme"/>
 <html>
     <%@ include file="head.jsp" %> 
 
