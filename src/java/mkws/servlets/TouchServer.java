@@ -40,7 +40,7 @@ public class TouchServer extends HttpServlet {
             String requestedDeviceType = "";
             requestIdByUID = request.getParameter("uid");
             requestedDeviceType = request.getParameter("deviceType");
-            int output = 0;
+            String output = "0";
             ServerEngine server = new ServerEngine();
             output = server.touchServer(requestIdByUID, requestedDeviceType);
             out.println(output);

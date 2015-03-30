@@ -29,6 +29,7 @@ public class KopterStatus {
     public int kopterRcSignal;
     public double kopterVario; //in m/s
     public int kopterId;
+    public int sessionId;
     public Timestamp updateTime;
 
     // NC flags
@@ -327,4 +328,10 @@ public class KopterStatus {
     public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
     }
+public void setSessionId(int id){
+    this.sessionId=id;
+}
+public int getSessionId(){
+    return this.sessionId;
+}
 }

@@ -22,6 +22,7 @@ public class FollowMeData {
     int followMeDeviceId;
     String name="";
     int routeId=0;
+    int sessionId=-1;
 
     
     public void setName(String newName){

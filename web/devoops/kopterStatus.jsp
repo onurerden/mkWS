@@ -12,7 +12,6 @@
 
 <html>
     <%@ include file="head.jsp" %> 
-
     <div id="main" class="container-fluid">
         <div class="row">
             <%@ include file="nav.jsp" %>                                                 
@@ -21,7 +20,6 @@
                     id = "kopterStatus" class= "mkws.webbeans.GetKopterStatus">
                 </jsp:useBean>
                 <jsp:setProperty name="kopterStatus" property = "kopterId" value="${param.kopterId}"/>
-
                 <div class="row">
                     <div id="breadcrumb" class="col-xs-12">
                         <ol class="breadcrumb">
@@ -37,7 +35,7 @@
                             <div class="box-header">
                                 <div class="box-name">
                                     <i class="fa fa-table"></i>
-                                    <span>KopterStatus for <% out.println(kopterStatus.getKopterVoltage()/10);%></span>
+                                    <span>KopterStatus for <% out.println(kopterStatus.getKopterId());%></span>
                                 </div>
                                 <div class="box-icons">
                                     <a class="collapse-link">
@@ -50,46 +48,38 @@
                                 </div>
                                 <div class="no-move"></div>
                             </div>
-
                             <div class="box-content" style="height:430px">
                                 <div class="row">
                                     <div class="col-xs-4">
-                                        Voltage: <jsp:getProperty name="kopterStatus" property="kopterVoltage"/> V
-                                           </div>
-                                           <div class="col-xs-4">    
-                                    <div class="progress progress-striped active">
-                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<c:out value="${100*(kopterStatus.kopterVoltage-135)/(170-135)}" />"  aria-valuemin="13.5" aria-valuemax="18" style="width:<c:out value="${100*(kopterStatus.kopterVoltage-135)/(170-135)}" />% ;">
-                                            <span><c:out value="${kopterStatus.kopterVoltage/10}"/> V </span>
+                                        Voltage: <c:out value="${kopterStatus.kopterVoltage/10}"/> V
+                                    </div>
+                                    <div class="col-xs-4">    
+                                        <div class="progress progress-striped active">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<c:out value="${100*(kopterStatus.kopterVoltage-135)/(170-135)}" />" aria-valuemin="13.5" aria-valuemax="17" style="width:<c:out value="${100*(kopterStatus.kopterVoltage-135)/(170-135)}" />% ;">
+                                                <span><c:out value="${kopterStatus.kopterVoltage/10}"/> V </span>
+                                            </div>
                                         </div>
                                     </div>
-                                           </div>
                                 </div>
-                                        <div class="row">
-                                            <div class="col-xs-4">
-                                                Consumed Battery: <jsp:getProperty name="kopterStatus" property="batteryCapacity"/> mAh
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        Consumed Battery: <jsp:getProperty name="kopterStatus" property="batteryCapacity"/> mAh
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <div class="progress progress-striped active">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<c:out value="${100*(kopterStatus.batteryCapacity)/(5000)}" />"  aria-valuemin="0" aria-valuemax="5000" style="width:<c:out value="${100*(kopterStatus.batteryCapacity)/(5000)}" />% ;">
+                                                <span><c:out value="${kopterStatus.batteryCapacity}"/> mAh </span>
                                             </div>
-                                            <div class="col-xs-4">
-                                               <div class="progress progress-striped active">
-                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<c:out value="${100*(kopterStatus.batteryCapacity)/(5000)}" />"  aria-valuemin="0" aria-valuemax="5000" style="width:<c:out value="${100*(kopterStatus.batteryCapacity)/(5000)}" />% ;">
-                                            <span><c:out value="${kopterStatus.batteryCapacity}"/> mAh </span>
-                                        </div>
-                                    </div> 
-                                            </div>
-                                        </div>
+                                        </div> 
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-
-
                 </div>
             </div>
         </div>
     </div>       
-
-
-
-
 </body>
 </html>
 <%@include file="foot.jsp" %>

@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div id="routes" class="col-xs-8">
+                    <div id="routes" class="col-md-8 col-lg-10">
                         <div class="box">
                             <div class="box-header">
                                 <div class="box-name">
@@ -43,7 +43,7 @@
                                     <a class="collapse-link">
                                         <i class="fa fa-chevron-up"></i>
                                     </a>
-                                    
+
                                     <a class="close-link">
                                         <i class="fa fa-times"></i>
                                     </a>
@@ -56,47 +56,47 @@
                             </div>
                         </div>
                     </div>
-                
 
-                <div id="details" class="col-xs-4">
-                    <div class="box">
-                        <div class="box-header">
-                            <div class="box-name">
-                                <i class="fa fa-table"></i>
-                                <span>Details</span>
+
+                    <div id="details" class="col-md-4 col-lg-2">
+                        <div class="box">
+                            <div class="box-header">
+                                <div class="box-name">
+                                    <i class="fa fa-table"></i>
+                                    <span>Details</span>
+                                </div>
+                                <div class="box-icons">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                                <div class="no-move"></div>
                             </div>
-                            <div class="box-icons">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                               
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
+                            <div class="box-content" style="width:auto; height:430px">
+                                <h2>Route Id: <% out.println(Integer.parseInt(request.getParameter("routeId")));%> </h2>
+                                <b>Device Name :</b> <i><jsp:getProperty name="routeBean" property="deviceName"/> </i><br/>
+                                <b>Route Date : </b> <i><jsp:getProperty name="routeBean" property="routeCreationDate"/> </i><br/>
+                                <b>Route length: </b>
+                                <c:choose> 
+                                    <c:when test="${routeBean.getRouteLength()>1}">
+                                        <fmt:formatNumber type="number" maxFractionDigits="2" value="<%= routeBean.getRouteLength()%>" /> km
+                                    </c:when>
+                                    <c:otherwise>
+                                        <fmt:formatNumber type="number" maxFractionDigits="2" value="<%= routeBean.getRouteLength() * 1000%>" /> m
+                                    </c:otherwise>
+                                </c:choose>   
+
+
+
                             </div>
-                            <div class="no-move"></div>
-                        </div>
-                        <div class="box-content" style="width:auto; height:430px">
-                            <h2>Route Id: <% out.println(Integer.parseInt(request.getParameter("routeId")));%> </h2>
-                            <b>Device Name :</b> <i><jsp:getProperty name="routeBean" property="deviceName"/> </i><br/>
-                            <b>Route Date : </b> <i><jsp:getProperty name="routeBean" property="routeCreationDate"/> </i><br/>
-                            <b>Route length: </b>
-                            <c:choose> 
-                                <c:when test="${routeBean.getRouteLength()>1}">
-                                    <fmt:formatNumber type="number" maxFractionDigits="2" value="<%= routeBean.getRouteLength()%>" /> km
-                                </c:when>
-                                <c:otherwise>
-                                    <fmt:formatNumber type="number" maxFractionDigits="2" value="<%= routeBean.getRouteLength() * 1000%>" /> m
-                                </c:otherwise>
-                            </c:choose>   
-
-
 
                         </div>
-
                     </div>
                 </div>
-                            </div>
             </div>
         </div>
     </div>       
@@ -109,10 +109,9 @@
 
         function init() {
             var myMap = new ymaps.Map("yandex", {
-                
-            //    center: <jsp:getProperty name="routeBean" property="routeStartPoint"/>
-            //    zoom: 15,
-                        bounds:<jsp:getProperty name="routeBean" property="mapBounds"/>
+                //    center: <jsp:getProperty name="routeBean" property="routeStartPoint"/>
+                //    zoom: 15,
+                bounds:<jsp:getProperty name="routeBean" property="mapBounds"/>
             }),
             // A polyline
             myPolyline = new ymaps.Polyline([
@@ -160,14 +159,31 @@
                     .add(myStartPoint)
                     .add(myEndPoint);
 
-            
+
+
+
+
+            var button = new ymaps.control.Button({
+                data: {
+                    // Setting an icon for the button.
+                    //image: 'images/button.jpg',
+                    // Text on the icon.
+                    content: 'Save',
+                    // Text for the popup hint.
+                    title: 'Click to save the route'
+                }
+            }, {
+                // Setting options for the button.
+                selectOnClick: false
                 
+            });
+            myMap.controls.add(button, {bottom: 10, left: 5});
+
             myMap.controls.add('mapTools');
             myMap.controls.add('typeSelector');
             myMap.controls.add('smallZoomControl');
             myMap.copyrights.add('&copy; Belkopter Team');
-            myMap.setZoom(myMap.getZoom()-1);
-
+            myMap.setZoom(myMap.getZoom() - 1);
         }
     </script>
 
