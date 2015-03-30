@@ -30,7 +30,7 @@
                     ResultSet resultset
                             = statement.executeQuery("SELECT * FROM `followme` AS f INNER JOIN followmedevices "
                                     + "ON f.followMeDeviceId = followmedevices.id "
-                                    + "GROUP BY f.followMeDeviceId ORDER BY `time` DESC"); %>
+                                    + "GROUP BY f.followMeDeviceId ORDER BY `time` DESC");%>
 
 
                 <div class="row">
@@ -94,4 +94,5 @@
         </div>
     </body>
 </html>    
+<% connection.close(); %>
 <%@ include file="foot.jsp" %> 

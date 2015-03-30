@@ -83,6 +83,7 @@
                                         <% }%>
 
                                     </tbody>
+                                    <% connection.close();%>
                                 </table>
                             </div>
                         </div>
@@ -115,4 +116,5 @@
                 </div>
                 </body>
                 </html>
+                
                 <%@ include file="foot.jsp" %> 
