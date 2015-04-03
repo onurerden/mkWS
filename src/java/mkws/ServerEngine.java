@@ -197,7 +197,10 @@ public class ServerEngine implements IDeviceServer {
         if (status.getKopterVario() > 32768) {
             status.kopterVario = status.getKopterVario() - 65536;
         }
-
+        status.setFlagsNC(addZerosToByte(status.getFlagsNC()));
+        status.setFcStatusFlags1(addZerosToByte(status.getFcStatusFlags1()));
+        status.setFcStatusFlags2(addZerosToByte(status.getFcStatusFlags2()));
+        
         //String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         queryString = "INSERT INTO `kopterstatus`(`kopterId`, `altitude`,"
                 + "`latitude`, `longitude`, `heading`, `kopterErrorCode`, `gsmSignalStrength`, "
@@ -218,9 +221,9 @@ public class ServerEngine implements IDeviceServer {
                 + status.getKopterSpeed() + ", "
                 + status.getKopterRcSignal() + ", "
                 + status.getKopterVario() + ", '"
-                + status.flagsNC + "', '"
-                + status.fcStatusFlags1 + "', '"
-                + status.fcStatusFlags2 + "', "
+                + status.getFlagsNC() + "', '"
+                + status.getFcStatusFlags1() + "', '"
+                + status.getFcStatusFlags2() + "', "
                 + "NOW(), "
                 + status.getSessionId() +")";
         //System.out.println(queryString);
@@ -371,6 +374,7 @@ public class ServerEngine implements IDeviceServer {
             while (rs_1.next()) {
                 matchedFollowMeDevice = rs_1.getInt(1);
             }
+            System.out.println("Follow follodMeDevice: " + matchedFollowMeDevice);
             con_1.close();
             
         } catch (SQLException ex) {
@@ -420,7 +424,7 @@ public class ServerEngine implements IDeviceServer {
                 status.kopterSpeed = rs_1.getDouble("kopterSpeed");
                 status.kopterRcSignal = rs_1.getInt("kopterRcSignal");
                 status.kopterVario = rs_1.getInt("kopterVario");
-                status.flagsNC = rs_1.getString("ncFlags");
+                status.setFlagsNC(rs_1.getString("ncFlags"));
                 status.setUpdateTime(rs_1.getTimestamp("updateTime"));
                 status.setSessionId(rs_1.getInt("sessionId"));
                 
@@ -735,4 +739,13 @@ public class ServerEngine implements IDeviceServer {
         
         return sessionId;
     }
+    
+   private String addZerosToByte(String preString){
+       int i = preString.length();
+        String preZero="";
+        for (int a=0;a<8-i;a++){
+            preZero=preZero+"0";
+        }
+        return preZero+preString;       
+   }
 }

@@ -41,7 +41,7 @@ public class KopterStatus {
     boolean flNC_FLAG_TARGET_REACHED = false; //0b00100000
     boolean flNC_FLAG_MANUAL = false; //0b01000000
     boolean flNC_FLAG_GPS_OK = false; //0b10000000
-    String flagsNC = "00000000";
+    private String FlagsNC = "00000000";
 
     //FCStatusFlags-1
     boolean flFC_STATUS_MOTOR_RUN = false;//                    0x01
@@ -52,7 +52,8 @@ public class KopterStatus {
     boolean flFC_STATUS_LOWBAT = false;//                     0x20
     boolean flFC_STATUS_VARIO_TRIM_UP = false;//             0x40
     boolean flFC_STATUS_VARIO_TRIM_DOWN = false;//             0x80
-    String fcStatusFlags1 = "00000000";
+//    private String FcStatusFlags1 = "00000000";
+    private String FlagsStatusFC1 = "00000000";
 
     //FCStatusFlags-2
     boolean flFC_STATUS2_CAREFREE_ACTIVE = false;//             0x01
@@ -63,7 +64,8 @@ public class KopterStatus {
     boolean flFC_STATUS2_RES1 = false;//                       0x20
     boolean flFC_STATUS2_RES2 = false;//                       0x40
     boolean flFC_STATUS2_RES3 = false;//                       0x80
-    String fcStatusFlags2 = "00000000";
+    //private String FcStatusFlags2 = "00000000";
+    private String FlagsStatusFC2 = "00000000";
 
     //parser methods
     void parseFlagsNC(String flString) {
@@ -335,6 +337,48 @@ public class KopterStatus {
 
     public int getSessionId() {
         return this.sessionId;
+    }
+
+    /**
+     * @return the FlagsNC
+     */
+    public String getFlagsNC() {
+        return FlagsNC;
+    }
+
+    /**
+     * @param FlagsNC the FlagsNC to set
+     */
+    public void setFlagsNC(String FlagsNC) {
+        this.FlagsNC = FlagsNC;
+    }
+
+    /**
+     * @return the FcStatusFlags1
+     */
+    public String getFcStatusFlags1() {
+        return FlagsStatusFC1;
+    }
+
+    /**
+     * @param FcStatusFlags1 the FcStatusFlags1 to set
+     */
+    public void setFcStatusFlags1(String FcStatusFlags1) {
+        this.FlagsStatusFC1 = FcStatusFlags1;
+    }
+
+    /**
+     * @return the FcStatusFlags2
+     */
+    public String getFcStatusFlags2() {
+        return FlagsStatusFC2;
+    }
+
+    /**
+     * @param FcStatusFlags2 the FcStatusFlags2 to set
+     */
+    public void setFcStatusFlags2(String FcStatusFlags2) {
+        this.FlagsStatusFC2 = FcStatusFlags2;
     }
 
 

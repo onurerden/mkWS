@@ -70,7 +70,7 @@
                                                             <div class="col-xs-4 col-sm-8 top-panel-right">
                                                                 <ul class="nav navbar-nav pull-right panel-menu">
                                                                     <li class="hidden-xs">
-                                                                        <a href="index.html" class="modal-link">
+                                                                        <a href="index.jsp" class="modal-link">
                                                                             <i class="fa fa-bell"></i>
                                                                             <span class="badge">7</span>
                                                                         </a>
