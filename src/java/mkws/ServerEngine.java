@@ -27,6 +27,7 @@ public class ServerEngine implements IDeviceServer {
         int deviceId = -1;
         String queryString = "";
         MKSession sessionInfo = new MKSession();
+        sessionInfo.setDeviceId(-1);
 
         //Device device = Device.other;
         DeviceTypes device = DeviceTypes.OTHER;
@@ -66,6 +67,7 @@ public class ServerEngine implements IDeviceServer {
             switch (device) {
                 case MK: {
                     deviceId = -2;
+                    sessionInfo.setDeviceId(-2);
                     
                     if (rs_1.next()) {
                         MKopter kopter = new MKopter();
@@ -87,6 +89,7 @@ public class ServerEngine implements IDeviceServer {
                 case MP: {
                     System.out.println("Case MP");
                     deviceId = -3;
+                    sessionInfo.setDeviceId(-3);
                     if (rs_1.next()) {
                         MobilePhone phone = new MobilePhone();
                         phone.id = rs_1.getInt("id");
@@ -103,6 +106,7 @@ public class ServerEngine implements IDeviceServer {
                 }
                 default: {
                     deviceId = -4;
+                    sessionInfo.setDeviceId(-4);
                     break;
                 }
             }
@@ -741,6 +745,10 @@ public class ServerEngine implements IDeviceServer {
     }
     
    private String addZerosToByte(String preString){
+       if (preString.length()>8){
+           preString="00000000";
+           return preString;
+       }
        int i = preString.length();
         String preZero="";
         for (int a=0;a<8-i;a++){
