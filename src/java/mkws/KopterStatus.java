@@ -67,141 +67,147 @@ public class KopterStatus {
     //private String FcStatusFlags2 = "00000000";
     private String FlagsStatusFC2 = "00000000";
 
+    public void parseAllFlags(){
+        parseFlagsNC(this.getFlagsNC());
+        parseFlagsStatusFC1(this.getFcStatusFlags1());
+        parseFlagsStatusFC2(this.getFcStatusFlags2());
+    }
+    
     //parser methods
     void parseFlagsNC(String flString) {
-        if (flString.charAt(0) == '0') {
-            flNC_FLAG_FREE = false;
+        if (flString.charAt(7) == '0') {
+            this.flNC_FLAG_FREE = false;
         } else {
-            flNC_FLAG_FREE = true;
-        }
-
-        if (flString.charAt(1) == '0') {
-            flNC_FLAG_PH = false;
-        } else {
-            flNC_FLAG_PH = true;
-        }
-
-        if (flString.charAt(2) == '0') {
-            flNC_FLAG_CH = false;
-        } else {
-            flNC_FLAG_CH = true;
-        }
-
-        if (flString.charAt(3) == '0') {
-            flNC_FLAG_RANGE_LIMIT = false;
-        } else {
-            flNC_FLAG_RANGE_LIMIT = true;
-        }
-
-        if (flString.charAt(4) == '0') {
-            flNC_FLAG_NOSERIALLINK = false;
-        } else {
-            flNC_FLAG_NOSERIALLINK = true;
-        }
-
-        if (flString.charAt(5) == '0') {
-            flNC_FLAG_TARGET_REACHED = false;
-        } else {
-            flNC_FLAG_MANUAL = true;
+            this.flNC_FLAG_FREE = true;
         }
 
         if (flString.charAt(6) == '0') {
-            flNC_FLAG_GPS_OK = false;
+            this.flNC_FLAG_PH = false;
         } else {
-            flNC_FLAG_GPS_OK = true;
+            this.flNC_FLAG_PH = true;
         }
 
-        if (flString.charAt(7) == '0') {
-            flNC_FLAG_FREE = false;
+        if (flString.charAt(5) == '0') {
+            this.flNC_FLAG_CH = false;
         } else {
-            flNC_FLAG_FREE = true;
+            this.flNC_FLAG_CH = true;
+        }
+
+        if (flString.charAt(4) == '0') {
+            this.flNC_FLAG_RANGE_LIMIT = false;
+        } else {
+            this.flNC_FLAG_RANGE_LIMIT = true;
+        }
+
+        if (flString.charAt(3) == '0') {
+            this.flNC_FLAG_NOSERIALLINK = false;
+        } else {
+            this.flNC_FLAG_NOSERIALLINK = true;
+        }
+
+        if (flString.charAt(2) == '0') {
+            this.flNC_FLAG_TARGET_REACHED = false;
+        } else {
+            this.flNC_FLAG_MANUAL = true;
+        }
+
+        if (flString.charAt(1) == '0') {
+            this.flNC_FLAG_GPS_OK = false;
+        } else {
+            this.flNC_FLAG_GPS_OK = true;
+        }
+
+        if (flString.charAt(0) == '0') {
+            this.flNC_FLAG_FREE = false;
+        } else {
+            this.flNC_FLAG_FREE = true;
         }
 
     }
 
     void parseFlagsStatusFC1(String flString) {
-        if (flString.charAt(0) == '0') {
-            flFC_STATUS_MOTOR_RUN = false;
+        if (flString.charAt(7) == '0') {
+            this.flFC_STATUS_MOTOR_RUN = false;
         } else {
-            flFC_STATUS_MOTOR_RUN = true;
-        }
-        if (flString.charAt(1) == '0') {
-            flFC_STATUS_FLY = false;
-        } else {
-            flFC_STATUS_FLY = true;
-        }
-        if (flString.charAt(2) == '0') {
-            flFC_STATUS_CALIBRATE = false;
-        } else {
-            flFC_STATUS_CALIBRATE = true;
-        }
-        if (flString.charAt(3) == '0') {
-            flFC_STATUS_START = false;
-        } else {
-            flFC_STATUS_START = true;
-        }
-        if (flString.charAt(4) == '0') {
-            flFC_STATUS_EMERGENCY_LANDING = false;
-        } else {
-            flFC_STATUS_EMERGENCY_LANDING = true;
-        }
-        if (flString.charAt(5) == '0') {
-            flFC_STATUS_LOWBAT = false;
-        } else {
-            flFC_STATUS_LOWBAT = true;
+            this.flFC_STATUS_MOTOR_RUN = true;
         }
         if (flString.charAt(6) == '0') {
-            flFC_STATUS_VARIO_TRIM_UP = false;
+            this.flFC_STATUS_FLY = false;
         } else {
-            flFC_STATUS_VARIO_TRIM_UP = true;
+            this.flFC_STATUS_FLY = true;
         }
-        if (flString.charAt(7) == '0') {
-            flFC_STATUS_VARIO_TRIM_DOWN = false;
+        if (flString.charAt(5) == '0') {
+            this.flFC_STATUS_CALIBRATE = false;
         } else {
-            flFC_STATUS_VARIO_TRIM_DOWN = true;
+            this.flFC_STATUS_CALIBRATE = true;
+        }
+        if (flString.charAt(4) == '0') {
+            this.flFC_STATUS_START = false;
+        } else {
+            this.flFC_STATUS_START = true;
+        }
+        if (flString.charAt(3) == '0') {
+            this.flFC_STATUS_EMERGENCY_LANDING = false;
+        } else {
+            this.flFC_STATUS_EMERGENCY_LANDING = true;
+        }
+        if (flString.charAt(2) == '0') {
+            this.flFC_STATUS_LOWBAT = false;
+        } else {
+            this.flFC_STATUS_LOWBAT = true;
+        }
+        if (flString.charAt(1) == '0') {
+            this.flFC_STATUS_VARIO_TRIM_UP = false;
+        } else {
+            this.flFC_STATUS_VARIO_TRIM_UP = true;
+        }
+        if (flString.charAt(0) == '0') {
+            this.flFC_STATUS_VARIO_TRIM_DOWN = false;
+        } else {
+            this.flFC_STATUS_VARIO_TRIM_DOWN = true;
         }
     }
 
     void parseFlagsStatusFC2(String flString) {
-        if (flString.charAt(0) == '0') {
-            flFC_STATUS2_CAREFREE_ACTIVE = false;
+        if (flString.charAt(7) == '0') {
+            this.flFC_STATUS2_CAREFREE_ACTIVE = false;
         } else {
-            flFC_STATUS2_CAREFREE_ACTIVE = true;
-        }
-        if (flString.charAt(1) == '0') {
-            flFC_STATUS2_ALTITUDE_CONTROL_ACTIVE = false;
-        } else {
-            flFC_STATUS2_ALTITUDE_CONTROL_ACTIVE = true;
-        }
-        if (flString.charAt(2) == '0') {
-            flFC_STATUS2_FAILSAFE_ACTIVE = false;
-        } else {
-            flFC_STATUS2_FAILSAFE_ACTIVE = true;
-        }
-        if (flString.charAt(3) == '0') {
-            flFC_STATUS2_OUT1 = false;
-        } else {
-            flFC_STATUS2_OUT1 = true;
-        }
-        if (flString.charAt(4) == '0') {
-            flFC_STATUS2_OUT2 = false;
-        } else {
-            flFC_STATUS2_OUT2 = true;
-        }
-        if (flString.charAt(5) == '0') {
-            flFC_STATUS2_RES1 = false;
-        } else {
-            flFC_STATUS2_RES1 = true;
+            this.flFC_STATUS2_CAREFREE_ACTIVE = true;
         }
         if (flString.charAt(6) == '0') {
-            flFC_STATUS2_RES2 = false;
+            this.flFC_STATUS2_ALTITUDE_CONTROL_ACTIVE = false;
         } else {
-            flFC_STATUS2_RES2 = true;
+            this.flFC_STATUS2_ALTITUDE_CONTROL_ACTIVE = true;
         }
-        if (flString.charAt(7) == '0') {
-            flFC_STATUS2_RES3 = false;
+        if (flString.charAt(5) == '0') {
+            this.flFC_STATUS2_FAILSAFE_ACTIVE = false;
         } else {
-            flFC_STATUS2_RES3 = true;
+            this.flFC_STATUS2_FAILSAFE_ACTIVE = true;
+        }
+        if (flString.charAt(4) == '0') {
+            this.flFC_STATUS2_OUT1 = false;
+        } else {
+            this.flFC_STATUS2_OUT1 = true;
+        }
+        if (flString.charAt(3) == '0') {
+            this.flFC_STATUS2_OUT2 = false;
+        } else {
+            this.flFC_STATUS2_OUT2 = true;
+        }
+        if (flString.charAt(2) == '0') {
+            this.flFC_STATUS2_RES1 = false;
+        } else {
+            this.flFC_STATUS2_RES1 = true;
+        }
+        if (flString.charAt(1) == '0') {
+            this.flFC_STATUS2_RES2 = false;
+        } else {
+            this.flFC_STATUS2_RES2 = true;
+        }
+        if (flString.charAt(0) == '0') {
+            this.flFC_STATUS2_RES3 = false;
+        } else {
+            this.flFC_STATUS2_RES3 = true;
         }
     }
 

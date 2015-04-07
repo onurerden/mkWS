@@ -431,6 +431,8 @@ public class ServerEngine implements IDeviceServer {
                 status.setFlagsNC(rs_1.getString("ncFlags"));
                 status.setUpdateTime(rs_1.getTimestamp("updateTime"));
                 status.setSessionId(rs_1.getInt("sessionId"));
+                status.setFcStatusFlags1(rs_1.getString("fcFlags1"));
+                status.setFcStatusFlags2(rs_1.getString("fcFlags2"));
                 
                 System.out.println("All values Set");
                 
