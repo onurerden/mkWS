@@ -31,6 +31,7 @@ public class KopterStatus {
     public int kopterId;
     public int sessionId;
     public Timestamp updateTime;
+    private String blTempList;
 
     // NC flags
     boolean flNC_FLAG_FREE = false; //0b00000001
@@ -67,12 +68,12 @@ public class KopterStatus {
     //private String FcStatusFlags2 = "00000000";
     private String FlagsStatusFC2 = "00000000";
 
-    public void parseAllFlags(){
+    public void parseAllFlags() {
         parseFlagsNC(this.getFlagsNC());
         parseFlagsStatusFC1(this.getFcStatusFlags1());
         parseFlagsStatusFC2(this.getFcStatusFlags2());
     }
-    
+
     //parser methods
     void parseFlagsNC(String flString) {
         if (flString.charAt(7) == '0') {
@@ -387,5 +388,12 @@ public class KopterStatus {
         this.FlagsStatusFC2 = FcStatusFlags2;
     }
 
+    public String getBlTempList() {
+        return blTempList;
+    }
+
+    public void setBlTempList(String blTempList) {
+        this.blTempList = blTempList;
+    }
 
 }

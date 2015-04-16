@@ -211,7 +211,7 @@ public class ServerEngine implements IDeviceServer {
                 + "`latitude`, `longitude`, `heading`, `kopterErrorCode`, `gsmSignalStrength`, "
                 + "`kopterVoltage`, `gpsSatCount`, `batteryCurrent`, `batteryCapacity`, "
                 + "`kopterSpeed`, `kopterRcSignal`, `kopterVario`, `ncFlags`, `fcFlags1`,"
-                + "`fcFlags2`, `updateTime`,`sessionId`) VALUES ("
+                + "`fcFlags2`, `updateTime`,`sessionId`,`blTempList`) VALUES ("
                 + status.getKopterId() + ", "
                 + status.getKopterAltitude() + ", "
                 + status.getKopterLatitude() + ", "
@@ -230,7 +230,9 @@ public class ServerEngine implements IDeviceServer {
                 + status.getFcStatusFlags1() + "', '"
                 + status.getFcStatusFlags2() + "', "
                 + "NOW(), "
-                + status.getSessionId() + ")";
+                + status.getSessionId() + ", '"
+                + status.getBlTempList() + "'"
+                + ")";
         //System.out.println(queryString);
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
