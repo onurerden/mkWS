@@ -448,6 +448,7 @@ public class ServerEngine implements IDeviceServer {
                 status.setSessionId(rs_1.getInt("sessionId"));
                 status.setFcStatusFlags1(rs_1.getString("fcFlags1"));
                 status.setFcStatusFlags2(rs_1.getString("fcFlags2"));
+                status.setBlTempList(rs_1.getString("blTempList"));
 
                 System.out.println("All values Set");
 
@@ -708,7 +709,8 @@ public class ServerEngine implements IDeviceServer {
 //    }
     @Override
     public int endRoute(int routeId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        return 0;
     }
 
     private int createSession(int deviceId, DeviceTypes type) {
