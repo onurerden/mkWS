@@ -709,6 +709,11 @@ public class ServerEngine implements IDeviceServer {
 //    }
     @Override
     public int endRoute(int routeId) {
+        Credentials cr = new Credentials();
+        Connection con_1=null;
+        Statement st_1=null;
+        
+        String query ="";
         
         return 0;
     }
