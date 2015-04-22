@@ -298,6 +298,7 @@ public class ServerEngine implements IDeviceServer {
             Gson json = new Gson();
 
             output = json.toJson(data);
+            System.out.println(output);
             con_1.close();
         } catch (SQLException ex) {
             output = "-2";
@@ -576,8 +577,11 @@ public class ServerEngine implements IDeviceServer {
         Statement st_2 = null;
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
+            System.out.println("Instance Created");
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            System.out.println("Connection Created");
             st_1 = con_1.createStatement();
+            System.out.println("StatementCreated:");
             System.out.println(queryString);
             st_1.executeUpdate(queryString);
             System.out.println("routeId for deviceId = " + deviceId + " is created.");
@@ -593,17 +597,18 @@ public class ServerEngine implements IDeviceServer {
             }
 
         } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
             return -1;
 
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-            return -1;
+            return -2;
         } catch (InstantiationException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-            return -1;
+            return -2;
         } catch (IllegalAccessException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-            return -1;
+            return -2;
         } finally {
             try {
                 con_1.close();
@@ -661,7 +666,8 @@ public class ServerEngine implements IDeviceServer {
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1 = null;
-        String query = "INSERT INTO mk.logs SET logLevel = '" + msg.logLevel + "', logMessage = '" + msg.logMessage + "', ";
+        String query = "INSERT INTO mk.logs SET logLevel = '" + msg.logLevel 
+                + "', logMessage = '" + msg.logMessage + "', ";
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
@@ -671,18 +677,20 @@ public class ServerEngine implements IDeviceServer {
             switch (deviceType) {
                 case MK: {
                     query = query + "kopterId = '" + msg.deviceId + "'";
+                    break;
                 }
                 case MP: {
                     query = query + "followMeDeviceId = '" + msg.deviceId + "'";
+                    break;
                 }
                 default: {
                     query = query + "";
-
+                    break;}
                 }
                 System.out.println(query);
                 st_1.execute(query);
                 status = 0;
-            }
+            
 
         } catch (ClassNotFoundException ex) {
 
