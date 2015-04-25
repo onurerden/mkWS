@@ -211,7 +211,7 @@ public class ServerEngine implements IDeviceServer {
                 + "`latitude`, `longitude`, `heading`, `kopterErrorCode`, `gsmSignalStrength`, "
                 + "`kopterVoltage`, `gpsSatCount`, `batteryCurrent`, `batteryCapacity`, "
                 + "`kopterSpeed`, `kopterRcSignal`, `kopterVario`, `ncFlags`, `fcFlags1`,"
-                + "`fcFlags2`, `updateTime`,`sessionId`,`blTempList`) VALUES ("
+                + "`fcFlags2`, `updateTime`,`sessionId`,`blTempList`,`targetLatitude`,`targetLongitude` ) VALUES ("
                 + status.getKopterId() + ", "
                 + status.getKopterAltitude() + ", "
                 + status.getKopterLatitude() + ", "
@@ -231,9 +231,11 @@ public class ServerEngine implements IDeviceServer {
                 + status.getFcStatusFlags2() + "', "
                 + "NOW(), "
                 + status.getSessionId() + ", '"
-                + status.getBlTempList() + "'"
+                + status.getBlTempList() + "',"
+                + status.getTargetLatitude() + ","
+                + status.getTargetLongitude() + ""
                 + ")";
-        //System.out.println(queryString);
+        System.out.println(queryString);
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());

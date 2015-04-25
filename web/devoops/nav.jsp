@@ -51,6 +51,19 @@
                 <span class="hidden-xs">Routes</span>
             </a>
         </li>
+        <li>
+            <c:choose>
+                <c:when test="${selectedMenu=='logs'}">
+                <a href="logs.jsp" class="active">
+                </c:when>
+                <c:otherwise>
+                    <a href="logs.jsp">
+                </c:otherwise>
+            </c:choose>
+                <i class="fa fa-map-marker"></i>
+                <span class="hidden-xs">Logs</span>
+            </a>
+        </li>
 <li>
             <a href="http://mk-onurerden.rhcloud.com/phpmyadmin" target="_blank">
                 <i class="fa fa-book"></i>

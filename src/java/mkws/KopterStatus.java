@@ -33,6 +33,9 @@ public class KopterStatus {
     public Timestamp updateTime;
     private String blTempList;
 
+    private double TargetLongitude;
+    private double TargetLatitude;
+
     // NC flags
     boolean flNC_FLAG_FREE = false; //0b00000001
     boolean flNC_FLAG_PH = false; //0b00000010
@@ -394,6 +397,34 @@ public class KopterStatus {
 
     public void setBlTempList(String blTempList) {
         this.blTempList = blTempList;
+    }
+
+    /**
+     * @return the TargetLongitude
+     */
+    public double getTargetLongitude() {
+        return TargetLongitude;
+    }
+
+    /**
+     * @param TargetLongitude the TargetLongitude to set
+     */
+    public void setTargetLongitude(double TargetLongitude) {
+        this.TargetLongitude = TargetLongitude;
+    }
+
+    /**
+     * @return the TargetLatitude
+     */
+    public double getTargetLatitude() {
+        return TargetLatitude;
+    }
+
+    /**
+     * @param TargetLatitude the TargetLatitude to set
+     */
+    public void setTargetLatitude(double TargetLatitude) {
+        this.TargetLatitude = TargetLatitude;
     }
 
 }
