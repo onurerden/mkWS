@@ -723,7 +723,26 @@ public class ServerEngine implements IDeviceServer {
         Connection con_1=null;
         Statement st_1=null;
         
-        String query ="";
+        String query ="UPDATE  `route` SET isEnded =1 WHERE id =" + routeId;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            st_1 = con_1.createStatement();
+            st_1.executeUpdate(query);
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            return -1;
+        } catch (InstantiationException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            return -1;
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            return -1;
+        } catch (SQLException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            return -1;
+        }
         
         return 0;
     }

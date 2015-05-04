@@ -37,7 +37,7 @@ public class EndRoute extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             ServerEngine server=new ServerEngine();
-            String routeIdString=request.getParameter("roudeId");
+            String routeIdString=request.getParameter("routeId");
             int routeId=-1;
             try {
                 routeId=Integer.valueOf(routeIdString);

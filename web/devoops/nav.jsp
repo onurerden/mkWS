@@ -60,7 +60,7 @@
                     <a href="logs.jsp">
                 </c:otherwise>
             </c:choose>
-                <i class="fa fa-map-marker"></i>
+                <i class="fa fa-wrench"></i>
                 <span class="hidden-xs">Logs</span>
             </a>
         </li>
