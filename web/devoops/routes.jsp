@@ -28,7 +28,7 @@
 
                     Statement statement = connection.createStatement();
                     ResultSet resultset
-                            = statement.executeQuery("SELECT followme.routeId, followmedevices.name, route.time FROM  followme "
+                            = statement.executeQuery("SELECT followme.routeId, followmedevices.name, route.time, route.isEnded FROM  followme "
                                     + "INNER JOIN followmedevices ON followme.followMeDeviceId = followmedevices.id "
                                     + "INNER JOIN route ON followme.routeId = route.id "
                                     + "GROUP BY followme.routeId "
@@ -87,7 +87,11 @@
                                             <td><a href="getFollowMeOnMap.jsp?routeId=<%= resultset.getInt("routeId")%>">
                                                     <%= resultset.getInt("routeId")%></a></td>
                                             <td><%= resultset.getString("name")%></td>
-                                            <td><%= resultset.getTimestamp("time")%></td>
+                                            <td><%= resultset.getTimestamp("time")%>
+                                                <% if (resultset.getInt("isEnded")==0) {%>
+                                                <a href="getFollowMeOnMap.jsp?routeId=<%= resultset.getInt("routeId")%>" role="button" class="btn btn-danger">Live</a>
+                                                <% } %>
+                                            </td>
 
 
                                         </tr>
