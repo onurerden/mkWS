@@ -38,14 +38,14 @@ public class EndRoute extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             ServerEngine server=new ServerEngine();
             String routeIdString=request.getParameter("routeId");
-            int routeId=-1;
+            int roudeId=-1;
             try {
-                routeId=Integer.valueOf(routeIdString);
+                roudeId=Integer.valueOf(routeIdString);
             }catch (Exception ex){
                 System.out.println("Cannot parse routeId while EndRoute");
             }
             
-            out.println(server.endRoute(routeId));
+            out.println(server.endRoute(roudeId));
         }
     }
 
