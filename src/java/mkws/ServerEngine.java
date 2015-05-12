@@ -809,4 +809,10 @@ public class ServerEngine implements IDeviceServer {
         }
         return preZero + preString;
     }
+
+    @Override
+    public String ping() {
+        System.out.println("I am the one who will send 'Pong'");
+        return null;
+    }
 }

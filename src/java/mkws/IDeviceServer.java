@@ -78,4 +78,9 @@ public interface IDeviceServer {
     //Rotanın sonuçlandırılması için followme aksiyonunun bitirilmesi ile çağırılan metoddur.
     //sonlandırılmak istenen rota gönderilir.
     //1: başarılı, -1 db erişim hatası ya da geçersiz rota id
+    
+    String ping();
+    //Sistemin ayakta olup olmadığının tespiti için kullanılan metoddur.
+    // ".../Ping" URL'i ile sorgulanır (P büyük), yanıt olarak "Pong" gelir.
+    //Başka bir çıktısı yoktur.
 }
