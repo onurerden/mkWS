@@ -812,7 +812,7 @@ public class ServerEngine implements IDeviceServer {
 
     @Override
     public String ping() {
-        System.out.println("I am the one who will send 'Pong'");
+        System.out.println("I am the one who will send 'Pongs'");
         return null;
     }
 }
