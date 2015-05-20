@@ -200,7 +200,7 @@ public class ServerEngine implements IDeviceServer {
         Gson jsonObject = new Gson();
         status = jsonObject.fromJson(jsonStatus, KopterStatus.class);
         if (status.getKopterVario() > 32768) {
-            status.kopterVario = status.getKopterVario() - 65536;
+            status.setKopterVario(status.getKopterVario() - 65536);
         }
         status.setFlagsNC(addZerosToByte(status.getFlagsNC()));
         status.setFcStatusFlags1(addZerosToByte(status.getFcStatusFlags1()));
@@ -432,20 +432,20 @@ public class ServerEngine implements IDeviceServer {
             System.out.println("KopterStatus found for " + deviceId);
 
             if (rs_1.next()) {
-                status.kopterId = rs_1.getInt("kopterId");
-                status.kopterAltitude = rs_1.getInt("altitude");
-                status.kopterLatitude = rs_1.getDouble("latitude");
-                status.kopterLongitude = rs_1.getDouble("longitude");
-                status.kopterHeading = rs_1.getInt("heading");
-                status.kopterErrorCode = rs_1.getInt("kopterErrorCode");
-                status.gsmSignalStrength = rs_1.getInt("gsmSignalStrength");
-                status.kopterVoltage = rs_1.getInt("kopterVoltage");
-                status.gpsSatCount = rs_1.getInt("gpsSatCount");
-                status.batteryCurrent = rs_1.getInt("batteryCurrent");
-                status.batteryCapacity = rs_1.getInt("batteryCapacity");
-                status.kopterSpeed = rs_1.getDouble("kopterSpeed");
-                status.kopterRcSignal = rs_1.getInt("kopterRcSignal");
-                status.kopterVario = rs_1.getInt("kopterVario");
+                status.setKopterId(rs_1.getInt("kopterId"));
+                status.setKopterAltitude(rs_1.getInt("altitude"));
+                status.setKopterLatitude(rs_1.getDouble("latitude"));
+                status.setKopterLongitude(rs_1.getDouble("longitude"));
+                status.setKopterHeading(rs_1.getInt("heading"));
+                status.setKopterErrorCode(rs_1.getInt("kopterErrorCode"));
+                status.setGsmSignalStrength(rs_1.getInt("gsmSignalStrength"));
+                status.setKopterVoltage(rs_1.getInt("kopterVoltage"));
+                status.setGpsSatCount(rs_1.getInt("gpsSatCount"));
+                status.setBatteryCurrent(rs_1.getInt("batteryCurrent"));
+                status.setBatteryCapacity(rs_1.getInt("batteryCapacity"));
+                status.setKopterSpeed(rs_1.getDouble("kopterSpeed"));
+                status.setKopterRcSignal(rs_1.getInt("kopterRcSignal"));
+                status.setKopterVario(rs_1.getInt("kopterVario"));
                 status.setFlagsNC(rs_1.getString("ncFlags"));
                 status.setUpdateTime(rs_1.getTimestamp("updateTime"));
                 status.setSessionId(rs_1.getInt("sessionId"));
@@ -815,4 +815,51 @@ public class ServerEngine implements IDeviceServer {
         System.out.println("I am the one who will send 'Pongs'");
         return null;
     }
+    
+    public ArrayList<KopterStatus> getKopterSessionData(int sessionId){
+        ArrayList<KopterStatus> sessionList=new ArrayList<>();
+        Credentials cr = new Credentials();
+        Connection con_1=null;
+        Statement st_1=null;
+        
+        String query ="SELECT * from kopterstatus WHERE sessionId="+sessionId;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            st_1= con_1.createStatement();
+            ResultSet rs_1 = st_1.executeQuery(query);
+            while (rs_1.next()){
+                KopterStatus newStatus= new KopterStatus();
+                newStatus.setKopterAltitude(rs_1.getInt("altitude"));
+                newStatus.setKopterLatitude(rs_1.getDouble("latitude"));
+                newStatus.setKopterLongitude(rs_1.getDouble("longitude"));
+                newStatus.setKopterHeading(rs_1.getInt("heading"));
+                newStatus.setKopterErrorCode(rs_1.getInt("kopterErrorCode"));
+                newStatus.setGsmSignalStrength(rs_1.getInt("gsmSignalStrength"));
+                newStatus.setKopterVoltage(rs_1.getInt("kopterVoltage"));
+                newStatus.setGpsSatCount(rs_1.getInt("gpsSatCount"));
+                newStatus.setBatteryCurrent(rs_1.getInt("batteryCurrent"));
+                newStatus.setBatteryCapacity(rs_1.getInt("batteryCapacity"));
+                newStatus.setKopterSpeed(rs_1.getInt("kopterSpeed"));
+                newStatus.setKopterRcSignal(rs_1.getInt("kopterRcSignal"));
+                newStatus.setKopterVario(rs_1.getInt("kopterVario"));
+                newStatus.setUpdateTime(rs_1.getTimestamp("updateTime"));
+                newStatus.setTargetLatitude(rs_1.getDouble("targetLatitude"));
+                newStatus.setTargetLongitude(rs_1.getDouble("targetLongitude"));
+                newStatus.setSessionId(sessionId);
+                
+                sessionList.add(newStatus);
+            }
+            
+        } catch (Exception ex){
+            System.out.println("Error at collecting session data");
+        }
+        
+        
+        return sessionList;
+               
+    };
+        
+        
+      
 }

@@ -13,24 +13,24 @@ import java.sql.Timestamp;
  */
 public class KopterStatus {
 
-    public int kopterHeading;  //in degree
-    public int kopterAltitude; //in meters
-    public double kopterLatitude;
-    public double kopterLongitude;
-    public double homeLatitude;
-    public double homeLongitude;
-    public int kopterErrorCode;
-    public int gsmSignalStrength;
-    public int kopterVoltage; //in mV
-    public int gpsSatCount;
-    public double batteryCurrent; //in mA
-    public int batteryCapacity; //in mAh
-    public double kopterSpeed; //in m/s
-    public int kopterRcSignal;
-    public double kopterVario; //in m/s
-    public int kopterId;
-    public int sessionId;
-    public Timestamp updateTime;
+    private int kopterHeading;  //in degree
+    private int kopterAltitude; //in meters
+    private double kopterLatitude;
+    private double kopterLongitude;
+    private double homeLatitude;
+    private double homeLongitude;
+    private int kopterErrorCode;
+    private int gsmSignalStrength;
+    private int kopterVoltage; //in mV
+    private int gpsSatCount;
+    private double batteryCurrent; //in mA
+    private int batteryCapacity; //in mAh
+    private double kopterSpeed; //in m/s
+    private int kopterRcSignal;
+    private double kopterVario; //in m/s
+    private int kopterId;
+    private int sessionId;
+    private Timestamp updateTime;
     private String blTempList;
 
     private double TargetLongitude;
@@ -425,6 +425,118 @@ public class KopterStatus {
      */
     public void setTargetLatitude(double TargetLatitude) {
         this.TargetLatitude = TargetLatitude;
+    }
+
+    /**
+     * @param kopterHeading the kopterHeading to set
+     */
+    public void setKopterHeading(int kopterHeading) {
+        this.kopterHeading = kopterHeading;
+    }
+
+    /**
+     * @param kopterAltitude the kopterAltitude to set
+     */
+    public void setKopterAltitude(int kopterAltitude) {
+        this.kopterAltitude = kopterAltitude;
+    }
+
+    /**
+     * @param kopterLatitude the kopterLatitude to set
+     */
+    public void setKopterLatitude(double kopterLatitude) {
+        this.kopterLatitude = kopterLatitude;
+    }
+
+    /**
+     * @param kopterLongitude the kopterLongitude to set
+     */
+    public void setKopterLongitude(double kopterLongitude) {
+        this.kopterLongitude = kopterLongitude;
+    }
+
+    /**
+     * @param homeLatitude the homeLatitude to set
+     */
+    public void setHomeLatitude(double homeLatitude) {
+        this.homeLatitude = homeLatitude;
+    }
+
+    /**
+     * @param homeLongitude the homeLongitude to set
+     */
+    public void setHomeLongitude(double homeLongitude) {
+        this.homeLongitude = homeLongitude;
+    }
+
+    /**
+     * @param kopterErrorCode the kopterErrorCode to set
+     */
+    public void setKopterErrorCode(int kopterErrorCode) {
+        this.kopterErrorCode = kopterErrorCode;
+    }
+
+    /**
+     * @param gsmSignalStrength the gsmSignalStrength to set
+     */
+    public void setGsmSignalStrength(int gsmSignalStrength) {
+        this.gsmSignalStrength = gsmSignalStrength;
+    }
+
+    /**
+     * @param kopterVoltage the kopterVoltage to set
+     */
+    public void setKopterVoltage(int kopterVoltage) {
+        this.kopterVoltage = kopterVoltage;
+    }
+
+    /**
+     * @param gpsSatCount the gpsSatCount to set
+     */
+    public void setGpsSatCount(int gpsSatCount) {
+        this.gpsSatCount = gpsSatCount;
+    }
+
+    /**
+     * @param batteryCurrent the batteryCurrent to set
+     */
+    public void setBatteryCurrent(double batteryCurrent) {
+        this.batteryCurrent = batteryCurrent;
+    }
+
+    /**
+     * @param batteryCapacity the batteryCapacity to set
+     */
+    public void setBatteryCapacity(int batteryCapacity) {
+        this.batteryCapacity = batteryCapacity;
+    }
+
+    /**
+     * @param kopterSpeed the kopterSpeed to set
+     */
+    public void setKopterSpeed(double kopterSpeed) {
+        this.kopterSpeed = kopterSpeed;
+    }
+
+    /**
+     * @param kopterRcSignal the kopterRcSignal to set
+     */
+    public void setKopterRcSignal(int kopterRcSignal) {
+        this.kopterRcSignal = kopterRcSignal;
+    }
+
+    /**
+     * @param kopterVario the kopterVario to set
+     */
+    public void setKopterVario(double kopterVario) {
+        this.kopterVario = kopterVario;
+    }
+
+    /**
+     * @param kopterId the kopterId to set
+     */
+    public void setKopterId(int kopterId) {
+        this.kopterId = kopterId;
     }
 
 }
