@@ -42,7 +42,9 @@
                                     <a class="collapse-link">
                                         <i class="fa fa-chevron-up"></i>
                                     </a>
-
+                                    <a class="expand-link">
+                                        <i class="fa fa-expand"></i>
+                                    </a>
                                     <a class="close-link">
                                         <i class="fa fa-times"></i>
                                     </a>
@@ -69,7 +71,9 @@
                                     <a class="collapse-link">
                                         <i class="fa fa-chevron-up"></i>
                                     </a>
-
+                                    <a class="expand-link">
+                                        <i class="fa fa-expand"></i>
+                                    </a>
                                     <a class="close-link">
                                         <i class="fa fa-times"></i>
                                     </a>
@@ -95,7 +99,9 @@
                                     <a class="collapse-link">
                                         <i class="fa fa-chevron-up"></i>
                                     </a>
-
+                                    <a class="expand-link">
+                                        <i class="fa fa-expand"></i>
+                                    </a>
                                     <a class="close-link">
                                         <i class="fa fa-times"></i>
                                     </a>
@@ -145,7 +151,7 @@
                         "data":
         <jsp:getProperty name="kopterSessionInfo" property = "currentSerie"/>
                     }]};
-                    
+
             var capacityData = {
                 "xScale": "linear",
                 "yScale": "linear",
