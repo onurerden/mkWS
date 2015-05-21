@@ -31,12 +31,12 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div id="routes" class="col-xs-12">
+                    <div id="voltageBox" class="col-xs-4">
                         <div class="box">
                             <div class="box-header">
                                 <div class="box-name">
                                     <i class="fa fa-table"></i>
-                                    <span>KopterSessionInfo for <% out.println(kopterSessionInfo.getSessionId());%></span>
+                                    <span>Voltage</span>
                                 </div>
                                 <div class="box-icons">
                                     <a class="collapse-link">
@@ -51,7 +51,60 @@
                             </div>
                             <div class="box-content">
                                 <div class="row">
-                                    <figure style="width: 900px; height: 500px;" id="voltageChart"></figure>
+                                    <figure style="width: 300px; height: 200px;" id="voltageChart"></figure>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="currentBox" class="col-xs-4">
+                        <div class="box">
+                            <div class="box-header">
+                                <div class="box-name">
+                                    <i class="fa fa-table"></i>
+                                    <span>Current</span>
+                                </div>
+                                <div class="box-icons">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                                <div class="no-move"></div>
+                            </div>
+                            <div class="box-content">
+                                <div class="row">
+                                    <figure style="width: 300px; height: 200px;" id="currentChart"></figure>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div id="capacityBox" class="col-xs-4">
+                        <div class="box">
+                            <div class="box-header">
+                                <div class="box-name">
+                                    <i class="fa fa-table"></i>
+                                    <span>Capacity</span>
+                                </div>
+                                <div class="box-icons">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                                <div class="no-move"></div>
+                            </div>
+                            <div class="box-content">
+                                <div class="row">
+                                    <figure style="width: 300px; height: 200px;" id="capacityChart"></figure>
                                 </div>
 
                             </div>
@@ -68,7 +121,7 @@
     <script>
         (function() {
 
-            var data = {
+            var voltageData = {
                 "xScale": "linear",
                 "yScale": "linear",
                 "main": [
@@ -79,16 +132,34 @@
 
 
                     }
-                ], "comp": [
+                ]
+
+            };
+            var currentData = {
+                "xScale": "linear",
+                "yScale": "linear",
+                "main": [
                     {
                         "className": ".pizza",
                         "type": "line",
                         "data":
         <jsp:getProperty name="kopterSessionInfo" property = "currentSerie"/>
-                    }]
+                    }]};
                     
-            };
-            var myChart = new xChart('line', data, '#voltageChart');
+            var capacityData = {
+                "xScale": "linear",
+                "yScale": "linear",
+                "main": [
+                    {
+                        "className": ".pizza",
+                        "type": "line",
+                        "data":
+        <jsp:getProperty name="kopterSessionInfo" property = "capacitySerie"/>
+                    }]};
+
+            var voltageChart = new xChart('line', voltageData, '#voltageChart');
+            var currentChart = new xChart('line', currentData, '#currentChart');
+            var capacityChart = new xChart('line', capacityData, '#capacityChart');
 
 
         }());

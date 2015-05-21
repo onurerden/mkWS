@@ -74,7 +74,6 @@
                             </div>
                             <div class="box-content">
                                 <figure style="width: 400px; height: 300px;" id="myChart"></figure>
-
                             </div>
                         </div>                                                
                     </div>
