@@ -25,7 +25,7 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-12">
-                        <div class="box">
+                        <div class="box ui-draggable ui-droppable">
                             <div class="box-header">
                                 <div class="box-name">
                                     <i class="fa fa-table"></i>
@@ -53,7 +53,7 @@
                 <!-- map here -->
                 <div class="row">
                     <div class="col-xs-12">
-                        <div class="box">
+                        <div class="box ui-draggable ui-droppable">
                             <div class="box-header">
                                 <div class="box-name">
                                     <i class="fa fa-table"></i>
