@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div id="map" class="col-xs-12">
+                    <div class="col-xs-12">
                         <div class="box">
                             <div class="box-header">
                                 <div class="box-name">
@@ -50,8 +50,9 @@
                                 <div class="no-move"></div>
                             </div>
 
-                            <div id="yandex" class="box-content" style="height:430px">
-
+                            <div class="box-content">
+                                <!--<div id="yandex" style="height:430px"></div>-->
+                                <div id="map-canvas" style="height: 450px"></div>
                             </div>
                         </div>
                     </div>
@@ -79,7 +80,11 @@
                             </div>
                             <div class="box-content">
                                 <div class="row">
-                                    <figure style="width: 300px; height: 200px;" id="voltageChart"></figure>
+                                    <figure style="height: 200px;" id="voltageChart"></figure>
+
+                                </div>
+                                <div class="row" id="voltageValue">
+                                    InitialValue
                                 </div>
 
                             </div>
@@ -266,37 +271,41 @@
             </div>
         </div>
     </div>       
-    <script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=en-US"
-    type="text/javascript"></script>
-    <script type="text/javascript">
 
-        // Initializes the map as soon as the API is loaded and DOM is ready
-        ymaps.ready(init);
-        function init() {
-            var myMap = new ymaps.Map("yandex", {
-                bounds:<jsp:getProperty name="kopterSessionInfo" property="mapBounds"/>
+    <%@include file="foot.jsp" %>
+
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <script>
+        var map;
+        function initialize() {
+            var mapOptions = {
+                zoom: 8,
+            };
+            map = new google.maps.Map(document.getElementById('map-canvas'),
+                    mapOptions);
+            var flightPlanCoordinates = <jsp:getProperty name="kopterSessionInfo" property = "latLonSerie"/>;
+
+            var flightPath = new google.maps.Polyline({
+                path: flightPlanCoordinates,
+                geodesic: true,
+                strokeColor: '#FF0000',
+                strokeOpacity: 1.0,
+                strokeWeight: 2
             });
-                    
-                    // A polyline
-                    myPolyline = new ymaps.Polyline([
-                        // The coordinates of polyline vertices.
-        <jsp:getProperty name="kopterSessionInfo" property = "latLonSerie"/>
-                    ] );
+                            <jsp:getProperty name="kopterSessionInfo" property = "mapBounds"/>;
+            var bounds = new google.maps.LatLngBounds(southWest, northEast);
+            map.fitBounds(bounds);
 
-            myMap.geoObjects
-                    .add(myPolyline)
-
-            myMap.controls.add('mapTools');
-            myMap.controls.add('typeSelector');
-            myMap.controls.add('smallZoomControl');
-            myMap.copyrights.add('&copy; Belkopter Team');
-            myMap.setZoom(myMap.getZoom() - 1);
+            flightPath.setMap(map);
         }
+        google.maps.event.addDomListener(window, 'load', initialize);
+
     </script>
 
-
+    <!-- çizelge verileri dolduruluyor-->
     <script src = "plugins/d3/d3.v3.js" ></script>
     <script src="plugins/xcharts/xcharts.js"></script>
+
     <script>
         (function() {
 
@@ -314,6 +323,7 @@
                 ]
 
             };
+
             var currentData = {
                 "xScale": "linear",
                 "yScale": "linear",
@@ -381,7 +391,13 @@
                 "tickHintY": 5
             };
 
-            var voltageChart = new xChart('line', voltageData, '#voltageChart');
+            var voltageopts = {
+                "mouseover": function(d, i) {
+                    $("#voltageValue").text("Voltage: " + d.y);
+                }
+            };
+
+            var voltageChart = new xChart('line-dotted', voltageData, '#voltageChart', voltageopts);
             var currentChart = new xChart('line', currentData, '#currentChart');
             var capacityChart = new xChart('line', capacityData, '#capacityChart');
             var altitudeChart = new xChart('line', altitudeData, '#altitudeChart');
@@ -389,10 +405,10 @@
             var rcSignalChart = new xChart('line', rcSignalData, '#rcSignalChart');
             var satChart = new xChart('line', satData, '#satChart', opts);
 
-        }());
+        })();
     </script>
 
-    <%@include file="foot.jsp" %>
+
     <script type="text/javascript">
         $(document).ready(function() {
             WinMove();

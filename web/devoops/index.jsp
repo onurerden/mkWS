@@ -10,7 +10,13 @@
 <c:set var="selectedMenu" value="anasayfa"/>
 <html>
     <%@ include file="head.jsp" %> 
-
+<style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+    </style>
     <div id="main" class="container-fluid">
         <div class="row">
             <%@ include file="nav.jsp" %>                                                 
@@ -74,7 +80,7 @@
                                     <div class="no-move"></div>
                                 </div>
                                 <div class="box-content">
-                                    <figure style="width: 400px; height: 300px;" id="myChart"></figure>
+                                    <div id="map-canvas" style="height: 350px"></div>
                                 </div>
                             </div>                                                
                         </div>
@@ -85,39 +91,25 @@
 
         <%@ include file="foot.jsp" %> 
 
-        <script src="plugins/d3/d3.v3.js"></script>
-        <script src="plugins/xcharts/xcharts.js"></script>
-        <script>
-            (function() {
+        
+        
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <script>
+var map;
+function initialize() {
+  var mapOptions = {
+    zoom: 8,
+    center: new google.maps.LatLng(-34.397, 150.644)
+  };
+  map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+}
 
-                var data = {
-                    "xScale": "linear",
-                    "yScale": "linear",
-                    "main": [
-                        {
-                            "className": ".pizza",
-                            "data": [
-                                {
-                                    "x": 1,
-                                    "y": 4
-                                },
-                                {
-                                    "x": 2,
-                                    "y": 8
-                                }
-                                ,
-                                {
-                                    "x": 3,
-                                    "y": 8
-                                }
-                            ]
-                        }
-                    ]
-                };
-                var myChart = new xChart('line', data, '#myChart');
+google.maps.event.addDomListener(window, 'load', initialize);
 
-            }());
-        </script>
+    </script>
+
+        
 <script type="text/javascript">
     $(document).ready(function() {
 WinMove();

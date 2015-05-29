@@ -93,8 +93,10 @@ public class GetKopterSessionInfo {
         this.rcSignalSerie = gson.toJson(rcSignalList);
         this.satSerie = gson.toJson(satList);
         MapTools.setPoints(rpcList);
-        this.latLonSerie = MapTools.getYandexMapPositionData();
-        this.mapBounds=MapTools.getYandexBoundsData();
+        //this.latLonSerie = MapTools.getYandexMapPositionData();
+        this.latLonSerie = MapTools.getGoogleMapPositionData();
+        //this.mapBounds=MapTools.getYandexBoundsData();
+        this.mapBounds=MapTools.getGoogleBoundsData();
         
                 
     }

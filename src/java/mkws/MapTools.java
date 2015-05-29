@@ -26,6 +26,15 @@ public class MapTools {
         }
         return mapData;
     }
+    public static String getGoogleMapPositionData(){
+    
+    String mapData = "[";
+        for (RoutePointClass point : points){
+            mapData = mapData + "new google.maps.LatLng("+ point.getLatitude()+","+ point.getLongitude() +"),\n";
+        }
+        mapData=mapData + "]";
+    return mapData;
+    }
     public static String getYandexBoundsData(){
         String boundsData="";
         double minLat=99;
@@ -50,6 +59,33 @@ public class MapTools {
         
         boundsData= "[["+minLat+","+minLong+"],"
                         + "["+maxLat+","+maxLong+"]]";
+        
+        return boundsData;
+    }
+    public static String getGoogleBoundsData(){
+        String boundsData = "";
+        double minLat=99;
+        double maxLat=-99;
+        double minLong=99;
+        double maxLong=-99;
+        
+        for (RoutePointClass point : points){
+            if (point.getLatitude()<minLat){
+                minLat=point.getLatitude();
+            }
+           if (point.getLongitude()<minLong){
+                minLong=point.getLongitude();
+            }     
+           if (point.getLatitude()>maxLat){
+               maxLat=point.getLatitude();
+           }
+           if (point.getLongitude()>maxLong){
+               maxLong=point.getLongitude();
+           }                        
+        }
+        
+        boundsData = "var southWest = new google.maps.LatLng(" +minLat+"," +minLong +   ");\n" +
+                     "var northEast = new google.maps.LatLng("+maxLat +"," +maxLong+");";
         
         return boundsData;
     }
