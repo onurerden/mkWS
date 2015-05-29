@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package mkws;
+package mkws.Model;
 
 import java.sql.Timestamp;
 

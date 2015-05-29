@@ -31,6 +31,32 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div id="map" class="col-xs-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <div class="box-name">
+                                    <i class="fa fa-table"></i>
+                                    <span>Flight Map</span>
+                                </div>
+                                <div class="box-icons">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                                <div class="no-move"></div>
+                            </div>
+
+                            <div id="yandex" class="box-content" style="height:430px">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div id="voltageBox" class="col-xs-12 col-sm-6 col-md-4">
                         <div class="box">
                             <div class="box-header">
@@ -207,7 +233,7 @@
                             </div>
                         </div>
                     </div>
-<div id="satBox" class="col-xs-12 col-sm-6 col-md-4">
+                    <div id="satBox" class="col-xs-12 col-sm-6 col-md-4">
                         <div class="box">
                             <div class="box-header">
                                 <div class="box-name">
@@ -240,9 +266,36 @@
             </div>
         </div>
     </div>       
+    <script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=en-US"
+    type="text/javascript"></script>
+    <script type="text/javascript">
+
+        // Initializes the map as soon as the API is loaded and DOM is ready
+        ymaps.ready(init);
+        function init() {
+            var myMap = new ymaps.Map("yandex", {
+                bounds:<jsp:getProperty name="kopterSessionInfo" property="mapBounds"/>
+            });
+                    
+                    // A polyline
+                    myPolyline = new ymaps.Polyline([
+                        // The coordinates of polyline vertices.
+        <jsp:getProperty name="kopterSessionInfo" property = "latLonSerie"/>
+                    ] );
+
+            myMap.geoObjects
+                    .add(myPolyline)
+
+            myMap.controls.add('mapTools');
+            myMap.controls.add('typeSelector');
+            myMap.controls.add('smallZoomControl');
+            myMap.copyrights.add('&copy; Belkopter Team');
+            myMap.setZoom(myMap.getZoom() - 1);
+        }
+    </script>
 
 
-    <script src="plugins/d3/d3.v3.js"></script>
+    <script src = "plugins/d3/d3.v3.js" ></script>
     <script src="plugins/xcharts/xcharts.js"></script>
     <script>
         (function() {
@@ -313,7 +366,7 @@
                         "data":
         <jsp:getProperty name="kopterSessionInfo" property = "rcSignalSerie"/>
                     }]};
-var satData = {
+            var satData = {
                 "xScale": "linear",
                 "yScale": "linear",
                 "main": [
@@ -324,9 +377,9 @@ var satData = {
         <jsp:getProperty name="kopterSessionInfo" property = "satSerie"/>
                     }]};
 
-var opts = {
-"tickHintY": 5
-};
+            var opts = {
+                "tickHintY": 5
+            };
 
             var voltageChart = new xChart('line', voltageData, '#voltageChart');
             var currentChart = new xChart('line', currentData, '#currentChart');
@@ -334,10 +387,17 @@ var opts = {
             var altitudeChart = new xChart('line', altitudeData, '#altitudeChart');
             var gsmSignalChart = new xChart('line', gsmSignalData, '#gsmSignalChart');
             var rcSignalChart = new xChart('line', rcSignalData, '#rcSignalChart');
-            var satChart = new xChart('line', satData, '#satChart',opts);
+            var satChart = new xChart('line', satData, '#satChart', opts);
 
         }());
     </script>
+
     <%@include file="foot.jsp" %>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            WinMove();
+        });
+    </script>
+
 </body>
 </html>

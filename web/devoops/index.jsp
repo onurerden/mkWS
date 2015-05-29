@@ -23,66 +23,68 @@
                         </ol>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="box ui-draggable ui-droppable">
-                            <div class="box-header">
-                                <div class="box-name">
-                                    <i class="fa fa-table"></i>
-                                    <span>Welcome</span>
+                
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box">
+                                <div class="box-header">
+                                    <div class="box-name">
+                                        <i class="fa fa-table"></i>
+                                        <span>Welcome</span>
+                                    </div>
+                                    <div class="box-icons">
+                                        <a class="collapse-link">
+                                            <i class="fa fa-chevron-up"></i>
+                                        </a>
+                                        <a class="expand-link">
+                                            <i class="fa fa-expand"></i>
+                                        </a>
+                                        <a class="close-link">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+                                    <div class="no-move"></div>
                                 </div>
-                                <div class="box-icons">
-                                    <a class="collapse-link">
-                                        <i class="fa fa-chevron-up"></i>
-                                    </a>
-                                    <a class="expand-link">
-                                        <i class="fa fa-expand"></i>
-                                    </a>
-                                    <a class="close-link">
-                                        <i class="fa fa-times"></i>
-                                    </a>
+                                <div class="box-content">
+                                    denemedir, şöyle denemedir böyle denemedir
                                 </div>
-                                <div class="no-move"></div>
-                            </div>
-                            <div class="box-content">
-                                denemedir, şöyle denemedir böyle denemedir
-                            </div>
-                        </div>                                                
+                            </div>                                                
+                        </div>
                     </div>
-                </div>
-                <!-- map here -->
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="box ui-draggable ui-droppable">
-                            <div class="box-header">
-                                <div class="box-name">
-                                    <i class="fa fa-table"></i>
-                                    <span>chart example</span>
+                    <!-- map here -->
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box">
+                                <div class="box-header">
+                                    <div class="box-name">
+                                        <i class="fa fa-table"></i>
+                                        <span>chart example</span>
+                                    </div>
+                                    <div class="box-icons">
+                                        <a class="collapse-link">
+                                            <i class="fa fa-chevron-up"></i>
+                                        </a>
+                                        <a class="expand-link">
+                                            <i class="fa fa-expand"></i>
+                                        </a>
+                                        <a class="close-link">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+                                    <div class="no-move"></div>
                                 </div>
-                                <div class="box-icons">
-                                    <a class="collapse-link">
-                                        <i class="fa fa-chevron-up"></i>
-                                    </a>
-                                    <a class="expand-link">
-                                        <i class="fa fa-expand"></i>
-                                    </a>
-                                    <a class="close-link">
-                                        <i class="fa fa-times"></i>
-                                    </a>
+                                <div class="box-content">
+                                    <figure style="width: 400px; height: 300px;" id="myChart"></figure>
                                 </div>
-                                <div class="no-move"></div>
-                            </div>
-                            <div class="box-content">
-                                <figure style="width: 400px; height: 300px;" id="myChart"></figure>
-                            </div>
-                        </div>                                                
+                            </div>                                                
+                        </div>
                     </div>
-                </div>
+                
             </div>
         </div>
 
         <%@ include file="foot.jsp" %> 
-        
+
         <script src="plugins/d3/d3.v3.js"></script>
         <script src="plugins/xcharts/xcharts.js"></script>
         <script>
@@ -116,6 +118,10 @@
 
             }());
         </script>
-        
+<script type="text/javascript">
+    $(document).ready(function() {
+WinMove();
+    });
+</script>
     </body>
 </html>
