@@ -83,8 +83,8 @@
                                     <figure style="height: 200px;" id="voltageChart"></figure>
 
                                 </div>
-                                <div class="row" id="voltageValue">
-                                    InitialValue
+                                <div class="row" style="text-align:center" id="voltageValue">
+                                     Voltage:
                                 </div>
 
                             </div>
@@ -277,37 +277,86 @@
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
     <script>
         var map;
+        function BoundsControl(controlDiv, map) {
+
+            // Set CSS for the control border
+            var controlUI = document.createElement('div');
+            controlUI.style.backgroundColor = '#fff';
+            controlUI.style.border = '2px solid #fff';
+            controlUI.style.borderRadius = '3px';
+            controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+            controlUI.style.cursor = 'pointer';
+            controlUI.style.marginTop = '22px';
+            controlUI.style.marginLeft = '22px';
+            controlUI.style.textAlign = 'center';
+            controlUI.title = 'Uçuş Rotasını Ortalamak için tıklayın';
+
+            controlDiv.appendChild(controlUI);
+
+            // Set CSS for the control interior
+            var controlText = document.createElement('div');
+            controlText.style.color = 'rgb(25,25,25)';
+            controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+            controlText.style.fontSize = '16px';
+            controlText.style.lineHeight = '38px';
+            controlText.style.paddingLeft = '5px';
+            controlText.style.paddingRight = '5px';
+            controlText.innerHTML = 'Rotayı Ortala';
+            controlUI.appendChild(controlText);
+
+            // Setup the click event listeners: simply set the map to
+            // Chicago
+            google.maps.event.addDomListener(controlUI, 'click', function() {
+        <jsp:getProperty name="kopterSessionInfo" property = "mapBounds"/>;
+                var bounds = new google.maps.LatLngBounds(southWest, northEast);
+                map.fitBounds(bounds);
+            });
+
+        }
+
+
         function initialize() {
             var mapOptions = {
-                zoom: 8,
+
+            disableDefaultUI: true,
+                    mapTypeControl: true,
+                    zoomControl: true,
+                    zoomControlOptions:{
+                            style: google.maps.ZoomControlStyle.LARGE,
+                            position: google.maps.ControlPosition.LEFT_CENTER
+                    }
             };
-            map = new google.maps.Map(document.getElementById('map-canvas'),
-                    mapOptions);
+                    map = new google.maps.Map(document.getElementById('map-canvas'),
+                            mapOptions);
             var flightPlanCoordinates = <jsp:getProperty name="kopterSessionInfo" property = "latLonSerie"/>;
 
             var flightPath = new google.maps.Polyline({
                 path: flightPlanCoordinates,
                 geodesic: true,
-                strokeColor: '#FF0000',
+                strokeColor: '#3880aa',
                 strokeOpacity: 1.0,
-                strokeWeight: 2
+                strokeWeight: 3
             });
-                            <jsp:getProperty name="kopterSessionInfo" property = "mapBounds"/>;
+        <jsp:getProperty name="kopterSessionInfo" property = "mapBounds"/>;
             var bounds = new google.maps.LatLngBounds(southWest, northEast);
             map.fitBounds(bounds);
 
             flightPath.setMap(map);
+            var boundsControlDiv = document.createElement('div');
+            var boundsControl = new BoundsControl(boundsControlDiv, map);
+
+            boundsControlDiv.index = 1;
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(boundsControlDiv);
         }
         google.maps.event.addDomListener(window, 'load', initialize);
 
     </script>
 
     <!-- çizelge verileri dolduruluyor-->
-    <script src = "plugins/d3/d3.v3.js" ></script>
-    <script src="plugins/xcharts/xcharts.js"></script>
+
 
     <script>
-        (function() {
+        function DrawAllxCharts() {
 
             var voltageData = {
                 "xScale": "linear",
@@ -405,12 +454,19 @@
             var rcSignalChart = new xChart('line', rcSignalData, '#rcSignalChart');
             var satChart = new xChart('line', satData, '#satChart', opts);
 
-        })();
-    </script>
+        }
 
 
-    <script type="text/javascript">
         $(document).ready(function() {
+            // Load required scripts and callback to draw
+            LoadXChartScript(DrawAllxCharts);
+            // Required for correctly resize charts, when boxes expand
+            var graphxChartsResize;
+            $(".box").resize(function(event) {
+                event.preventDefault();
+                clearTimeout(graphxChartsResize);
+                graphxChartsResize = setTimeout(DrawAllxCharts, 500);
+            });
             WinMove();
         });
     </script>

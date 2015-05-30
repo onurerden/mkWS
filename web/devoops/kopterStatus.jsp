@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div id="routes" class="col-xs-12">
+                    <div id="routes" class="col-xs-12 col-md-8">
                         <div class="box">
                             <div class="box-header">
                                 <div class="box-name">
@@ -49,7 +49,7 @@
                                 </div>
                                 <div class="no-move"></div>
                             </div>
-                            <div class="box-content" style="height:430px">
+                            <div class="box-content">
                                 <div class="row">
                                     <div class="col-xs-4">
                                         Voltage: <c:out value="${kopterStatus.kopterVoltage/10}"/> V
@@ -77,10 +77,100 @@
                             </div>
                         </div>
                     </div>
+                    <!-- list of sessions-->
+                    <div id="sessionList" class="col-xs-12 col-md-4">
+                        <div class="box">
+                            <div class="box-header">
+                                <div class="box-name">
+                                    <i class="fa fa-table"></i>
+                                    <span>Session Summaries</span>
+                                </div>
+                                <div class="box-icons">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                                <div class="no-move"></div>
+                            </div>
+                            <div class="box-content"> 
+
+                                <% Class.forName("com.mysql.jdbc.Driver").newInstance(); %>
+                                <%
+                                    Credentials cr = new Credentials();
+                                    Connection connection = DriverManager.getConnection(
+                                            //cr.getMysqlConnectionString(),cr.getDbUserName(),cr.getDbPassword());
+                                            cr.getMysqlConnectionString(), "onur", "19861986");
+
+                                    Statement statement = connection.createStatement();
+                                    ResultSet resultset
+                                            = statement.executeQuery("SELECT sessionId, updateTime from mk.kopterstatus "
+                                                    + "WHERE kopterId=" + request.getParameter("kopterId") + " "
+                                                    + "GROUP BY sessionId "
+                                                    + "ORDER BY id DESC");
+                                %>
+                                <table class="table table-heading table-datatable" id="sessionListTable">
+                                    <thead>
+                                        <tr>
+                                            <th>SessionId</th>
+                                            <th>Session Start Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% while (resultset.next()) {%>
+                                        <tr>
+                                        <!--    <td><a href="kopterSessionSummary.jsp?sessionId=<%= resultset.getInt("sessionId")%>"><%= resultset.getInt("sessionId")%></a></td>
+                                            -->
+                                            <td><%= resultset.getInt("sessionId")%></td>
+                                            <td><a href="kopterSessionSummary.jsp?sessionId=<%= resultset.getInt("sessionId")%>"><%= resultset.getTimestamp("updateTime")%></a></td>
+
+                                        </tr>
+                                        <% }%>
+
+                                    </tbody>
+                                    <% connection.close();%>
+                                </table>
+                            </div>
+                        </div>               
+                    </div>
+
+
                 </div>
             </div>
         </div>
     </div>       
+    <%@include file="foot.jsp" %>
+    <script>
+        function AllTables() {
+            $('#sessionListTable').dataTable({
+                "aaSorting": [[0, "desc"]],
+                "sDom": "<'box-content'<'col-sm-6'f><'col-sm-6 text-right'l><'clearfix'>>rt<'box-content'<'col-sm-6'i><'col-sm-6 text-right'p><'clearfix'>>",
+                "sPaginationType": "bootstrap",
+                "aoColumns": [
+                    {"sType": 'numeric'},{"sType": 'date'}],
+                "oLanguage": {
+                    "sSearch": "",
+                    "sLengthMenu": '_MENU_'
+                }
+            });
+            LoadSelect2Script(MakeSelect2);
+        }
+        function MakeSelect2() {
+            $('select').select2();
+            $('.dataTables_filter').each(function() {
+                $(this).find('label input[type=text]').attr('placeholder', 'Search');
+            });
+        }
+        $(document).ready(function() {
+
+
+
+            LoadDataTablesScripts(AllTables);
+            WinMove();
+        });
+    </script>
 </body>
 </html>
-<%@include file="foot.jsp" %>

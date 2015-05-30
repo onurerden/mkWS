@@ -28,7 +28,7 @@ public class KopterStatus {
     private double kopterSpeed; //in m/s
     private int kopterRcSignal;
     private double kopterVario; //in m/s
-    private int kopterId;
+    public int kopterId;
     private int sessionId;
     private Timestamp updateTime;
     private String blTempList;

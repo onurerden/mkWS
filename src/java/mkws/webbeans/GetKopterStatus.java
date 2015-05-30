@@ -15,13 +15,14 @@ import mkws.ServerEngine;
  */
 public class GetKopterStatus extends KopterStatus {
 
+    @Override
     public void setKopterId(int id) {
         ServerEngine server = new ServerEngine();
 
         KopterStatus ks = new KopterStatus();
         Gson jsonObject = new Gson();
         ks = jsonObject.fromJson(server.getKopterStatus(id), KopterStatus.class);
-        this.setKopterId(ks.getKopterId());
+        this.kopterId=ks.getKopterId();
         this.setBatteryCapacity(ks.getBatteryCapacity());
         this.setBatteryCurrent(ks.getBatteryCurrent());
         this.setGpsSatCount(ks.getGpsSatCount());
@@ -31,7 +32,6 @@ public class GetKopterStatus extends KopterStatus {
         this.setKopterAltitude(ks.getKopterAltitude());
         this.setKopterErrorCode(ks.getKopterErrorCode());
         this.setKopterHeading(ks.getKopterHeading());
-        this.setKopterId(ks.getKopterId());
         this.setKopterLatitude(ks.getKopterLatitude());
         this.setKopterLongitude(ks.getKopterLongitude());
         this.setKopterRcSignal(ks.getKopterRcSignal());
