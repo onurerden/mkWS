@@ -124,7 +124,10 @@
                                         <tr>
                                         <!--    <td><a href="kopterSessionSummary.jsp?sessionId=<%= resultset.getInt("sessionId")%>"><%= resultset.getInt("sessionId")%></a></td>
                                             -->
-                                            <td><%= resultset.getInt("sessionId")%></td>
+                                            <td><a href="kopterSessionSummary.jsp?sessionId=<%= resultset.getInt("sessionId")%>">
+                                                <%= resultset.getInt("sessionId")%>
+                                                </a>
+                                            </td>
                                             <td><a href="kopterSessionSummary.jsp?sessionId=<%= resultset.getInt("sessionId")%>"><%= resultset.getTimestamp("updateTime")%></a></td>
 
                                         </tr>
@@ -143,17 +146,18 @@
         </div>
     </div>       
     <%@include file="foot.jsp" %>
+        
     <script>
         function AllTables() {
             $('#sessionListTable').dataTable({
                 "aaSorting": [[0, "desc"]],
                 "sDom": "<'box-content'<'col-sm-6'f><'col-sm-6 text-right'l><'clearfix'>>rt<'box-content'<'col-sm-6'i><'col-sm-6 text-right'p><'clearfix'>>",
                 "sPaginationType": "bootstrap",
-                "aoColumns": [
-                    {"sType": 'numeric'},{"sType": 'date'}],
+                
                 "oLanguage": {
                     "sSearch": "",
-                    "sLengthMenu": '_MENU_'
+                    "sLengthMenu": '_MENU_',
+                    "sInfo": 'Showing _START_ to _END_ of _TOTAL_ sessions'
                 }
             });
             LoadSelect2Script(MakeSelect2);
