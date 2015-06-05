@@ -71,7 +71,7 @@
    document.getElementById("content").innerHTML='<object type="text/html" data="mkWS/getFollowMeOnMap.jsp?routeId=171" ></object>';
    }
            </script> -->
-                                <table class="table">
+                                <table id="routeTable" class="table table-datatable table-heading">
 
                                     <thead>
                                         <tr>
@@ -109,6 +109,35 @@
             </div>
         </div>
     </div>
+                        <%@ include file="foot.jsp" %>         
+                                <script>
+        function AllTables() {
+            $('#routeTable').dataTable({
+                "aaSorting": [[0, "desc"]],
+                "sDom": "<'box-content'<'col-sm-6'f><'col-sm-6 text-right'l><'clearfix'>>rt<'box-content'<'col-sm-6'i><'col-sm-6 text-right'p><'clearfix'>>",
+                "sPaginationType": "bootstrap",
+                
+                "oLanguage": {
+                    "sSearch": "",
+                    "sLengthMenu": '_MENU_',
+                    "sInfo": 'Showing _START_ to _END_ of _TOTAL_ routes'
+                }
+            });
+            LoadSelect2Script(MakeSelect2);
+        }
+        function MakeSelect2() {
+            $('select').select2();
+            $('.dataTables_filter').each(function() {
+                $(this).find('label input[type=text]').attr('placeholder', 'Search');
+            });
+        }
+        $(document).ready(function() {
+
+
+
+            LoadDataTablesScripts(AllTables);
+            WinMove();
+        });
+    </script>
 </body>
 </html>    
-<%@ include file="foot.jsp" %> 

@@ -33,9 +33,15 @@ public class SendLog extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         response.setContentType("text/json");
+        request.setCharacterEncoding("UTF-8");
+        System.out.println(request.getCharacterEncoding());
+        System.out.println(request.getParameter("logJson"));
+        
         PrintWriter out = response.getWriter();
         ServerEngine server = new ServerEngine();
+        
         try {
             /* TODO output your page here. You may use following sample code. */
             int result=-1;
