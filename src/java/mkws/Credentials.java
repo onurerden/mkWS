@@ -12,7 +12,8 @@ package mkws;
 public class Credentials {
 
     String server = "127.8.64.130:3306";
-    //String server = "localhost:3306";
+   // String server = "localhost:3306";
+    //String server = "onur-mac-mini.local:3306";
     String database = "mk";
 //    String dbUserName = "adminGStcLXX";
 //    String dbPassword = "Wc_flbnyklZt";
@@ -21,7 +22,7 @@ public class Credentials {
 
     public String getMysqlConnectionString() {
         String connectionString = new String();
-        connectionString = "jdbc:mysql://" + server + "/" + database;
+        connectionString = "jdbc:mysql://" + server + "/" + database +"?useUnicode=true&characterEncoding=UTF-8";
         return connectionString;
     }
     public String getDbUserName(){
