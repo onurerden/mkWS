@@ -98,12 +98,48 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">       
+                    <div id="speed" class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="box">
+                            <div class="box-header">
+                                <div class="box-name">
+                                    <i class="fa fa-table"></i>
+                                    <span>Altitude</span>
+                                </div>
+                                <div class="box-icons">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                    <a class="expand-link">
+                                        <i class="fa fa-expand"></i>
+                                    </a>
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                                <div class="no-move"></div>
+                            </div>
+                            <div class="box-content">
+                                <div class="row">
+                                    <figure style="height: 200px;" id="altitudeChart"></figure>
+
+                                </div>
+                                <div class="row" style="text-align:center" id="altitudeValue">
+                                    Altitude:
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>       
     <script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=en-US"
     type="text/javascript"></script>
+    <%@include file="foot.jsp" %>
     <script type="text/javascript">
+
 
         // Initializes the map as soon as the API is loaded and DOM is ready
         ymaps.ready(init);
@@ -176,7 +212,7 @@
             }, {
                 // Setting options for the button.
                 selectOnClick: false
-                
+
             });
             myMap.controls.add(button, {bottom: 10, left: 5});
 
@@ -186,10 +222,41 @@
             myMap.copyrights.add('&copy; Belkopter Team');
             myMap.setZoom(myMap.getZoom() - 1);
         }
-    </script>
+        
+         function DrawAllxCharts() {
+    var altitudeData = {
+                "xScale": "linear",
+                "yScale": "linear",
+                "main": [
+                    {
+                        "className": ".pizza",
+                        "data":
+        <jsp:getProperty name="routeBean" property = "routeAltitudeValues"/>
+                    }
+                ]
 
+            };
+            var altitudeChart = new xChart('line', altitudeData, '#altitudeChart');
+        
+}
+
+        
+    </script>
+    <script>
+ $(document).ready(function() {
+            // Load required scripts and callback to draw
+            LoadXChartScript(DrawAllxCharts);
+            // Required for correctly resize charts, when boxes expand
+            var graphxChartsResize;
+            $(".box").resize(function(event) {
+                event.preventDefault();
+                clearTimeout(graphxChartsResize);
+                graphxChartsResize = setTimeout(DrawAllxCharts, 500);
+            });
+            WinMove();
+        });
+    </script>
 
 
 </body>
 </html>
-<%@include file="foot.jsp" %>

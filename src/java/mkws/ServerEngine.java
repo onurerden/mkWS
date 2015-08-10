@@ -345,7 +345,7 @@ public class ServerEngine implements IDeviceServer {
             st_1 = con_1.createStatement();
 
             queryString = "INSERT INTO followme "
-                    + "(`latitude`, `longitude`, `bearing`, `event`, `time`, `followMeDeviceId`, `sent`,`routeId`,`sessionId` ) "
+                    + "(`latitude`, `longitude`, `bearing`, `event`, `time`, `followMeDeviceId`, `sent`,`routeId`,`sessionId`, `speed`, `altitude` ) "
                     + "VALUES ("
                     + "'" + data.getLat() + "', "
                     + "'" + data.getLon() + "', "
@@ -355,7 +355,9 @@ public class ServerEngine implements IDeviceServer {
                     + "'" + data.getFollowMeDeviceId() + "', "
                     + "'0', "
                     + "'" + data.getRouteId() + "', "
-                    + "'" + data.getSessionId() + "')";
+                    + "'" + data.getSessionId() + "', "
+                    + "'" + data.getSpeed() + "', "
+                    + "'" + data.getAltitude() + "')";
 
             System.out.println(queryString);
             st_1.executeUpdate(queryString);

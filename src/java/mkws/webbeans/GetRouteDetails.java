@@ -5,6 +5,7 @@
  */
 package mkws.webbeans;
 
+import com.google.gson.Gson;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -25,6 +26,8 @@ public class GetRouteDetails {
 
     private int routeId = -1;
     private String routePoints = "";
+    private String routeAltitudeValues = "";
+    private String routeSpeedValues = "";
     private String mapCenter = "";
     private String routeStartPoint = "";
     private String routeEndPoint = "";
@@ -34,18 +37,60 @@ public class GetRouteDetails {
     private double routeLength = 0;
     private String mapBounds = "";
 
+    /**
+     * @return the routeAltitudeValues
+     */
+    public String getRouteAltitudeValues() {
+        return routeAltitudeValues;
+    }
+
+    /**
+     * @param routeAltitudeValues the routeAltitudeValues to set
+     */
+    public void setRouteAltitudeValues(String routeAltitudeValues) {
+        this.routeAltitudeValues = routeAltitudeValues;
+    }
+
+    /**
+     * @return the routeSpeedValues
+     */
+    public String getRouteSpeedValues() {
+        return routeSpeedValues;
+    }
+
+    /**
+     * @param routeSpeedValues the routeSpeedValues to set
+     */
+    public void setRouteSpeedValues(String routeSpeedValues) {
+        this.routeSpeedValues = routeSpeedValues;
+    }
+
     class Koordinat {
 
         public double enlem = 0;
         public double boylam = 0;
+        public double altitude = 0.0;
+        public double speed = 0.0;
+    }
+    
+    class AltitudeChartValues{
+        public double y=0;
+        public int x=0; //id
+    }
+    class SpeedChartValues{
+        public int x=0; //id
+        public double y=0;
     }
 
     List<Koordinat> noktalar = new ArrayList<Koordinat>();
+    
 
     public void setRouteId(int i) {
 
         this.routeId = i;
         List<String> points = new ArrayList<String>();
+        List<AltitudeChartValues> altitudeValues = new ArrayList<AltitudeChartValues>();
+        List<SpeedChartValues> speedValues = new ArrayList<SpeedChartValues>();
 
         Credentials cr = new Credentials();
         this.routePoints = "";
@@ -64,17 +109,63 @@ public class GetRouteDetails {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
-            String query = "SELECT latitude, longitude, followMeDeviceId from followme WHERE routeId = " + routeId + " "
+            String query = "SELECT latitude, longitude, speed, altitude, followMeDeviceId from followme WHERE routeId = " + routeId + " "
                     + "ORDER BY followme.id ASC";
 
             rs_1 = st_1.executeQuery(query);
-
+int a=0;
             while (rs_1.next()) {
+                a++;
                 points.add("[" + rs_1.getString("latitude") + "," + rs_1.getString("longitude") + "],");
+                try{
+                AltitudeChartValues value = new AltitudeChartValues();
+                value.x=a;
+                value.y=rs_1.getDouble("altitude");
+                altitudeValues.add(value);
+                            
+                }catch (Exception ex){
+                    System.out.println("Exception: " + ex.toString());
+                   AltitudeChartValues value = new AltitudeChartValues();
+                value.x=a;
+                value.y=0.0;
+                altitudeValues.add(value);
+                            
+                }
+                ////
+                
+                try{
+                SpeedChartValues value = new SpeedChartValues();
+                value.x=a;
+                value.y=rs_1.getDouble("speed");
+                speedValues.add(value);
+                            
+                }catch (Exception ex){
+                    System.out.println("Exception: " + ex.toString());
+                   SpeedChartValues value = new SpeedChartValues();
+                value.x=a;
+                value.y=0.0;
+                speedValues.add(value);
+                            
+                }
+                
                 this.routePoints = this.routePoints + "[" + rs_1.getString("latitude") + "," + rs_1.getString("longitude") + "],";
+               // this.routeAltitudeValues = this.routeAltitudeValues + "[" + rs_1.getString("altitude") + "],";
+                //this.routeSpeedValues = this.routeSpeedValues + "[" + rs_1.getString("speed") + "],";
+                
+                
                 Koordinat yeniNokta = new Koordinat();
                 yeniNokta.enlem = Double.parseDouble(rs_1.getString("latitude"));
                 yeniNokta.boylam = Double.parseDouble(rs_1.getString("longitude"));
+                try {
+                yeniNokta.speed = Double.parseDouble(rs_1.getString("speed"));
+                }catch (Exception ex){
+                    System.out.println("Exception: " +ex.getMessage());
+                }
+                try {
+                yeniNokta.altitude = Double.parseDouble(rs_1.getString("altitude"));
+                } catch (Exception ex){
+                    System.out.println("Exception: " +ex.getMessage());
+                }
                 noktalar.add(yeniNokta);
 
 //Set Bounds
@@ -98,6 +189,8 @@ public class GetRouteDetails {
                 //  this.deviceId = rs_1.getInt("followMeDeviceId");
                 //  this.routeCreationDate = rs_1.getTimestamp("time");
             }
+            this.setRouteAltitudeValues(new Gson().toJson(altitudeValues));
+            this.setRouteSpeedValues(new Gson().toJson(speedValues));
 
             if (!points.isEmpty()) {
                 routeStartPoint = points.get(0).toString();
