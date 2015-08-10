@@ -23,6 +23,8 @@ public class FollowMeData {
     String name = "";
     int routeId = 0;
     int sessionId = -1;
+    private double speed = 0.0; // in meters/sec
+    private double altitude = 0.0; //in meters
 
     public void setName(String newName) {
         name = newName;
@@ -94,5 +96,33 @@ public class FollowMeData {
 
     public void setSessionId(int id) {
         this.sessionId = id;
+    }
+
+    /**
+     * @return the speed
+     */
+    public double getSpeed() {
+        return speed;
+    }
+
+    /**
+     * @param speed the speed to set
+     */
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    /**
+     * @return the altitude
+     */
+    public double getAltitude() {
+        return altitude;
+    }
+
+    /**
+     * @param altitude the altitude to set
+     */
+    public void setAltitude(double altitude) {
+        this.altitude = altitude;
     }
 }
