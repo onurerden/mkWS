@@ -2398,6 +2398,8 @@ $(document).ready(function() {
                 var body = $('body');
                 //In order to resolve box-expand glitch, map should be collapsed
                 $("#map-canvas").slideToggle("fast")
+                $("#yandex").slideToggle("fast")
+                
                 e.preventDefault();
                 var box = $(this).closest('div.box');
                 var button = $(this).find('i');

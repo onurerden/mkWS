@@ -36,6 +36,9 @@ public class GetRouteDetails {
     private Timestamp routeCreationDate;
     private double routeLength = 0;
     private String mapBounds = "";
+    private double maxSpeed = 0.0;
+    private double maxAltitude = 0.0;
+    private double minAltitude = 10000;
 
     /**
      * @return the routeAltitudeValues
@@ -63,6 +66,48 @@ public class GetRouteDetails {
      */
     public void setRouteSpeedValues(String routeSpeedValues) {
         this.routeSpeedValues = routeSpeedValues;
+    }
+
+    /**
+     * @return the maxSpeed
+     */
+    public double getMaxSpeed() {
+        return maxSpeed;
+    }
+
+    /**
+     * @param maxSpeed the maxSpeed to set
+     */
+    public void setMaxSpeed(double maxSpeed) {
+        this.maxSpeed = maxSpeed;
+    }
+
+    /**
+     * @return the maxAltitude
+     */
+    public double getMaxAltitude() {
+        return maxAltitude;
+    }
+
+    /**
+     * @param maxAltitude the maxAltitude to set
+     */
+    public void setMaxAltitude(double maxAltitude) {
+        this.maxAltitude = maxAltitude;
+    }
+
+    /**
+     * @return the minAltitude
+     */
+    public double getMinAltitude() {
+        return minAltitude;
+    }
+
+    /**
+     * @param minAltitude the minAltitude to set
+     */
+    public void setMinAltitude(double minAltitude) {
+        this.minAltitude = minAltitude;
     }
 
     class Koordinat {
@@ -158,11 +203,21 @@ int a=0;
                 yeniNokta.boylam = Double.parseDouble(rs_1.getString("longitude"));
                 try {
                 yeniNokta.speed = Double.parseDouble(rs_1.getString("speed"));
+                if (yeniNokta.speed>getMaxSpeed()){
+                    setMaxSpeed(yeniNokta.speed);
+                }
                 }catch (Exception ex){
                     System.out.println("Exception: " +ex.getMessage());
                 }
                 try {
                 yeniNokta.altitude = Double.parseDouble(rs_1.getString("altitude"));
+                if( getMaxAltitude()<yeniNokta.altitude){
+                    setMaxAltitude(yeniNokta.altitude);
+                }
+                if(getMinAltitude()>yeniNokta.altitude){
+                    setMinAltitude(yeniNokta.altitude);
+                }
+                
                 } catch (Exception ex){
                     System.out.println("Exception: " +ex.getMessage());
                 }

@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="windows-1250"%>
+
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -18,6 +20,10 @@
     <a href="/mkWS/latestRoutes.jsp">Latest Routes</a><br>
     <a href="devoops/index.jsp">devoops</a><br>
     
-    
+<script>
+    window.location = "devoops";
+    </script>    
 </body>
+
+
 </html>

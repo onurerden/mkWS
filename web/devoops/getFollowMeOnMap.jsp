@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div id="routes" class="col-md-8 col-lg-10">
+                    <div id="routes" class="col-md-8 col-lg-9">
                         <div class="box">
                             <div class="box-header">
                                 <div class="box-name">
@@ -59,7 +59,7 @@
                     </div>
 
 
-                    <div id="details" class="col-md-4 col-lg-2">
+                    <div id="details" class="col-md-4 col-lg-3">
                         <div class="box">
                             <div class="box-header">
                                 <div class="box-name">
@@ -90,6 +90,10 @@
                                         <fmt:formatNumber type="number" maxFractionDigits="2" value="<%= routeBean.getRouteLength() * 1000%>" /> m
                                     </c:otherwise>
                                 </c:choose>   
+                                        </br>
+                                <b>Max Speed : </b> <i><jsp:getProperty name="routeBean" property="maxSpeed"/> m/sec</i><br/>
+                                <b>Max Altitude : </b> <i><jsp:getProperty name="routeBean" property="maxAltitude"/> m </i><br/>
+                                <b>Min Altitude : </b> <i><jsp:getProperty name="routeBean" property="minAltitude"/> m </i><br/>
 
 
 
@@ -99,12 +103,12 @@
                     </div>
                 </div>
                 <div class="row">       
-                    <div id="speed" class="col-xs-12 col-sm-6 col-md-4">
+                    <div id="speed" class="col-xs-12 col-sm-12 col-md-12">
                         <div class="box">
                             <div class="box-header">
                                 <div class="box-name">
                                     <i class="fa fa-table"></i>
-                                    <span>Altitude</span>
+                                    <span>Altitude (m)</span>
                                 </div>
                                 <div class="box-icons">
                                     <a class="collapse-link">
@@ -125,13 +129,51 @@
 
                                 </div>
                                 <div class="row" style="text-align:center" id="altitudeValue">
-                                    Altitude:
+                                    Altitude (m)
                                 </div>
 
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- Other graph -->
+                <div class="row">       
+                    <div id="speed" class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <div class="box-name">
+                                    <i class="fa fa-table"></i>
+                                    <span>Speed (m/sec) </span>
+                                </div>
+                                <div class="box-icons">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                    <a class="expand-link">
+                                        <i class="fa fa-expand"></i>
+                                    </a>
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                                <div class="no-move"></div>
+                            </div>
+                            <div class="box-content">
+                                <div class="row">
+                                    <figure style="height: 200px;" id="speedChart"></figure>
+
+                                </div>
+                                <div class="row" style="text-align:center" id="speedValue">
+                                    Speed (m/sec)
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                                
             </div>
         </div>
     </div>       
@@ -224,19 +266,35 @@
         }
         
          function DrawAllxCharts() {
+         var altitudeJSON = <jsp:getProperty name="routeBean" property = "routeAltitudeValues"/>
     var altitudeData = {
                 "xScale": "linear",
                 "yScale": "linear",
                 "main": [
                     {
                         "className": ".pizza",
-                        "data":
-        <jsp:getProperty name="routeBean" property = "routeAltitudeValues"/>
+                        "data":altitudeJSON
+        
                     }
                 ]
 
             };
+           
+         var speedData = {
+                "xScale": "linear",
+                "yScale": "linear",
+                "main": [
+                    {
+                        "className": ".pizza",
+                        "data":
+        <jsp:getProperty name="routeBean" property = "routeSpeedValues"/>
+                    }
+                ]
+
+            };   
+            
             var altitudeChart = new xChart('line', altitudeData, '#altitudeChart');
+            var speedChart = new xChart('line', speedData, '#speedChart');
         
 }
 
