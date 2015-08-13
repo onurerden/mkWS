@@ -120,10 +120,10 @@ public class GetRouteDetails {
     
     class AltitudeChartValues{
         public double y=0;
-        public int x=0; //id
+        public double x=0; //id
     }
     class SpeedChartValues{
-        public int x=0; //id
+        public double x=0; //id
         public double y=0;
     }
 
@@ -159,37 +159,42 @@ public class GetRouteDetails {
 
             rs_1 = st_1.executeQuery(query);
 int a=0;
+double cumulativeDistance=0.0;
             while (rs_1.next()) {
                 a++;
                 points.add("[" + rs_1.getString("latitude") + "," + rs_1.getString("longitude") + "],");
                 try{
                 AltitudeChartValues value = new AltitudeChartValues();
-                value.x=a;
+                cumulativeDistance =  cumulativeDistance + distanceBetweenPoints(noktalar.get(a-2).enlem, noktalar.get(a-2).boylam,
+                                                            noktalar.get(a-3).enlem, noktalar.get(a-3).boylam);
+                value.x = cumulativeDistance ;
                 value.y=rs_1.getDouble("altitude");
                 altitudeValues.add(value);
                             
                 }catch (Exception ex){
-                    System.out.println("Exception: " + ex.toString());
-                   AltitudeChartValues value = new AltitudeChartValues();
-                value.x=a;
-                value.y=0.0;
-                altitudeValues.add(value);
+                    
+                    System.out.println("Exception while preparing altitude graph data: " +ex.getMessage());
+//                    System.out.println("Exception: " + ex.toString());
+//                   AltitudeChartValues value = new AltitudeChartValues();
+//                value.x=a;
+//                value.y=0.0;
+//                altitudeValues.add(value);
                             
                 }
                 ////
                 
                 try{
                 SpeedChartValues value = new SpeedChartValues();
-                value.x=a;
+                value.x=cumulativeDistance;
                 value.y=rs_1.getDouble("speed");
                 speedValues.add(value);
                             
                 }catch (Exception ex){
-                    System.out.println("Exception: " + ex.toString());
-                   SpeedChartValues value = new SpeedChartValues();
-                value.x=a;
-                value.y=0.0;
-                speedValues.add(value);
+                    System.out.println("Exception while preparing speed graph data: " + ex.toString());
+//                   SpeedChartValues value = new SpeedChartValues();
+//                value.x=a;
+//                value.y=0.0;
+//                speedValues.add(value);
                             
                 }
                 

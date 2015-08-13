@@ -292,9 +292,14 @@
                 ]
 
             };   
-            
-            var altitudeChart = new xChart('line', altitudeData, '#altitudeChart');
-            var speedChart = new xChart('line', speedData, '#speedChart');
+            var opts = {
+                "axisPaddingRight": 50,
+                "yMin": 0.0,
+                "paddingRight":50
+            };
+
+            var altitudeChart = new xChart('line', altitudeData, '#altitudeChart',opts);
+            var speedChart = new xChart('line', speedData, '#speedChart',opts);
         
 }
 
