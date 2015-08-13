@@ -143,7 +143,9 @@
                             <div class="box-header">
                                 <div class="box-name">
                                     <i class="fa fa-table"></i>
-                                    <span>Speed (m/sec) </span>
+                                    <span id="speedLabel" style="display:inline-block; width:125px;">Speed (m/sec)</span>
+                                    <button id="kmhButton" onclick="kmhConv()" type="button" class="btn btn-primary">km/h</button>
+                                    <button id= "msecButton" onclick="msecConv()" type="button" class="btn btn-primary">m/sec</button>
                                 </div>
                                 <div class="box-icons">
                                     <a class="collapse-link">
@@ -267,7 +269,8 @@
         
          function DrawAllxCharts() {
          var altitudeJSON = <jsp:getProperty name="routeBean" property = "routeAltitudeValues"/>
-    var altitudeData = {
+        
+             var altitudeData = {
                 "xScale": "linear",
                 "yScale": "linear",
                 "main": [
@@ -279,19 +282,7 @@
                 ]
 
             };
-           
-         var speedData = {
-                "xScale": "linear",
-                "yScale": "linear",
-                "main": [
-                    {
-                        "className": ".pizza",
-                        "data":
-        <jsp:getProperty name="routeBean" property = "routeSpeedValues"/>
-                    }
-                ]
-
-            };   
+          
             var opts = {
                 "axisPaddingRight": 50,
                 "yMin": 0.0,
@@ -299,8 +290,67 @@
             };
 
             var altitudeChart = new xChart('line', altitudeData, '#altitudeChart',opts);
-            var speedChart = new xChart('line', speedData, '#speedChart',opts);
+           msecConv();
         
+}
+
+function kmhConv(){
+//alert("denemedir");
+
+ var speedJSON = <jsp:getProperty name="routeBean" property = "routeSpeedKmhValues"/>
+    var speedData = {
+                "xScale": "linear",
+                "yScale": "linear",
+                "main": [
+                    {
+                        "className": ".pizza",
+                        "data":speedJSON
+        
+                    }
+                ]
+
+            };
+var opts = {
+                "axisPaddingRight": 50,
+                "yMin": 0.0,
+                "paddingRight":50
+            };
+  var speedChart = new xChart('line', speedData, '#speedChart',opts);
+document.getElementById("kmhButton").className='btn btn-primary';
+document.getElementById("kmhButton").disabled=true;
+document.getElementById("msecButton").className='btn btn-default';
+document.getElementById("msecButton").disabled=false;
+document.getElementById("speedLabel").innerHTML = "Speed (km/h) ";
+}
+
+function msecConv(){
+//alert("denemedir");
+
+ var speedJSON = <jsp:getProperty name="routeBean" property = "routeSpeedValues"/>
+    var speedData = {
+                "xScale": "linear",
+                "yScale": "linear",
+                "main": [
+                    {
+                        "className": ".pizza",
+                        "data":speedJSON
+        
+                    }
+                ]
+
+            };
+var opts = {
+                "axisPaddingRight": 50,
+                "yMin": 0.0,
+                "paddingRight":50
+            };
+  var speedChart = new xChart('line', speedData, '#speedChart',opts);
+  
+document.getElementById("kmhButton").className='btn btn-default';
+document.getElementById("kmhButton").disabled=false;
+document.getElementById("msecButton").className='btn btn-primary';
+document.getElementById("msecButton").disabled=true;
+document.getElementById("speedLabel").innerHTML = "Speed (m/sec) ";
 }
 
         

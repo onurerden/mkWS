@@ -28,6 +28,8 @@ public class GetRouteDetails {
     private String routePoints = "";
     private String routeAltitudeValues = "";
     private String routeSpeedValues = "";
+    private String routeSpeedKmhValues = "";
+    
     private String mapCenter = "";
     private String routeStartPoint = "";
     private String routeEndPoint = "";
@@ -110,7 +112,21 @@ public class GetRouteDetails {
         this.minAltitude = minAltitude;
     }
 
-    class Koordinat {
+    /**
+     * @return the routeSpeedKmhValues
+     */
+    public String getRouteSpeedKmhValues() {
+        return routeSpeedKmhValues;
+    }
+
+    /**
+     * @param routeSpeedKmhValues the routeSpeedKmhValues to set
+     */
+    public void setRouteSpeedKmhValues(String routeSpeedKmhValues) {
+        this.routeSpeedKmhValues = routeSpeedKmhValues;
+    }
+
+      class Koordinat {
 
         public double enlem = 0;
         public double boylam = 0;
@@ -136,6 +152,7 @@ public class GetRouteDetails {
         List<String> points = new ArrayList<String>();
         List<AltitudeChartValues> altitudeValues = new ArrayList<AltitudeChartValues>();
         List<SpeedChartValues> speedValues = new ArrayList<SpeedChartValues>();
+        List<SpeedChartValues> speedKmhValues = new ArrayList<SpeedChartValues>();
 
         Credentials cr = new Credentials();
         this.routePoints = "";
@@ -165,6 +182,7 @@ double cumulativeDistance=0.0;
                 points.add("[" + rs_1.getString("latitude") + "," + rs_1.getString("longitude") + "],");
                 try{
                 AltitudeChartValues value = new AltitudeChartValues();
+                    AltitudeChartValues value2=new AltitudeChartValues();
                 cumulativeDistance =  cumulativeDistance + distanceBetweenPoints(noktalar.get(a-2).enlem, noktalar.get(a-2).boylam,
                                                             noktalar.get(a-3).enlem, noktalar.get(a-3).boylam);
                 value.x = cumulativeDistance ;
@@ -188,6 +206,11 @@ double cumulativeDistance=0.0;
                 value.x=cumulativeDistance;
                 value.y=rs_1.getDouble("speed");
                 speedValues.add(value);
+                
+                SpeedChartValues valueKmh = new SpeedChartValues();
+                valueKmh.x=cumulativeDistance;
+                valueKmh.y=rs_1.getDouble("speed")*3.6;
+                speedKmhValues.add(valueKmh);
                             
                 }catch (Exception ex){
                     System.out.println("Exception while preparing speed graph data: " + ex.toString());
@@ -251,6 +274,8 @@ double cumulativeDistance=0.0;
             }
             this.setRouteAltitudeValues(new Gson().toJson(altitudeValues));
             this.setRouteSpeedValues(new Gson().toJson(speedValues));
+            this.setRouteSpeedKmhValues(new Gson().toJson(speedKmhValues));
+           
 
             if (!points.isEmpty()) {
                 routeStartPoint = points.get(0).toString();
