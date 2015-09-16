@@ -83,4 +83,9 @@ public interface IDeviceServer {
     //Sistemin ayakta olup olmadığının tespiti için kullanılan metoddur.
     // ".../Ping" URL'i ile sorgulanır (P büyük), yanıt olarak "Pong" gelir.
     //Başka bir çıktısı yoktur.
+    
+    int saveGPXContent(String gpxString);
+    //daha önceden kaydedilmiş bir gpx dosyası içeriğini sistemdeki rotaların arasına kaydeder.
+    //URL .../SaveGpxFile'dır.
+    //başarılı ise 1, db hatası ise -1, geçersiz gpx dosyası için -2 döner 
 }

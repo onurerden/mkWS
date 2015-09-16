@@ -14,7 +14,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.tomcat.jni.Time;
+
 
 /**
  *
@@ -816,6 +816,7 @@ public class ServerEngine implements IDeviceServer {
     public String ping() {
         System.out.println("I am the one who will send 'Pongs'");
         return null;
+    
     }
     
     public ArrayList<KopterStatus> getKopterSessionData(int sessionId){
@@ -861,6 +862,14 @@ public class ServerEngine implements IDeviceServer {
         return sessionList;
                
     };
+
+    @Override
+    public int saveGPXContent(String gpxString) {
+    
+        System.out.println(gpxString);
+        
+        return 0;
+    }
         
         
       

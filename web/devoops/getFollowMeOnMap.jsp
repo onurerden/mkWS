@@ -90,7 +90,7 @@
                                         <fmt:formatNumber type="number" maxFractionDigits="2" value="<%= routeBean.getRouteLength() * 1000%>" /> m
                                     </c:otherwise>
                                 </c:choose>   
-                                        </br>
+                                </br>
                                 <b>Max Speed : </b> <i><jsp:getProperty name="routeBean" property="maxSpeed"/> m/sec</i><br/>
                                 <b>Max Altitude : </b> <i><jsp:getProperty name="routeBean" property="maxAltitude"/> m </i><br/>
                                 <b>Min Altitude : </b> <i><jsp:getProperty name="routeBean" property="minAltitude"/> m </i><br/>
@@ -173,9 +173,9 @@
                         </div>
                     </div>
                 </div>
-                
-                
-                                
+
+
+
             </div>
         </div>
     </div>       
@@ -185,178 +185,175 @@
     <script type="text/javascript">
 
 
-        // Initializes the map as soon as the API is loaded and DOM is ready
-        ymaps.ready(init);
+                                        // Initializes the map as soon as the API is loaded and DOM is ready
+                                        ymaps.ready(init);
 
-        function init() {
-            var myMap = new ymaps.Map("yandex", {
-                //    center: <jsp:getProperty name="routeBean" property="routeStartPoint"/>
-                //    zoom: 15,
-                bounds:<jsp:getProperty name="routeBean" property="mapBounds"/>
-            }),
-            // A polyline
-            myPolyline = new ymaps.Polyline([
-                // The coordinates of polyline vertices.
+                                        function init() {
+                                            var myMap = new ymaps.Map("yandex", {
+                                                //    center: <jsp:getProperty name="routeBean" property="routeStartPoint"/>
+                                                //    zoom: 15,
+                                                bounds:<jsp:getProperty name="routeBean" property="mapBounds"/>
+                                            }),
+                                            // A polyline
+                                            myPolyline = new ymaps.Polyline([
+                                                // The coordinates of polyline vertices.
 
 
         <jsp:getProperty name="routeBean" property="routePoints"/>
-            ], {
-                // The balloon content
-                balloonContent: "FollowMe Device Route for device: <jsp:getProperty name="routeBean" property="routeId"/>"
-            }, {
-                // Balloon options
-                // Disabling the "Close" button
-                balloonHasCloseButton: false,
-                // The line width
-                strokeWidth: 4,
-                // The line transparency
-                strokeOpacity: 0.8,
-                // Defines the color of the line - white
-                strokeColor: "#FF0000"
-            });
+                                            ], {
+                                                // The balloon content
+                                                balloonContent: "FollowMe Device Route for device: <jsp:getProperty name="routeBean" property="routeId"/>"
+                                            }, {
+                                                // Balloon options
+                                                // Disabling the "Close" button
+                                                balloonHasCloseButton: false,
+                                                // The line width
+                                                strokeWidth: 4,
+                                                // The line transparency
+                                                strokeOpacity: 0.8,
+                                                // Defines the color of the line - white
+                                                strokeColor: "#FF0000"
+                                            });
 
-            myStartPoint = new ymaps.GeoObject({
-                geometry: {
-                    type: "Point",
-                    coordinates: <jsp:getProperty name="routeBean" property="routeStartPoint"/>
-                },
-                properties: {
-                    iconContent: "Başlangıç"}
-            }, {preset: 'twirl#greenStretchyIcon'});
+                                            myStartPoint = new ymaps.GeoObject({
+                                                geometry: {
+                                                    type: "Point",
+                                                    coordinates: <jsp:getProperty name="routeBean" property="routeStartPoint"/>
+                                                },
+                                                properties: {
+                                                    iconContent: "Başlangıç"}
+                                            }, {preset: 'twirl#greenStretchyIcon'});
 
-            myEndPoint = new ymaps.GeoObject({
-                geometry: {
-                    type: "Point",
-                    coordinates: <jsp:getProperty name="routeBean" property="routeEndPoint"/>
-                },
-                properties: {
-                    iconContent: "Bitiş"}
-            }, {preset: 'twirl#redStretchyIcon'});
+                                            myEndPoint = new ymaps.GeoObject({
+                                                geometry: {
+                                                    type: "Point",
+                                                    coordinates: <jsp:getProperty name="routeBean" property="routeEndPoint"/>
+                                                },
+                                                properties: {
+                                                    iconContent: "Bitiş"}
+                                            }, {preset: 'twirl#redStretchyIcon'});
 
-            // Adds geo objects to the map 
+                                            // Adds geo objects to the map 
 
-            myMap.geoObjects
-                    .add(myPolyline)
-                    .add(myStartPoint)
-                    .add(myEndPoint);
-
-
+                                            myMap.geoObjects
+                                                    .add(myPolyline)
+                                                    .add(myStartPoint)
+                                                    .add(myEndPoint);
 
 
 
-            var button = new ymaps.control.Button({
-                data: {
-                    // Setting an icon for the button.
-                    //image: 'images/button.jpg',
-                    // Text on the icon.
-                    content: 'Save',
-                    // Text for the popup hint.
-                    title: 'Click to save the route'
-                }
-            }, {
-                // Setting options for the button.
-                selectOnClick: false
 
-            });
-            myMap.controls.add(button, {bottom: 10, left: 5});
 
-            myMap.controls.add('mapTools');
-            myMap.controls.add('typeSelector');
-            myMap.controls.add('smallZoomControl');
-            myMap.copyrights.add('&copy; Belkopter Team');
-            myMap.setZoom(myMap.getZoom() - 1);
-        }
-        
-         function DrawAllxCharts() {
-         var altitudeJSON = <jsp:getProperty name="routeBean" property = "routeAltitudeValues"/>
-        
-             var altitudeData = {
-                "xScale": "linear",
-                "yScale": "linear",
-                "main": [
-                    {
-                        "className": ".pizza",
-                        "data":altitudeJSON
-        
-                    }
-                ]
+                                            var button = new ymaps.control.Button({
+                                                data: {
+                                                    // Setting an icon for the button.
+                                                    //image: 'images/button.jpg',
+                                                    // Text on the icon.
+                                                    content: 'Save',
+                                                    // Text for the popup hint.
+                                                    title: 'Click to save the route'
+                                                }
+                                            }, {
+                                                // Setting options for the button.
+                                                selectOnClick: false
 
-            };
-          
-            var opts = {
-                "axisPaddingRight": 50,
-                "yMin": 0.0,
-                "paddingRight":50
-            };
+                                            });
+                                            myMap.controls.add(button, {bottom: 10, left: 5});
 
-            var altitudeChart = new xChart('line', altitudeData, '#altitudeChart',opts);
-           msecConv();
-        
-}
+                                            myMap.controls.add('mapTools');
+                                            myMap.controls.add('typeSelector');
+                                            myMap.controls.add('smallZoomControl');
+                                            myMap.copyrights.add('&copy; Belkopter Team');
+                                            myMap.setZoom(myMap.getZoom() - 1);
+                                        }
 
-function kmhConv(){
+                                        function DrawAllxCharts() {
+                                            var altitudeJSON = <jsp:getProperty name="routeBean" property = "routeAltitudeValues"/>
+
+                                            var altitudeData = {
+                                                "xScale": "linear",
+                                                "yScale": "linear",
+                                                "main": [
+                                                    {
+                                                        "className": ".pizza",
+                                                        "data": altitudeJSON
+                                                    }
+                                                ]
+
+                                            };
+
+                                            var opts = {
+                                                "axisPaddingRight": 50,
+                                                "yMin": 0.0,
+                                                "paddingRight": 50
+                                            };
+
+                                            var altitudeChart = new xChart('line', altitudeData, '#altitudeChart', opts);
+                                            msecConv();
+
+                                        }
+
+                                        function kmhConv() {
+
+                                            var speedJSON = <jsp:getProperty name="routeBean" property = "routeSpeedKmhValues"/>
+                                            var speedData = {
+                                                "xScale": "linear",
+                                                "yScale": "linear",
+                                                "main": [
+                                                    {
+                                                        "className": ".pizza",
+                                                        "data": speedJSON
+                                                    }
+                                                ]
+
+                                            };
+                                            var opts = {
+                                                "axisPaddingRight": 50,
+                                                "yMin": 0.0,
+                                                "paddingRight": 50
+                                            };
+                                            var speedChart = new xChart('line', speedData, '#speedChart', opts);
+                                            document.getElementById("kmhButton").className = 'btn btn-primary';
+                                            document.getElementById("kmhButton").disabled = true;
+                                            document.getElementById("msecButton").className = 'btn btn-default';
+                                            document.getElementById("msecButton").disabled = false;
+                                            document.getElementById("speedLabel").innerHTML = "Speed (km/h) ";
+                                        }
+
+                                        function msecConv() {
 //alert("denemedir");
 
- var speedJSON = <jsp:getProperty name="routeBean" property = "routeSpeedKmhValues"/>
-    var speedData = {
-                "xScale": "linear",
-                "yScale": "linear",
-                "main": [
-                    {
-                        "className": ".pizza",
-                        "data":speedJSON
-        
-                    }
-                ]
+                                            var speedJSON = <jsp:getProperty name="routeBean" property = "routeSpeedValues"/>
+                                            var speedData = {
+                                                "xScale": "linear",
+                                                "yScale": "linear",
+                                                "main": [
+                                                    {
+                                                        "className": ".pizza",
+                                                        "data": speedJSON
 
-            };
-var opts = {
-                "axisPaddingRight": 50,
-                "yMin": 0.0,
-                "paddingRight":50
-            };
-  var speedChart = new xChart('line', speedData, '#speedChart',opts);
-document.getElementById("kmhButton").className='btn btn-primary';
-document.getElementById("kmhButton").disabled=true;
-document.getElementById("msecButton").className='btn btn-default';
-document.getElementById("msecButton").disabled=false;
-document.getElementById("speedLabel").innerHTML = "Speed (km/h) ";
-}
+                                                    }
+                                                ]
 
-function msecConv(){
-//alert("denemedir");
+                                            };
+                                            var opts = {
+                                                "axisPaddingRight": 50,
+                                                "yMin": 0.0,
+                                                "paddingRight": 50
+                                            };
+                                            var speedChart = new xChart('line', speedData, '#speedChart', opts);
 
- var speedJSON = <jsp:getProperty name="routeBean" property = "routeSpeedValues"/>
-    var speedData = {
-                "xScale": "linear",
-                "yScale": "linear",
-                "main": [
-                    {
-                        "className": ".pizza",
-                        "data":speedJSON
-        
-                    }
-                ]
+                                            document.getElementById("kmhButton").className = 'btn btn-default';
+                                            document.getElementById("kmhButton").disabled = false;
+                                            document.getElementById("msecButton").className = 'btn btn-primary';
+                                            document.getElementById("msecButton").disabled = true;
+                                            document.getElementById("speedLabel").innerHTML = "Speed (m/sec) ";
+                                        }
 
-            };
-var opts = {
-                "axisPaddingRight": 50,
-                "yMin": 0.0,
-                "paddingRight":50
-            };
-  var speedChart = new xChart('line', speedData, '#speedChart',opts);
-  
-document.getElementById("kmhButton").className='btn btn-default';
-document.getElementById("kmhButton").disabled=false;
-document.getElementById("msecButton").className='btn btn-primary';
-document.getElementById("msecButton").disabled=true;
-document.getElementById("speedLabel").innerHTML = "Speed (m/sec) ";
-}
 
-        
     </script>
     <script>
- $(document).ready(function() {
+        $(document).ready(function() {
             // Load required scripts and callback to draw
             LoadXChartScript(DrawAllxCharts);
             // Required for correctly resize charts, when boxes expand
