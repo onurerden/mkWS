@@ -11,20 +11,24 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import mkws.ServerEngine;
+import org.apache.tomcat.util.http.fileupload.FileItem;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
+
 
 /**
  *
  * @author oerden
  */
 @WebServlet(name = "SaveGpxFile", urlPatterns = {"/SaveGpxFile"})
+@MultipartConfig
 public class SaveGpxFile extends HttpServlet {
 
     /**
@@ -38,13 +42,14 @@ public class SaveGpxFile extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        request.toString();
+        System.out.println("Request geldi");
+        System.out.println("Request:" + request.toString());
         
         response.setContentType("text/html;charset=UTF-8");
+        
         String description = request.getParameter("description"); // Retrieves <input type="text" name="description">
         Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">
-        String fileName = "incomingFile.txt"; //getSubmittedFileName(filePart);
+        String fileName = getSubmittedFileName(filePart);
         InputStream fileContent = filePart.getInputStream();
         
         System.out.println(filePart.getSize() + " bytes received. FileName is " +fileName);
@@ -52,6 +57,8 @@ public class SaveGpxFile extends HttpServlet {
 
         String contentString = slurp(fileContent, 2048);
         System.out.println(contentString);
+              
+        
         ServerEngine server = new ServerEngine();
         
         int result = server.saveGPXContent(contentString);
@@ -59,6 +66,7 @@ public class SaveGpxFile extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println(result);
+            
 
         }
     }
