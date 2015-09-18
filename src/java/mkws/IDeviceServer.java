@@ -84,8 +84,8 @@ public interface IDeviceServer {
     // ".../Ping" URL'i ile sorgulanır (P büyük), yanıt olarak "Pong" gelir.
     //Başka bir çıktısı yoktur.
     
-    int saveGPXContent(String gpxString);
+    int saveGPXContent(String gpxString, String uid);
     //daha önceden kaydedilmiş bir gpx dosyası içeriğini sistemdeki rotaların arasına kaydeder.
     //URL .../SaveGpxFile'dır.
-    //başarılı ise 1, db hatası ise -1, geçersiz gpx dosyası için -2 döner 
+    //başarılı ise 1, session alınamaz ise -1, device kayıtlı değilse-2, geçersiz gpx dosyası için -3 döner 
 }

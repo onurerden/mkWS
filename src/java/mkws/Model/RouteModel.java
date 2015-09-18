@@ -12,6 +12,7 @@ import java.sql.Timestamp;
  *
  * @author oerden
  */
+
 public class RouteModel {
     private int routeId;
     private Timestamp time;

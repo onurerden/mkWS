@@ -46,7 +46,8 @@ public class SaveGpxFile extends HttpServlet {
         System.out.println("Request:" + request.toString());
         
         response.setContentType("text/html;charset=UTF-8");
-        
+        String deviceId = request.getParameter("deviceId");
+        System.out.println(deviceId+ "'den request geldi.");
         String description = request.getParameter("description"); // Retrieves <input type="text" name="description">
         Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">
         String fileName = getSubmittedFileName(filePart);
@@ -61,7 +62,7 @@ public class SaveGpxFile extends HttpServlet {
         
         ServerEngine server = new ServerEngine();
         
-        int result = server.saveGPXContent(contentString);
+        int result = server.saveGPXContent(contentString,deviceId);
 
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */

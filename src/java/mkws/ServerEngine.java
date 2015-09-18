@@ -6,6 +6,11 @@
 package mkws;
 
 import com.google.gson.Gson;
+import com.sun.org.apache.xerces.internal.parsers.DOMParser;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -14,7 +19,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -245,13 +257,7 @@ public class ServerEngine implements IDeviceServer {
             result = st_1.executeUpdate(queryString);
             con_1.close();
 
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
         return result;
@@ -302,20 +308,9 @@ public class ServerEngine implements IDeviceServer {
             output = json.toJson(data);
             System.out.println(output);
             con_1.close();
-        } catch (SQLException ex) {
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             output = "-2";
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            output = "-2";
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            output = "-2";
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            output = "-2";
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
         }
 
         return output;
@@ -332,6 +327,11 @@ public class ServerEngine implements IDeviceServer {
             System.out.println("FollowMeData parse error: " + ex.toString());
             return -2;
         }
+        int result = sendFollowMeData(data);
+        return result;
+    }
+
+    public int sendFollowMeData(FollowMeData data) {
 
         Credentials cr = new Credentials();
         Connection con_1 = null;
@@ -386,7 +386,7 @@ public class ServerEngine implements IDeviceServer {
         ResultSet rs_1 = null;
         String queryString = "SELECT followMeDeviceId "
                 + "from devicematching "
-                + "where id=(SELECT max(id) from devicematching where kopterId=" + deviceId +")";
+                + "where id=(SELECT max(id) from devicematching where kopterId=" + deviceId + ")";
 
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -670,8 +670,9 @@ public class ServerEngine implements IDeviceServer {
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1 = null;
-        String query = "INSERT INTO mk.logs SET logLevel = '" + msg.logLevel 
+        String query = "INSERT INTO mk.logs SET logLevel = '" + msg.logLevel
                 + "', logMessage = '" + msg.logMessage + "', ";
+        
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
@@ -689,12 +690,12 @@ public class ServerEngine implements IDeviceServer {
                 }
                 default: {
                     query = query + "";
-                    break;}
+                    break;
                 }
-                System.out.println(query);
-                st_1.execute(query);
-                status = 0;
-            
+            }
+            // System.out.println(query);
+            st_1.execute(query);
+            status = 0;
 
         } catch (ClassNotFoundException ex) {
 
@@ -722,10 +723,10 @@ public class ServerEngine implements IDeviceServer {
     @Override
     public int endRoute(int routeId) {
         Credentials cr = new Credentials();
-        Connection con_1=null;
-        Statement st_1=null;
-        
-        String query ="UPDATE  `route` SET isEnded =1 WHERE id =" + routeId;
+        Connection con_1 = null;
+        Statement st_1 = null;
+
+        String query = "UPDATE  `route` SET isEnded =1 WHERE id =" + routeId;
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
@@ -745,7 +746,7 @@ public class ServerEngine implements IDeviceServer {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
             return -1;
         }
-        
+
         return 0;
     }
 
@@ -816,23 +817,23 @@ public class ServerEngine implements IDeviceServer {
     public String ping() {
         System.out.println("I am the one who will send 'Pongs'");
         return null;
-    
+
     }
-    
-    public ArrayList<KopterStatus> getKopterSessionData(int sessionId){
-        ArrayList<KopterStatus> sessionList=new ArrayList<>();
+
+    public ArrayList<KopterStatus> getKopterSessionData(int sessionId) {
+        ArrayList<KopterStatus> sessionList = new ArrayList<>();
         Credentials cr = new Credentials();
-        Connection con_1=null;
-        Statement st_1=null;
-        
-        String query ="SELECT * from kopterstatus WHERE sessionId="+sessionId;
+        Connection con_1 = null;
+        Statement st_1 = null;
+
+        String query = "SELECT * from kopterstatus WHERE sessionId=" + sessionId;
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
-            st_1= con_1.createStatement();
+            st_1 = con_1.createStatement();
             ResultSet rs_1 = st_1.executeQuery(query);
-            while (rs_1.next()){
-                KopterStatus newStatus= new KopterStatus();
+            while (rs_1.next()) {
+                KopterStatus newStatus = new KopterStatus();
                 newStatus.setKopterAltitude(rs_1.getInt("altitude"));
                 newStatus.setKopterLatitude(rs_1.getDouble("latitude"));
                 newStatus.setKopterLongitude(rs_1.getDouble("longitude"));
@@ -850,27 +851,102 @@ public class ServerEngine implements IDeviceServer {
                 newStatus.setTargetLatitude(rs_1.getDouble("targetLatitude"));
                 newStatus.setTargetLongitude(rs_1.getDouble("targetLongitude"));
                 newStatus.setSessionId(sessionId);
-                
+
                 sessionList.add(newStatus);
             }
-            
-        } catch (Exception ex){
+
+        } catch (Exception ex) {
             System.out.println("Error at collecting session data");
         }
-        
-        
+
         return sessionList;
-               
-    };
+
+    }
+
+    ;
 
     @Override
-    public int saveGPXContent(String gpxString) {
-    
-        System.out.println(gpxString);
-        
-        return 0;
+    public int saveGPXContent(String gpxString, String uid) {
+
+        System.out.println(uid + " bir gpx dosyası gönderdi.");
+
+        DOMParser parser = new DOMParser();
+
+        try {
+
+            //parser.parse(gpxString);
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            InputStream stream = new ByteArrayInputStream(gpxString.getBytes(StandardCharsets.UTF_8));
+            Document doc = dBuilder.parse(stream); //parser.getDocument();
+
+            MKSession session = new MKSession();
+            Gson jsonObject = new Gson();
+            session = jsonObject.fromJson(touchServer(uid, "MP"), MKSession.class);
+            if (session.getSessionId() < 0) {
+                return -1;
+            }
+            if (session.getDeviceId() < 0) {
+                return -2;
+            }
+            int routeId = getRouteId(session.getDeviceId());
+
+            NodeList nl = doc.getElementsByTagName("*");
+            Node n;
+            for (int i = 0; i < nl.getLength(); i++) {
+
+                n = nl.item(i);
+                System.out.print(n.getNodeName() + " ");
+            }
+
+            NodeList nList = doc.getElementsByTagName("trkpt");
+
+            System.out.println("----------------------------");
+            int temp = 0;
+            for (temp = 0; temp < nList.getLength(); temp++) {
+
+                Node nNode = nList.item(temp);
+
+                //System.out.println("\nCurrent Element :" + nNode.getNodeName());
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    FollowMeData fmData = new FollowMeData();
+                    Element eElement = (Element) nNode;
+
+                    try {
+                        fmData.setLat(Double.valueOf(eElement.getAttribute("lat")));
+                        fmData.setLon(Double.valueOf(eElement.getAttribute("lon")));
+                        fmData.setAltitude(Double.valueOf(eElement.getElementsByTagName("ele").item(0).getTextContent()));
+                        //fmData.setSpeed(Double.valueOf(eElement.getElementsByTagName("speed").item(0).getTextContent()));
+                        fmData.setRouteId(routeId);
+                        fmData.setSessionId(session.getSessionId());
+                        fmData.setFollowMeDeviceId(session.getDeviceId());
+
+                        System.out.println("Latitude: " + fmData.getLat());
+                        System.out.println("Longitude: " + fmData.getLat());
+                        System.out.println("Elevation: " + fmData.getAltitude());
+                        System.out.println("Speed: " + fmData.getSpeed());
+                        sendFollowMeData(fmData);
+                    } catch (Exception ex) {
+                        System.out.println("Error Message:" + ex.toString());
+                    }
+                }
+            }
+            LogMessage log = new LogMessage();
+            log.logMessage = session.getDeviceId() + " id\\'li followMe cihazı " + temp + " adet konum içeren GPX dosyasını başarıyla yükledi. ";
+            log.deviceId = session.getDeviceId();
+            log.deviceType = "MP";
+            log.logLevel = 2;
+            System.out.println("Bitti");
+            endRoute(routeId);
+            sendLog(new Gson().toJson(log));
+        } catch (SAXException | IOException | ParserConfigurationException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            return -3;
+        } catch (Exception ex) {
+            System.out.println("Fena exception");
+        }
+
+        return 1;
     }
-        
-        
-      
+
 }
