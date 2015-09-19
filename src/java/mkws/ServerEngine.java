@@ -916,7 +916,7 @@ public class ServerEngine implements IDeviceServer {
                         fmData.setLat(Double.valueOf(eElement.getAttribute("lat")));
                         fmData.setLon(Double.valueOf(eElement.getAttribute("lon")));
                         fmData.setAltitude(Double.valueOf(eElement.getElementsByTagName("ele").item(0).getTextContent()));
-                        //fmData.setSpeed(Double.valueOf(eElement.getElementsByTagName("speed").item(0).getTextContent()));
+                        fmData.setSpeed(Double.valueOf(eElement.getElementsByTagName("speed").item(0).getTextContent()));
                         fmData.setRouteId(routeId);
                         fmData.setSessionId(session.getSessionId());
                         fmData.setFollowMeDeviceId(session.getDeviceId());
