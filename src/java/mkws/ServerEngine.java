@@ -672,7 +672,7 @@ public class ServerEngine implements IDeviceServer {
         Statement st_1 = null;
         String query = "INSERT INTO mk.logs SET logLevel = '" + msg.logLevel
                 + "', logMessage = '" + msg.logMessage + "', ";
-        
+
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
@@ -871,7 +871,8 @@ public class ServerEngine implements IDeviceServer {
         System.out.println(uid + " bir gpx dosyası gönderdi.");
 
         DOMParser parser = new DOMParser();
-
+        int routeId = 0;
+        boolean success = true;
         try {
 
             //parser.parse(gpxString);
@@ -889,14 +890,14 @@ public class ServerEngine implements IDeviceServer {
             if (session.getDeviceId() < 0) {
                 return -2;
             }
-            int routeId = getRouteId(session.getDeviceId());
+            routeId = getRouteId(session.getDeviceId());
 
             NodeList nl = doc.getElementsByTagName("*");
             Node n;
             for (int i = 0; i < nl.getLength(); i++) {
 
                 n = nl.item(i);
-                System.out.print(n.getNodeName() + " ");
+                // System.out.print(n.getNodeName() + " ");
             }
 
             NodeList nList = doc.getElementsByTagName("trkpt");
@@ -928,17 +929,23 @@ public class ServerEngine implements IDeviceServer {
                         sendFollowMeData(fmData);
                     } catch (Exception ex) {
                         System.out.println("Error Message:" + ex.toString());
+                        success = false;
                     }
                 }
             }
-            LogMessage log = new LogMessage();
-            log.logMessage = session.getDeviceId() + " id\\'li followMe cihazı " + temp + " adet konum içeren GPX dosyasını başarıyla yükledi. ";
-            log.deviceId = session.getDeviceId();
-            log.deviceType = "MP";
-            log.logLevel = 2;
-            System.out.println("Bitti");
-            endRoute(routeId);
-            sendLog(new Gson().toJson(log));
+            if (success) {
+                LogMessage log = new LogMessage();
+                log.logMessage = session.getDeviceId() + " id\\'li followMe cihazı " + temp + " adet konum içeren GPX dosyasını başarıyla yükledi. RouteId: " + routeId;
+                log.deviceId = session.getDeviceId();
+                log.deviceType = "MP";
+                log.logLevel = 2;
+                endRoute(routeId);
+                System.out.println("GPX dosyası başarıyla girildi.");
+                sendLog(new Gson().toJson(log));
+            } else {
+                return -3;
+            }
+
         } catch (SAXException | IOException | ParserConfigurationException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
             return -3;

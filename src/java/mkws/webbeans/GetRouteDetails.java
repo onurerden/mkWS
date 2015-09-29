@@ -29,8 +29,8 @@ public class GetRouteDetails {
     private String routeAltitudeValues = "";
     private String routeSpeedValues = "";
     private String routeSpeedKmhValues = "";
-    
-    private String mapCenter = "";
+
+    private final String mapCenter = "";
     private String routeStartPoint = "";
     private String routeEndPoint = "";
     private String deviceName = "";
@@ -126,39 +126,41 @@ public class GetRouteDetails {
         this.routeSpeedKmhValues = routeSpeedKmhValues;
     }
 
-      class Koordinat {
+    class Koordinat {
 
         public double enlem = 0;
         public double boylam = 0;
         public double altitude = 0.0;
         public double speed = 0.0;
     }
-    
-    class AltitudeChartValues{
-        public double y=0;
-        public double x=0; //id
-    }
-    class SpeedChartValues{
-        public double x=0; //id
-        public double y=0;
+
+    class AltitudeChartValues {
+
+        public double y = 0;
+        public double x = 0; //id
     }
 
-    List<Koordinat> noktalar = new ArrayList<Koordinat>();
-    
+    class SpeedChartValues {
+
+        public double x = 0; //id
+        public double y = 0;
+    }
+
+    List<Koordinat> noktalar = new ArrayList<>();
 
     public void setRouteId(int i) {
 
         this.routeId = i;
-        List<String> points = new ArrayList<String>();
-        List<AltitudeChartValues> altitudeValues = new ArrayList<AltitudeChartValues>();
-        List<SpeedChartValues> speedValues = new ArrayList<SpeedChartValues>();
-        List<SpeedChartValues> speedKmhValues = new ArrayList<SpeedChartValues>();
+        List<String> points = new ArrayList<>();
+        List<AltitudeChartValues> altitudeValues = new ArrayList<>();
+        List<SpeedChartValues> speedValues = new ArrayList<>();
+        List<SpeedChartValues> speedKmhValues = new ArrayList<>();
 
         Credentials cr = new Credentials();
         this.routePoints = "";
         Connection con_1 = null;
-        Statement st_1 = null;
-        ResultSet rs_1 = null;
+        Statement st_1;
+        ResultSet rs_1 ;
         Koordinat minBounds = new Koordinat();
         minBounds.boylam = 99;
         minBounds.enlem = 99;
@@ -175,79 +177,78 @@ public class GetRouteDetails {
                     + "ORDER BY followme.id ASC";
 
             rs_1 = st_1.executeQuery(query);
-int a=0;
-double cumulativeDistance=0.0;
+            int a = -2;
+            double cumulativeDistance = 0.0;
             while (rs_1.next()) {
                 a++;
                 points.add("[" + rs_1.getString("latitude") + "," + rs_1.getString("longitude") + "],");
-                try{
-                AltitudeChartValues value = new AltitudeChartValues();
-                    AltitudeChartValues value2=new AltitudeChartValues();
-                cumulativeDistance =  cumulativeDistance + distanceBetweenPoints(noktalar.get(a-2).enlem, noktalar.get(a-2).boylam,
-                                                            noktalar.get(a-3).enlem, noktalar.get(a-3).boylam);
-                value.x = cumulativeDistance ;
-                value.y=rs_1.getDouble("altitude");
-                altitudeValues.add(value);
-                            
-                }catch (Exception ex){
-                    
-                    System.out.println("Exception while preparing altitude graph data: " +ex.getMessage());
+                try {
+                    AltitudeChartValues value = new AltitudeChartValues();
+                    AltitudeChartValues value2 = new AltitudeChartValues();
+                    cumulativeDistance = cumulativeDistance + distanceBetweenPoints(noktalar.get(a).enlem, noktalar.get(a).boylam,
+                            noktalar.get(a - 1).enlem, noktalar.get(a - 1).boylam);
+                    value.x = cumulativeDistance;
+                    value.y = rs_1.getDouble("altitude");
+                    altitudeValues.add(value);
+
+                } catch (SQLException ex) {
+
+                    System.out.println("Exception while preparing altitude graph data: " + ex.getMessage());
 //                    System.out.println("Exception: " + ex.toString());
 //                   AltitudeChartValues value = new AltitudeChartValues();
 //                value.x=a;
 //                value.y=0.0;
 //                altitudeValues.add(value);
-                            
+
                 }
                 ////
-                
-                try{
-                SpeedChartValues value = new SpeedChartValues();
-                value.x=cumulativeDistance;
-                value.y=rs_1.getDouble("speed");
-                speedValues.add(value);
-                
-                SpeedChartValues valueKmh = new SpeedChartValues();
-                valueKmh.x=cumulativeDistance;
-                valueKmh.y=rs_1.getDouble("speed")*3.6;
-                speedKmhValues.add(valueKmh);
-                            
-                }catch (Exception ex){
+
+                try {
+                    SpeedChartValues value = new SpeedChartValues();
+                    value.x = cumulativeDistance;
+                    value.y = rs_1.getDouble("speed");
+                    speedValues.add(value);
+
+                    SpeedChartValues valueKmh = new SpeedChartValues();
+                    valueKmh.x = cumulativeDistance;
+                    valueKmh.y = rs_1.getDouble("speed") * 3.6;
+                    speedKmhValues.add(valueKmh);
+
+                } catch (SQLException ex) {
                     System.out.println("Exception while preparing speed graph data: " + ex.toString());
 //                   SpeedChartValues value = new SpeedChartValues();
 //                value.x=a;
 //                value.y=0.0;
 //                speedValues.add(value);
-                            
+
                 }
-                
+
                 this.routePoints = this.routePoints + "[" + rs_1.getString("latitude") + "," + rs_1.getString("longitude") + "],";
-               // this.routeAltitudeValues = this.routeAltitudeValues + "[" + rs_1.getString("altitude") + "],";
+                // this.routeAltitudeValues = this.routeAltitudeValues + "[" + rs_1.getString("altitude") + "],";
                 //this.routeSpeedValues = this.routeSpeedValues + "[" + rs_1.getString("speed") + "],";
-                
-                
+
                 Koordinat yeniNokta = new Koordinat();
                 yeniNokta.enlem = Double.parseDouble(rs_1.getString("latitude"));
                 yeniNokta.boylam = Double.parseDouble(rs_1.getString("longitude"));
                 try {
-                yeniNokta.speed = Double.parseDouble(rs_1.getString("speed"));
-                if (yeniNokta.speed>getMaxSpeed()){
-                    setMaxSpeed(yeniNokta.speed);
-                }
-                }catch (Exception ex){
-                    System.out.println("Exception: " +ex.getMessage());
+                    yeniNokta.speed = Double.parseDouble(rs_1.getString("speed"));
+                    if (yeniNokta.speed > getMaxSpeed()) {
+                        setMaxSpeed(yeniNokta.speed);
+                    }
+                } catch (SQLException | NumberFormatException ex) {
+                    System.out.println("Exception: " + ex.getMessage());
                 }
                 try {
-                yeniNokta.altitude = Double.parseDouble(rs_1.getString("altitude"));
-                if( getMaxAltitude()<yeniNokta.altitude){
-                    setMaxAltitude(yeniNokta.altitude);
-                }
-                if(getMinAltitude()>yeniNokta.altitude){
-                    setMinAltitude(yeniNokta.altitude);
-                }
-                
-                } catch (Exception ex){
-                    System.out.println("Exception: " +ex.getMessage());
+                    yeniNokta.altitude = Double.parseDouble(rs_1.getString("altitude"));
+                    if (getMaxAltitude() < yeniNokta.altitude) {
+                        setMaxAltitude(yeniNokta.altitude);
+                    }
+                    if (getMinAltitude() > yeniNokta.altitude) {
+                        setMinAltitude(yeniNokta.altitude);
+                    }
+
+                } catch (SQLException | NumberFormatException ex) {
+                    System.out.println("Exception: " + ex.getMessage());
                 }
                 noktalar.add(yeniNokta);
 
@@ -265,8 +266,8 @@ double cumulativeDistance=0.0;
                     maxBounds.boylam = yeniNokta.boylam;
                 }
 
-                this.mapBounds= "[["+minBounds.enlem+","+minBounds.boylam+"],"
-                        + "["+maxBounds.enlem+","+maxBounds.boylam+"]]";
+                this.mapBounds = "[[" + minBounds.enlem + "," + minBounds.boylam + "],"
+                        + "[" + maxBounds.enlem + "," + maxBounds.boylam + "]]";
 
 //  this.deviceName = rs_1.getString("name");
                 //  this.deviceId = rs_1.getInt("followMeDeviceId");
@@ -275,7 +276,6 @@ double cumulativeDistance=0.0;
             this.setRouteAltitudeValues(new Gson().toJson(altitudeValues));
             this.setRouteSpeedValues(new Gson().toJson(speedValues));
             this.setRouteSpeedKmhValues(new Gson().toJson(speedKmhValues));
-           
 
             if (!points.isEmpty()) {
                 routeStartPoint = points.get(0).toString();
@@ -284,14 +284,13 @@ double cumulativeDistance=0.0;
                 this.deviceName = deviceNameFromId(this.deviceId);
             }
 
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e) {
 
-        } catch (InstantiationException e) {
-        } catch (IllegalAccessException e) {
-        } catch (SQLException e) {
         } finally {
             try {
+                
                 con_1.close();
+                
             } catch (SQLException ex) {
 
             }
@@ -343,7 +342,7 @@ double cumulativeDistance=0.0;
     private double distanceBetweenPoints(double latFirst, double lngFirst, double latSecond, double lngSecond) {
 
         double R = 6371.0; // metres
-        double d = 0.0;
+        double d ;
         double fiFirst = Math.toRadians(latFirst);
         double fiSecond = Math.toRadians(latSecond);
         double deltaFi = Math.toRadians(latSecond - latFirst);
@@ -363,8 +362,8 @@ double cumulativeDistance=0.0;
         Credentials cr = new Credentials();
 
         Connection con_1 = null;
-        Statement st_1 = null;
-        ResultSet rs_1 = null;
+        Statement st_1 ;
+        ResultSet rs_1 ;
         try {
             /* TODO output your page here. You may use following sample code. */
 
@@ -379,7 +378,7 @@ double cumulativeDistance=0.0;
             }
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException e) {
 
-        }finally{
+        } finally {
             try {
                 con_1.close();
             } catch (SQLException ex) {
@@ -394,8 +393,8 @@ double cumulativeDistance=0.0;
         Credentials cr = new Credentials();
 
         Connection con_1 = null;
-        Statement st_1 = null;
-        ResultSet rs_1 = null;
+        Statement st_1 ;
+        ResultSet rs_1 ;
         try {
             /* TODO output your page here. You may use following sample code. */
 
@@ -411,7 +410,7 @@ double cumulativeDistance=0.0;
             }
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException e) {
 
-        }finally{
+        } finally {
             try {
                 con_1.close();
             } catch (SQLException ex) {
@@ -421,7 +420,8 @@ double cumulativeDistance=0.0;
         calculateRouteLength();
 
     }
-    public String getMapBounds(){
+
+    public String getMapBounds() {
         return this.mapBounds;
     }
 }
