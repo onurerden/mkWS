@@ -88,4 +88,23 @@ public interface IDeviceServer {
     //daha önceden kaydedilmiş bir gpx dosyası içeriğini sistemdeki rotaların arasına kaydeder.
     //URL .../SaveGpxFile'dır.
     //başarılı ise 1, session alınamaz ise -1, device kayıtlı değilse-2, geçersiz gpx dosyası için -3 döner 
+    
+    int saveMMRauthorizationCodeForDevice(int deviceId, String deviceType, String code);
+    //MapMyRide için authorization code'unu sunucuya kaydetmek için kullanılır.
+    //deviceId cihazın mkWS üzerindeki id'si,
+    //deviceType mk (mikrokopter) ya da mp (mobilephone),
+    //code mapmyride oauth 2 sunucusuna login olduktan sonra dönüşü yapılan code'dur.
+    //
+    //mapmyride oauth sunucusuna aşağıdaki linkten giriş yapılacak:
+    //https://www.mapmyfitness.com/v7.1/oauth2/uacf/authorize/?client_id=XXXXXXXXXXXX&response_type=code
+    //XXXXXXXXX client key, Onur Erden bunu soranlara verecek
+    //giriş başarılı olursa "followme://response?state=&code=XXXXXXXXXXX"
+    //uri'si ile dönüş yapılacak. program bu uri'yi yakalayarak code'u parse edecek ve bu methodla sunucuya iletecek.
+    //parse işlemi android için aşağıdaki linkte örnekler var
+    //http://stackoverflow.com/questions/2448213/how-to-implement-my-very-own-uri-scheme-on-android
+    //başarılı ise 1, hata alınırsa -1 döner
+    
+    
+    
+    
 }

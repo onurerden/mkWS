@@ -733,16 +733,7 @@ public class ServerEngine implements IDeviceServer {
             st_1 = con_1.createStatement();
             st_1.executeUpdate(query);
 
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-            return -1;
-        } catch (InstantiationException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-            return -1;
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-            return -1;
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
             return -1;
         }
@@ -956,4 +947,98 @@ public class ServerEngine implements IDeviceServer {
         return 1;
     }
 
-}
+    @Override
+    public int saveMMRauthorizationCodeForDevice(int deviceId, String deviceType, String code) {
+        deviceType = deviceType.toLowerCase();
+        DeviceTypes dt = DeviceTypes.OTHER;
+        try {
+            dt = DeviceTypes.valueOf(deviceType.toUpperCase());
+            System.out.println(dt.getName());
+        } catch (Exception ex) {
+            System.out.println("DeviceType alınamadı.");
+        }
+     
+        Credentials cr = new Credentials();
+        Connection con_1 = null;
+        Statement st_1 = null;
+        String query = "";
+        switch (dt) {
+            case MP: {
+
+                query = "INSERT INTO mmrauthorization (code,followMeDeviceId ) VALUES ("
+                        + code + ","
+                        + deviceId + ")";
+                break;
+            }
+            case MK: {
+                query = "INSERT INTO mk.mmrauthorization (code,kopterId ) VALUES ("
+                        + code + ","
+                        + deviceId + ")";
+                break;
+            }
+            default: {
+                return -1;
+            }
+        }
+            try {
+                Class.forName("com.mysql.jdbc.Driver").newInstance();
+                con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+                st_1 = con_1.createStatement();
+                st_1.executeUpdate(query);
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+                System.out.println("Error while saving MMR Authorization code: " + ex.getMessage());
+                return -1;
+            }
+            return 1;
+        }
+
+        String mmrAccessToken(int deviceId, String deviceType) throws Exception
+        {
+            String token = "";
+            DeviceTypes dt = DeviceTypes.OTHER;
+            
+            try {
+            dt = DeviceTypes.valueOf(deviceType.toUpperCase());
+        System.out.println(dt.getName());
+        } catch (Exception ex) {
+            System.out.println("DeviceType alınamadı.");
+        }
+            String queryString = "";
+            switch (dt){
+                case MP:{
+                    queryString = "SELECT code FROM mk.mmrauthorization WHERE followMeDeviceId = " + deviceId;
+                    break;
+                }
+                case MK:{
+                    queryString = "SELECT code FROM mk.mmrauthorization WHERE kopterId = " + deviceId;
+                    break;
+                }
+                default:
+                    throw new Exception();
+            }
+        queryString = queryString +" ORDER BY id DESC LIMIT 1";
+        
+                     Credentials cr = new Credentials();
+        Connection con_1 = null;
+        Statement st_1 = null;
+        try {
+                Class.forName("com.mysql.jdbc.Driver").newInstance();
+                con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+                st_1 = con_1.createStatement();
+                ResultSet rs = st_1.executeQuery(queryString);
+                
+                while(rs.next()){
+                    token = rs.getString("code");
+                    return token;
+                }
+                
+                
+        }catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex){
+            System.out.println("Error on querying MMR Token");
+            return "Error on querying MMR Token";
+        }
+        
+            return "Token not found.";
+        }
+
+    }
