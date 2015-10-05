@@ -160,7 +160,7 @@ public class GetRouteDetails {
         this.routePoints = "";
         Connection con_1 = null;
         Statement st_1;
-        ResultSet rs_1 ;
+        ResultSet rs_1;
         Koordinat minBounds = new Koordinat();
         minBounds.boylam = 99;
         minBounds.enlem = 99;
@@ -207,13 +207,16 @@ public class GetRouteDetails {
                     SpeedChartValues value = new SpeedChartValues();
                     value.x = cumulativeDistance;
                     value.y = rs_1.getDouble("speed");
-                    speedValues.add(value);
 
                     SpeedChartValues valueKmh = new SpeedChartValues();
                     valueKmh.x = cumulativeDistance;
                     valueKmh.y = rs_1.getDouble("speed") * 3.6;
-                    speedKmhValues.add(valueKmh);
 
+                    if (value.y!=0){
+                    speedKmhValues.add(valueKmh);
+                    speedValues.add(value);
+                    }
+                    
                 } catch (SQLException ex) {
                     System.out.println("Exception while preparing speed graph data: " + ex.toString());
 //                   SpeedChartValues value = new SpeedChartValues();
@@ -288,9 +291,9 @@ public class GetRouteDetails {
 
         } finally {
             try {
-                
+
                 con_1.close();
-                
+
             } catch (SQLException ex) {
 
             }
@@ -342,7 +345,7 @@ public class GetRouteDetails {
     private double distanceBetweenPoints(double latFirst, double lngFirst, double latSecond, double lngSecond) {
 
         double R = 6371.0; // metres
-        double d ;
+        double d;
         double fiFirst = Math.toRadians(latFirst);
         double fiSecond = Math.toRadians(latSecond);
         double deltaFi = Math.toRadians(latSecond - latFirst);
@@ -362,8 +365,8 @@ public class GetRouteDetails {
         Credentials cr = new Credentials();
 
         Connection con_1 = null;
-        Statement st_1 ;
-        ResultSet rs_1 ;
+        Statement st_1;
+        ResultSet rs_1;
         try {
             /* TODO output your page here. You may use following sample code. */
 
@@ -393,8 +396,8 @@ public class GetRouteDetails {
         Credentials cr = new Credentials();
 
         Connection con_1 = null;
-        Statement st_1 ;
-        ResultSet rs_1 ;
+        Statement st_1;
+        ResultSet rs_1;
         try {
             /* TODO output your page here. You may use following sample code. */
 
