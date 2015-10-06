@@ -52,7 +52,7 @@
                                     <div class="no-move"></div>
                                 </div>
                                 <div class="box-content">
-                                    denemedir, şöyle denemedir böyle denemedir
+                                    Mikrokopter Web Servis uygulaması HTML önyüzüne hoşgeldiniz.
                                 </div>
                             </div>                                                
                         </div>
@@ -64,7 +64,7 @@
                                 <div class="box-header">
                                     <div class="box-name">
                                         <i class="fa fa-table"></i>
-                                        <span>chart example</span>
+                                        <span>Harita</span>
                                     </div>
                                     <div class="box-icons">
                                         <a class="collapse-link">

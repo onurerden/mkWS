@@ -191,7 +191,7 @@ public class GetRouteDetails {
                     value.y = rs_1.getDouble("altitude");
                     altitudeValues.add(value);
 
-                } catch (SQLException ex) {
+                } catch (Exception ex) {
 
                     System.out.println("Exception while preparing altitude graph data: " + ex.getMessage());
 //                    System.out.println("Exception: " + ex.toString());
@@ -211,13 +211,11 @@ public class GetRouteDetails {
                     SpeedChartValues valueKmh = new SpeedChartValues();
                     valueKmh.x = cumulativeDistance;
                     valueKmh.y = rs_1.getDouble("speed") * 3.6;
-
                     if (value.y!=0){
                     speedKmhValues.add(valueKmh);
                     speedValues.add(value);
                     }
-                    
-                } catch (SQLException ex) {
+                } catch (Exception ex) {
                     System.out.println("Exception while preparing speed graph data: " + ex.toString());
 //                   SpeedChartValues value = new SpeedChartValues();
 //                value.x=a;
