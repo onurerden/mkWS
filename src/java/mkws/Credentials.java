@@ -19,6 +19,9 @@ public class Credentials {
 //    String dbPassword = "Wc_flbnyklZt";
     private String dbUserName = "onur";
     private String dbPassword = "19861986";
+    
+    private String mmrClientId= "kd8sw2eft3bmy3hft7x9yezqgfhwezcz";
+    private String mmrClientSecret = "smAfN8CYndqQSuUMR5p8Tt4pNPkuhGv5DT6pns3B3sW";
 
     public String getMysqlConnectionString() {
         String connectionString = new String();
@@ -30,5 +33,33 @@ public class Credentials {
     }
     public String getDbPassword(){
         return this.dbPassword;
+    }
+
+    /**
+     * @return the mmrClientId
+     */
+    public String getMmrClientId() {
+        return mmrClientId;
+    }
+
+    /**
+     * @param mmrClientId the mmrClientId to set
+     */
+    public void setMmrClientId(String mmrClientId) {
+        this.mmrClientId = mmrClientId;
+    }
+
+    /**
+     * @return the mmrClientSecret
+     */
+    public String getMmrClientSecret() {
+        return mmrClientSecret;
+    }
+
+    /**
+     * @param mmrClientSecret the mmrClientSecret to set
+     */
+    public void setMmrClientSecret(String mmrClientSecret) {
+        this.mmrClientSecret = mmrClientSecret;
     }
 }
