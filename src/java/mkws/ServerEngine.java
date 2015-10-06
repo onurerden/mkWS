@@ -597,7 +597,7 @@ public class ServerEngine implements IDeviceServer {
 
             while (rs_1.next()) {
                 routeId = rs_1.getInt("maxId");
-                System.out.println("New routeId for deviceId = " + deviceId + "is " + routeId);
+                System.out.println("New routeId for deviceId = " + deviceId + " is " + routeId);
             }
 
         } catch (SQLException ex) {
