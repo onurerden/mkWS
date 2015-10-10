@@ -23,22 +23,24 @@ import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import mkws.Model.OAuthToken;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.CoreProtocolPNames;
+import org.apache.http.util.EntityUtils;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
 
 /**
  *
@@ -977,9 +979,66 @@ public class ServerEngine implements IDeviceServer {
         return 1;
     }
 
-    String mmrAccessToken(int deviceId, String deviceType) throws Exception {
-        String token;
-        String code;
+    public int saveMMRauthorizationToken(int deviceId, String deviceType, OAuthToken token) {
+        deviceType = deviceType.toLowerCase();
+        DeviceTypes dt = DeviceTypes.OTHER;
+        try {
+            dt = DeviceTypes.valueOf(deviceType.toUpperCase());
+            System.out.println(dt.getName());
+        } catch (Exception ex) {
+            System.out.println("DeviceType alınamadı.");
+        }
+
+        Credentials cr = new Credentials();
+        Connection con_1 = null;
+        Statement st_1;
+        String query;
+
+        switch (dt) {
+            case MP: {
+
+                query = "INSERT INTO mmrauthorization (code,followMeDeviceId,access_token,refresh_token,expires_in) VALUES (\""
+                        + token.getAuthorizationCode() + "\","
+                        + deviceId + ",\""
+                        + token.getAccess_token() + "\",\""
+                        + token.getRefresh_token() + "\","
+                        + token.getExpires_in()
+                        + ")";
+                break;
+            }
+            case MK: {
+                query = "INSERT INTO mk.mmrauthorization (code,kopterId,access_token,refresh_token,expires_in ) VALUES (\""
+                        + token.getAuthorizationCode() + "\","
+                        + deviceId + ",\""
+                        + token.getAccess_token() + "\",\""
+                        + token.getRefresh_token() + "\","
+                        + token.getExpires_in()
+                        + ")";
+                break;
+            }
+            default: {
+                return -1;
+            }
+        }
+        try {
+            System.out.println(query);
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            st_1 = con_1.createStatement();
+            st_1.executeUpdate(query);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+            System.out.println("Error while saving MMR Authorization code: " + ex.getMessage());
+            return -1;
+        }
+        return 1;
+    }
+
+    public String mmrAccessToken(int deviceId, String deviceType) throws Exception {
+        OAuthToken token = new OAuthToken();
+        Credentials cr = new Credentials();
+        token.setClientId(cr.getMmrClientId());
+        token.setClientSecret(cr.getMmrClientSecret());
+
         DeviceTypes dt = DeviceTypes.OTHER;
 
         try {
@@ -991,11 +1050,11 @@ public class ServerEngine implements IDeviceServer {
         String queryString = "";
         switch (dt) {
             case MP: {
-                queryString = "SELECT code FROM mk.mmrauthorization WHERE followMeDeviceId = " + deviceId;
+                queryString = "SELECT code, access_token, refresh_token, scope, expires_in FROM mk.mmrauthorization WHERE followMeDeviceId = " + deviceId;
                 break;
             }
             case MK: {
-                queryString = "SELECT code FROM mk.mmrauthorization WHERE kopterId = " + deviceId;
+                queryString = "SELECT code, access_token, refresh_token, scope, expires_in FROM mk.mmrauthorization WHERE kopterId = " + deviceId;
                 break;
             }
             default:
@@ -1003,7 +1062,6 @@ public class ServerEngine implements IDeviceServer {
         }
         queryString = queryString + " ORDER BY id DESC LIMIT 1";
 
-        Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1 = null;
         try {
@@ -1012,32 +1070,72 @@ public class ServerEngine implements IDeviceServer {
             st_1 = con_1.createStatement();
             ResultSet rs = st_1.executeQuery(queryString);
 
-            rs.next();
-            code = rs.getString("code");
-
+            if (rs.next()) {
+                token.setAuthorizationCode(rs.getString("code"));
+                token.setAccess_token(rs.getString("access_token"));
+                token.setRefresh_token(rs.getString("refresh_token"));
+                token.setScope(rs.getString("scope"));
+                token.setExpires_in(String.valueOf(rs.getInt("expires_in")));
+            } else {
+                System.out.println("no authorization record found for device" + deviceId);
+            }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
             System.out.println("Error on querying MMR OAuth2 Code");
             return "Error on querying MMR OAuth2 Code";
         }
+        if (!token.getRefresh_token().equals("Not Set")) {
+            String newToken = token.refreshToken();
+            saveMMRauthorizationToken(deviceId, deviceType, token);
+            return newToken;
+        }
 
-        HttpClient httpclient = new DefaultHttpClient();
-        httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
-        HttpPost httppost = new HttpPost("https://oauth2-api.mapmyapi.com/v7.1/oauth2/uacf/access_token/ ");
+        if (!token.getAuthorizationCode().equals("Not Set")) {
+            String newToken = token.getNewAccessToken();
+            saveMMRauthorizationToken(deviceId, deviceType, token);
+            return newToken;
+        }
 
-        MultipartEntity mpEntity = new MultipartEntity();
-        mpEntity.addPart("grant_type", new StringBody("authorization_code"));
-        mpEntity.addPart("client_id", new StringBody(cr.getMmrClientId()));
-        mpEntity.addPart("client_secret", new StringBody(cr.getMmrClientSecret()));
-        mpEntity.addPart("code", new StringBody(code));
+        return "No Authorization Code";
+    }
+    
+    public String getActivityTypes(){
+        String types="";
+        Credentials cr = new Credentials();
+        try {
+            HttpClient httpclient = new DefaultHttpClient();
+            httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
+            
+            HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/activity_type/");
+           // HttpPost httppost = new HttpPost("https://oauth2-api.mapmyapi.com/v7.1/activity_type/");
+            httpget.addHeader("Api-Key", cr.getMmrClientId());
+            httpget.addHeader("Content-Type", cr.getMmrClientId());
+            httpget.addHeader("Authorization", "Bearer " +mmrAccessToken(28, "MP"));
 
-        httppost.setEntity(mpEntity);
-        System.out.println("executing request " + httppost.getRequestLine());
-        HttpResponse response = httpclient.execute(httppost);
-        HttpEntity resEntity = response.getEntity();
+            MultipartEntity mpEntity = new MultipartEntity();
+          //  mpEntity.addPart("grant_type", new StringBody("authorization_code"));
+          //  mpEntity.addPart("code", new StringBody(getAuthorizationCode()));
+          //  mpEntity.addPart("client_id", new StringBody(getClientId()));
+          //  mpEntity.addPart("client_secret", new StringBody(getClientSecret()));
 
-        System.out.println(response.getStatusLine());
+          //  httppost.setEntity(mpEntity);
+            System.out.println("executing request " + httpget.getRequestLine());
+            HttpResponse response = httpclient.execute(httpget);
+            HttpEntity resEntity = response.getEntity();
+            String responseString = EntityUtils.toString(resEntity, "UTF-8");
+            types = responseString;
+            if (responseString.contains("error")) {
+                System.out.println("Error while getting Activity Types: " + responseString);
+                return "Error while getting Activity Types: " + responseString;
+            }
+            System.out.println(responseString);
+        
 
-        return "Token not found.";
+            
+        }catch (Exception ex){
+            
+        }
+        
+        return types;
     }
 
 }
