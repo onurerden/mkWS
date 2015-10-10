@@ -952,14 +952,14 @@ public class ServerEngine implements IDeviceServer {
         switch (dt) {
             case MP: {
 
-                query = "INSERT INTO mmrauthorization (code,followMeDeviceId ) VALUES ("
-                        + code + ","
+                query = "INSERT INTO mmrauthorization (code,followMeDeviceId ) VALUES (\""
+                        + code + "\","
                         + deviceId + ")";
                 break;
             }
             case MK: {
-                query = "INSERT INTO mk.mmrauthorization (code,kopterId ) VALUES ("
-                        + code + ","
+                query = "INSERT INTO mk.mmrauthorization (code,kopterId ) VALUES (\""
+                        + code + "\","
                         + deviceId + ")";
                 break;
             }
