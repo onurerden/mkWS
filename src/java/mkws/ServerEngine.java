@@ -1097,27 +1097,28 @@ public class ServerEngine implements IDeviceServer {
 
         return "No Authorization Code";
     }
-    
-    public String getActivityTypes(){
-        String types="";
+
+    public String getActivityTypes() {
+        String types = "";
         Credentials cr = new Credentials();
         try {
             HttpClient httpclient = new DefaultHttpClient();
             httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
+
+            //HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/activity_type/");
+            HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/user/self/");
             
-            HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/activity_type/");
-           // HttpPost httppost = new HttpPost("https://oauth2-api.mapmyapi.com/v7.1/activity_type/");
             httpget.addHeader("Api-Key", cr.getMmrClientId());
             httpget.addHeader("Content-Type", cr.getMmrClientId());
-            httpget.addHeader("Authorization", "Bearer " +mmrAccessToken(28, "MP"));
+            httpget.addHeader("Authorization", "Bearer " + mmrAccessToken(28, "MP"));
 
             MultipartEntity mpEntity = new MultipartEntity();
           //  mpEntity.addPart("grant_type", new StringBody("authorization_code"));
-          //  mpEntity.addPart("code", new StringBody(getAuthorizationCode()));
-          //  mpEntity.addPart("client_id", new StringBody(getClientId()));
-          //  mpEntity.addPart("client_secret", new StringBody(getClientSecret()));
+            //  mpEntity.addPart("code", new StringBody(getAuthorizationCode()));
+            //  mpEntity.addPart("client_id", new StringBody(getClientId()));
+            //  mpEntity.addPart("client_secret", new StringBody(getClientSecret()));
 
-          //  httppost.setEntity(mpEntity);
+            //  httppost.setEntity(mpEntity);
             System.out.println("executing request " + httpget.getRequestLine());
             HttpResponse response = httpclient.execute(httpget);
             HttpEntity resEntity = response.getEntity();
@@ -1128,14 +1129,19 @@ public class ServerEngine implements IDeviceServer {
                 return "Error while getting Activity Types: " + responseString;
             }
             System.out.println(responseString);
-        
 
-            
-        }catch (Exception ex){
-            
+        } catch (Exception ex) {
+
         }
-        
+
         return types;
+    }
+
+    @Override
+    public int endRoute(int routeId, boolean sendToMMR) {
+        int result = endRoute(routeId);
+
+        return result;
     }
 
 }

@@ -79,6 +79,12 @@ public interface IDeviceServer {
     //sonlandırılmak istenen rota gönderilir.
     //1: başarılı, -1 db erişim hatası ya da geçersiz rota id
     
+    int endRoute (int routeId, boolean sendToMMR);
+    //Rotanın sonuçlandırılması için followme aksiyonunun bitirilmesi ile çağırılan metoddur.
+    //sonlandırılmak istenen rota gönderilir.
+    //1: başarılı, -1 db erişim hatası ya da geçersiz rota id
+    //-2 MMR hatası
+    
     String ping();
     //Sistemin ayakta olup olmadığının tespiti için kullanılan metoddur.
     // ".../Ping" URL'i ile sorgulanır (P büyük), yanıt olarak "Pong" gelir.
