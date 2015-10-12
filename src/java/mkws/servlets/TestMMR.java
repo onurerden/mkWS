@@ -5,6 +5,7 @@
  */
 package mkws.servlets;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import mkws.Model.MMRUser;
 import mkws.ServerEngine;
 
 /**
@@ -37,7 +39,11 @@ public class TestMMR extends HttpServlet {
         
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            out.println(server.getMMRUserInfo(28,"MP"));
+            String jsonString=server.getMMRUserInfo(25,"MP");
+            Gson json = new Gson();
+            MMRUser user = json.fromJson(jsonString,MMRUser.class);
+            out.println("User Name: " + user.getDisplay_name() + "<br>");
+            out.println("User Id  : " + user.getId());
         } catch (Exception ex){
             System.out.println("Error: " + ex.getMessage());
         }

@@ -1143,5 +1143,10 @@ public class ServerEngine implements IDeviceServer {
 
         return result;
     }
+    
+    public int sendMMRWorkout(int userId){
+      
+        return 1;
+    }
 
 }
