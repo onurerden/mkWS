@@ -37,7 +37,7 @@ public class TestMMR extends HttpServlet {
         
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            out.println(server.getActivityTypes());
+            out.println(server.getMMRUserInfo(28,"MP"));
         } catch (Exception ex){
             System.out.println("Error: " + ex.getMessage());
         }

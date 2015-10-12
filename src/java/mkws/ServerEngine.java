@@ -1098,7 +1098,7 @@ public class ServerEngine implements IDeviceServer {
         return "No Authorization Code";
     }
 
-    public String getActivityTypes() {
+    public String getMMRUserInfo(int deviceId, String deviceType) {
         String types = "";
         Credentials cr = new Credentials();
         try {
@@ -1110,7 +1110,7 @@ public class ServerEngine implements IDeviceServer {
             
             httpget.addHeader("Api-Key", cr.getMmrClientId());
             httpget.addHeader("Content-Type", cr.getMmrClientId());
-            httpget.addHeader("Authorization", "Bearer " + mmrAccessToken(28, "MP"));
+            httpget.addHeader("Authorization", "Bearer " + mmrAccessToken(deviceId, deviceType));
 
             MultipartEntity mpEntity = new MultipartEntity();
           //  mpEntity.addPart("grant_type", new StringBody("authorization_code"));
