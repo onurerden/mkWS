@@ -41,13 +41,13 @@ public class GetRouteDetails {
     private double maxSpeed = 0.0;
     private double maxAltitude = 0.0;
     private double minAltitude = 10000;
-    
+
     public List<String> points = new ArrayList<>();
     private List<Double> altitudeList = new ArrayList<>();
     private List<Double> speedList = new ArrayList<>();
     private List<Double> latitudeList = new ArrayList<>();
     private List<Double> longitudeList = new ArrayList<>();
-                
+    private List<Double> distanceList = new ArrayList<>();
 
     /**
      * @return the routeAltitudeValues
@@ -189,6 +189,20 @@ public class GetRouteDetails {
         this.longitudeList = longitudeList;
     }
 
+    /**
+     * @return the distanceList
+     */
+    public List<Double> getDistanceList() {
+        return distanceList;
+    }
+
+    /**
+     * @param distanceList the distanceList to set
+     */
+    public void setDistanceList(List<Double> distanceList) {
+        this.distanceList = distanceList;
+    }
+
     class Koordinat {
 
         public double enlem = 0;
@@ -212,173 +226,163 @@ public class GetRouteDetails {
     List<Koordinat> noktalar = new ArrayList<>();
 
     public void setRouteId(int i) {
-    
-    List<AltitudeChartValues> altitudeValues = new ArrayList<>();
-    List<SpeedChartValues> speedValues = new ArrayList<>();
-    List<SpeedChartValues> speedKmhValues = new ArrayList<>();
 
-     
-    this.routeId  = i;
+        List<AltitudeChartValues> altitudeValues = new ArrayList<>();
+        List<SpeedChartValues> speedValues = new ArrayList<>();
+        List<SpeedChartValues> speedKmhValues = new ArrayList<>();
 
-    Credentials cr = new Credentials();
-     
-    this.routePoints  = "";
-    Connection con_1 = null;
-    Statement st_1;
-    ResultSet rs_1;
-    Koordinat minBounds = new Koordinat();
-    minBounds.boylam  = 99;
-    minBounds.enlem  = 99;
-    Koordinat maxBounds = new Koordinat();
-    maxBounds.boylam  = -99;
-    maxBounds.enlem  = -99;
+        this.routeId = i;
 
-    
+        Credentials cr = new Credentials();
+
+        this.routePoints = "";
+        Connection con_1 = null;
+        Statement st_1;
+        ResultSet rs_1;
+        Koordinat minBounds = new Koordinat();
+        minBounds.boylam = 99;
+        minBounds.enlem = 99;
+        Koordinat maxBounds = new Koordinat();
+        maxBounds.boylam = -99;
+        maxBounds.enlem = -99;
+
         try {
             /* TODO output your page here. You may use following sample code. */
 
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-        con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
-        st_1 = con_1.createStatement();
-        String query = "SELECT latitude, longitude, speed, altitude, followMeDeviceId from followme WHERE routeId = " + routeId + " "
-                + "ORDER BY followme.id ASC";
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            st_1 = con_1.createStatement();
+            String query = "SELECT latitude, longitude, speed, altitude, followMeDeviceId from followme WHERE routeId = " + routeId + " "
+                    + "ORDER BY followme.id ASC";
 
-        rs_1 = st_1.executeQuery(query);
-        int a = -2;
-        double cumulativeDistance = 0.0;
-        while (rs_1.next()) {
-            a++;
-            points.add("[" + rs_1.getString("latitude") + "," + rs_1.getString("longitude") + "],");
-            try {
-                AltitudeChartValues value = new AltitudeChartValues();
-                AltitudeChartValues value2 = new AltitudeChartValues();
-                cumulativeDistance = cumulativeDistance + distanceBetweenPoints(noktalar.get(a).enlem, noktalar.get(a).boylam,
-                        noktalar.get(a - 1).enlem, noktalar.get(a - 1).boylam);
-                value.x = cumulativeDistance;
-                value.y = rs_1.getDouble("altitude");
-                altitudeValues.add(value);
-                    getAltitudeList().add(Double.valueOf(value.y));
+            rs_1 = st_1.executeQuery(query);
+            int a = -2;
+            double cumulativeDistance = 0.0;
+            while (rs_1.next()) {
+                a++;
+                points.add("[" + rs_1.getString("latitude") + "," + rs_1.getString("longitude") + "],");
 
-            } catch (Exception ex) {
+                try {
 
-                System.out.println("Exception while preparing altitude graph data: " + ex.getMessage());
-//                    System.out.println("Exception: " + ex.toString());
-//                   AltitudeChartValues value = new AltitudeChartValues();
-//                value.x=a;
-//                value.y=0.0;
-//                altitudeValues.add(value);
+                    cumulativeDistance = cumulativeDistance + distanceBetweenPoints(noktalar.get(a).enlem, noktalar.get(a).boylam,
+                            noktalar.get(a - 1).enlem, noktalar.get(a - 1).boylam);
+                    getDistanceList().add(cumulativeDistance);
 
-            }
-            ////
+                } catch (Exception ex) {
 
-            try {
-                SpeedChartValues value = new SpeedChartValues();
-                value.x = cumulativeDistance;
-                value.y = rs_1.getDouble("speed");
-
-                SpeedChartValues valueKmh = new SpeedChartValues();
-                valueKmh.x = cumulativeDistance;
-                valueKmh.y = rs_1.getDouble("speed") * 3.6;
-                    getSpeedList().add(Double.valueOf(value.y));
-                
-                if (value.y != 0) {
-                    speedKmhValues.add(valueKmh);
-                    speedValues.add(value);
+                    System.out.println("Exception while preparing altitude graph data: " + ex.getMessage());
+                } finally {
+                    getDistanceList().add(0.0);
+                    AltitudeChartValues value = new AltitudeChartValues();
+                    AltitudeChartValues value2 = new AltitudeChartValues();
+                    value.x = cumulativeDistance;
+                    value.y = rs_1.getDouble("altitude");
+                    altitudeValues.add(value);
+                    getAltitudeList().add(value.y);
                 }
-            } catch (Exception ex) {
-                System.out.println("Exception while preparing speed graph data: " + ex.toString());
+                ////
+
+                try {
+                    SpeedChartValues value = new SpeedChartValues();
+                    value.x = cumulativeDistance;
+                    value.y = rs_1.getDouble("speed");
+
+                    SpeedChartValues valueKmh = new SpeedChartValues();
+                    valueKmh.x = cumulativeDistance;
+                    valueKmh.y = rs_1.getDouble("speed") * 3.6;
+                    getSpeedList().add(value.y);
+
+                    if (value.y != 0) {
+                        speedKmhValues.add(valueKmh);
+                        speedValues.add(value);
+                    }
+                } catch (Exception ex) {
+                    System.out.println("Exception while preparing speed graph data: " + ex.toString());
 //                   SpeedChartValues value = new SpeedChartValues();
 //                value.x=a;
 //                value.y=0.0;
 //                speedValues.add(value);
 
-            }
+                }
 
-            this.routePoints = this.routePoints + "[" + rs_1.getString("latitude") + "," + rs_1.getString("longitude") + "],";
+                this.routePoints = this.routePoints + "[" + rs_1.getString("latitude") + "," + rs_1.getString("longitude") + "],";
                 // this.routeAltitudeValues = this.routeAltitudeValues + "[" + rs_1.getString("altitude") + "],";
-            //this.routeSpeedValues = this.routeSpeedValues + "[" + rs_1.getString("speed") + "],";
+                //this.routeSpeedValues = this.routeSpeedValues + "[" + rs_1.getString("speed") + "],";
 
-            Koordinat yeniNokta = new Koordinat();
-            yeniNokta.enlem = Double.parseDouble(rs_1.getString("latitude"));
-            yeniNokta.boylam = Double.parseDouble(rs_1.getString("longitude"));
-            try {
-                yeniNokta.speed = Double.parseDouble(rs_1.getString("speed"));
-                if (yeniNokta.speed > getMaxSpeed()) {
-                    setMaxSpeed(yeniNokta.speed);
+                Koordinat yeniNokta = new Koordinat();
+                yeniNokta.enlem = Double.parseDouble(rs_1.getString("latitude"));
+                yeniNokta.boylam = Double.parseDouble(rs_1.getString("longitude"));
+                try {
+                    yeniNokta.speed = Double.parseDouble(rs_1.getString("speed"));
+                    if (yeniNokta.speed > getMaxSpeed()) {
+                        setMaxSpeed(yeniNokta.speed);
+                    }
+                } catch (SQLException | NumberFormatException ex) {
+                    System.out.println("Exception: " + ex.getMessage());
                 }
-            } catch (SQLException | NumberFormatException ex) {
-                System.out.println("Exception: " + ex.getMessage());
-            }
-            try {
-                yeniNokta.altitude = Double.parseDouble(rs_1.getString("altitude"));
-                if (getMaxAltitude() < yeniNokta.altitude) {
-                    setMaxAltitude(yeniNokta.altitude);
-                }
-                if (getMinAltitude() > yeniNokta.altitude) {
-                    setMinAltitude(yeniNokta.altitude);
-                }
+                try {
+                    yeniNokta.altitude = Double.parseDouble(rs_1.getString("altitude"));
+                    if (getMaxAltitude() < yeniNokta.altitude) {
+                        setMaxAltitude(yeniNokta.altitude);
+                    }
+                    if (getMinAltitude() > yeniNokta.altitude) {
+                        setMinAltitude(yeniNokta.altitude);
+                    }
 
-            } catch (SQLException | NumberFormatException ex) {
-                System.out.println("Exception: " + ex.getMessage());
-            }
+                } catch (SQLException | NumberFormatException ex) {
+                    System.out.println("Exception: " + ex.getMessage());
+                }
                 getLatitudeList().add(yeniNokta.enlem);
                 getLongitudeList().add(yeniNokta.boylam);
-            noktalar.add(yeniNokta);
+                noktalar.add(yeniNokta);
 
 //Set Bounds
-            if (yeniNokta.enlem < minBounds.enlem) {
-                minBounds.enlem = yeniNokta.enlem;
-            }
-            if (yeniNokta.boylam < minBounds.boylam) {
-                minBounds.boylam = yeniNokta.boylam;
-            }
-            if (yeniNokta.enlem > maxBounds.enlem) {
-                maxBounds.enlem = yeniNokta.enlem;
-            }
-            if (yeniNokta.boylam > maxBounds.boylam) {
-                maxBounds.boylam = yeniNokta.boylam;
-            }
+                if (yeniNokta.enlem < minBounds.enlem) {
+                    minBounds.enlem = yeniNokta.enlem;
+                }
+                if (yeniNokta.boylam < minBounds.boylam) {
+                    minBounds.boylam = yeniNokta.boylam;
+                }
+                if (yeniNokta.enlem > maxBounds.enlem) {
+                    maxBounds.enlem = yeniNokta.enlem;
+                }
+                if (yeniNokta.boylam > maxBounds.boylam) {
+                    maxBounds.boylam = yeniNokta.boylam;
+                }
 
-            this.mapBounds = "[[" + minBounds.enlem + "," + minBounds.boylam + "],"
-                    + "[" + maxBounds.enlem + "," + maxBounds.boylam + "]]";
+                this.mapBounds = "[[" + minBounds.enlem + "," + minBounds.boylam + "],"
+                        + "[" + maxBounds.enlem + "," + maxBounds.boylam + "]]";
 
 //  this.deviceName = rs_1.getString("name");
-            //  this.deviceId = rs_1.getInt("followMeDeviceId");
-            //  this.routeCreationDate = rs_1.getTimestamp("time");
-        }
-        this.setRouteAltitudeValues(new Gson().toJson(altitudeValues));
-        this.setRouteSpeedValues(new Gson().toJson(speedValues));
-        this.setRouteSpeedKmhValues(new Gson().toJson(speedKmhValues));
+                //  this.deviceId = rs_1.getInt("followMeDeviceId");
+                //  this.routeCreationDate = rs_1.getTimestamp("time");
+            }
+            this.setRouteAltitudeValues(new Gson().toJson(altitudeValues));
+            this.setRouteSpeedValues(new Gson().toJson(speedValues));
+            this.setRouteSpeedKmhValues(new Gson().toJson(speedKmhValues));
 
-        if (!points.isEmpty()) {
-            routeStartPoint = points.get(0).toString();
-            routeEndPoint = points.get(points.size() - 1).toString();
-            prepareRouteDetails(this.routeId);
-            this.deviceName = deviceNameFromId(this.deviceId);
-        }
+            if (!points.isEmpty()) {
+                routeStartPoint = points.get(0).toString();
+                routeEndPoint = points.get(points.size() - 1).toString();
+                prepareRouteDetails(this.routeId);
+                this.deviceName = deviceNameFromId(this.deviceId);
+            }
 
-    }
-    catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e
-
-    
-    
-
-    
-        ) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e) {
 
         } finally {
             try {
 
-            con_1.close();
+                con_1.close();
 
-        } catch (SQLException ex) {
+            } catch (SQLException ex) {
 
+            }
         }
+
     }
 
-}
-
-public int getRouteId() {
+    public int getRouteId() {
         return this.routeId;
     }
 
@@ -461,12 +465,10 @@ public int getRouteId() {
         } finally {
             try {
                 con_1.close();
-            
 
-} catch (SQLException ex) {
-                Logger.getLogger(GetRouteDetails.class  
-
-.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(GetRouteDetails.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
         }
         return name;
@@ -497,12 +499,10 @@ public int getRouteId() {
         } finally {
             try {
                 con_1.close();
-            
 
-} catch (SQLException ex) {
-                Logger.getLogger(GetRouteDetails.class  
-
-.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(GetRouteDetails.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
         }
         calculateRouteLength();

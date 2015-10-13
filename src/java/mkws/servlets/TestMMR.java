@@ -37,6 +37,7 @@ public class TestMMR extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         ServerEngine server = new ServerEngine();
+        int routeId=Integer.valueOf(request.getParameter("routeId"));
         
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
@@ -45,11 +46,10 @@ public class TestMMR extends HttpServlet {
             //MMRUser user = json.fromJson(jsonString,MMRUser.class);
             //out.println("User Name: " + user.getDisplay_name() + "<br>");
             //out.println("User Id  : " + user.getId());
-            MMRWorkout workout = new MMRWorkout();
-            workout.populateWorkout(400);
+        server.sendMMRWorkout(routeId);
                         
         } catch (Exception ex){
-            System.out.println("Error: " + ex.getMessage());
+            System.out.println("Error while sending MMRWorkout: " + ex.getMessage());
         }
             
     }

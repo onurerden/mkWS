@@ -23,6 +23,8 @@ import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import mkws.Model.MMRUser;
+import mkws.Model.MMRWorkout;
 import mkws.Model.OAuthToken;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -30,6 +32,7 @@ import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -745,7 +748,7 @@ public class ServerEngine implements IDeviceServer {
             st_1.executeUpdate(query);
 
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
-            System.out.println("Error: " + ex.getMessage());
+            System.out.println("Error while creating new mk session: " + ex.getMessage());
         } finally {
             try {
                 con_1.close();
@@ -1107,31 +1110,25 @@ public class ServerEngine implements IDeviceServer {
 
             //HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/activity_type/");
             HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/user/self/");
-            
+
             httpget.addHeader("Api-Key", cr.getMmrClientId());
             httpget.addHeader("Content-Type", cr.getMmrClientId());
             httpget.addHeader("Authorization", "Bearer " + mmrAccessToken(deviceId, deviceType));
 
-            MultipartEntity mpEntity = new MultipartEntity();
-          //  mpEntity.addPart("grant_type", new StringBody("authorization_code"));
-            //  mpEntity.addPart("code", new StringBody(getAuthorizationCode()));
-            //  mpEntity.addPart("client_id", new StringBody(getClientId()));
-            //  mpEntity.addPart("client_secret", new StringBody(getClientSecret()));
-
-            //  httppost.setEntity(mpEntity);
             System.out.println("executing request " + httpget.getRequestLine());
             HttpResponse response = httpclient.execute(httpget);
             HttpEntity resEntity = response.getEntity();
             String responseString = EntityUtils.toString(resEntity, "UTF-8");
             types = responseString;
             if (responseString.contains("error")) {
-                System.out.println("Error while getting Activity Types: " + responseString);
-                return "Error while getting Activity Types: " + responseString;
+                System.out.println("Error while getting MMRUser Info: " + responseString);
+                return "Error while getting MMRUser Info: " + responseString;
             }
             System.out.println(responseString);
 
         } catch (Exception ex) {
-
+            System.out.println("Error while getting MMRUser Info: " + ex.toString());
+            return "Error while getting MMRUser Info: " + ex.toString();
         }
 
         return types;
@@ -1140,12 +1137,37 @@ public class ServerEngine implements IDeviceServer {
     @Override
     public int endRoute(int routeId, boolean sendToMMR) {
         int result = endRoute(routeId);
+        sendMMRWorkout(routeId);
 
         return result;
     }
-    
-    public int sendMMRWorkout(int userId){
-      
+
+    public int sendMMRWorkout(int routeId) {
+        MMRWorkout workout = new MMRWorkout();
+        workout.populateWorkout(routeId);
+        //MMRUser user = new Gson().fromJson(getMMRUserInfo(workout.getDeviceId(), "MP"), MMRUser.class);
+        Credentials cr = new Credentials();
+        try {
+            HttpClient httpclient = new DefaultHttpClient();
+            httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
+
+            HttpPost httppost = new HttpPost("https://oauth2-api.mapmyapi.com/v7.1/workout/");
+            httppost.addHeader("Api-Key", cr.getMmrClientId());
+            httppost.addHeader("Content-Type", "application/json");
+            httppost.addHeader("Authorization", "Bearer " + mmrAccessToken(workout.getDeviceId(), "MP"));
+                        
+            
+            StringEntity entity = new StringEntity( new Gson().toJson(workout));
+            httppost.setEntity(entity);
+            
+            HttpResponse response = httpclient.execute(httppost);
+            HttpEntity resEntity = response.getEntity();
+            System.out.println(EntityUtils.toString(resEntity, "UTF-8"));
+
+        } catch (Exception ex) {
+            System.out.println("Error while sendMMRWorkout: " + ex.getMessage() );
+        }
+
         return 1;
     }
 
