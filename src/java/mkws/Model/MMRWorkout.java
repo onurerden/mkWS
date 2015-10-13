@@ -5,7 +5,12 @@
  */
 package mkws.Model;
 
+import com.google.gson.Gson;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import mkws.webbeans.GetRouteDetails;
+
 
 /**
  *
@@ -23,8 +28,6 @@ public class MMRWorkout {
     private String notes = "Workout is submitted by FollowMe (mkWS)";
     private Aggregates aggregates;
 
-    
-    
     public class TimeSeries {
 
         ArrayList<ArrayList<Object>> distance = new ArrayList();
@@ -33,20 +36,42 @@ public class MMRWorkout {
 
         public void addToSeries(double newDistance, Location newPosition, double newSpeed) {
             int size = distance.size() - 1;
-            
+
         }
     }
 
-        public class Location {
+    public class Location {
 
-            public double lat;
-            public double lng;
-            public double elevation;
-
-        }
-        
-        public class Aggregates{
-            
-        }
+        public double lat;
+        public double lng;
+        public double elevation;
 
     }
+
+    public class Aggregates {
+
+    }
+class AltitudeChartValues {
+
+        public double y = 0;
+        public double x = 0; //id
+    }
+
+    
+    @SuppressWarnings("empty-statement")
+    public int populateWorkout(int routeId) {
+        GetRouteDetails gatherer = new GetRouteDetails();
+        gatherer.setRouteId(routeId);
+        int i=0;
+        ArrayList<Object[]> list = new ArrayList<>();
+        for(Double d :gatherer.getLatitudeList()){
+        Object[] o = new Object[2];
+        o[0] = i;
+        o[1] = Double.valueOf(d);
+                i++;
+                list.add(o);
+        }
+        System.out.println(new Gson().toJson(list));
+        return 0;
+    }
+}

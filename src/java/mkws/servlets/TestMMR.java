@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import mkws.Model.MMRUser;
+import mkws.Model.MMRWorkout;
 import mkws.ServerEngine;
 
 /**
@@ -39,11 +40,14 @@ public class TestMMR extends HttpServlet {
         
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            String jsonString=server.getMMRUserInfo(25,"MP");
-            Gson json = new Gson();
-            MMRUser user = json.fromJson(jsonString,MMRUser.class);
-            out.println("User Name: " + user.getDisplay_name() + "<br>");
-            out.println("User Id  : " + user.getId());
+            //String jsonString=server.getMMRUserInfo(25,"MP");
+           // Gson json = new Gson();
+            //MMRUser user = json.fromJson(jsonString,MMRUser.class);
+            //out.println("User Name: " + user.getDisplay_name() + "<br>");
+            //out.println("User Id  : " + user.getId());
+            MMRWorkout workout = new MMRWorkout();
+            workout.populateWorkout(400);
+                        
         } catch (Exception ex){
             System.out.println("Error: " + ex.getMessage());
         }
