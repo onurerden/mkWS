@@ -11,15 +11,15 @@ package mkws;
  */
 public class Credentials {
 
-    //String server = "127.8.64.130:3306"; //mk
-    String server = "127.2.57.130:3306";//mknew
+    String server = "127.5.211.2:3306"; //mk
+   // String server = "127.2.57.130:3306";//mknew
   //  String server = "localhost:3306";
     //String server = "onur-mac-mini.local:3306";
-    String database = "mknew";
+    String database = "mk";
 //    String dbUserName = "adminGStcLXX";
 //    String dbPassword = "Wc_flbnyklZt";
-    private String dbUserName = "adminr6HKjsr";
-    private String dbPassword = "eHM_4FZq3C2M";
+    private String dbUserName = "adminHr8UXvV";
+    private String dbPassword = "UrtgKUvL3deC";
     
     private String mmrClientId= "kd8sw2eft3bmy3hft7x9yezqgfhwezcz";
     private String mmrClientSecret = "smAfN8CYndqQSuUMR5p8Tt4pNPkuhGv5DT6pns3B3sW";
