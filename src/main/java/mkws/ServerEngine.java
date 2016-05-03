@@ -815,8 +815,13 @@ public class ServerEngine implements IDeviceServer {
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1;
-        String query = "INSERT INTO mk.session SET deviceId= '" + deviceId + "', deviceType = '" + type.getName().toString() + "'";
+        boolean isKopter = type.equals(DeviceTypes.MK);
+        
+        String query = "INSERT INTO mk.session SET deviceId= '" + deviceId + "',"
+                + " deviceType = '" + type.getName().toString() + "'"
+                + " isKopter = " +isKopter ;
         System.out.println(query);
+        
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
