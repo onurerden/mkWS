@@ -818,8 +818,8 @@ public class ServerEngine implements IDeviceServer {
         boolean isKopter = type.equals(DeviceTypes.MK);
         
         String query = "INSERT INTO mk.session SET deviceId= '" + deviceId + "',"
-                + " deviceType = '" + type.getName().toString() + "'"
-                + " isKopter = '" +isKopter +"'" ;
+                + " deviceType = '" + type.getName().toString() + "',"
+                + " isKopter = " +isKopter  ;
         System.out.println(query);
         
         try {
