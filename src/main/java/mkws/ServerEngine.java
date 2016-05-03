@@ -819,7 +819,7 @@ public class ServerEngine implements IDeviceServer {
         
         String query = "INSERT INTO mk.session SET deviceId= '" + deviceId + "',"
                 + " deviceType = '" + type.getName().toString() + "'"
-                + " isKopter = " +isKopter ;
+                + " isKopter = '" +isKopter +"'" ;
         System.out.println(query);
         
         try {
