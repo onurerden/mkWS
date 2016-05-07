@@ -102,8 +102,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">       
-                    <div id="altitude" class="col-xs-12 col-sm-12 col-md-12">
+                                <!--Highchart -->
+<div class="row">       
+                    <div id="highchart" class="col-xs-12 col-sm-12 col-md-12">
                         <div class="box">
                             <div class="box-header">
                                 <div class="box-name">
@@ -125,17 +126,16 @@
                             </div>
                             <div class="box-content">
                                 <div class="row">
-                                    <figure style="height: 200px;" id="altitudeChart"></figure>
+                                  <div id="highchartcontainer" style="width:100%; height:400px;"></div>
 
                                 </div>
-                                <div class="row" style="text-align:center" id="altitudeValue">
-                                    Altitude (m)
-                                </div>
+                                
 
                             </div>
                         </div>
                     </div>
                 </div>
+                     
                 <!-- Other graph -->
                 <div class="row">       
                     <div id="speed" class="col-xs-12 col-sm-12 col-md-12">
@@ -173,39 +173,7 @@
                         </div>
                     </div>
                 </div>
-<!--Highchart -->
-<div class="row">       
-                    <div id="highchart" class="col-xs-12 col-sm-12 col-md-12">
-                        <div class="box">
-                            <div class="box-header">
-                                <div class="box-name">
-                                    <i class="fa fa-table"></i>
-                                    <span>Highchart</span>
-                                </div>
-                                <div class="box-icons">
-                                    <a class="collapse-link">
-                                        <i class="fa fa-chevron-up"></i>
-                                    </a>
-                                    <a class="expand-link">
-                                        <i class="fa fa-expand"></i>
-                                    </a>
-                                    <a class="close-link">
-                                        <i class="fa fa-times"></i>
-                                    </a>
-                                </div>
-                                <div class="no-move"></div>
-                            </div>
-                            <div class="box-content">
-                                <div class="row">
-                                  <div id="highchartcontainer" style="width:100%; height:400px;"></div>
 
-                                </div>
-                                
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
             </div>
         </div>
@@ -323,7 +291,7 @@
                                                 "interpolate":"basis"
                                             };
 
-                                            var altitudeChart = new xChart('line', altitudeData, '#altitudeChart', opts);
+//                                            var altitudeChart = new xChart('line', altitudeData, '#altitudeChart', opts);
                                             msecConv();
 
                                         }
@@ -392,6 +360,7 @@
     <script>
         $(document).ready(function () {
             // Load required scripts and callback to draw
+          
             LoadXChartScript(DrawAllxCharts);
             // Required for correctly resize charts, when boxes expand
             var graphxChartsResize;
@@ -401,23 +370,43 @@
                 graphxChartsResize = setTimeout(DrawAllxCharts, 500);
             });
             WinMove();
+//            kmhConv();            
         });
     </script>
     <script>
         $(function () { 
              var altitudeJSON = <jsp:getProperty name="routeBean" property = "routeAltitudeValues"/>;
+             var yData = altitudeJSON.y;
+             
     $('#highchartcontainer').highcharts({
        
         chart: {
-            type: 'line'
+            type: 'area',
+            
+        zoomType:"x"
         },
         title: {
-            text: 'HighCharts Altitude'
+            text: 'Altitude'
         },
+        xAxis:{
+        title:{
+        text: "Altitude"
+            }
+        },
+        animation: true,
         
-        series: altitudeJSON.getJSONArray("y");
+        series: [{
+                name: 'Altitude',
+            data: altitudeJSON,
+            color: '#3880aa',
+            fillOpacity: 0.1,
+            lineWidth: 3,
+            turboThreshold:0
+        }]
     });
 });
+ 
+
     </script>
 
 </body>
