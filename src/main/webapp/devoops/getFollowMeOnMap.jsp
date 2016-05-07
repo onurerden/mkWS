@@ -405,8 +405,9 @@
     </script>
     <script>
         $(function () { 
+             var altitudeJSON = <jsp:getProperty name="routeBean" property = "routeAltitudeValues"/>;
     $('#highchartcontainer').highcharts({
-        var altitudeJSON = <jsp:getProperty name="routeBean" property = "routeAltitudeValues"/>;
+       
         chart: {
             type: 'line'
         },
