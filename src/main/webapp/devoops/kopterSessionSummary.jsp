@@ -437,7 +437,12 @@
                     }]};
 
             var opts = {
-                "tickHintY": 5
+                "tickHintY": 5,
+                "yMin" : 0
+            };
+            var rcChartOpts = {
+                
+                "yMin" : 0
             };
 
             var voltageopts = {
@@ -451,7 +456,7 @@
             var capacityChart = new xChart('line', capacityData, '#capacityChart');
             var altitudeChart = new xChart('line', altitudeData, '#altitudeChart');
             var gsmSignalChart = new xChart('line', gsmSignalData, '#gsmSignalChart');
-            var rcSignalChart = new xChart('line', rcSignalData, '#rcSignalChart');
+            var rcSignalChart = new xChart('line', rcSignalData, '#rcSignalChart',rcChartOpts);
             var satChart = new xChart('line', satData, '#satChart', opts);
 
         }
