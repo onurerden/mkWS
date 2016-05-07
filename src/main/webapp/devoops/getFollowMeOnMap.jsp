@@ -194,26 +194,26 @@
                                                 //    zoom: 15,
                                                 bounds:<jsp:getProperty name="routeBean" property="mapBounds"/>
                                             }),
-                                            // A polyline
-                                            myPolyline = new ymaps.Polyline([
-                                                // The coordinates of polyline vertices.
+                                                    // A polyline
+                                                    myPolyline = new ymaps.Polyline([
+                                                        // The coordinates of polyline vertices.
 
 
         <jsp:getProperty name="routeBean" property="routePoints"/>
-                                            ], {
-                                                // The balloon content
-                                                balloonContent: "FollowMe Device Route for device: <jsp:getProperty name="routeBean" property="routeId"/>"
-                                            }, {
-                                                // Balloon options
-                                                // Disabling the "Close" button
-                                                balloonHasCloseButton: false,
-                                                // The line width
-                                                strokeWidth: 4,
-                                                // The line transparency
-                                                strokeOpacity: 0.8,
-                                                // Defines the color of the line - white
-                                                strokeColor: "#FF0000"
-                                            });
+                                                    ], {
+                                                        // The balloon content
+                                                        balloonContent: "FollowMe Device Route for device: <jsp:getProperty name="routeBean" property="routeId"/>"
+                                                    }, {
+                                                        // Balloon options
+                                                        // Disabling the "Close" button
+                                                        balloonHasCloseButton: false,
+                                                        // The line width
+                                                        strokeWidth: 4,
+                                                        // The line transparency
+                                                        strokeOpacity: 0.8,
+                                                        // Defines the color of the line - white
+                                                        strokeColor: "#FF0000"
+                                                    });
 
                                             myStartPoint = new ymaps.GeoObject({
                                                 geometry: {
@@ -285,7 +285,8 @@
                                             var opts = {
                                                 "axisPaddingRight": 50,
                                                 "yMin": 0.0,
-                                                "paddingRight": 50
+                                                "paddingRight": 50,
+                                                "interpolate":"linear"
                                             };
 
                                             var altitudeChart = new xChart('line', altitudeData, '#altitudeChart', opts);
@@ -310,7 +311,8 @@
                                             var opts = {
                                                 "axisPaddingRight": 50,
                                                 "yMin": 0.0,
-                                                "paddingRight": 50
+                                                "paddingRight": 50,
+                                                "interpolate":"linear"
                                             };
                                             var speedChart = new xChart('line', speedData, '#speedChart', opts);
                                             document.getElementById("kmhButton").className = 'btn btn-primary';
@@ -339,7 +341,8 @@
                                             var opts = {
                                                 "axisPaddingRight": 50,
                                                 "yMin": 0.0,
-                                                "paddingRight": 50
+                                                "paddingRight": 50,
+                                                "interpolate":"linear"
                                             };
                                             var speedChart = new xChart('line', speedData, '#speedChart', opts);
 
@@ -353,12 +356,12 @@
 
     </script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Load required scripts and callback to draw
             LoadXChartScript(DrawAllxCharts);
             // Required for correctly resize charts, when boxes expand
             var graphxChartsResize;
-            $(".box").resize(function(event) {
+            $(".box").resize(function (event) {
                 event.preventDefault();
                 clearTimeout(graphxChartsResize);
                 graphxChartsResize = setTimeout(DrawAllxCharts, 500);
