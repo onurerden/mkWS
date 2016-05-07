@@ -103,7 +103,7 @@
                     </div>
                 </div>
                 <div class="row">       
-                    <div id="altitude" class="col-xs-12 col-sm-12 col-md-12">
+                    <div id="speed" class="col-xs-12 col-sm-12 col-md-12">
                         <div class="box">
                             <div class="box-header">
                                 <div class="box-name">
@@ -173,46 +173,14 @@
                         </div>
                     </div>
                 </div>
-<!--Highchart -->
-<div class="row">       
-                    <div id="highchart" class="col-xs-12 col-sm-12 col-md-12">
-                        <div class="box">
-                            <div class="box-header">
-                                <div class="box-name">
-                                    <i class="fa fa-table"></i>
-                                    <span>Highchart</span>
-                                </div>
-                                <div class="box-icons">
-                                    <a class="collapse-link">
-                                        <i class="fa fa-chevron-up"></i>
-                                    </a>
-                                    <a class="expand-link">
-                                        <i class="fa fa-expand"></i>
-                                    </a>
-                                    <a class="close-link">
-                                        <i class="fa fa-times"></i>
-                                    </a>
-                                </div>
-                                <div class="no-move"></div>
-                            </div>
-                            <div class="box-content">
-                                <div class="row">
-                                  <div id="highchartcontainer" style="width:100%; height:400px;"></div>
 
-                                </div>
-                                
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
             </div>
         </div>
     </div>       
     <script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=en-US"
     type="text/javascript"></script>
-    <script src="http://code.highcharts.com/highcharts.js"></script>
     <%@include file="foot.jsp" %>
     <script type="text/javascript">
 
@@ -402,33 +370,7 @@
             WinMove();
         });
     </script>
-    <script>
-        $(function () { 
-    $('#highchartcontainer').highcharts({
-        chart: {
-            type: 'bar'
-        },
-        title: {
-            text: 'Fruit Consumption'
-        },
-        xAxis: {
-            categories: ['Apples', 'Bananas', 'Oranges']
-        },
-        yAxis: {
-            title: {
-                text: 'Fruit eaten'
-            }
-        },
-        series: [{
-            name: 'Jane',
-            data: [1, 0, 4]
-        }, {
-            name: 'John',
-            data: [5, 7, 3]
-        }]
-    });
-});
-    </script>
+
 
 </body>
 </html>
