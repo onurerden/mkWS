@@ -441,7 +441,9 @@
                 "yMin" : 0
             };
             var rcChartOpts = {
-                
+                "yMin" : 0
+            };
+            var altChartOpts = {                
                 "yMin" : 0
             };
 
@@ -454,7 +456,7 @@
             var voltageChart = new xChart('line-dotted', voltageData, '#voltageChart', voltageopts);
             var currentChart = new xChart('line', currentData, '#currentChart');
             var capacityChart = new xChart('line', capacityData, '#capacityChart');
-            var altitudeChart = new xChart('line', altitudeData, '#altitudeChart');
+            var altitudeChart = new xChart('line', altitudeData, '#altitudeChart',altChartOpts);
             var gsmSignalChart = new xChart('line', gsmSignalData, '#gsmSignalChart');
             var rcSignalChart = new xChart('line', rcSignalData, '#rcSignalChart',rcChartOpts);
             var satChart = new xChart('line', satData, '#satChart', opts);

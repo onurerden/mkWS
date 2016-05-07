@@ -347,6 +347,7 @@ public class GetRouteDetails {
             //  this.routeCreationDate = rs_1.getTimestamp("time");
         }
         this.setRouteAltitudeValues(new Gson().toJson(altitudeValues));
+            System.out.println(getRouteAltitudeValues());
         this.setRouteSpeedValues(new Gson().toJson(speedValues));
         this.setRouteSpeedKmhValues(new Gson().toJson(speedKmhValues));
 
