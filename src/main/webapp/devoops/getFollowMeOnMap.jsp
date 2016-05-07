@@ -212,8 +212,9 @@
     </div>       
     <script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=en-US"
     type="text/javascript"></script>
-    <script src="http://code.highcharts.com/highcharts.js"></script>
+    
     <%@include file="foot.jsp" %>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
     <script type="text/javascript">
 
 
