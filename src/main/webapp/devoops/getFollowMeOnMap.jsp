@@ -268,7 +268,7 @@
                                         }
 
                                         function DrawAllxCharts() {
-                                            var altitudeJSON = <jsp:getProperty name="routeBean" property = "routeAltitudeValues"/>
+                                            var altitudeJSON = <jsp:getProperty name="routeBean" property = "routeAltitudeValues"/>;
                                             
 
                                             var altitudeData = {
@@ -297,7 +297,7 @@
 
                                         function kmhConv() {
 
-                                            var speedJSON = <jsp:getProperty name="routeBean" property = "routeSpeedKmhValues"/>
+                                            var speedJSON = <jsp:getProperty name="routeBean" property = "routeSpeedKmhValues"/>;
                                             var speedData = {
                                                 "xScale": "linear",
                                                 "yScale": "linear",
@@ -326,7 +326,7 @@
                                         function msecConv() {
 //alert("denemedir");
 
-                                            var speedJSON = <jsp:getProperty name="routeBean" property = "routeSpeedValues"/>
+                                            var speedJSON = <jsp:getProperty name="routeBean" property = "routeSpeedValues"/>;
                                             var speedData = {
                                                 "xScale": "linear",
                                                 "yScale": "linear",
