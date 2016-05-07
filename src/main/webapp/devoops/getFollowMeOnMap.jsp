@@ -286,7 +286,7 @@
                                                 "axisPaddingRight": 50,
                                                 "yMin": 0.0,
                                                 "paddingRight": 50,
-                                                "interpolate":"linear"
+                                                "interpolate":"basis"
                                             };
 
                                             var altitudeChart = new xChart('line', altitudeData, '#altitudeChart', opts);
@@ -312,7 +312,7 @@
                                                 "axisPaddingRight": 50,
                                                 "yMin": 0.0,
                                                 "paddingRight": 50,
-                                                "interpolate":"linear"
+                                                "interpolate":"basis"
                                             };
                                             var speedChart = new xChart('line', speedData, '#speedChart', opts);
                                             document.getElementById("kmhButton").className = 'btn btn-primary';
@@ -342,7 +342,7 @@
                                                 "axisPaddingRight": 50,
                                                 "yMin": 0.0,
                                                 "paddingRight": 50,
-                                                "interpolate":"linear"
+                                                "interpolate":"basis"
                                             };
                                             var speedChart = new xChart('line', speedData, '#speedChart', opts);
 
