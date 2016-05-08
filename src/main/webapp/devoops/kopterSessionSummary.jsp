@@ -83,9 +83,7 @@
                                     <figure style="height: 200px;" id="voltageChart"></figure>
 
                                 </div>
-                                <div class="row" style="text-align:center" id="voltageValue">
-                                     Voltage:
-                                </div>
+                                
 
                             </div>
                         </div>
@@ -273,7 +271,7 @@
     </div>       
 
     <%@include file="foot.jsp" %>
-
+<script src="http://code.highcharts.com/highcharts.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
     <script>
         var map;
@@ -357,109 +355,232 @@
 
     <script>
         function DrawAllxCharts() {
-
-            var voltageData = {
-                "xScale": "linear",
-                "yScale": "linear",
-                "main": [
-                    {
-                        "className": ".pizza",
-                        "data":
-        <jsp:getProperty name="kopterSessionInfo" property = "voltageSerie"/>
-
-
-                    }
-                ]
-
-            };
-
-            var currentData = {
-                "xScale": "linear",
-                "yScale": "linear",
-                "main": [
-                    {
-                        "className": ".pizza",
-                        "type": "line",
-                        "data":
-        <jsp:getProperty name="kopterSessionInfo" property = "currentSerie"/>
-                    }]};
-
-            var capacityData = {
-                "xScale": "linear",
-                "yScale": "linear",
-                "main": [
-                    {
-                        "className": ".pizza",
-                        "type": "line",
-                        "data":
-        <jsp:getProperty name="kopterSessionInfo" property = "capacitySerie"/>
-                    }]};
-
-            var altitudeData = {
-                "xScale": "linear",
-                "yScale": "linear",
-                "main": [
-                    {
-                        "className": ".pizza",
-                        "type": "line",
-                        "data":
-        <jsp:getProperty name="kopterSessionInfo" property = "altitudeSerie"/>
-                    }]};
-            var gsmSignalData = {
-                "xScale": "linear",
-                "yScale": "linear",
-                "main": [
-                    {
-                        "className": ".pizza",
-                        "type": "line",
-                        "data":
-        <jsp:getProperty name="kopterSessionInfo" property = "gsmSignalSerie"/>
-                    }]};
-            var rcSignalData = {
-                "xScale": "linear",
-                "yScale": "linear",
-                "main": [
-                    {
-                        "className": ".pizza",
-                        "type": "line",
-                        "data":
-        <jsp:getProperty name="kopterSessionInfo" property = "rcSignalSerie"/>
-                    }]};
-            var satData = {
-                "xScale": "linear",
-                "yScale": "linear",
-                "main": [
-                    {
-                        "className": ".pizza",
-                        "type": "line",
-                        "data":
-        <jsp:getProperty name="kopterSessionInfo" property = "satSerie"/>
-                    }]};
-
-            var opts = {
-                "tickHintY": 5,
-                "yMin" : 0
-            };
-            var rcChartOpts = {
-                "yMin" : 0
-            };
-            var altChartOpts = {                
-                "yMin" : 0
-            };
-
-            var voltageopts = {
-                "mouseover": function(d, i) {
-                    $("#voltageValue").text("Voltage: " + d.y);
-                }
-            };
-
-            var voltageChart = new xChart('line-dotted', voltageData, '#voltageChart', voltageopts);
-            var currentChart = new xChart('line', currentData, '#currentChart');
-            var capacityChart = new xChart('line', capacityData, '#capacityChart');
-            var altitudeChart = new xChart('line', altitudeData, '#altitudeChart',altChartOpts);
-            var gsmSignalChart = new xChart('line', gsmSignalData, '#gsmSignalChart');
-            var rcSignalChart = new xChart('line', rcSignalData, '#rcSignalChart',rcChartOpts);
-            var satChart = new xChart('line', satData, '#satChart', opts);
+          
+           
+$('#capacityChart').highcharts({
+       
+        chart: {
+            type: 'area',
+            
+        zoomType:"x"
+        },
+        title: {
+            text: ''
+        },
+          credits: {
+      enabled: false
+  },
+        xAxis:{
+        title:{
+        text: "Capacity (mAh)"
+            }
+        },
+        animation: true,
+        legend:{
+                    enabled:false
+                },
+        series: [{
+                name: 'Capacity (mAh)',
+                
+            data:  <jsp:getProperty name="kopterSessionInfo" property = "capacitySerie"/>,
+            color: '#3880aa',
+            fillOpacity: 0.1,
+            lineWidth: 3,
+            turboThreshold:0
+        }]
+    }); 
+    $('#rcSignalChart').highcharts({
+       
+        chart: {
+            type: 'area',
+            
+        zoomType:"x"
+        },
+        title: {
+            text: ''
+        },
+          credits: {
+      enabled: false
+  },
+        xAxis:{
+        title:{
+        text: "RC Signal"
+            }
+        },
+        animation: true,
+        legend:{
+                    enabled:false
+                },
+        series: [{
+                name: 'RC Signal',
+                
+            data:  <jsp:getProperty name="kopterSessionInfo" property = "rcSignalSerie"/>,
+            color: '#3880aa',
+            fillOpacity: 0.1,
+            lineWidth: 3,
+            turboThreshold:0
+        }]
+    }); 
+            $('#voltageChart').highcharts({
+       
+        chart: {
+            type: 'area',
+            
+        zoomType:"x"
+        },
+        title: {
+            text: ''
+        },
+          credits: {
+      enabled: false
+  },
+        xAxis:{
+        title:{
+        text: "Voltage (V)"
+            }
+        },
+        animation: true,
+        legend:{
+                    enabled:false
+                },
+        series: [{
+                name: 'Voltage',
+                
+            data: <jsp:getProperty name="kopterSessionInfo" property = "voltageSerie"/>,
+            color: '#3880aa',
+            fillOpacity: 0.1,
+            lineWidth: 3,
+            turboThreshold:0
+        }]
+    }); 
+       $('#currentChart').highcharts({
+       
+        chart: {
+            type: 'area',
+            
+        zoomType:"x"
+        },
+        title: {
+            text: ''
+        },
+          credits: {
+      enabled: false
+  },
+        xAxis:{
+        title:{
+        text: "Current (mA)"
+            }
+        },
+        animation: true,
+        legend:{
+                    enabled:false
+                },
+        series: [{
+                name: 'Current',
+                
+            data: <jsp:getProperty name="kopterSessionInfo" property = "currentSerie"/>,
+            color: '#3880aa',
+            fillOpacity: 0.1,
+            lineWidth: 3,
+            turboThreshold:0
+        }]
+    }); 
+    $('#satChart').highcharts({
+       
+        chart: {
+            type: 'area',
+            
+        zoomType:"x"
+        },
+        title: {
+            text: ''
+        },
+          credits: {
+      enabled: false
+  },
+        xAxis:{
+        title:{
+        text: "Satellite Count"
+            }
+        },
+        animation: true,
+        legend:{
+                    enabled:false
+                },
+        series: [{
+                name: 'Satellite Count',
+                
+            data: <jsp:getProperty name="kopterSessionInfo" property = "satSerie"/>,
+            color: '#3880aa',
+            fillOpacity: 0.1,
+            lineWidth: 3,
+            turboThreshold:0
+        }]
+    }); 
+    $('#gsmSignalChart').highcharts({
+       
+        chart: {
+            type: 'area',
+            
+        zoomType:"x"
+        },
+        title: {
+            text: ''
+        },
+          credits: {
+      enabled: false
+  },
+        xAxis:{
+        title:{
+        text: "GSM Signal Strength"
+            }
+        },
+        animation: true,
+        legend:{
+                    enabled:false
+                },
+        series: [{
+                name: 'GSM Signal Strength',
+                
+            data: <jsp:getProperty name="kopterSessionInfo" property = "gsmSignalSerie"/>,
+            color: '#3880aa',
+            fillOpacity: 0.1,
+            lineWidth: 3,
+            turboThreshold:0
+        }]
+    });
+     $('#altitudeChart').highcharts({
+       
+        chart: {
+            type: 'area',
+            
+        zoomType:"x"
+        },
+        title: {
+            text: ''
+        },
+          credits: {
+      enabled: false
+  },
+        xAxis:{
+        title:{
+        text: ""
+            }
+        },
+        animation: true,
+        legend:{
+                    enabled:false
+                },
+        series: [{
+                name: 'Altitude (m)',
+                
+            data: <jsp:getProperty name="kopterSessionInfo" property = "altitudeSerie"/>,
+            color: '#3880aa',
+            fillOpacity: 0.1,
+            lineWidth: 3,
+            turboThreshold:0
+        }]
+    });
 
         }
 

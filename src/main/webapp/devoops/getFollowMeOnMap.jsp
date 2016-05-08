@@ -102,9 +102,9 @@
                         </div>
                     </div>
                 </div>
-                                <!--Highchart -->
-<div class="row">       
-                    <div id="highchart" class="col-xs-12 col-sm-12 col-md-12">
+                <!--Highchart -->
+                <div class="row">       
+                    <div id="highchart" class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                         <div class="box">
                             <div class="box-header">
                                 <div class="box-name">
@@ -126,19 +126,19 @@
                             </div>
                             <div class="box-content">
                                 <div class="row">
-                                  <div id="highchartcontainer" style="width:100%; height:400px;"></div>
+                                    <div id="altitudeChart" style="width:100%; height:400px;"></div>
 
                                 </div>
-                                
+
 
                             </div>
                         </div>
                     </div>
-                </div>
-                     
-                <!-- Other graph -->
-                <div class="row">       
-                    <div id="speed" class="col-xs-12 col-sm-12 col-md-12">
+
+
+                    <!-- Other graph -->
+
+                    <div id="speed" class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                         <div class="box">
                             <div class="box-header">
                                 <div class="box-name">
@@ -162,11 +162,8 @@
                             </div>
                             <div class="box-content">
                                 <div class="row">
-                                    <figure style="height: 200px;" id="speedChart"></figure>
+                                    <figure style="height: 400px;" id="speedChart"></figure>
 
-                                </div>
-                                <div class="row" style="text-align:center" id="speedValue">
-                                    Speed (m/sec)
                                 </div>
 
                             </div>
@@ -180,12 +177,16 @@
     </div>       
     <script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=en-US"
     type="text/javascript"></script>
-    
+
     <%@include file="foot.jsp" %>
     <script src="http://code.highcharts.com/highcharts.js"></script>
     <script type="text/javascript">
 
-
+                                        var speedChart;
+                                        var altitudeChart;
+                                        var myTooltip;
+                                        var altitudeTooltip;
+                                        
                                         // Initializes the map as soon as the API is loaded and DOM is ready
                                         ymaps.ready(init);
 
@@ -269,29 +270,8 @@
                                         }
 
                                         function DrawAllxCharts() {
-                                           var altitudeJSON = <jsp:getProperty name="routeBean" property = "routeAltitudeValues"/>;
-                                            
+                                            var altitudeJSON = <jsp:getProperty name="routeBean" property = "routeAltitudeValues"/>;
 
-                                            var altitudeData = {
-                                                "xScale": "linear",
-                                                "yScale": "linear",
-                                                "main": [
-                                                    {
-                                                        "className": ".pizza",
-                                                        "data": altitudeJSON
-                                                    }
-                                                ]
-
-                                            };
-
-                                            var opts = {
-                                                "axisPaddingRight": 50,
-                                                "yMin": 0.0,
-                                                "paddingRight": 50,
-                                                "interpolate":"basis"
-                                            };
-
-//                                            var altitudeChart = new xChart('line', altitudeData, '#altitudeChart', opts);
                                             msecConv();
 
                                         }
@@ -299,60 +279,115 @@
                                         function kmhConv() {
 
                                             var speedJSON = <jsp:getProperty name="routeBean" property = "routeSpeedKmhValues"/>
-                                            var speedData = {
-                                                "xScale": "linear",
-                                                "yScale": "linear",
-                                                "main": [
-                                                    {
-                                                        "className": ".pizza",
-                                                        "data": speedJSON
-                                                    }
-                                                ]
 
-                                            };
-                                            var opts = {
-                                                "axisPaddingRight": 50,
-                                                "yMin": 0.0,
-                                                "paddingRight": 50,
-                                                "interpolate":"basis"
-                                            };
-                                            var speedChart = new xChart('line', speedData, '#speedChart', opts);
+                                            speedChart = new Highcharts.Chart({
+                                                chart: {
+                                                    renderTo: 'speedChart',
+                                                    type: 'area',
+                                                    zoomType: "x",
+                                                    events: {
+                                                        load: function () {
+                                                            myTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
+                                                        }
+                                                    }
+                                                },
+                                                title: {
+                                                    text: 'Speed (km/h)'
+                                                },
+                                                xAxis: {
+                                                    title: {
+                                                        text: "Speed (km/h)"
+                                                    }
+                                                },
+                                                credits: {
+                                                    enabled: false
+                                                },
+                                                animation: true,
+                                                tooltip: {
+                                                    enabled: false
+                                                },
+                                                series: [{
+                                                        name: 'Speed (km/h)',
+                                                        data: speedJSON,
+                                                        color: '#3880aa',
+                                                        fillOpacity: 0.1,
+                                                        lineWidth: 3,
+                                                        turboThreshold: 0,
+                                                        point: {
+                                                            events: {
+                                                                mouseOver: function (evt) {
+//                                    console.log('mouseOver');
+                                                                    myTooltip.enabled = false;
+                                                                    myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
+                                                                    altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
+
+
+                                                                }}}
+                                                    }]
+                                            });
+
                                             document.getElementById("kmhButton").className = 'btn btn-primary';
                                             document.getElementById("kmhButton").disabled = true;
                                             document.getElementById("msecButton").className = 'btn btn-default';
                                             document.getElementById("msecButton").disabled = false;
-                                            document.getElementById("speedLabel").innerHTML = "Speed (km/h) ";
+
                                         }
 
                                         function msecConv() {
 //alert("denemedir");
 
                                             var speedJSON = <jsp:getProperty name="routeBean" property = "routeSpeedValues"/>
-                                            var speedData = {
-                                                "xScale": "linear",
-                                                "yScale": "linear",
-                                                "main": [
-                                                    {
-                                                        "className": ".pizza",
-                                                        "data": speedJSON
 
+                                            speedChart = new Highcharts.Chart({
+                                                chart: {
+                                                    renderTo: 'speedChart',
+                                                    type: 'area',
+                                                    zoomType: "x",
+                                                    events: {
+                                                        load: function () {
+                                                            myTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
+                                                        }
                                                     }
-                                                ]
+                                                },
+                                                title: {
+                                                    text: 'Speed (m/sec)'
+                                                },
+                                                credits: {
+                                                    enabled: false
+                                                },
+                                                xAxis: {
+                                                    title: {
+                                                        text: "Speed (m/sec)"
+                                                    }
+                                                },
+                                                tooltip: {
+                                                    enabled: false
+                                                },
+                                                animation: true,
+                                                series: [{
+                                                        name: 'Speed (m/sec)',
+                                                        data: speedJSON,
+                                                        color: '#3880aa',
+                                                        fillOpacity: 0.1,
+                                                        lineWidth: 3,
+                                                        turboThreshold: 0,
+                                                        point: {
+                                                            events: {
+                                                                mouseOver: function (evt) {
+//                                    console.log('mouseOver');
+                                                                    myTooltip.enabled = false;
+                                                                    myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
+                                                                    altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
 
-                                            };
-                                            var opts = {
-                                                "axisPaddingRight": 50,
-                                                "yMin": 0.0,
-                                                "paddingRight": 50,
-                                                "interpolate":"basis"
-                                            };
-                                            var speedChart = new xChart('line', speedData, '#speedChart', opts);
 
+                                                                }}}
+                                                    }]
+                                            });
                                             document.getElementById("kmhButton").className = 'btn btn-default';
                                             document.getElementById("kmhButton").disabled = false;
                                             document.getElementById("msecButton").className = 'btn btn-primary';
                                             document.getElementById("msecButton").disabled = true;
-                                            document.getElementById("speedLabel").innerHTML = "Speed (m/sec) ";
+
                                         }
 
 
@@ -360,7 +395,8 @@
     <script>
         $(document).ready(function () {
             // Load required scripts and callback to draw
-          
+
+
             LoadXChartScript(DrawAllxCharts);
             // Required for correctly resize charts, when boxes expand
             var graphxChartsResize;
@@ -374,38 +410,70 @@
         });
     </script>
     <script>
-        $(function () { 
-             var altitudeJSON = <jsp:getProperty name="routeBean" property = "routeAltitudeValues"/>;
-             var yData = altitudeJSON.y;
-             
-    $('#highchartcontainer').highcharts({
-       
-        chart: {
-            type: 'area',
-            
-        zoomType:"x"
-        },
-        title: {
-            text: 'Altitude'
-        },
-        xAxis:{
-        title:{
-        text: "Altitude"
-            }
-        },
-        animation: true,
-        
-        series: [{
-                name: 'Altitude',
-            data: altitudeJSON,
-            color: '#3880aa',
-            fillOpacity: 0.1,
-            lineWidth: 3,
-            turboThreshold:0
-        }]
-    });
-});
- 
+        $(function () {
+            var altitudeJSON = <jsp:getProperty name="routeBean" property = "routeAltitudeValues"/>;
+            var yData = altitudeJSON.y;
+            (function (H) {
+                H.wrap(H.Tooltip.prototype, 'hide', function () {
+                });
+            }(Highcharts));
+            altitudeChart = new Highcharts.Chart({
+                chart: {
+                    renderTo: 'altitudeChart',
+                    type: 'area',
+                    zoomType: "x",
+                    events: {
+                        load: function () {
+                            altitudeTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
+                        }
+                    }
+                },
+                title: {
+                    text: 'Altitude'
+                },
+                credits: {
+                    enabled: false
+                },
+                xAxis: {
+                    title: {
+                        text: "Altitude"
+                    }
+                },
+                animation: true,
+                tooltip: {
+                    enabled: false
+                },
+                series: [{
+                        name: 'Altitude',
+                        data: altitudeJSON,
+                        color: '#3880aa',
+                        fillOpacity: 0.1,
+                        lineWidth: 3,
+                        turboThreshold: 0,
+                        point: {
+                            events: {
+                                mouseOver: function (evt) {
+//                                    console.log('mouseOver');
+                                    myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
+                                    altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
+
+                                },
+                                mouseOut: function () {
+                                    HideAllToolTips();
+                                }
+                            }
+                        }
+                    }]
+            });
+
+        });
+        function DrawAllToolTips(event) {
+
+        }
+        function HideAllToolTips() {
+//            myTooltip.hide();
+//            altitudeTooltip.hide();
+        }
 
     </script>
 
