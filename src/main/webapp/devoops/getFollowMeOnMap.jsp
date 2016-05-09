@@ -186,7 +186,9 @@
                                         var altitudeChart;
                                         var myTooltip;
                                         var altitudeTooltip;
-                                        
+                                        var speedButton;
+                                        var altitudeButton;
+
                                         // Initializes the map as soon as the API is loaded and DOM is ready
                                         ymaps.ready(init);
 
@@ -273,6 +275,7 @@
                                             var altitudeJSON = <jsp:getProperty name="routeBean" property = "routeAltitudeValues"/>;
 
                                             msecConv();
+                                            drawAltitudeChart();
 
                                         }
 
@@ -297,6 +300,13 @@
                                                 xAxis: {
                                                     title: {
                                                         text: "Speed (km/h)"
+                                                    },
+                                                    events: {
+                                                        afterSetExtremes: function () {
+//                            console.log(altitudeChart.xAxis[0].getExtremes());
+
+                                                            altitudeChart.xAxis[0].setExtremes(speedChart.xAxis[0].getExtremes().min, speedChart.xAxis[0].getExtremes().max);
+                                                        }
                                                     }
                                                 },
                                                 credits: {
@@ -358,6 +368,23 @@
                                                 xAxis: {
                                                     title: {
                                                         text: "Speed (m/sec)"
+                                                    },
+                                                    events: {
+                                                        afterSetExtremes: function (evt) {
+//                            console.log(altitudeChart.xAxis[0].getExtremes());
+
+                                                            altitudeChart.xAxis[0].setExtremes(speedChart.xAxis[0].getExtremes().min, speedChart.xAxis[0].getExtremes().max);
+                                          if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
+                                console.log('speedChart reset zoom');
+                                $('.highcharts-button').hide();
+
+                            } else {
+                    altitudeButton = altitudeChart.showResetZoom();
+                                console.log('speedChart zoom-in');
+
+                            }
+
+                                                        }
                                                     }
                                                 },
                                                 tooltip: {
@@ -410,13 +437,13 @@
         });
     </script>
     <script>
-        $(function () {
+        function drawAltitudeChart() {
             var altitudeJSON = <jsp:getProperty name="routeBean" property = "routeAltitudeValues"/>;
-            var yData = altitudeJSON.y;
-            (function (H) {
-                H.wrap(H.Tooltip.prototype, 'hide', function () {
-                });
-            }(Highcharts));
+//            var yData = altitudeJSON.y;
+//            (function (H) {
+//                H.wrap(H.Tooltip.prototype, 'hide', function () {
+//                });
+//            }(Highcharts));
             altitudeChart = new Highcharts.Chart({
                 chart: {
                     renderTo: 'altitudeChart',
@@ -425,6 +452,7 @@
                     events: {
                         load: function () {
                             altitudeTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
+//                            console.log("chart loaded");
                         }
                     }
                 },
@@ -437,6 +465,25 @@
                 xAxis: {
                     title: {
                         text: "Altitude"
+
+                    },
+                    events: {
+                        afterSetExtremes: function (evt) {
+//                            console.log(altitudeChart.xAxis[0].getExtremes());
+
+                            speedChart.xAxis[0].setExtremes(altitudeChart.xAxis[0].getExtremes().min, altitudeChart.xAxis[0].getExtremes().max);
+
+                            if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
+                                console.log('altitudechart reset zoom');
+                                $('.highcharts-button').hide();
+
+                            } else {
+                   speedButton =  speedChart.showResetZoom();
+                                console.log('altitude chart zoom-in');
+
+                            }
+
+                        }
                     }
                 },
                 animation: true,
@@ -454,19 +501,20 @@
                             events: {
                                 mouseOver: function (evt) {
 //                                    console.log('mouseOver');
-                                    myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
                                     altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
+                                    myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
+
 
                                 },
                                 mouseOut: function () {
-                                    HideAllToolTips();
+//                                    HideAllToolTips();
                                 }
                             }
                         }
                     }]
             });
 
-        });
+        }
         function DrawAllToolTips(event) {
 
         }
