@@ -302,10 +302,19 @@
                                                         text: "Speed (km/h)"
                                                     },
                                                     events: {
-                                                        afterSetExtremes: function () {
+                                                        afterSetExtremes: function (evt) {
 //                            console.log(altitudeChart.xAxis[0].getExtremes());
 
                                                             altitudeChart.xAxis[0].setExtremes(speedChart.xAxis[0].getExtremes().min, speedChart.xAxis[0].getExtremes().max);
+                                                             if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
+                                console.log('speedChart reset zoom');
+                                $('.highcharts-button').hide();
+
+                            } else {
+                    altitudeButton = altitudeChart.showResetZoom();
+                                console.log('speedChart zoom-in');
+
+                            }
                                                         }
                                                     }
                                                 },
