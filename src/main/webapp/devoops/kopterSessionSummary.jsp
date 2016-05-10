@@ -83,7 +83,7 @@
                                     <figure style="height: 200px;" id="voltageChart"></figure>
 
                                 </div>
-                                
+
 
                             </div>
                         </div>
@@ -271,10 +271,25 @@
     </div>       
 
     <%@include file="foot.jsp" %>
-<script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
     <script>
         var map;
+        var voltageChart;
+        var capacityChart;
+        var currentChart;
+        var altitudeChart;
+        var gpsCountChart;
+        var gsmChart;
+        var rcChart;
+        var voltageTooltip;
+        var capacityTooltip;
+        var currentTooltip;
+        var altitudeTooltip;
+        var gpsCountTooltip;
+        var gsmTooltip;
+        var rcTooltip;
+
         function BoundsControl(controlDiv, map) {
 
             // Set CSS for the control border
@@ -304,7 +319,7 @@
 
             // Setup the click event listeners: simply set the map to
             // Chicago
-            google.maps.event.addDomListener(controlUI, 'click', function() {
+            google.maps.event.addDomListener(controlUI, 'click', function () {
         <jsp:getProperty name="kopterSessionInfo" property = "mapBounds"/>;
                 var bounds = new google.maps.LatLngBounds(southWest, northEast);
                 map.fitBounds(bounds);
@@ -315,17 +330,16 @@
 
         function initialize() {
             var mapOptions = {
-
-            disableDefaultUI: true,
-                    mapTypeControl: true,
-                    zoomControl: true,
-                    zoomControlOptions:{
-                            style: google.maps.ZoomControlStyle.LARGE,
-                            position: google.maps.ControlPosition.LEFT_CENTER
-                    }
+                disableDefaultUI: true,
+                mapTypeControl: true,
+                zoomControl: true,
+                zoomControlOptions: {
+                    style: google.maps.ZoomControlStyle.LARGE,
+                    position: google.maps.ControlPosition.LEFT_CENTER
+                }
             };
-                    map = new google.maps.Map(document.getElementById('map-canvas'),
-                            mapOptions);
+            map = new google.maps.Map(document.getElementById('map-canvas'),
+                    mapOptions);
             var flightPlanCoordinates = <jsp:getProperty name="kopterSessionInfo" property = "latLonSerie"/>;
 
             var flightPath = new google.maps.Polyline({
@@ -355,242 +369,570 @@
 
     <script>
         function DrawAllxCharts() {
-          
-           
-$('#capacityChart').highcharts({
-       
-        chart: {
-            type: 'area',
-            
-        zoomType:"x"
-        },
-        title: {
-            text: ''
-        },
-          credits: {
-      enabled: false
-  },
-        xAxis:{
-        title:{
-        text: "Capacity (mAh)"
-            }
-        },
-        animation: true,
-        legend:{
-                    enabled:false
+            capacityChart = new Highcharts.Chart({
+                chart: {
+                    type: 'area',
+                    renderTo: "capacityChart",
+                    zoomType: "x",
+                    events: {
+                        load: function () {
+                            capacityTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
+                        }
+                    }
                 },
-        series: [{
-                name: 'Capacity (mAh)',
-                
-            data:  <jsp:getProperty name="kopterSessionInfo" property = "capacitySerie"/>,
-            color: '#3880aa',
-            fillOpacity: 0.1,
-            lineWidth: 3,
-            turboThreshold:0
-        }]
-    }); 
-    $('#rcSignalChart').highcharts({
-       
-        chart: {
-            type: 'area',
-            
-        zoomType:"x"
-        },
-        title: {
-            text: ''
-        },
-          credits: {
-      enabled: false
-  },
-        xAxis:{
-        title:{
-        text: "RC Signal"
-            }
-        },
-        animation: true,
-        legend:{
-                    enabled:false
+                title: {
+                    text: ''
                 },
-        series: [{
-                name: 'RC Signal',
-                
-            data:  <jsp:getProperty name="kopterSessionInfo" property = "rcSignalSerie"/>,
-            color: '#3880aa',
-            fillOpacity: 0.1,
-            lineWidth: 3,
-            turboThreshold:0
-        }]
-    }); 
-            $('#voltageChart').highcharts({
-       
-        chart: {
-            type: 'area',
-            
-        zoomType:"x"
-        },
-        title: {
-            text: ''
-        },
-          credits: {
-      enabled: false
-  },
-        xAxis:{
-        title:{
-        text: "Voltage (V)"
-            }
-        },
-        animation: true,
-        legend:{
-                    enabled:false
+                credits: {
+                    enabled: false
                 },
-        series: [{
-                name: 'Voltage',
-                
-            data: <jsp:getProperty name="kopterSessionInfo" property = "voltageSerie"/>,
-            color: '#3880aa',
-            fillOpacity: 0.1,
-            lineWidth: 3,
-            turboThreshold:0
-        }]
-    }); 
-       $('#currentChart').highcharts({
-       
-        chart: {
-            type: 'area',
-            
-        zoomType:"x"
-        },
-        title: {
-            text: ''
-        },
-          credits: {
-      enabled: false
-  },
-        xAxis:{
-        title:{
-        text: "Current (mA)"
-            }
-        },
-        animation: true,
-        legend:{
-                    enabled:false
+                tooltip: {
+                    enabled: false
                 },
-        series: [{
-                name: 'Current',
-                
-            data: <jsp:getProperty name="kopterSessionInfo" property = "currentSerie"/>,
-            color: '#3880aa',
-            fillOpacity: 0.1,
-            lineWidth: 3,
-            turboThreshold:0
-        }]
-    }); 
-    $('#satChart').highcharts({
-       
-        chart: {
-            type: 'area',
-            
-        zoomType:"x"
-        },
-        title: {
-            text: ''
-        },
-          credits: {
-      enabled: false
-  },
-        xAxis:{
-        title:{
-        text: "Satellite Count"
-            }
-        },
-        animation: true,
-        legend:{
-                    enabled:false
+                xAxis: {
+                    title: {
+                        text: "Capacity (mAh)"
+                    },
+                    events: {
+                        afterSetExtremes: function (evt) {
+//                            console.log(altitudeChart.xAxis[0].getExtremes());
+
+                            currentChart.xAxis[0].setExtremes(capacityChart.xAxis[0].getExtremes().min, capacityChart.xAxis[0].getExtremes().max);
+                            rcChart.xAxis[0].setExtremes(capacityChart.xAxis[0].getExtremes().min, capacityChart.xAxis[0].getExtremes().max);
+                            satChart.xAxis[0].setExtremes(capacityChart.xAxis[0].getExtremes().min, capacityChart.xAxis[0].getExtremes().max);
+                            gsmChart.xAxis[0].setExtremes(capacityChart.xAxis[0].getExtremes().min, capacityChart.xAxis[0].getExtremes().max);
+                            voltageChart.xAxis[0].setExtremes(capacityChart.xAxis[0].getExtremes().min, capacityChart.xAxis[0].getExtremes().max);
+                            altitudeChart.xAxis[0].setExtremes(capacityChart.xAxis[0].getExtremes().min, capacityChart.xAxis[0].getExtremes().max);
+                            if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
+                                console.log('gsmChart reset zoom');
+                                $('.highcharts-button').hide();
+
+                            } else {
+                                altitudeChart.showResetZoom();
+                                voltageChart.showResetZoom();
+                                currentChart.showResetZoom();
+                                capacityChart.showResetZoom();
+                                satChart.showResetZoom();
+                                gsmChart.showResetZoom();
+                                rcChart.showResetZoom();
+                                console.log('speedChart zoom-in');
+
+                            }
+                        }
+                    }
                 },
-        series: [{
-                name: 'Satellite Count',
-                
-            data: <jsp:getProperty name="kopterSessionInfo" property = "satSerie"/>,
-            color: '#3880aa',
-            fillOpacity: 0.1,
-            lineWidth: 3,
-            turboThreshold:0
-        }]
-    }); 
-    $('#gsmSignalChart').highcharts({
-       
-        chart: {
-            type: 'area',
-            
-        zoomType:"x"
-        },
-        title: {
-            text: ''
-        },
-          credits: {
-      enabled: false
-  },
-        xAxis:{
-        title:{
-        text: "GSM Signal Strength"
-            }
-        },
-        animation: true,
-        legend:{
-                    enabled:false
+                animation: true,
+                legend: {
+                    enabled: false
                 },
-        series: [{
-                name: 'GSM Signal Strength',
-                
-            data: <jsp:getProperty name="kopterSessionInfo" property = "gsmSignalSerie"/>,
-            color: '#3880aa',
-            fillOpacity: 0.1,
-            lineWidth: 3,
-            turboThreshold:0
-        }]
-    });
-     $('#altitudeChart').highcharts({
-       
-        chart: {
-            type: 'area',
-            
-        zoomType:"x"
-        },
-        title: {
-            text: ''
-        },
-          credits: {
-      enabled: false
-  },
-        xAxis:{
-        title:{
-        text: ""
-            }
-        },
-        animation: true,
-        legend:{
-                    enabled:false
+                series: [{
+                        name: 'Capacity (mAh)',
+                        data: <jsp:getProperty name="kopterSessionInfo" property = "capacitySerie"/>,
+                        color: '#3880aa',
+                        fillOpacity: 0.1,
+                        lineWidth: 3,
+                        turboThreshold: 0,
+                        point: {
+                            events: {
+                                mouseOver: function (evt) {
+
+
+                                    altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
+                                    gsmTooltip.refresh(gsmChart.series[0].points[evt.target.index]);
+                                    rcTooltip.refresh(rcChart.series[0].points[evt.target.index]);
+                                    satTooltip.refresh(satChart.series[0].points[evt.target.index]);
+                                    voltageTooltip.refresh(voltageChart.series[0].points[evt.target.index]);
+                                    capacityTooltip.refresh(capacityChart.series[0].points[evt.target.index]);
+                                    currentTooltip.refresh(currentChart.series[0].points[evt.target.index]);
+
+                                }}}
+                    }]
+            });
+            rcChart = new Highcharts.Chart({
+                chart: {
+                    type: 'area',
+                    renderTo: "rcSignalChart",
+                    zoomType: "x",
+                    events: {
+                        load: function () {
+                            rcTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
+                        }
+                    }
                 },
-        series: [{
-                name: 'Altitude (m)',
-                
-            data: <jsp:getProperty name="kopterSessionInfo" property = "altitudeSerie"/>,
-            color: '#3880aa',
-            fillOpacity: 0.1,
-            lineWidth: 3,
-            turboThreshold:0
-        }]
-    });
+                title: {
+                    text: ''
+                },
+                credits: {
+                    enabled: false
+                },
+                tooltip: {
+                    enabled: false
+                },
+                xAxis: {
+                    title: {
+                        text: "RC Signal"
+                    },
+                    events: {
+                        afterSetExtremes: function (evt) {
+//                            console.log(altitudeChart.xAxis[0].getExtremes());
+
+                            currentChart.xAxis[0].setExtremes(rcChart.xAxis[0].getExtremes().min, rcChart.xAxis[0].getExtremes().max);
+                            capacityChart.xAxis[0].setExtremes(rcChart.xAxis[0].getExtremes().min, rcChart.xAxis[0].getExtremes().max);
+                            satChart.xAxis[0].setExtremes(rcChart.xAxis[0].getExtremes().min, rcChart.xAxis[0].getExtremes().max);
+                            gsmChart.xAxis[0].setExtremes(rcChart.xAxis[0].getExtremes().min, rcChart.xAxis[0].getExtremes().max);
+                            voltageChart.xAxis[0].setExtremes(rcChart.xAxis[0].getExtremes().min, rcChart.xAxis[0].getExtremes().max);
+                            altitudeChart.xAxis[0].setExtremes(rcChart.xAxis[0].getExtremes().min, rcChart.xAxis[0].getExtremes().max);
+                            if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
+                                console.log('gsmChart reset zoom');
+                                $('.highcharts-button').hide();
+
+                            } else {
+                                altitudeChart.showResetZoom();
+                                voltageChart.showResetZoom();
+                                currentChart.showResetZoom();
+                                capacityChart.showResetZoom();
+                                satChart.showResetZoom();
+                                gsmChart.showResetZoom();
+                                rcChart.showResetZoom();
+                                console.log('speedChart zoom-in');
+
+                            }
+                        }
+                    }
+                },
+                animation: true,
+                legend: {
+                    enabled: false
+                },
+                series: [{
+                        name: 'RC Signal',
+                        data: <jsp:getProperty name="kopterSessionInfo" property = "rcSignalSerie"/>,
+                        color: '#3880aa',
+                        fillOpacity: 0.1,
+                        lineWidth: 3,
+                        turboThreshold: 0,
+                        point: {
+                            events: {
+                                mouseOver: function (evt) {
+
+
+                                    altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
+                                    gsmTooltip.refresh(gsmChart.series[0].points[evt.target.index]);
+                                    rcTooltip.refresh(rcChart.series[0].points[evt.target.index]);
+                                    satTooltip.refresh(satChart.series[0].points[evt.target.index]);
+                                    voltageTooltip.refresh(voltageChart.series[0].points[evt.target.index]);
+                                    capacityTooltip.refresh(capacityChart.series[0].points[evt.target.index]);
+                                    currentTooltip.refresh(currentChart.series[0].points[evt.target.index]);
+
+                                }}}
+                    }]
+            });
+            voltageChart = new Highcharts.Chart({
+                chart: {
+                    type: 'area',
+                    renderTo: "voltageChart",
+                    zoomType: "x",
+                    events: {
+                        load: function () {
+                            voltageTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
+                        }
+                    }
+                },
+                title: {
+                    text: ''
+                },
+                credits: {
+                    enabled: false
+                },
+                tooltip: {
+                    enabled: false
+                },
+                xAxis: {
+                    title: {
+                        text: "Voltage (V)"
+                    },
+                    events: {
+                        afterSetExtremes: function (evt) {
+//                            console.log(altitudeChart.xAxis[0].getExtremes());
+
+                            currentChart.xAxis[0].setExtremes(voltageChart.xAxis[0].getExtremes().min, voltageChart.xAxis[0].getExtremes().max);
+                            capacityChart.xAxis[0].setExtremes(voltageChart.xAxis[0].getExtremes().min, voltageChart.xAxis[0].getExtremes().max);
+                            satChart.xAxis[0].setExtremes(voltageChart.xAxis[0].getExtremes().min, voltageChart.xAxis[0].getExtremes().max);
+                            gsmChart.xAxis[0].setExtremes(voltageChart.xAxis[0].getExtremes().min, voltageChart.xAxis[0].getExtremes().max);
+                            rcChart.xAxis[0].setExtremes(voltageChart.xAxis[0].getExtremes().min, voltageChart.xAxis[0].getExtremes().max);
+                            altitudeChart.xAxis[0].setExtremes(voltageChart.xAxis[0].getExtremes().min, voltageChart.xAxis[0].getExtremes().max);
+                            if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
+                                console.log('gsmChart reset zoom');
+                                $('.highcharts-button').hide();
+
+                            } else {
+                                altitudeChart.showResetZoom();
+                                voltageChart.showResetZoom();
+                                currentChart.showResetZoom();
+                                capacityChart.showResetZoom();
+                                satChart.showResetZoom();
+                                gsmChart.showResetZoom();
+                                rcChart.showResetZoom();
+                                console.log('speedChart zoom-in');
+
+                            }
+                        }
+                    }
+                },
+                animation: true,
+                legend: {
+                    enabled: false
+                },
+                series: [{
+                        name: 'Voltage',
+                        data: <jsp:getProperty name="kopterSessionInfo" property = "voltageSerie"/>,
+                        color: '#3880aa',
+                        fillOpacity: 0.1,
+                        lineWidth: 3,
+                        turboThreshold: 0,
+                        point: {
+                            events: {
+                                mouseOver: function (evt) {
+
+
+                                    altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
+                                    gsmTooltip.refresh(gsmChart.series[0].points[evt.target.index]);
+                                    rcTooltip.refresh(rcChart.series[0].points[evt.target.index]);
+                                    satTooltip.refresh(satChart.series[0].points[evt.target.index]);
+                                    voltageTooltip.refresh(voltageChart.series[0].points[evt.target.index]);
+                                    capacityTooltip.refresh(capacityChart.series[0].points[evt.target.index]);
+                                    currentTooltip.refresh(currentChart.series[0].points[evt.target.index]);
+
+                                }}}
+                    }]
+            });
+            currentChart = new Highcharts.Chart({
+                chart: {
+                    type: 'area',
+                    renderTo: "currentChart",
+                    zoomType: "x",
+                    events: {
+                        load: function () {
+                            currentTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
+                        }
+                    }
+                },
+                title: {
+                    text: ''
+                },
+                credits: {
+                    enabled: false
+                },
+                tooltip: {
+                    enabled: false
+                },
+                xAxis: {
+                    title: {
+                        text: "Current (mA)"
+                    },
+                    events: {
+                        afterSetExtremes: function (evt) {
+//                            console.log(altitudeChart.xAxis[0].getExtremes());
+
+                            voltageChart.xAxis[0].setExtremes(currentChart.xAxis[0].getExtremes().min, currentChart.xAxis[0].getExtremes().max);
+                            capacityChart.xAxis[0].setExtremes(currentChart.xAxis[0].getExtremes().min, currentChart.xAxis[0].getExtremes().max);
+                            satChart.xAxis[0].setExtremes(currentChart.xAxis[0].getExtremes().min, currentChart.xAxis[0].getExtremes().max);
+                            gsmChart.xAxis[0].setExtremes(currentChart.xAxis[0].getExtremes().min, currentChart.xAxis[0].getExtremes().max);
+                            rcChart.xAxis[0].setExtremes(currentChart.xAxis[0].getExtremes().min, currentChart.xAxis[0].getExtremes().max);
+                            altitudeChart.xAxis[0].setExtremes(currentChart.xAxis[0].getExtremes().min, currentChart.xAxis[0].getExtremes().max);
+                            if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
+                                console.log('gsmChart reset zoom');
+                                $('.highcharts-button').hide();
+
+                            } else {
+                                altitudeChart.showResetZoom();
+                                voltageChart.showResetZoom();
+                                currentChart.showResetZoom();
+                                capacityChart.showResetZoom();
+                                satChart.showResetZoom();
+                                gsmChart.showResetZoom();
+                                rcChart.showResetZoom();
+                                console.log('speedChart zoom-in');
+
+                            }
+                        }
+                    }
+                },
+                animation: true,
+                legend: {
+                    enabled: false
+                },
+                series: [{
+                        name: 'Current',
+                        data: <jsp:getProperty name="kopterSessionInfo" property = "currentSerie"/>,
+                        color: '#3880aa',
+                        fillOpacity: 0.1,
+                        lineWidth: 3,
+                        turboThreshold: 0,
+                        point: {
+                            events: {
+                                mouseOver: function (evt) {
+
+
+                                    altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
+                                    gsmTooltip.refresh(gsmChart.series[0].points[evt.target.index]);
+                                    rcTooltip.refresh(rcChart.series[0].points[evt.target.index]);
+                                    satTooltip.refresh(satChart.series[0].points[evt.target.index]);
+                                    voltageTooltip.refresh(voltageChart.series[0].points[evt.target.index]);
+                                    capacityTooltip.refresh(capacityChart.series[0].points[evt.target.index]);
+                                    currentTooltip.refresh(currentChart.series[0].points[evt.target.index]);
+
+                                }}}
+                    }]
+            });
+            satChart = new Highcharts.Chart({
+                chart: {
+                    type: 'area',
+                    renderTo: "satChart",
+                    zoomType: "x",
+                    events: {
+                        load: function () {
+                            satTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
+                        }
+                    }
+                },
+                title: {
+                    text: ''
+                },
+                credits: {
+                    enabled: false
+                },
+                tooltip: {
+                    enabled: false
+                },
+                xAxis: {
+                    title: {
+                        text: "Satellite Count"
+                    },
+                    events: {
+                        afterSetExtremes: function (evt) {
+//                            console.log(altitudeChart.xAxis[0].getExtremes());
+
+                            voltageChart.xAxis[0].setExtremes(satChart.xAxis[0].getExtremes().min, satChart.xAxis[0].getExtremes().max);
+                            capacityChart.xAxis[0].setExtremes(satChart.xAxis[0].getExtremes().min, satChart.xAxis[0].getExtremes().max);
+                            currentChart.xAxis[0].setExtremes(satChart.xAxis[0].getExtremes().min, satChart.xAxis[0].getExtremes().max);
+                            gsmChart.xAxis[0].setExtremes(satChart.xAxis[0].getExtremes().min, satChart.xAxis[0].getExtremes().max);
+                            rcChart.xAxis[0].setExtremes(satChart.xAxis[0].getExtremes().min, satChart.xAxis[0].getExtremes().max);
+                            altitudeChart.xAxis[0].setExtremes(satChart.xAxis[0].getExtremes().min, satChart.xAxis[0].getExtremes().max);
+                            if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
+                                console.log('gsmChart reset zoom');
+                                $('.highcharts-button').hide();
+
+                            } else {
+                                altitudeChart.showResetZoom();
+                                voltageChart.showResetZoom();
+                                currentChart.showResetZoom();
+                                capacityChart.showResetZoom();
+                                satChart.showResetZoom();
+                                gsmChart.showResetZoom();
+                                rcChart.showResetZoom();
+                                console.log('speedChart zoom-in');
+
+                            }
+                        }
+                    }
+                },
+                animation: true,
+                legend: {
+                    enabled: false
+                },
+                series: [{
+                        name: 'Satellite Count',
+                        data: <jsp:getProperty name="kopterSessionInfo" property = "satSerie"/>,
+                        color: '#3880aa',
+                        fillOpacity: 0.1,
+                        lineWidth: 3,
+                        turboThreshold: 0,
+                        point: {
+                            events: {
+                                mouseOver: function (evt) {
+
+
+                                    altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
+                                    gsmTooltip.refresh(gsmChart.series[0].points[evt.target.index]);
+                                    rcTooltip.refresh(rcChart.series[0].points[evt.target.index]);
+                                    satTooltip.refresh(satChart.series[0].points[evt.target.index]);
+                                    voltageTooltip.refresh(voltageChart.series[0].points[evt.target.index]);
+                                    capacityTooltip.refresh(capacityChart.series[0].points[evt.target.index]);
+                                    currentTooltip.refresh(currentChart.series[0].points[evt.target.index]);
+
+                                }}}
+                    }]
+            });
+            gsmChart = new Highcharts.Chart({
+                chart: {
+                    type: 'area',
+                    renderTo: "gsmSignalChart",
+                    zoomType: "x",
+                    events: {
+                        load: function () {
+                            gsmTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
+                        }
+                    }
+                },
+                title: {
+                    text: ''
+                },
+                credits: {
+                    enabled: false
+                },
+                tooltip: {
+                    enabled: false
+                },
+                xAxis: {
+                    title: {
+                        text: "GSM Signal Strength"
+                    },
+                    events: {
+                        afterSetExtremes: function (evt) {
+//                            console.log(altitudeChart.xAxis[0].getExtremes());
+
+                            voltageChart.xAxis[0].setExtremes(gsmChart.xAxis[0].getExtremes().min, gsmChart.xAxis[0].getExtremes().max);
+                            capacityChart.xAxis[0].setExtremes(gsmChart.xAxis[0].getExtremes().min, gsmChart.xAxis[0].getExtremes().max);
+                            currentChart.xAxis[0].setExtremes(gsmChart.xAxis[0].getExtremes().min, gsmChart.xAxis[0].getExtremes().max);
+                            satChart.xAxis[0].setExtremes(gsmChart.xAxis[0].getExtremes().min, gsmChart.xAxis[0].getExtremes().max);
+                            rcChart.xAxis[0].setExtremes(gsmChart.xAxis[0].getExtremes().min, gsmChart.xAxis[0].getExtremes().max);
+                            altitudeChart.xAxis[0].setExtremes(gsmChart.xAxis[0].getExtremes().min, gsmChart.xAxis[0].getExtremes().max);
+                            if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
+                                console.log('gsmChart reset zoom');
+                                $('.highcharts-button').hide();
+
+                            } else {
+                                altitudeChart.showResetZoom();
+                                voltageChart.showResetZoom();
+                                currentChart.showResetZoom();
+                                capacityChart.showResetZoom();
+                                satChart.showResetZoom();
+                                gsmChart.showResetZoom();
+                                rcChart.showResetZoom();
+                                console.log('speedChart zoom-in');
+
+                            }
+                        }
+                    }
+                },
+                animation: true,
+                legend: {
+                    enabled: false
+                },
+                series: [{
+                        name: 'GSM Signal Strength',
+                        data: <jsp:getProperty name="kopterSessionInfo" property = "gsmSignalSerie"/>,
+                        color: '#3880aa',
+                        fillOpacity: 0.1,
+                        lineWidth: 3,
+                        turboThreshold: 0,
+                        point: {
+                            events: {
+                                mouseOver: function (evt) {
+
+
+                                    altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
+                                    gsmTooltip.refresh(gsmChart.series[0].points[evt.target.index]);
+                                    rcTooltip.refresh(rcChart.series[0].points[evt.target.index]);
+                                    satTooltip.refresh(satChart.series[0].points[evt.target.index]);
+                                    voltageTooltip.refresh(voltageChart.series[0].points[evt.target.index]);
+                                    capacityTooltip.refresh(capacityChart.series[0].points[evt.target.index]);
+                                    currentTooltip.refresh(currentChart.series[0].points[evt.target.index]);
+
+                                }}}
+                    }]
+            });
+            altitudeChart = new Highcharts.Chart({
+                chart: {
+                    renderTo: 'altitudeChart',
+                    type: 'area',
+                    zoomType: "x",
+                    events: {
+                        load: function () {
+                            altitudeTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
+                        }
+                    }
+                },
+                title: {
+                    text: ''
+                },
+                credits: {
+                    enabled: false
+                },
+                tooltip: {
+                    enabled: false
+                },
+                xAxis: {
+                    title: {
+                        text: ""
+                    },
+                    events: {
+                        afterSetExtremes: function (evt) {
+//                            console.log(altitudeChart.xAxis[0].getExtremes());
+
+                            voltageChart.xAxis[0].setExtremes(altitudeChart.xAxis[0].getExtremes().min, altitudeChart.xAxis[0].getExtremes().max);
+                            capacityChart.xAxis[0].setExtremes(altitudeChart.xAxis[0].getExtremes().min, altitudeChart.xAxis[0].getExtremes().max);
+                            currentChart.xAxis[0].setExtremes(altitudeChart.xAxis[0].getExtremes().min, altitudeChart.xAxis[0].getExtremes().max);
+                            satChart.xAxis[0].setExtremes(altitudeChart.xAxis[0].getExtremes().min, altitudeChart.xAxis[0].getExtremes().max);
+                            rcChart.xAxis[0].setExtremes(altitudeChart.xAxis[0].getExtremes().min, altitudeChart.xAxis[0].getExtremes().max);
+                            gsmChart.xAxis[0].setExtremes(altitudeChart.xAxis[0].getExtremes().min, altitudeChart.xAxis[0].getExtremes().max);
+                            if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
+                                console.log('altitudeChart reset zoom');
+                                $('.highcharts-button').hide();
+
+                            } else {
+                                //altitudeChart.showResetZoom();
+                                voltageChart.showResetZoom();
+                                currentChart.showResetZoom();
+                                capacityChart.showResetZoom();
+                                satChart.showResetZoom();
+                                gsmChart.showResetZoom();
+                                rcChart.showResetZoom();
+                                console.log('speedChart zoom-in');
+
+                            }
+                        }
+                    }
+                },
+                animation: true,
+                legend: {
+                    enabled: false
+                },
+                series: [{
+                        name: 'Altitude (m)',
+                        data: <jsp:getProperty name="kopterSessionInfo" property = "altitudeSerie"/>,
+                        color: '#3880aa',
+                        fillOpacity: 0.1,
+                        lineWidth: 3,
+                        turboThreshold: 0,
+                        point: {
+                            events: {
+                                mouseOver: function (evt) {
+
+
+                                    altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
+                                    gsmTooltip.refresh(gsmChart.series[0].points[evt.target.index]);
+                                    rcTooltip.refresh(rcChart.series[0].points[evt.target.index]);
+                                    satTooltip.refresh(satChart.series[0].points[evt.target.index]);
+                                    voltageTooltip.refresh(voltageChart.series[0].points[evt.target.index]);
+                                    capacityTooltip.refresh(capacityChart.series[0].points[evt.target.index]);
+                                    currentTooltip.refresh(currentChart.series[0].points[evt.target.index]);
+
+                                }}}
+                    }]
+            });
 
         }
+        ;
 
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Load required scripts and callback to draw
             LoadXChartScript(DrawAllxCharts);
             // Required for correctly resize charts, when boxes expand
             var graphxChartsResize;
-            $(".box").resize(function(event) {
+            $(".box").resize(function (event) {
                 event.preventDefault();
                 clearTimeout(graphxChartsResize);
                 graphxChartsResize = setTimeout(DrawAllxCharts, 500);

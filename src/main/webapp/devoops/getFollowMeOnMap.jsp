@@ -306,15 +306,15 @@
 //                            console.log(altitudeChart.xAxis[0].getExtremes());
 
                                                             altitudeChart.xAxis[0].setExtremes(speedChart.xAxis[0].getExtremes().min, speedChart.xAxis[0].getExtremes().max);
-                                                             if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
-                                console.log('speedChart reset zoom');
-                                $('.highcharts-button').hide();
+                                                            if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
+                                                                console.log('speedChart reset zoom');
+                                                                $('.highcharts-button').hide();
 
-                            } else {
-                    altitudeButton = altitudeChart.showResetZoom();
-                                console.log('speedChart zoom-in');
+                                                            } else {
+                                                                altitudeButton = altitudeChart.showResetZoom();
+                                                                console.log('speedChart zoom-in');
 
-                            }
+                                                            }
                                                         }
                                                     }
                                                 },
@@ -336,7 +336,7 @@
                                                             events: {
                                                                 mouseOver: function (evt) {
 //                                    console.log('mouseOver');
-                                                                    myTooltip.enabled = false;
+                                                                 //   myTooltip.enabled = false;
                                                                     myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
                                                                     altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
 
@@ -383,15 +383,15 @@
 //                            console.log(altitudeChart.xAxis[0].getExtremes());
 
                                                             altitudeChart.xAxis[0].setExtremes(speedChart.xAxis[0].getExtremes().min, speedChart.xAxis[0].getExtremes().max);
-                                          if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
-                                console.log('speedChart reset zoom');
-                                $('.highcharts-button').hide();
+                                                            if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
+                                                                console.log('speedChart reset zoom');
+                                                                $('.highcharts-button').hide();
 
-                            } else {
-                    altitudeButton = altitudeChart.showResetZoom();
-                                console.log('speedChart zoom-in');
+                                                            } else {
+                                                                altitudeButton = altitudeChart.showResetZoom();
+                                                                console.log('speedChart zoom-in');
 
-                            }
+                                                            }
 
                                                         }
                                                     }
@@ -487,7 +487,7 @@
                                 $('.highcharts-button').hide();
 
                             } else {
-                   speedButton =  speedChart.showResetZoom();
+                                speedButton = speedChart.showResetZoom();
                                 console.log('altitude chart zoom-in');
 
                             }
