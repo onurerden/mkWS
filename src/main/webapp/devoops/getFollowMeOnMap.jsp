@@ -272,10 +272,11 @@
                                         }
 
                                         function DrawAllxCharts() {
-                                            var altitudeJSON = <jsp:getProperty name="routeBean" property = "routeAltitudeValues"/>;
+                                          //  var altitudeJSON = <jsp:getProperty name="routeBean" property = "routeAltitudeValues"/>;
 
-                                            msecConv();
+                                            
                                             drawAltitudeChart();
+                                            msecConv();
 
                                         }
 
@@ -337,9 +338,11 @@
                                                                 mouseOver: function (evt) {
 //                                    console.log('mouseOver');
                                                                  //   myTooltip.enabled = false;
-                                                                    myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
-                                                                    altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
-
+                                                      //myTooltip.enabled = false;
+                                                                   // myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
+                                                                  myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
+                                                                    //altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
+                                                                    altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
 
                                                                 }}}
                                                     }]
@@ -411,9 +414,11 @@
                                                             events: {
                                                                 mouseOver: function (evt) {
 //                                    console.log('mouseOver');
-                                                                    myTooltip.enabled = false;
-                                                                    myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
-                                                                    altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
+                                                                //    myTooltip.enabled = false;
+                                                                   // myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
+                                                                  myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
+                                                                    //altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
+                                                                    altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
 
 
                                                                 }}}
@@ -432,8 +437,8 @@
         $(document).ready(function () {
             // Load required scripts and callback to draw
 
-
-            LoadXChartScript(DrawAllxCharts);
+DrawAllxCharts();
+         //   LoadXChartScript(DrawAllxCharts);
             // Required for correctly resize charts, when boxes expand
             var graphxChartsResize;
             $(".box").resize(function (event) {
@@ -510,8 +515,11 @@
                             events: {
                                 mouseOver: function (evt) {
 //                                    console.log('mouseOver');
-                                    altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
-                                    myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
+                                    //   myTooltip.enabled = false;
+                                                                   // myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
+                                                                  myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
+                                                                    //altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
+                                                                    altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
 
 
                                 },

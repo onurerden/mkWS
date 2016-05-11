@@ -889,7 +889,7 @@
                                 satChart.showResetZoom();
                                 gsmChart.showResetZoom();
                                 rcChart.showResetZoom();
-                                console.log('speedChart zoom-in');
+                                console.log('altitudeChart zoom-in');
 
                             }
                         }
