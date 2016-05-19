@@ -21,8 +21,8 @@ import mkws.ServerEngine;
  *
  * @author onurerden
  */
-@WebServlet(name = "TestMMR", urlPatterns = {"/TestMMR"})
-public class TestMMR extends HttpServlet {
+@WebServlet(name = "SendWorkoutToMMR", urlPatterns = {"/SendWorkoutToMMR"})
+public class SendWorkoutToMMR extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,7 +37,7 @@ public class TestMMR extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         ServerEngine server = new ServerEngine();
-        
+         int routeId = Integer.parseInt(request.getParameter("routeId"));
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             //String jsonString=server.getMMRUserInfo(25,"MP");
@@ -45,7 +45,7 @@ public class TestMMR extends HttpServlet {
             //MMRUser user = json.fromJson(jsonString,MMRUser.class);
             //out.println("User Name: " + user.getDisplay_name() + "<br>");
             //out.println("User Id  : " + user.getId());
-            server.sendMMRWorkout(37);
+            server.sendMMRWorkout(routeId);
                         
         } catch (Exception ex){
             System.out.println("Error: " + ex.getMessage());
