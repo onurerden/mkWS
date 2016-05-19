@@ -45,8 +45,7 @@ public class TestMMR extends HttpServlet {
             //MMRUser user = json.fromJson(jsonString,MMRUser.class);
             //out.println("User Name: " + user.getDisplay_name() + "<br>");
             //out.println("User Id  : " + user.getId());
-            MMRWorkout workout = new MMRWorkout();
-            workout.populateWorkout(400);
+            server.sendMMRWorkout(37);
                         
         } catch (Exception ex){
             System.out.println("Error: " + ex.getMessage());

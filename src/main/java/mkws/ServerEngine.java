@@ -24,6 +24,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import mkws.Model.MKMission;
+import mkws.Model.MMRWorkout;
 import mkws.Model.OAuthToken;
 import mkws.Model.Waypoint;
 import org.apache.http.HttpEntity;
@@ -32,6 +33,7 @@ import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -1228,8 +1230,32 @@ public class ServerEngine implements IDeviceServer {
         return result;
     }
 
-    public int sendMMRWorkout(int userId) {
+    public int sendMMRWorkout(int routeId) {
 
+        MMRWorkout workout = new MMRWorkout();
+        workout.populateWorkout(routeId);
+        //MMRUser user = new Gson().fromJson(getMMRUserInfo(workout.getDeviceId(), "MP"), MMRUser.class);
+        Credentials cr = new Credentials();
+        try {
+            HttpClient httpclient = new DefaultHttpClient();
+            httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
+
+            HttpPost httppost = new HttpPost("https://oauth2-api.mapmyapi.com/v7.1/workout/");
+            httppost.addHeader("Api-Key", cr.getMmrClientId());
+            httppost.addHeader("Content-Type", "application/json");
+            httppost.addHeader("Authorization", "Bearer " + mmrAccessToken(workout.getDeviceId(), "MP"));
+                        
+            
+            StringEntity entity = new StringEntity( new Gson().toJson(workout));
+            httppost.setEntity(entity);
+            
+            HttpResponse response = httpclient.execute(httppost);
+            HttpEntity resEntity = response.getEntity();
+            System.out.println(EntityUtils.toString(resEntity, "UTF-8"));
+
+        } catch (Exception ex) {
+            System.out.println("Error while sendMMRWorkout: " + ex.getMessage() );
+        }
         return 1;
     }
 
