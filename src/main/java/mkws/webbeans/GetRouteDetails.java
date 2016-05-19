@@ -355,6 +355,7 @@ public class GetRouteDetails {
             this.setRouteAltitudeValues(new Gson().toJson(altitudeValues));
             this.setRouteSpeedValues(new Gson().toJson(speedValues));
             this.setRouteSpeedKmhValues(new Gson().toJson(speedKmhValues));
+            
 
             if (!points.isEmpty()) {
                 routeStartPoint = points.get(0).toString();
@@ -362,6 +363,7 @@ public class GetRouteDetails {
                 prepareRouteDetails(this.routeId);
                 this.deviceName = deviceNameFromId(this.deviceId);
             }
+            prepareDistanceList();
 
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e) {
 
