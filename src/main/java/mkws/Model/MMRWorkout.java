@@ -31,6 +31,7 @@ public class MMRWorkout {
     private String notes = "Workout is submitted by FollowMe (mkWS)";
     private Aggregates aggregates;
     private transient int deviceId;
+    private String activity_type="/v7.1/activity_type/11/";
     
     public class Sharing{
         boolean facebook=false;
