@@ -75,9 +75,9 @@ public int getDeviceId(){
         gatherer.setRouteId(routeId);
         int i = 0;
         TimeSeries series = new TimeSeries();
-        series.distance = new Object[gatherer.getLatitudeList().size()];
-        series.position = new Object[gatherer.getLatitudeList().size()];
-        series.speed = new Object[gatherer.getLatitudeList().size()];
+        series.distance = new Object[gatherer.getLatitudeList().size()-1];
+        series.position = new Object[gatherer.getLatitudeList().size()-1];
+        series.speed = new Object[gatherer.getLatitudeList().size()-1];
 
         for (i=0; i< gatherer.getLatitudeList().size()-1;i++) {
             Object[] distanceArray = new Object[2];
