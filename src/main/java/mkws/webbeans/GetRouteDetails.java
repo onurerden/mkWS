@@ -261,7 +261,7 @@ public class GetRouteDetails {
 
                     cumulativeDistance = cumulativeDistance + distanceBetweenPoints(noktalar.get(a).enlem, noktalar.get(a).boylam,
                             noktalar.get(a - 1).enlem, noktalar.get(a - 1).boylam);
-                    getDistanceList().add(cumulativeDistance);
+//                    getDistanceList().add(cumulativeDistance);
 
                 } catch (Exception ex) {
 
@@ -502,6 +502,15 @@ public class GetRouteDetails {
         }
         calculateRouteLength();
 
+    }
+    
+    private void prepareDistanceList(){
+        double a=0.0;
+         for (int i = 0; i < noktalar.size() - 1; i++) {
+            a = a + distanceBetweenPoints(noktalar.get(i).enlem, noktalar.get(i).boylam, noktalar.get(i + 1).enlem, noktalar.get(i + 1).boylam);
+        distanceList.add(a);
+         }
+//        System.out.println("Route Length: " + this.routeLength);
     }
 
     public String getMapBounds() {
