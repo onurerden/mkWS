@@ -120,7 +120,7 @@ public int getDeviceId(){
         this.aggregates.distance_total=gatherer.getRouteLength()*1000;
         this.setDeviceId(gatherer.getDeviceId());
         this.name = "FollowMeRoute: " + gatherer.getRouteId();
-        //this.reference_key = gatherer.getRouteId();
+        this.reference_key = gatherer.getRouteId();
         this.notes = this.notes + "\nRouteId: " + gatherer.getRouteId();
         
         System.out.println(new Gson().toJson(this));
