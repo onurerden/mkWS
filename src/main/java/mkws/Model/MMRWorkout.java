@@ -75,11 +75,11 @@ public int getDeviceId(){
         gatherer.setRouteId(routeId);
         int i = 0;
         TimeSeries series = new TimeSeries();
-        series.distance = new Object[gatherer.getLatitudeList().size()];
-        series.position = new Object[gatherer.getLatitudeList().size()];
-        series.speed = new Object[gatherer.getLatitudeList().size()];
+        series.distance = new Object[gatherer.getLatitudeList().size()+1];
+        series.position = new Object[gatherer.getLatitudeList().size()+1];
+        series.speed = new Object[gatherer.getLatitudeList().size()+1];
 
-        for (Double d : gatherer.getLatitudeList()) {
+        for (i=0; i< gatherer.getLatitudeList().size()-1;i++) {
             Object[] distanceArray = new Object[2];
             Object[] speedArray = new Object[2];
             Object[] locationArray = new Object[2];
@@ -101,7 +101,7 @@ public int getDeviceId(){
             series.speed[i]=speedArray;
             series.position[i]=locationArray;
             series.distance[i]=distanceArray;
-            i++;
+            
 
         }
         time_series=series;
