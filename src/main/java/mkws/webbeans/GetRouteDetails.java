@@ -416,10 +416,16 @@ public class GetRouteDetails {
     private void calculateRouteLength() {
         distanceList.clear();
         for (int i = 0; i < noktalar.size() - 1; i++) {
+           try{
             this.routeLength = this.routeLength + distanceBetweenPoints(noktalar.get(i).enlem, noktalar.get(i).boylam, noktalar.get(i + 1).enlem, noktalar.get(i + 1).boylam);
           distanceList.add(this.routeLength);
+           }catch (Exception ex){
+               System.out.println("Exception handled " + ex.getMessage());
+           }
+       
         }
         System.out.println("Route Length: " + this.routeLength);
+        
     }
 
     private double distanceBetweenPoints(double latFirst, double lngFirst, double latSecond, double lngSecond) {
