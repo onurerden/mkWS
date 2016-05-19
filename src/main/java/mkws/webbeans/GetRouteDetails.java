@@ -363,7 +363,7 @@ public class GetRouteDetails {
                 prepareRouteDetails(this.routeId);
                 this.deviceName = deviceNameFromId(this.deviceId);
             }
-            prepareDistanceList();
+            
 
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e) {
 
@@ -414,8 +414,10 @@ public class GetRouteDetails {
     }
 
     private void calculateRouteLength() {
+        distanceList.clear();
         for (int i = 0; i < noktalar.size() - 1; i++) {
             this.routeLength = this.routeLength + distanceBetweenPoints(noktalar.get(i).enlem, noktalar.get(i).boylam, noktalar.get(i + 1).enlem, noktalar.get(i + 1).boylam);
+          distanceList.add(this.routeLength);
         }
         System.out.println("Route Length: " + this.routeLength);
     }
@@ -506,14 +508,7 @@ public class GetRouteDetails {
 
     }
     
-    private void prepareDistanceList(){
-        double a=0.0;
-         for (int i = 0; i < noktalar.size() - 1; i++) {
-            a = a + distanceBetweenPoints(noktalar.get(i).enlem, noktalar.get(i).boylam, noktalar.get(i + 1).enlem, noktalar.get(i + 1).boylam);
-        distanceList.add(a);
-         }
-//        System.out.println("Route Length: " + this.routeLength);
-    }
+   
 
     public String getMapBounds() {
         return this.mapBounds;

@@ -23,7 +23,7 @@ public class MMRWorkout {
 
     private String start_datetime;
     private String name;
-    private String privacy;
+    private String privacy="/v7.1/privacy_option/0/";
     private String attachments;
     private TimeSeries time_series;
     private String start_locale_timezone = "Europe/Istanbul";
@@ -120,7 +120,7 @@ public int getDeviceId(){
         this.aggregates.distance_total=gatherer.getRouteLength()*1000;
         this.setDeviceId(gatherer.getDeviceId());
         this.name = "FollowMeRoute: " + gatherer.getRouteId();
-        this.reference_key = "v001_"+gatherer.getRouteId();//increase if anything changes
+        this.reference_key = "v002_"+gatherer.getRouteId();//increase if anything changes
         this.notes = this.notes + "\nRouteId: " + gatherer.getRouteId();
         
         System.out.println(new Gson().toJson(this));
