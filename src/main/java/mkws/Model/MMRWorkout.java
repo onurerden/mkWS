@@ -93,7 +93,7 @@ public int getDeviceId(){
             locationArray[1]=loc;
             
             distanceArray[0]=i;
-            distanceArray[1]=gatherer.getDistanceList().get(i)*1000;
+            distanceArray[1]=gatherer.getDistanceList().get(i)*1000.0;
             
             speedArray[0] = i;
             speedArray[1] = gatherer.getSpeedList().get(i);
