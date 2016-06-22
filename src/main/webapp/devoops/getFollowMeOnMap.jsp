@@ -188,12 +188,14 @@
                                         var altitudeTooltip;
                                         var speedButton;
                                         var altitudeButton;
+                                        var myMap;
+                                        var mapMarker;
 
                                         // Initializes the map as soon as the API is loaded and DOM is ready
                                         ymaps.ready(init);
 
                                         function init() {
-                                            var myMap = new ymaps.Map("yandex", {
+                                            myMap = new ymaps.Map("yandex", {
                                                 //    center: <jsp:getProperty name="routeBean" property="routeStartPoint"/>
                                                 //    zoom: 15,
                                                 bounds:<jsp:getProperty name="routeBean" property="mapBounds"/>
@@ -272,9 +274,7 @@
                                         }
 
                                         function DrawAllxCharts() {
-                                          //  var altitudeJSON = <jsp:getProperty name="routeBean" property = "routeAltitudeValues"/>;
 
-                                            
                                             drawAltitudeChart();
                                             msecConv();
 
@@ -337,10 +337,10 @@
                                                             events: {
                                                                 mouseOver: function (evt) {
 //                                    console.log('mouseOver');
-                                                                 //   myTooltip.enabled = false;
-                                                      //myTooltip.enabled = false;
-                                                                   // myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
-                                                                  myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
+                                                                    //   myTooltip.enabled = false;
+                                                                    //myTooltip.enabled = false;
+                                                                    // myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
+                                                                    myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
                                                                     //altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
                                                                     altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
 
@@ -414,13 +414,32 @@
                                                             events: {
                                                                 mouseOver: function (evt) {
 //                                    console.log('mouseOver');
-                                                                //    myTooltip.enabled = false;
-                                                                   // myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
-                                                                  myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
+                                                                    //    myTooltip.enabled = false;
+                                                                    // myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
+                                                                    myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
                                                                     //altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
                                                                     altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
-
-
+                                                                     var str = "[" + "<jsp:getProperty name="routeBean" property = "routePoints"/>";
+                                                                     str = str.substring(0, str.length - 1) + "]";
+                                                                        var routePoints = JSON.parse(str);
+                                                                    if ( mapMarker != null){
+                                                                        // myMap.geoObjects.remove(mapMarker);
+                                                                        myMap.geoObjects.remove(mapMarker);
+                                                                        mapMarker = new ymaps.GeoObject({
+                                                                            geometry: {
+                                                                                type: "Point",
+                                                                                coordinates: routePoints[evt.target.index]
+                                                                            }});
+                                                                        myMap.geoObjects.add(mapMarker);
+                                                                    } else {
+                                                                        //myMap.geoObjects.remove(mapMarker);
+                                                                        mapMarker = new ymaps.GeoObject({
+                                                                            geometry: {
+                                                                                type: "Point",
+                                                                                coordinates: routePoints[evt.target.index]
+                                                                            }});
+                                                                        myMap.geoObjects.add(mapMarker);
+                                                                    }
                                                                 }}}
                                                     }]
                                             });
@@ -437,8 +456,8 @@
         $(document).ready(function () {
             // Load required scripts and callback to draw
 
-DrawAllxCharts();
-         //   LoadXChartScript(DrawAllxCharts);
+            DrawAllxCharts();
+            //   LoadXChartScript(DrawAllxCharts);
             // Required for correctly resize charts, when boxes expand
             var graphxChartsResize;
             $(".box").resize(function (event) {
@@ -516,10 +535,10 @@ DrawAllxCharts();
                                 mouseOver: function (evt) {
 //                                    console.log('mouseOver');
                                     //   myTooltip.enabled = false;
-                                                                   // myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
-                                                                  myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
-                                                                    //altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
-                                                                    altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
+                                    // myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
+                                    myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
+                                    //altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
+                                    altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
 
 
                                 },

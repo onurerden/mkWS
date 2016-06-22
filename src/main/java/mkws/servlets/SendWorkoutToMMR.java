@@ -45,8 +45,12 @@ public class SendWorkoutToMMR extends HttpServlet {
             //MMRUser user = json.fromJson(jsonString,MMRUser.class);
             //out.println("User Name: " + user.getDisplay_name() + "<br>");
             //out.println("User Id  : " + user.getId());
-            server.sendMMRWorkout(routeId);
-                        
+            int result=server.sendMMRWorkout(routeId);
+            if (result ==1){
+            out.println("{\"result\": \"success\"}");
+            }else{
+                out.println("{\"result\": \"failed\"}");
+            }
         } catch (Exception ex){
             System.out.println("Error: " + ex.getMessage());
         }

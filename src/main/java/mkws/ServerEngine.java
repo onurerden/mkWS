@@ -1236,6 +1236,7 @@ public class ServerEngine implements IDeviceServer {
         workout.populateWorkout(routeId);
         //MMRUser user = new Gson().fromJson(getMMRUserInfo(workout.getDeviceId(), "MP"), MMRUser.class);
         Credentials cr = new Credentials();
+        int result = 0;
         try {
             HttpClient httpclient = new DefaultHttpClient();
             httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
@@ -1252,11 +1253,16 @@ public class ServerEngine implements IDeviceServer {
             HttpResponse response = httpclient.execute(httppost);
             HttpEntity resEntity = response.getEntity();
             System.out.println(EntityUtils.toString(resEntity, "UTF-8"));
+            
+            if (response.getStatusLine().getStatusCode()==200){
+                result=1;
+            }
+            
 
         } catch (Exception ex) {
             System.out.println("Error while sendMMRWorkout: " + ex.getMessage() );
         }
-        return 1;
+        return result;
     }
 
     @Override
