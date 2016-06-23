@@ -4,12 +4,14 @@
     Author     : oerden
 --%>
 
+<%@page import="mkws.Credentials"%>
 <%@ page import ="java.sql.*" %>
 <%
     String userid = request.getParameter("username");    
     String pwd = request.getParameter("password");
     Class.forName("com.mysql.jdbc.Driver");
-    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mk",
+    Credentials cr = new Credentials();
+    Connection con = DriverManager.getConnection(cr.getMysqlConnectionString(),
             "adminHr8UXvV", "UrtgKUvL3deC");
     Statement st = con.createStatement();
     ResultSet rs;
