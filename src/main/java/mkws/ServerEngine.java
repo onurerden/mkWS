@@ -1254,7 +1254,7 @@ public class ServerEngine implements IDeviceServer {
             HttpEntity resEntity = response.getEntity();
             System.out.println(EntityUtils.toString(resEntity, "UTF-8"));
             System.out.println("MMR response code is:" + response.getStatusLine().getStatusCode());
-            if (response.getStatusLine().getStatusCode()%100==2){
+            if ((int)response.getStatusLine().getStatusCode()/100==2){
                 
                 result=1;
             }else{
