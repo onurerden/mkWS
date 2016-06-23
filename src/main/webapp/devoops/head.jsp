@@ -4,7 +4,7 @@
     Author     : oerden
 --%>
 <%
-    System.out.println("UserId: " + session.getAttribute("userid"));
+  //  System.out.println("UserId: " + session.getAttribute("userid"));
     if(session.getAttribute("userid")==null){
          response.sendRedirect("../index.html");
     }

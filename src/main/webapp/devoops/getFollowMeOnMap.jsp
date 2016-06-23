@@ -90,13 +90,14 @@
                                         <fmt:formatNumber type="number" maxFractionDigits="2" value="<%= routeBean.getRouteLength() * 1000%>" /> m
                                     </c:otherwise>
                                 </c:choose>   
-                                </br>
+                                <br>
                                 <b>Max Speed : </b> <i><jsp:getProperty name="routeBean" property="maxSpeed"/> m/sec</i><br/>
                                 <b>Max Altitude : </b> <i><jsp:getProperty name="routeBean" property="maxAltitude"/> m </i><br/>
                                 <b>Min Altitude : </b> <i><jsp:getProperty name="routeBean" property="minAltitude"/> m </i><br/>
 
-
-
+                                <br>
+                                <button id="btn" class="btn btn-danger"  onclick="sendMMR()"> Upload to MMR</button>
+                                <div id="divResult"></div>
                             </div>
 
                         </div>
@@ -180,6 +181,19 @@
 
     <%@include file="foot.jsp" %>
     <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script>
+
+    function sendMMR() {
+        console.log("clicked");
+        var routeId= <% out.println(Integer.parseInt(request.getParameter("routeId")));%>;
+        var link = "../SendWorkoutToMMR?routeId=" + routeId;
+        $.ajax({url: link, success: function(result){
+        $("#divResult").html(result);
+        }});
+        
+    };
+
+</script>
     <script type="text/javascript">
 
                                         var speedChart;
