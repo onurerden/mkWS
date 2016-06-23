@@ -1257,6 +1257,10 @@ public class ServerEngine implements IDeviceServer {
             if (response.getStatusLine().getStatusCode()%100==2){
                 
                 result=1;
+            }else{
+                LogMessage msg = new LogMessage();
+                msg.logLevel=1;
+                msg.logMessage="MMR response code is: "  + response.getStatusLine().getStatusCode();
             }
             
 
