@@ -11,10 +11,10 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=windows-1250">
-    <title>JSP Page</title>
+    <title>Redirecting...</title>
 </head>
 <body>
-    <h1>Hello World!</h1>
+    <h1>MK Portal!</h1>
     <a href="/GetRegisteredData?device=mk">Kopters</a><br>
     <a href="/GetRegisteredData?device=mp">Devices</a><br>
     <a href="/latestRoutes.jsp">Latest Routes</a><br>

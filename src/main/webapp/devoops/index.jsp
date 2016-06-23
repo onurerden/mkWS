@@ -52,39 +52,13 @@
                                     <div class="no-move"></div>
                                 </div>
                                 <div class="box-content">
-                                    Mikrokopter Web Servis uygulaması HTML önyüzüne hoşgeldiniz.
+                                    Welcome to the mkWS Management Portal. Please select a category from left pane.
                                 </div>
                             </div>                                                
                         </div>
                     </div>
-                    <!-- map here -->
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="box">
-                                <div class="box-header">
-                                    <div class="box-name">
-                                        <i class="fa fa-table"></i>
-                                        <span>Harita</span>
-                                    </div>
-                                    <div class="box-icons">
-                                        <a class="collapse-link">
-                                            <i class="fa fa-chevron-up"></i>
-                                        </a>
-                                        <a class="expand-link">
-                                            <i class="fa fa-expand"></i>
-                                        </a>
-                                        <a class="close-link">
-                                            <i class="fa fa-times"></i>
-                                        </a>
-                                    </div>
-                                    <div class="no-move"></div>
-                                </div>
-                                <div class="box-content">
-                                    <div id="map-canvas" style="height: 350px"></div>
-                                </div>
-                            </div>                                                
-                        </div>
-                    </div>
+                    
+                    
                 
             </div>
         </div>
@@ -93,21 +67,8 @@
 
         
         
-        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-    <script>
-var map;
-function initialize() {
-  var mapOptions = {
-    zoom: 8,
-    center: new google.maps.LatLng(-34.397, 150.644)
-  };
-  map = new google.maps.Map(document.getElementById('map-canvas'),
-      mapOptions);
-}
-
-google.maps.event.addDomListener(window, 'load', initialize);
-
-    </script>
+        
+   
 
         
 <script type="text/javascript">

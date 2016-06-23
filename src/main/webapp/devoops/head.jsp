@@ -3,7 +3,12 @@
     Created on : 19.Mar.2015, 14:25:21
     Author     : oerden
 --%>
-
+<%
+    System.out.println("UserId: " + session.getAttribute("userid"));
+    if(session.getAttribute("userid")==null){
+         response.sendRedirect("../index.html");
+    }
+    %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <head>
@@ -95,7 +100,7 @@
                                                                         <i class="fa fa-angle-down pull-right"></i>
                                                                         <div class="user-mini pull-right">
                                                                             <span class="welcome">Welcome,</span>
-                                                                            <span>Jane Devoops</span>
+                                                                            <span><% out.println(session.getAttribute("first_name") +" " +session.getAttribute("last_name")); %></span>
                                                                         </div>
                                                                     </a>
                                                                     <ul class="dropdown-menu">
@@ -130,7 +135,7 @@
                                                                             </a>
                                                                         </li>
                                                                         <li>
-                                                                            <a href="#">
+                                                                            <a href="../logout.jsp">
                                                                                 <i class="fa fa-power-off"></i>
                                                                                 <span>Logout</span>
                                                                             </a>
