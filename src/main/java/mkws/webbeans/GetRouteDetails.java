@@ -43,6 +43,7 @@ public class GetRouteDetails {
     private List<Double> latitudeList = new ArrayList<>();
     private List<Double> longitudeList = new ArrayList<>();
     private List<Double> distanceList = new ArrayList<>();
+    private List<Timestamp> timeList = new ArrayList<>();
 
     /**
      * @return the routeAltitudeValues
@@ -198,6 +199,20 @@ public class GetRouteDetails {
         this.distanceList = distanceList;
     }
 
+    /**
+     * @return the timeList
+     */
+    public List<Timestamp> getTimeList() {
+        return timeList;
+    }
+
+    /**
+     * @param timeList the timeList to set
+     */
+    public void setTimeList(List<Timestamp> timeList) {
+        this.timeList = timeList;
+    }
+
     class Koordinat {
 
         public double enlem = 0;
@@ -225,6 +240,7 @@ public class GetRouteDetails {
         List<AltitudeChartValues> altitudeValues = new ArrayList<>();
         List<SpeedChartValues> speedValues = new ArrayList<>();
         List<SpeedChartValues> speedKmhValues = new ArrayList<>();
+        
 
         this.routeId = i;
 
@@ -247,16 +263,21 @@ public class GetRouteDetails {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
-            String query = "SELECT latitude, longitude, speed, altitude, followMeDeviceId from followme WHERE routeId = " + routeId + " "
+            String query = "SELECT latitude, longitude, speed, altitude, followMeDeviceId, time from followme WHERE routeId = " + routeId + " "
                     + "ORDER BY followme.id ASC";
 
             rs_1 = st_1.executeQuery(query);
             int a = -2;
             double cumulativeDistance = 0.0;
+            
+            
             while (rs_1.next()) {
+                
                 a++;
                 points.add("[" + rs_1.getString("latitude") + "," + rs_1.getString("longitude") + "],");
-
+                timeList.add(rs_1.getTimestamp("time"));
+                
+                
                 try {
 
                     cumulativeDistance = cumulativeDistance + distanceBetweenPoints(noktalar.get(a).enlem, noktalar.get(a).boylam,

@@ -6,6 +6,7 @@
 package mkws.Model;
 
 import com.google.gson.Gson;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -79,23 +80,33 @@ public int getDeviceId(){
         series.position = new Object[gatherer.getLatitudeList().size()-1];
         series.speed = new Object[gatherer.getLatitudeList().size()-1];
 
+        Timestamp firstDate = null;
+       // List<Double> mmrTimeList = new ArrayList<>();
+        if (firstDate==null){
+                firstDate=gatherer.getTimeList().get(0);
+                }
+        
         for (i=0; i< gatherer.getLatitudeList().size()-1;i++) {
             Object[] distanceArray = new Object[2];
             Object[] speedArray = new Object[2];
             Object[] locationArray = new Object[2];
-
             
+                        
             Location loc = new Location();
             loc.elevation=gatherer.getAltitudeList().get(i);
             loc.lat=gatherer.getLatitudeList().get(i);
             loc.lng=gatherer.getLongitudeList().get(i);
-            locationArray[0]=i;
+                       
+            double difference = (double)(gatherer.getTimeList().get(i).getTime()- firstDate.getTime())/1000.0;
+                
+            
+            locationArray[0]=difference;
             locationArray[1]=loc;
             
-            distanceArray[0]=i;
+            distanceArray[0]=difference;
             distanceArray[1]=gatherer.getDistanceList().get(i)*1000.0;
             
-            speedArray[0] = i;
+            speedArray[0] = difference;
             speedArray[1] = gatherer.getSpeedList().get(i);
             
             series.speed[i]=speedArray;
@@ -120,7 +131,7 @@ public int getDeviceId(){
         this.aggregates.distance_total=gatherer.getRouteLength()*1000.0;
         this.setDeviceId(gatherer.getDeviceId());
         this.name = "FollowMeRoute: " + gatherer.getRouteId();
-        this.reference_key = "v002_"+gatherer.getRouteId();//increase if anything changes
+        this.reference_key = "v003_"+gatherer.getRouteId();//increase if anything changes
         this.notes = this.notes + "\nRouteId: " + gatherer.getRouteId();
         
         System.out.println(new Gson().toJson(this));
