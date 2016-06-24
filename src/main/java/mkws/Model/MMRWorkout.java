@@ -131,7 +131,7 @@ public int getDeviceId(){
                 
         this.aggregates.distance_total=gatherer.getRouteLength()*1000.0;
         this.aggregates.active_time_total=(double)(gatherer.getTimeList().get(gatherer.getTimeList().size()-1).getTime()
-                - gatherer.getTimeList().get(0).getTime());
+                - gatherer.getTimeList().get(0).getTime())/1000.0;
         this.setDeviceId(gatherer.getDeviceId());
         this.name = "FollowMeRoute: " + gatherer.getRouteId();
         this.reference_key = "v004_"+gatherer.getRouteId();//increase if anything changes
