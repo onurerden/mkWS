@@ -333,7 +333,7 @@ public class GetRouteDetails {
                     if (yeniNokta.speed > getMaxSpeed()) {
                         setMaxSpeed(yeniNokta.speed);
                     }
-                } catch (SQLException | NumberFormatException ex) {
+                } catch (SQLException | NumberFormatException | NullPointerException ex) {
                     System.out.println("Exception: " + ex.getMessage());
                 }
                 try {
@@ -345,7 +345,7 @@ public class GetRouteDetails {
                         setMinAltitude(yeniNokta.altitude);
                     }
 
-                } catch (SQLException | NumberFormatException ex) {
+                } catch (SQLException | NumberFormatException | NullPointerException ex) {
                     System.out.println("Exception: " + ex.getMessage());
                 }
                 getLatitudeList().add(yeniNokta.enlem);

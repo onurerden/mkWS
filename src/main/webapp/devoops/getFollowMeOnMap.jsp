@@ -185,10 +185,19 @@
 
     function sendMMR() {
         console.log("clicked");
+        $("#divResult").html("");
         var routeId= <% out.println(Integer.parseInt(request.getParameter("routeId")));%>;
         var link = "../SendWorkoutToMMR?routeId=" + routeId;
         $.ajax({url: link, success: function(result){
-        $("#divResult").html(result);
+        
+        var info = JSON.parse(result);
+        $("#divResult").html(info.result);
+        
+        console.log(info.result);
+        
+        if(info.result==="success"){
+        $('#btn').prop('disabled', true);
+            }
         }});
         
     };

@@ -35,7 +35,8 @@ public class Ping extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            out.println("Pong");
+            
+            out.println("Pong");            
             
         }
     }

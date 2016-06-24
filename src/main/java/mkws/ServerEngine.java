@@ -746,21 +746,21 @@ public class ServerEngine implements IDeviceServer {
         Connection con_1 = null;
         Statement st_1 = null;
         String query = "INSERT INTO mk.logs SET logLevel = '" + msg.logLevel
-                + "', logMessage = '" + msg.logMessage + "', ";
+                + "', logMessage = '" + msg.logMessage +"'";
 
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
-
+try{
             DeviceTypes deviceType = DeviceTypes.valueOf(msg.deviceType.toUpperCase());
             switch (deviceType) {
                 case MK: {
-                    query = query + "kopterId = '" + msg.deviceId + "'";
+                    query = ", " +query + "kopterId = '" + msg.deviceId + "'";
                     break;
                 }
                 case MP: {
-                    query = query + "followMeDeviceId = '" + msg.deviceId + "'";
+                    query = ", " +query + "followMeDeviceId = '" + msg.deviceId + "'";
                     break;
                 }
                 default: {
@@ -768,6 +768,9 @@ public class ServerEngine implements IDeviceServer {
                     break;
                 }
             }
+}catch (Exception ex){
+    System.out.println("Exception at sendLog: "+ex.toString());
+}
             // System.out.println(query);
             st_1.execute(query);
             status = 0;
@@ -1252,7 +1255,8 @@ public class ServerEngine implements IDeviceServer {
             
             HttpResponse response = httpclient.execute(httppost);
             HttpEntity resEntity = response.getEntity();
-            System.out.println(EntityUtils.toString(resEntity, "UTF-8"));
+            String responseString = EntityUtils.toString(resEntity, "UTF-8");
+            System.out.println(responseString);
             System.out.println("MMR response code is:" + response.getStatusLine().getStatusCode());
             if ((int)response.getStatusLine().getStatusCode()/100==2){
                 
@@ -1260,7 +1264,11 @@ public class ServerEngine implements IDeviceServer {
             }else{
                 LogMessage msg = new LogMessage();
                 msg.logLevel=1;
-                msg.logMessage="MMR response code is: "  + response.getStatusLine().getStatusCode();
+                msg.logMessage="MMR response code is: "  + response.getStatusLine().getStatusCode() +" while sending Route: "+routeId+ ".\n"
+                        + "Response is: \n"
+                        + responseString;
+                Gson gson = new Gson();
+                sendLog(gson.toJson(msg));
             }
             
 

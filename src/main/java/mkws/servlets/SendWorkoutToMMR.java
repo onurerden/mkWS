@@ -35,26 +35,31 @@ public class SendWorkoutToMMR extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         response.setContentType("text/html;charset=UTF-8");
         ServerEngine server = new ServerEngine();
-         int routeId = Integer.parseInt(request.getParameter("routeId"));
+        int routeId = Integer.parseInt(request.getParameter("routeId"));
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             //String jsonString=server.getMMRUserInfo(25,"MP");
-           // Gson json = new Gson();
+            // Gson json = new Gson();
             //MMRUser user = json.fromJson(jsonString,MMRUser.class);
             //out.println("User Name: " + user.getDisplay_name() + "<br>");
             //out.println("User Id  : " + user.getId());
-            int result=server.sendMMRWorkout(routeId);
-            if (result ==1){
-            out.println("{\"result\": \"success\"}");
-            }else{
+            if (request.getSession().getAttribute("userid") == null) {
+                out.println("{\"result\": \"mkWS authentication failed\"}");
+                return;
+            };
+            int result = server.sendMMRWorkout(routeId);
+            if (result == 1) {
+                out.println("{\"result\": \"success\"}");
+            } else {
                 out.println("{\"result\": \"failed\"}");
             }
-        } catch (Exception ex){
-            System.out.println("Error: " + ex.getMessage());
+        } catch (Exception ex) {
+            System.out.println("result: \"Error; "+ ex.getMessage()+"\"");
         }
-            
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
