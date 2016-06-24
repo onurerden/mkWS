@@ -757,7 +757,7 @@ public class ServerEngine implements IDeviceServer {
         Statement st_1 = null;
         String query = "INSERT INTO mk.logs SET logLevel = '" + msg.logLevel
                 + "', logMessage = '" + msg.logMessage + "' ";
-        System.out.println(query);
+        
         
         try {
             DeviceTypes deviceType = DeviceTypes.valueOf(msg.deviceType.toUpperCase());
@@ -779,6 +779,8 @@ public class ServerEngine implements IDeviceServer {
                     break;
                 }
             }
+            
+            
         } catch (NullPointerException ex) {
             System.out.println("NullPointerException at sendLog: " + ex.toString());
         }
@@ -787,7 +789,7 @@ public class ServerEngine implements IDeviceServer {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
-            
+            System.out.println(query);
             st_1.execute(query);
             status = 0;
             
