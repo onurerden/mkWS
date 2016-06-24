@@ -58,6 +58,7 @@ public class MMRWorkout {
 
     public class Aggregates {
 double distance_total=0.0;
+double active_time_total=0.0;
     }
 class AltitudeChartValues {
 
@@ -129,9 +130,11 @@ public int getDeviceId(){
         this.aggregates = new Aggregates();
                 
         this.aggregates.distance_total=gatherer.getRouteLength()*1000.0;
+        this.aggregates.active_time_total=(double)(gatherer.getTimeList().get(gatherer.getTimeList().size()-1).getTime()
+                - gatherer.getTimeList().get(0).getTime());
         this.setDeviceId(gatherer.getDeviceId());
         this.name = "FollowMeRoute: " + gatherer.getRouteId();
-        this.reference_key = "v003_"+gatherer.getRouteId();//increase if anything changes
+        this.reference_key = "v004_"+gatherer.getRouteId();//increase if anything changes
         this.notes = this.notes + "\nRouteId: " + gatherer.getRouteId();
         
         System.out.println(new Gson().toJson(this));
