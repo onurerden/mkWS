@@ -763,11 +763,11 @@ public class ServerEngine implements IDeviceServer {
             DeviceTypes deviceType = DeviceTypes.valueOf(msg.deviceType.toUpperCase());
             switch (deviceType) {
                 case MK: {
-                    query = ", " + query + "kopterId = '" + msg.deviceId + "'";
+                    query = query + ", " +  "kopterId = '" + msg.deviceId + "'";
                     break;
                 }
                 case MP: {
-                    query = ", " + query + "followMeDeviceId = '" + msg.deviceId + "'";
+                    query = query + ", " + "followMeDeviceId = '" + msg.deviceId + "'";
                     break;
                 }
                 case SERVER: {
