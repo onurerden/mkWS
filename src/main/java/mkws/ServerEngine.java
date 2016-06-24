@@ -776,10 +776,9 @@ public class ServerEngine implements IDeviceServer {
 
             st_1.execute(query);
             status = 0;
-
-        } catch (ClassNotFoundException ex) {
-
-        } catch (IllegalAccessException | InstantiationException | SQLException ex) {
+            
+        }catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
+            System.out.println("Exception while sendLog: " + ex.toString());
             status = -1;
         } finally {
             try {
