@@ -756,6 +756,10 @@ public class ServerEngine implements IDeviceServer {
                     query = ", " + query + "followMeDeviceId = '" + msg.deviceId + "'";
                     break;
                 }
+                case SERVER: {
+                    query = query + "";
+                    break;
+                }
                 default: {
                     query = query + "";
                     break;
@@ -1261,6 +1265,7 @@ public class ServerEngine implements IDeviceServer {
             } else {
                 LogMessage msg = new LogMessage();
                 msg.logLevel = 1;
+                msg.deviceType=DeviceTypes.SERVER.getName();
                 msg.logMessage = "MMR response code is: " + response.getStatusLine().getStatusCode() + " while sending Route: " + routeId + ".\n"
                         + "Response is: \n"
                         + responseString;

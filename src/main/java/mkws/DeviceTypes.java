@@ -24,6 +24,7 @@ public enum DeviceTypes
 {
   MK("Desktop",1),
   MP("Mobile Phone",2),
+  SERVER("Server",3),
   OTHER("Other Device",-1);
   
  
