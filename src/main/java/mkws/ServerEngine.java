@@ -743,6 +743,7 @@ public class ServerEngine implements IDeviceServer {
         Statement st_1 = null;
         String query = "INSERT INTO mk.logs SET logLevel = '" + msg.logLevel
                 + "', logMessage = '" + msg.logMessage + "'";
+        System.out.println(query);
 
         try {
             DeviceTypes deviceType = DeviceTypes.valueOf(msg.deviceType.toUpperCase());
