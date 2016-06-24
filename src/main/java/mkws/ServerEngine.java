@@ -6,6 +6,7 @@
 package mkws;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.sun.org.apache.xerces.internal.parsers.DOMParser;
 import java.io.ByteArrayInputStream;
@@ -18,7 +19,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -52,10 +55,10 @@ import org.xml.sax.SAXException;
  * @author oerden
  */
 public class ServerEngine implements IDeviceServer {
-
+    
     @Override
     public String touchServer(String uid, String deviceType) {
-
+        
         int deviceId = -1;
         String queryString = "";
         MKSession sessionInfo = new MKSession();
@@ -63,7 +66,7 @@ public class ServerEngine implements IDeviceServer {
 
         //Device device = Device.other;
         DeviceTypes device = DeviceTypes.OTHER;
-
+        
         try {
             device = DeviceTypes.valueOf(deviceType.toUpperCase());
             sessionInfo.setDeviceType(device);
@@ -71,7 +74,7 @@ public class ServerEngine implements IDeviceServer {
         } catch (Exception ex) {
             System.out.println("DeviceType alınamadı.");
         }
-
+        
         switch (device) {
             case MK: {
                 queryString = "SELECT * from kopter where UID = '" + uid + "'";
@@ -84,7 +87,7 @@ public class ServerEngine implements IDeviceServer {
                 break;
             }
         }
-
+        
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1 = null;
@@ -93,26 +96,26 @@ public class ServerEngine implements IDeviceServer {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
-
+            
             rs_1 = st_1.executeQuery(queryString);
-
+            
             switch (device) {
                 case MK: {
                     deviceId = -2;
                     sessionInfo.setDeviceId(-2);
-
+                    
                     if (rs_1.next()) {
                         MKopter kopter = new MKopter();
                         kopter.id = rs_1.getInt("id");
                         kopter.name = rs_1.getString("name");
                         kopter.isActive = rs_1.getBoolean("active");
                         kopter.uid = rs_1.getString("uid");
-
+                        
                         System.out.println("query device uid = " + kopter.uid + " device type mk");
                         //String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
                         Statement st_2 = con_1.createStatement();
                         st_2.executeUpdate("UPDATE kopter SET latestTouch = NOW() WHERE id = " + kopter.id);
-
+                        
                         deviceId = kopter.id;
                         sessionInfo.setDeviceId(kopter.id);
                     }
@@ -128,9 +131,9 @@ public class ServerEngine implements IDeviceServer {
                         phone.name = rs_1.getString("name");
                         phone.uid = rs_1.getString("uid");
                         phone.registerDate = rs_1.getTimestamp("registerDate");
-
+                        
                         System.out.println("query device uid = " + phone.uid + " device type phone");
-
+                        
                         deviceId = phone.id;
                         sessionInfo.setDeviceId(deviceId);
                     }
@@ -157,7 +160,7 @@ public class ServerEngine implements IDeviceServer {
         System.out.println(json.toJson(sessionInfo).toString());
         return json.toJson(sessionInfo);
     }
-
+    
     @Override
     public int registerDevice(String uid, String name, String deviceType) {
         //    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -167,10 +170,10 @@ public class ServerEngine implements IDeviceServer {
         if (name.length() == 0) {
             name = "defaultName";
         }
-
+        
         if ((deviceId == -2) || (deviceId == -3)) {
             String queryString = "";
-
+            
             DeviceTypes device = DeviceTypes.OTHER;
             try {
                 device = DeviceTypes.valueOf(deviceType.toUpperCase());
@@ -189,7 +192,7 @@ public class ServerEngine implements IDeviceServer {
                     break;
                 }
             }
-
+            
             Credentials cr = new Credentials();
             Connection con_1;
             Statement st_1;
@@ -198,10 +201,10 @@ public class ServerEngine implements IDeviceServer {
                 Class.forName("com.mysql.jdbc.Driver").newInstance();
                 con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
                 st_1 = con_1.createStatement();
-
+                
                 st_1.executeUpdate(queryString, Statement.RETURN_GENERATED_KEYS);
                 deviceId = jsonObject.fromJson(touchServer(uid, deviceType), MKSession.class).getDeviceId();
-
+                
                 con_1.close();
             } catch (SQLException ex) {
                 Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
@@ -212,11 +215,11 @@ public class ServerEngine implements IDeviceServer {
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
             }
-
+            
         }
         return deviceId;
     }
-
+    
     @Override
     public int sendStatus(String jsonStatus) {
         int result = -1;
@@ -225,9 +228,9 @@ public class ServerEngine implements IDeviceServer {
         Statement st_1 = null;
         System.out.println(jsonStatus);
         String queryString = "";
-
+        
         KopterStatus status = new KopterStatus();
-
+        
         Gson jsonObject = new Gson();
         status = jsonObject.fromJson(jsonStatus, KopterStatus.class);
         if (status.getKopterVario() > 32768) {
@@ -275,20 +278,20 @@ public class ServerEngine implements IDeviceServer {
             result = -2;
             result = st_1.executeUpdate(queryString);
             con_1.close();
-
+            
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
         return result;
     }
-
+    
     @Override
     public String getTask(int deviceId) {
 //        return "not implemented";
 
         String output = "-1";
         String queryString;
-
+        
         Credentials cr = new Credentials();
         Connection con_1;
         Statement st_1;
@@ -298,10 +301,10 @@ public class ServerEngine implements IDeviceServer {
             case -3: {
                 try {
                     Class.forName("com.mysql.jdbc.Driver").newInstance();
-
+                    
                     con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
                     st_1 = con_1.createStatement();
-
+                    
                     queryString = "SELECT * from waypoints "
                             + "WHERE missionId = (SELECT max(missionId) from koptermission WHERE kopterId = " + deviceId
                             + ")ORDER BY waypoints.id DESC";
@@ -324,17 +327,17 @@ public class ServerEngine implements IDeviceServer {
                         wp.waitingTime = rs_1.getInt("waitingTime");
                         wp.waypointEvent = rs_1.getInt("wpEvent");
                         wp.missionId = rs_1.getInt("missionId");
-
+                        
                         mission.waypoints.add(wp);
-
+                        
                     }
-
+                    
                     FollowMeData fmData = new FollowMeData();
                     fmData.setMission(mission);
-
+                    
                     fmData.event = 4;
                     Gson json = new Gson();
-
+                    
                     if (mission.waypoints.size() > 0) {
                         if (!isMissionSent(mission.waypoints.get(0).missionId)) {
                             output = json.toJson(fmData);
@@ -344,7 +347,7 @@ public class ServerEngine implements IDeviceServer {
                             output = json.toJson(fmData);
                         }
                     }
-
+                    
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (InstantiationException ex) {
@@ -354,16 +357,16 @@ public class ServerEngine implements IDeviceServer {
                 } catch (SQLException ex) {
                     Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
+                
             }
             break;
-
+            
             default: {
                 try {
                     Class.forName("com.mysql.jdbc.Driver").newInstance();
                     con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
                     st_1 = con_1.createStatement();
-
+                    
                     queryString = "SELECT * from followme WHERE followMeDeviceId = " + matchedDevice
                             + " AND sent = 0 "
                             + " AND followme.time > DATE_SUB(NOW(), INTERVAL 1 MINUTE)"
@@ -371,7 +374,7 @@ public class ServerEngine implements IDeviceServer {
                     System.out.println(queryString);
                     rs_1 = st_1.executeQuery(queryString);
                     FollowMeData data = new FollowMeData();
-
+                    
                     if (rs_1.next()) {
                         //data.kopterID = rs_1.getInt("kopterId");
                         System.out.println("Getting Data");
@@ -386,9 +389,9 @@ public class ServerEngine implements IDeviceServer {
                         data.setEvent(3);
                         data.setName("ComingHome");
                     }
-
+                    
                     Gson json = new Gson();
-
+                    
                     output = json.toJson(data);
                     System.out.println(output);
                     con_1.close();
@@ -399,15 +402,17 @@ public class ServerEngine implements IDeviceServer {
                 break;
             }
         }
-
+        
         return output;
     }
-
+    
     @Override
     public int sendFollowMeData(String json) {
         FollowMeData data;
-        Gson gson = new Gson();
-
+      //  Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+   .setDateFormat("yyyy-MM-dd hh:mm:ss").create();
+        
         try {
             data = gson.fromJson(json, FollowMeData.class);
         } catch (JsonSyntaxException ex) {
@@ -417,9 +422,9 @@ public class ServerEngine implements IDeviceServer {
         int result = sendFollowMeData(data);
         return result;
     }
-
+    
     public int sendFollowMeData(FollowMeData data) {
-
+        
         Credentials cr = new Credentials();
         Connection con_1;
         Statement st_1;
@@ -430,7 +435,7 @@ public class ServerEngine implements IDeviceServer {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
-
+            
             queryString = "INSERT INTO followme "
                     + "(`latitude`, `longitude`, `bearing`, `event`, `time`, `followMeDeviceId`, `sent`,`routeId`,`sessionId`, `speed`, `altitude` ) "
                     + "VALUES ("
@@ -449,29 +454,29 @@ public class ServerEngine implements IDeviceServer {
                     + "'" + data.getSessionId() + "', "
                     + "'" + data.getSpeed() + "', "
                     + "'" + data.getAltitude() + "')";
-
+            
             System.out.println(queryString);
             st_1.executeUpdate(queryString);
             con_1.close();
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Exception: "+ ex.getMessage());
+            System.out.println("Exception: " + ex.getMessage());
             return -1;
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Exception: "+ ex.getMessage());
-        } catch (Exception ex){
-            System.out.println("Exception: "+ ex.getMessage());
-    }
-
+            System.out.println("Exception: " + ex.getMessage());
+        } catch (Exception ex) {
+            System.out.println("Exception: " + ex.getMessage());
+        }
+        
         return 0;
     }
-
+    
     private int getMatchedDevice(int deviceId) {
         int matchedFollowMeDevice = -1;
         boolean hasMission = false;
-
+        
         Credentials cr = new Credentials();
         Connection con_1;
         Statement st_1;
@@ -479,22 +484,22 @@ public class ServerEngine implements IDeviceServer {
         String queryString = "SELECT followMeDeviceId, hasMission "
                 + "from devicematching "
                 + "where id=(SELECT max(id) from devicematching where kopterId=" + deviceId + ")";
-
+        
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
-
+            
             rs_1 = st_1.executeQuery(queryString);
-
+            
             while (rs_1.next()) {
                 matchedFollowMeDevice = rs_1.getInt(1);
                 hasMission = rs_1.getBoolean("hasMission");
-
+                
             }
             System.out.println("Follow followMeDevice: " + matchedFollowMeDevice);
             con_1.close();
-
+            
         } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -503,13 +508,13 @@ public class ServerEngine implements IDeviceServer {
         }
         return matchedFollowMeDevice;
     }
-
+    
     @Override
     public String getKopterStatus(int deviceId) {
         System.out.println("Looking for KopterStatus " + deviceId);
         String kopterStatusString = "-2";
         KopterStatus status = new KopterStatus();
-
+        
         Credentials cr = new Credentials();
         Connection con_1;
         Statement st_1;
@@ -522,7 +527,7 @@ public class ServerEngine implements IDeviceServer {
             System.out.println(queryString);
             rs_1 = st_1.executeQuery(queryString);
             System.out.println("KopterStatus found for " + deviceId);
-
+            
             if (rs_1.next()) {
                 status.setKopterId(rs_1.getInt("kopterId"));
                 status.setKopterAltitude(rs_1.getInt("altitude"));
@@ -544,12 +549,12 @@ public class ServerEngine implements IDeviceServer {
                 status.setFcStatusFlags1(rs_1.getString("fcFlags1"));
                 status.setFcStatusFlags2(rs_1.getString("fcFlags2"));
                 status.setBlTempList(rs_1.getString("blTempList"));
-
+                
                 System.out.println("All values Set");
-
+                
                 Gson gson = new Gson();
                 kopterStatusString = gson.toJson(status, KopterStatus.class);
-
+                
             }
             con_1.close();
         } catch (SQLException ex) {
@@ -558,11 +563,11 @@ public class ServerEngine implements IDeviceServer {
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         return kopterStatusString;
-
+        
     }
-
+    
     @Override
     public String getFollowMeData(int deviceId) {
         String jsonString = "";
@@ -583,7 +588,7 @@ public class ServerEngine implements IDeviceServer {
                     + "GROUP BY followMeDeviceId) AS s ON s.maksimum_id = followme.id "
                     + "INNER JOIN mk.followmedevices AS d ON followme.followMeDeviceId = d.id "
                     + "WHERE followme.time > DATE_SUB(CURRENT_TIMESTAMP(),INTERVAL 1 MINUTE)";
-
+            
         } else {
             queryString = "SELECT * from followme "
                     + "INNER JOIN followmedevices AS d "
@@ -609,11 +614,11 @@ public class ServerEngine implements IDeviceServer {
                     data.setName(rs_1.getString("name"));
                     data.setRouteId(rs_1.getInt("routeId"));
                     data.setSessionId(rs_1.getInt("sessionId"));
-
+                    
                     Gson gson = new Gson();
                     jsonString = gson.toJson(data, FollowMeData.class);
                 }
-
+                
             } else {
                 ArrayList<FollowMeData> datas = new ArrayList<FollowMeData>();
                 while (rs_1.next()) {
@@ -629,7 +634,7 @@ public class ServerEngine implements IDeviceServer {
                     data.setSessionId(rs_1.getInt("sessionId"));
                     datas.add(data);
                 }
-
+                
                 Gson gson = new Gson();
                 jsonString = gson.toJson(datas);
             }
@@ -655,7 +660,7 @@ public class ServerEngine implements IDeviceServer {
         }
         return jsonString;
     }
-
+    
     @Override
     public int getRouteId(int deviceId) {
         int routeId = -1;
@@ -675,21 +680,21 @@ public class ServerEngine implements IDeviceServer {
             System.out.println(queryString);
             st_1.executeUpdate(queryString);
             System.out.println("routeId for deviceId = " + deviceId + " is created.");
-
+            
             st_2 = con_1.createStatement();
             queryString = "SELECT MAX(id) AS maxId from mk.route WHERE followMeDeviceId = " + deviceId;
             System.out.println(queryString);
             rs_1 = st_2.executeQuery(queryString);
-
+            
             while (rs_1.next()) {
                 routeId = rs_1.getInt("maxId");
                 System.out.println("New routeId for deviceId = " + deviceId + " is " + routeId);
             }
-
+            
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             return -1;
-
+            
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
             return -2;
@@ -700,13 +705,13 @@ public class ServerEngine implements IDeviceServer {
                 Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
+        
         return routeId;
     }
-
+    
     @Override
     public int setTask(int kopterId, int followMeDeviceId) {
-
+        
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1;
@@ -718,11 +723,11 @@ public class ServerEngine implements IDeviceServer {
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             queryString = "INSERT INTO devicematching SET kopterId =" + kopterId + ", followMeDeviceId =" + followMeDeviceId;
-
+            
             st_1.executeUpdate(queryString);
-
+            
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
-
+            
         } finally {
             try {
                 con_1.close();
@@ -730,30 +735,30 @@ public class ServerEngine implements IDeviceServer {
                 Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
+        
         return 1;
     }
-
+    
     @Override
     public int sendLog(String logJson) {
         int status = -2;
         LogMessage msg = new LogMessage();
         Gson gson = new Gson();
-
+        
         try {
             msg = gson.fromJson(logJson, LogMessage.class);
         } catch (Exception ex) {
             System.out.println("LogMessage Parse error: " + ex.toString());
             return -2;
         }
-
+        
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1 = null;
         String query = "INSERT INTO mk.logs SET logLevel = '" + msg.logLevel
-                + "', logMessage = '" + msg.logMessage + "'";
+                + "', logMessage = '" + msg.logMessage + "' ";
         System.out.println(query);
-
+        
         try {
             DeviceTypes deviceType = DeviceTypes.valueOf(msg.deviceType.toUpperCase());
             switch (deviceType) {
@@ -777,15 +782,15 @@ public class ServerEngine implements IDeviceServer {
         } catch (NullPointerException ex) {
             System.out.println("NullPointerException at sendLog: " + ex.toString());
         }
-
+        
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
-
+            
             st_1.execute(query);
             status = 0;
-
+            
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
             System.out.println("Exception while sendLog: " + ex.toString());
             status = -1;
@@ -793,10 +798,10 @@ public class ServerEngine implements IDeviceServer {
             try {
                 con_1.close();
             } catch (SQLException ex) {
-
+                
             }
         }
-
+        
         return status;
     }
 
@@ -809,47 +814,47 @@ public class ServerEngine implements IDeviceServer {
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1 = null;
-
+        
         String query = "UPDATE  `route` SET isEnded =1 WHERE id =" + routeId;
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             st_1.executeUpdate(query);
-
+            
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
             return -1;
         }
-
+        
         return 0;
     }
-
+    
     private int createSession(int deviceId, DeviceTypes type) {
         int sessionId = -1;
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1;
         boolean isKopter = type.equals(DeviceTypes.MK);
-
+        
         String query = "INSERT INTO mk.session SET deviceId= '" + deviceId + "',"
                 + " deviceType = '" + type.getName().toString() + "',"
                 + " isKopter = " + isKopter;
         System.out.println(query);
-
+        
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             st_1.executeUpdate(query);
-
+            
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
             System.out.println("Error: " + ex.getMessage());
         } finally {
             try {
                 con_1.close();
             } catch (SQLException ex) {
-
+                
             }
         }
         query = "SELECT * from mk.session WHERE deviceId='" + deviceId + "'" + " AND deviceType = '" + type.getName().toString()
@@ -858,7 +863,7 @@ public class ServerEngine implements IDeviceServer {
         Connection con_2 = null;
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-
+            
             con_2 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             Statement st_2 = con_2.createStatement();
             ResultSet rs_2 = st_2.executeQuery(query);
@@ -866,7 +871,7 @@ public class ServerEngine implements IDeviceServer {
             sessionId = rs_2.getInt("id");
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
             sessionId = -2;
-
+            
         } finally {
             try {
                 con_2.close();
@@ -874,10 +879,10 @@ public class ServerEngine implements IDeviceServer {
                 sessionId = -3;
             }
         }
-
+        
         return sessionId;
     }
-
+    
     private String addZerosToByte(String preString) {
         if (preString.length() > 8) {
             preString = "00000000";
@@ -890,20 +895,20 @@ public class ServerEngine implements IDeviceServer {
         }
         return preZero + preString;
     }
-
+    
     @Override
     public String ping() {
         System.out.println("I am the one who will send 'Pongs'");
         return null;
-
+        
     }
-
+    
     public ArrayList<KopterStatus> getKopterSessionData(int sessionId) {
         ArrayList<KopterStatus> sessionList = new ArrayList<>();
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1;
-
+        
         String query = "SELECT * from kopterstatus WHERE sessionId=" + sessionId;
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -929,25 +934,25 @@ public class ServerEngine implements IDeviceServer {
                 newStatus.setTargetLatitude(rs_1.getDouble("targetLatitude"));
                 newStatus.setTargetLongitude(rs_1.getDouble("targetLongitude"));
                 newStatus.setSessionId(sessionId);
-
+                
                 sessionList.add(newStatus);
             }
-
+            
         } catch (Exception ex) {
             System.out.println("Error at collecting session data");
         }
-
+        
         return sessionList;
-
+        
     }
-
+    
     ;
 
     @Override
     public int saveGPXContent(String gpxString, String uid) {
-
+        
         System.out.println(uid + " bir gpx dosyası gönderdi.");
-
+        
         DOMParser parser = new DOMParser();
         int routeId = 0;
         boolean success = true;
@@ -969,28 +974,28 @@ public class ServerEngine implements IDeviceServer {
                 return -2;
             }
             routeId = getRouteId(session.getDeviceId());
-
+            
             NodeList nl = doc.getElementsByTagName("*");
             Node n;
             for (int i = 0; i < nl.getLength(); i++) {
-
+                
                 n = nl.item(i);
                 // System.out.print(n.getNodeName() + " ");
             }
-
+            
             NodeList nList = doc.getElementsByTagName("trkpt");
-
+            
             System.out.println("----------------------------");
             int temp = 0;
             for (temp = 0; temp < nList.getLength(); temp++) {
-
+                
                 Node nNode = nList.item(temp);
 
                 //System.out.println("\nCurrent Element :" + nNode.getNodeName());
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     FollowMeData fmData = new FollowMeData();
                     Element eElement = (Element) nNode;
-
+                    
                     try {
                         fmData.setLat(Double.valueOf(eElement.getAttribute("lat")));
                         fmData.setLon(Double.valueOf(eElement.getAttribute("lon")));
@@ -999,8 +1004,13 @@ public class ServerEngine implements IDeviceServer {
                         fmData.setRouteId(routeId);
                         fmData.setSessionId(session.getSessionId());
                         fmData.setFollowMeDeviceId(session.getDeviceId());
-                        fmData.setTime(Timestamp.valueOf(eElement.getAttribute("time")));
-
+                        
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        Date parsedDate = dateFormat.parse(eElement.getElementsByTagName("time").item(0).getTextContent());
+                        Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+                        
+                        fmData.setTime(timestamp);
+                                                
                         System.out.println("Latitude: " + fmData.getLat());
                         System.out.println("Longitude: " + fmData.getLat());
                         System.out.println("Elevation: " + fmData.getAltitude());
@@ -1009,12 +1019,16 @@ public class ServerEngine implements IDeviceServer {
                     } catch (NumberFormatException | DOMException ex) {
                         System.out.println("Error Message:" + ex.toString());
                         success = false;
+                    } catch (Exception ex) {
+                        System.out.println("Error Message:" + ex.toString());
+                        success = false;
                     }
+                    
                 }
             }
             if (success) {
                 LogMessage log = new LogMessage();
-                log.logMessage = session.getDeviceId() + " id\\'li followMe cihazı " + temp + " adet konum içeren GPX dosyasını başarıyla yükledi. RouteId: " + routeId;
+                log.logMessage = session.getDeviceId() + " id\'li followMe cihazı " + temp + " adet konum içeren GPX dosyasını başarıyla yükledi. RouteId: " + routeId;
                 log.deviceId = session.getDeviceId();
                 log.deviceType = "MP";
                 log.logLevel = 2;
@@ -1024,16 +1038,16 @@ public class ServerEngine implements IDeviceServer {
             } else {
                 return -3;
             }
-
+            
         } catch (SAXException | IOException | ParserConfigurationException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Exception thrown while GPX import: " + ex.getMessage());
             return -3;
         }
-
+        
         return 1;
     }
-
+    
     @Override
     public int saveMMRauthorizationCodeForDevice(int deviceId, String deviceType, String code) {
         deviceType = deviceType.toLowerCase();
@@ -1044,14 +1058,14 @@ public class ServerEngine implements IDeviceServer {
         } catch (Exception ex) {
             System.out.println("DeviceType alınamadı.");
         }
-
+        
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1;
         String query;
         switch (dt) {
             case MP: {
-
+                
                 query = "INSERT INTO mmrauthorization (code,followMeDeviceId ) VALUES (\""
                         + code + "\","
                         + deviceId + ")";
@@ -1078,7 +1092,7 @@ public class ServerEngine implements IDeviceServer {
         }
         return 1;
     }
-
+    
     public int saveMMRauthorizationToken(int deviceId, String deviceType, OAuthToken token) {
         deviceType = deviceType.toLowerCase();
         DeviceTypes dt = DeviceTypes.OTHER;
@@ -1088,15 +1102,15 @@ public class ServerEngine implements IDeviceServer {
         } catch (Exception ex) {
             System.out.println("DeviceType alınamadı.");
         }
-
+        
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1;
         String query;
-
+        
         switch (dt) {
             case MP: {
-
+                
                 query = "INSERT INTO mmrauthorization (code,followMeDeviceId,access_token,refresh_token,expires_in) VALUES (\""
                         + token.getAuthorizationCode() + "\","
                         + deviceId + ",\""
@@ -1132,15 +1146,15 @@ public class ServerEngine implements IDeviceServer {
         }
         return 1;
     }
-
+    
     public String mmrAccessToken(int deviceId, String deviceType) throws Exception {
         OAuthToken token = new OAuthToken();
         Credentials cr = new Credentials();
         token.setClientId(cr.getMmrClientId());
         token.setClientSecret(cr.getMmrClientSecret());
-
+        
         DeviceTypes dt = DeviceTypes.OTHER;
-
+        
         try {
             dt = DeviceTypes.valueOf(deviceType.toUpperCase());
             System.out.println(dt.getName());
@@ -1161,7 +1175,7 @@ public class ServerEngine implements IDeviceServer {
                 throw new Exception();
         }
         queryString = queryString + " ORDER BY id DESC LIMIT 1";
-
+        
         Connection con_1 = null;
         Statement st_1 = null;
         try {
@@ -1169,7 +1183,7 @@ public class ServerEngine implements IDeviceServer {
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             ResultSet rs = st_1.executeQuery(queryString);
-
+            
             if (rs.next()) {
                 token.setAuthorizationCode(rs.getString("code"));
                 token.setAccess_token(rs.getString("access_token"));
@@ -1188,16 +1202,16 @@ public class ServerEngine implements IDeviceServer {
             saveMMRauthorizationToken(deviceId, deviceType, token);
             return newToken;
         }
-
+        
         if (!token.getAuthorizationCode().equals("Not Set")) {
             String newToken = token.getNewAccessToken();
             saveMMRauthorizationToken(deviceId, deviceType, token);
             return newToken;
         }
-
+        
         return "No Authorization Code";
     }
-
+    
     public String getMMRUserInfo(int deviceId, String deviceType) {
         String types = "";
         Credentials cr = new Credentials();
@@ -1207,11 +1221,11 @@ public class ServerEngine implements IDeviceServer {
 
             //HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/activity_type/");
             HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/user/self/");
-
+            
             httpget.addHeader("Api-Key", cr.getMmrClientId());
             httpget.addHeader("Content-Type", cr.getMmrClientId());
             httpget.addHeader("Authorization", "Bearer " + mmrAccessToken(deviceId, deviceType));
-
+            
             MultipartEntity mpEntity = new MultipartEntity();
             //  mpEntity.addPart("grant_type", new StringBody("authorization_code"));
             //  mpEntity.addPart("code", new StringBody(getAuthorizationCode()));
@@ -1229,23 +1243,23 @@ public class ServerEngine implements IDeviceServer {
                 return "Error while getting Activity Types: " + responseString;
             }
             System.out.println(responseString);
-
+            
         } catch (Exception ex) {
-
+            
         }
-
+        
         return types;
     }
-
+    
     @Override
     public int endRoute(int routeId, boolean sendToMMR) {
         int result = endRoute(routeId);
-
+        
         return result;
     }
-
+    
     public int sendMMRWorkout(int routeId) {
-
+        
         MMRWorkout workout = new MMRWorkout();
         workout.populateWorkout(routeId);
         //MMRUser user = new Gson().fromJson(getMMRUserInfo(workout.getDeviceId(), "MP"), MMRUser.class);
@@ -1254,22 +1268,22 @@ public class ServerEngine implements IDeviceServer {
         try {
             HttpClient httpclient = new DefaultHttpClient();
             httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
-
+            
             HttpPost httppost = new HttpPost("https://oauth2-api.mapmyapi.com/v7.1/workout/");
             httppost.addHeader("Api-Key", cr.getMmrClientId());
             httppost.addHeader("Content-Type", "application/json");
             httppost.addHeader("Authorization", "Bearer " + mmrAccessToken(workout.getDeviceId(), "MP"));
-
+            
             StringEntity entity = new StringEntity(new Gson().toJson(workout));
             httppost.setEntity(entity);
-
+            
             HttpResponse response = httpclient.execute(httppost);
             HttpEntity resEntity = response.getEntity();
             String responseString = EntityUtils.toString(resEntity, "UTF-8");
             System.out.println(responseString);
             System.out.println("MMR response code is:" + response.getStatusLine().getStatusCode());
             if ((int) response.getStatusLine().getStatusCode() / 100 == 2) {
-
+                
                 result = 1;
             } else {
                 LogMessage msg = new LogMessage();
@@ -1281,21 +1295,21 @@ public class ServerEngine implements IDeviceServer {
                 Gson gson = new Gson();
                 sendLog(gson.toJson(msg));
             }
-
+            
         } catch (Exception ex) {
             System.out.println("Error while sendMMRWorkout: " + ex.getMessage());
         }
         return result;
     }
-
+    
     @Override
     public int saveMission(MKMission mission, String name, String comments) {
-
+        
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1;
         String query;
-
+        
         query = "INSERT into mk.missions (`name`,`comments`) values (\"" + name + "\",\"" + comments + "\");"
                 + "SET @last_id_in_table1 = LAST_INSERT_ID();";
         for (Waypoint wp : mission.waypoints) {
@@ -1318,7 +1332,7 @@ public class ServerEngine implements IDeviceServer {
             query = query + "INSERT into mk.koptermission (`missionId`, `kopterId`) VALUES (@last_id_in_table1, " + mission.mkId + ");";
             query = query + "INSERT into mk.devicematching (`kopterId`, `hasMission`) VALUES (" + mission.mkId + ", true);";
         }
-
+        
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
@@ -1331,16 +1345,16 @@ public class ServerEngine implements IDeviceServer {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
             return -2;
         }
-
+        
         return 1;
     }
-
+    
     @Override
     public String getMission(int kopterId) {
-
+        
         return new String();
     }
-
+    
     private void setMissionSent(int missionId) {
         try {
             Credentials cr = new Credentials();
@@ -1361,9 +1375,9 @@ public class ServerEngine implements IDeviceServer {
         } catch (IllegalAccessException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
     }
-
+    
     private boolean isMissionSent(int missionId) {
         boolean isSent = false;
         Credentials cr = new Credentials();
@@ -1371,18 +1385,18 @@ public class ServerEngine implements IDeviceServer {
         Statement st_1;
         ResultSet rs_1;
         String queryString = "SELECT isSent from koptermission WHERE missionId = " + missionId;
-
+        
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
-
+            
             rs_1 = st_1.executeQuery(queryString);
             while (rs_1.next()) {
                 isSent = rs_1.getBoolean("isSent");
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
-
+            
         }
         return isSent;
     }
