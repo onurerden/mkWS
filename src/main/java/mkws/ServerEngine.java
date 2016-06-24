@@ -456,10 +456,14 @@ public class ServerEngine implements IDeviceServer {
 
         } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Exception: "+ ex.getMessage());
             return -1;
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            System.out.println("Exception: "+ ex.getMessage());
+        } catch (Exception ex){
+            System.out.println("Exception: "+ ex.getMessage());
+    }
 
         return 0;
     }
