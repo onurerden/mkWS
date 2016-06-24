@@ -17,6 +17,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -436,9 +437,13 @@ public class ServerEngine implements IDeviceServer {
                     + "'" + data.getLat() + "', "
                     + "'" + data.getLon() + "', "
                     + "'" + data.getBearing() + "', "
-                    + "'" + data.getEvent() + "', "
-                    + "NOW(), "
-                    + "'" + data.getFollowMeDeviceId() + "', "
+                    + "'" + data.getEvent() + "', ";
+            if (data.getTime() != null) {
+                queryString = queryString + "'" + data.getTime().toString() + "', ";
+            } else {
+                queryString = queryString + "NOW(), ";
+            }
+            queryString = queryString + "'" + data.getFollowMeDeviceId() + "', "
                     + "'0', "
                     + "'" + data.getRouteId() + "', "
                     + "'" + data.getSessionId() + "', "
@@ -768,7 +773,7 @@ public class ServerEngine implements IDeviceServer {
         } catch (NullPointerException ex) {
             System.out.println("NullPointerException at sendLog: " + ex.toString());
         }
-        
+
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
@@ -776,8 +781,8 @@ public class ServerEngine implements IDeviceServer {
 
             st_1.execute(query);
             status = 0;
-            
-        }catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
+
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
             System.out.println("Exception while sendLog: " + ex.toString());
             status = -1;
         } finally {
@@ -990,6 +995,7 @@ public class ServerEngine implements IDeviceServer {
                         fmData.setRouteId(routeId);
                         fmData.setSessionId(session.getSessionId());
                         fmData.setFollowMeDeviceId(session.getDeviceId());
+                        fmData.setTime(Timestamp.valueOf(eElement.getAttribute("time")));
 
                         System.out.println("Latitude: " + fmData.getLat());
                         System.out.println("Longitude: " + fmData.getLat());
@@ -1264,7 +1270,7 @@ public class ServerEngine implements IDeviceServer {
             } else {
                 LogMessage msg = new LogMessage();
                 msg.logLevel = 1;
-                msg.deviceType=DeviceTypes.SERVER.getName();
+                msg.deviceType = DeviceTypes.SERVER.getName();
                 msg.logMessage = "MMR response code is: " + response.getStatusLine().getStatusCode() + " while sending Route: " + routeId + ".\n"
                         + "Response is: \n"
                         + responseString;
