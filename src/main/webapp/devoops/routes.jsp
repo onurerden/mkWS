@@ -27,12 +27,20 @@
                             cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
 
                     Statement statement = connection.createStatement();
+                    //ResultSet resultset
+                      //      = statement.executeQuery("SELECT followme.routeId, followmedevices.name, route.time, route.isEnded FROM  followme "
+                        //            + "INNER JOIN followmedevices ON followme.followMeDeviceId = followmedevices.id "
+                          //          + "INNER JOIN route ON followme.routeId = route.id "
+                            //        + "GROUP BY followme.routeId "
+                              //      + "ORDER BY time DESC");
                     ResultSet resultset
                             = statement.executeQuery("SELECT followme.routeId, followmedevices.name, route.time, route.isEnded FROM  followme "
                                     + "INNER JOIN followmedevices ON followme.followMeDeviceId = followmedevices.id "
                                     + "INNER JOIN route ON followme.routeId = route.id "
+                                    + "WHERE route.isDeleted=FALSE "
                                     + "GROUP BY followme.routeId "
                                     + "ORDER BY time DESC");
+                    
                 %>
                 <div class="row">
                     <div id="breadcrumb" class="col-xs-12">

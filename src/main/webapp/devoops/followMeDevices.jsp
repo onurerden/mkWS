@@ -67,10 +67,10 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>FollowMeDevice Id</th>
-                                            <th>FollowMeDevice Name</th>
-                                            <th>FollowMeDevice UID</th>
-                                            <th>Latest Data UID</th>
+                                            <th>FollowMe Device Id</th>
+                                            <th>FollowMe Device Name</th>
+                                            <th>FollowMe Device UID</th>
+                                            <th>Latest Data</th>
                                         </tr>
                                     </thead>
                                     <tbody>

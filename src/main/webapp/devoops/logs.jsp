@@ -74,7 +74,7 @@
                                             <th>Log Id</th>
                                             <th>log Level</th>
                                             <th>Kopter Device Id</th>
-                                            <th>FollowMeDevice Id</th>
+                                            <th>FollowMe Device Id</th>
                                             <th>Log Message</th>
                                             <th>Time</th>
 
