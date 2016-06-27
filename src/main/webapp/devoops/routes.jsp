@@ -17,7 +17,7 @@
         <div class="row">
             <%@ include file="nav.jsp" %>                                                 
             <div id="content" class="col-xs-12 col-sm-10">
-               
+
                 <%// Class.forName("sun.jdbc.odbc.JdbcOdbcDriver"); %>
                 <% Class.forName("com.mysql.jdbc.Driver").newInstance(); %>
                 <% 
@@ -28,11 +28,11 @@
 
                     Statement statement = connection.createStatement();
                     //ResultSet resultset
-                      //      = statement.executeQuery("SELECT followme.routeId, followmedevices.name, route.time, route.isEnded FROM  followme "
-                        //            + "INNER JOIN followmedevices ON followme.followMeDeviceId = followmedevices.id "
-                          //          + "INNER JOIN route ON followme.routeId = route.id "
-                            //        + "GROUP BY followme.routeId "
-                              //      + "ORDER BY time DESC");
+                    //      = statement.executeQuery("SELECT followme.routeId, followmedevices.name, route.time, route.isEnded FROM  followme "
+                    //            + "INNER JOIN followmedevices ON followme.followMeDeviceId = followmedevices.id "
+                    //          + "INNER JOIN route ON followme.routeId = route.id "
+                    //        + "GROUP BY followme.routeId "
+                    //      + "ORDER BY time DESC");
                     ResultSet resultset
                             = statement.executeQuery("SELECT followme.routeId, followmedevices.name, route.time, route.isEnded FROM  followme "
                                     + "INNER JOIN followmedevices ON followme.followMeDeviceId = followmedevices.id "
@@ -40,7 +40,7 @@
                                     + "WHERE route.isDeleted=FALSE "
                                     + "GROUP BY followme.routeId "
                                     + "ORDER BY time DESC");
-                    
+
                 %>
                 <div class="row">
                     <div id="breadcrumb" class="col-xs-12">
@@ -50,6 +50,19 @@
                         </ol>
                     </div>
                 </div>
+<c:choose>
+    <c:when test="${param.message=='dr'}">
+       <div class="alert alert-success">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Success!</strong> Route successfully deleted.
+                </div>
+    </c:when>    
+    <c:otherwise>
+      
+    </c:otherwise>
+</c:choose>
+                
+
                 <div class="row">
                     <div id="routes" class="col-xs-12">
                         <div class="box">
@@ -96,9 +109,15 @@
                                                     <%= resultset.getInt("routeId")%></a></td>
                                             <td><%= resultset.getString("name")%></td>
                                             <td><%= resultset.getTimestamp("time")%>
-                                                <% if (resultset.getInt("isEnded")==0) {%>
+                                                <% if (resultset.getInt("isEnded") == 0) {%>
                                                 <a href="getFollowMeOnMap.jsp?routeId=<%= resultset.getInt("routeId")%>" role="button" class="btn btn-danger">Live</a>
-                                                <% } %>
+                                                <% }%>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-primary"
+                                                        onClick="deleteRoute(<%=resultset.getInt("routeId")%>)">
+                                                    Delete
+                                                </button>
                                             </td>
 
 
@@ -106,25 +125,24 @@
                                         <% }%>
 
                                     </tbody>
-                                    <% connection.close(); %>
+                                    <% connection.close();%>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
 
             </div>
         </div>
     </div>
-                        <%@ include file="foot.jsp" %>         
-                                <script>
+    <%@ include file="foot.jsp" %>         
+    <script>
         function AllTables() {
             $('#routeTable').dataTable({
                 "aaSorting": [[0, "desc"]],
                 "sDom": "<'box-content'<'col-sm-6'f><'col-sm-6 text-right'l><'clearfix'>>rt<'box-content'<'col-sm-6'i><'col-sm-6 text-right'p><'clearfix'>>",
                 "sPaginationType": "bootstrap",
-                
                 "oLanguage": {
                     "sSearch": "",
                     "sLengthMenu": '_MENU_',
@@ -135,11 +153,28 @@
         }
         function MakeSelect2() {
             $('select').select2();
-            $('.dataTables_filter').each(function() {
+            $('.dataTables_filter').each(function () {
                 $(this).find('label input[type=text]').attr('placeholder', 'Search');
             });
         }
-        $(document).ready(function() {
+
+        function deleteRoute(routeId) {
+            console.log("delete clicked for route: " + routeId);
+            var link = "../DeleteRoute?routeId=" + routeId;
+            console.log(link);
+            $.ajax({url: link, success: function (result) {
+
+                    var info = JSON.parse(result);
+
+                    console.log(info);
+
+                    if (info.result === "success") {
+                        window.location.replace("./routes.jsp?message=dr");
+                    }
+                }});
+
+        }
+        $(document).ready(function () {
 
 
 

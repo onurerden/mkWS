@@ -32,6 +32,8 @@
                         </ol>
                     </div>
                 </div>
+                        <div id="results"></div>
+                        
                 <div class="row">
                     <div id="routes" class="col-md-8 col-lg-9">
                         <div class="box">
@@ -97,6 +99,7 @@
 
                                 <br>
                                 <button id="btn" class="btn btn-danger"  onclick="sendMMR()"> Upload to MMR</button>
+                                <button id="deletebutton" class="btn btn-danger" onClick="deleteRoute(<% out.println(Integer.parseInt(request.getParameter("routeId")));%>)">Delete Route</button>
                                 <div id="divResult"></div>
                             </div>
 
@@ -183,297 +186,316 @@
     <script src="http://code.highcharts.com/highcharts.js"></script>
     <script>
 
-    function sendMMR() {
-        console.log("clicked");
-        $("#divResult").html("");
-        var routeId= <% out.println(Integer.parseInt(request.getParameter("routeId")));%>;
-        var link = "../SendWorkoutToMMR?routeId=" + routeId;
-        $.ajax({url: link, success: function(result){
-        
-        var info = JSON.parse(result);
-        $("#divResult").html(info.result);
-        
-        console.log(info.result);
-        
-        if(info.result==="success"){
-        $('#btn').prop('disabled', true);
-            }
-        }});
-        
-    };
+                                        function sendMMR() {
+                                            console.log("clicked");
+                                            $("#divResult").html("");
+                                            var routeId = <% out.println(Integer.parseInt(request.getParameter("routeId")));%>;
+                                            var link = "../SendWorkoutToMMR?routeId=" + routeId;
+                                            $.ajax({url: link, success: function (result) {
 
-</script>
+                                                    var info = JSON.parse(result);
+                                                    $("#divResult").html(info.result);
+
+                                                    console.log(info.result);
+
+                                                    if (info.result === "success") {
+                                                        $('#btn').prop('disabled', true);
+                                                    }else{
+                                                        $("#result").html("success")};
+                                                }});
+
+                                        }
+                                        ;
+
+    </script>
     <script type="text/javascript">
 
-                                        var speedChart;
-                                        var altitudeChart;
-                                        var myTooltip;
-                                        var altitudeTooltip;
-                                        var speedButton;
-                                        var altitudeButton;
-                                        var myMap;
-                                        var mapMarker;
+        var speedChart;
+        var altitudeChart;
+        var myTooltip;
+        var altitudeTooltip;
+        var speedButton;
+        var altitudeButton;
+        var myMap;
+        var mapMarker;
 
-                                        // Initializes the map as soon as the API is loaded and DOM is ready
-                                        ymaps.ready(init);
+        // Initializes the map as soon as the API is loaded and DOM is ready
+        ymaps.ready(init);
 
-                                        function init() {
-                                            myMap = new ymaps.Map("yandex", {
-                                                //    center: <jsp:getProperty name="routeBean" property="routeStartPoint"/>
-                                                //    zoom: 15,
-                                                bounds:<jsp:getProperty name="routeBean" property="mapBounds"/>
-                                            }),
-                                                    // A polyline
-                                                    myPolyline = new ymaps.Polyline([
-                                                        // The coordinates of polyline vertices.
+        function init() {
+            myMap = new ymaps.Map("yandex", {
+                //    center: <jsp:getProperty name="routeBean" property="routeStartPoint"/>
+                //    zoom: 15,
+                bounds:<jsp:getProperty name="routeBean" property="mapBounds"/>
+            }),
+                    // A polyline
+                    myPolyline = new ymaps.Polyline([
+                        // The coordinates of polyline vertices.
 
 
         <jsp:getProperty name="routeBean" property="routePoints"/>
-                                                    ], {
-                                                        // The balloon content
-                                                        balloonContent: "FollowMe Device Route for device: <jsp:getProperty name="routeBean" property="routeId"/>"
-                                                    }, {
-                                                        // Balloon options
-                                                        // Disabling the "Close" button
-                                                        balloonHasCloseButton: false,
-                                                        // The line width
-                                                        strokeWidth: 4,
-                                                        // The line transparency
-                                                        strokeOpacity: 0.8,
-                                                        // Defines the color of the line - white
-                                                        strokeColor: "#FF0000"
-                                                    });
+                    ], {
+                        // The balloon content
+                        balloonContent: "FollowMe Device Route for device: <jsp:getProperty name="routeBean" property="routeId"/>"
+                    }, {
+                        // Balloon options
+                        // Disabling the "Close" button
+                        balloonHasCloseButton: false,
+                        // The line width
+                        strokeWidth: 4,
+                        // The line transparency
+                        strokeOpacity: 0.8,
+                        // Defines the color of the line - white
+                        strokeColor: "#FF0000"
+                    });
 
-                                            myStartPoint = new ymaps.GeoObject({
-                                                geometry: {
-                                                    type: "Point",
-                                                    coordinates: <jsp:getProperty name="routeBean" property="routeStartPoint"/>
-                                                },
-                                                properties: {
-                                                    iconContent: "Başlangıç"}
-                                            }, {preset: 'twirl#greenStretchyIcon'});
+            myStartPoint = new ymaps.GeoObject({
+                geometry: {
+                    type: "Point",
+                    coordinates: <jsp:getProperty name="routeBean" property="routeStartPoint"/>
+                },
+                properties: {
+                    iconContent: "Başlangıç"}
+            }, {preset: 'twirl#greenStretchyIcon'});
 
-                                            myEndPoint = new ymaps.GeoObject({
-                                                geometry: {
-                                                    type: "Point",
-                                                    coordinates: <jsp:getProperty name="routeBean" property="routeEndPoint"/>
-                                                },
-                                                properties: {
-                                                    iconContent: "Bitiş"}
-                                            }, {preset: 'twirl#redStretchyIcon'});
+            myEndPoint = new ymaps.GeoObject({
+                geometry: {
+                    type: "Point",
+                    coordinates: <jsp:getProperty name="routeBean" property="routeEndPoint"/>
+                },
+                properties: {
+                    iconContent: "Bitiş"}
+            }, {preset: 'twirl#redStretchyIcon'});
 
-                                            // Adds geo objects to the map 
+            // Adds geo objects to the map 
 
-                                            myMap.geoObjects
-                                                    .add(myPolyline)
-                                                    .add(myStartPoint)
-                                                    .add(myEndPoint);
-
-
+            myMap.geoObjects
+                    .add(myPolyline)
+                    .add(myStartPoint)
+                    .add(myEndPoint);
 
 
 
-                                            var button = new ymaps.control.Button({
-                                                data: {
-                                                    // Setting an icon for the button.
-                                                    //image: 'images/button.jpg',
-                                                    // Text on the icon.
-                                                    content: 'Save',
-                                                    // Text for the popup hint.
-                                                    title: 'Click to save the route'
-                                                }
-                                            }, {
-                                                // Setting options for the button.
-                                                selectOnClick: false
 
-                                            });
-                                            myMap.controls.add(button, {bottom: 10, left: 5});
 
-                                            myMap.controls.add('mapTools');
-                                            myMap.controls.add('typeSelector');
-                                            myMap.controls.add('smallZoomControl');
-                                            myMap.copyrights.add('&copy; Belkopter Team');
-                                            myMap.setZoom(myMap.getZoom() - 1);
-                                        }
+            var button = new ymaps.control.Button({
+                data: {
+                    // Setting an icon for the button.
+                    //image: 'images/button.jpg',
+                    // Text on the icon.
+                    content: 'Save',
+                    // Text for the popup hint.
+                    title: 'Click to save the route'
+                }
+            }, {
+                // Setting options for the button.
+                selectOnClick: false
 
-                                        function DrawAllxCharts() {
+            });
+            myMap.controls.add(button, {bottom: 10, left: 5});
 
-                                            drawAltitudeChart();
-                                            msecConv();
+            myMap.controls.add('mapTools');
+            myMap.controls.add('typeSelector');
+            myMap.controls.add('smallZoomControl');
+            myMap.copyrights.add('&copy; Belkopter Team');
+            myMap.setZoom(myMap.getZoom() - 1);
+        }
 
-                                        }
+        function DrawAllxCharts() {
 
-                                        function kmhConv() {
+            drawAltitudeChart();
+            msecConv();
 
-                                            var speedJSON = <jsp:getProperty name="routeBean" property = "routeSpeedKmhValues"/>
+        }
 
-                                            speedChart = new Highcharts.Chart({
-                                                chart: {
-                                                    renderTo: 'speedChart',
-                                                    type: 'area',
-                                                    zoomType: "x",
-                                                    events: {
-                                                        load: function () {
-                                                            myTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
-                                                        }
-                                                    }
-                                                },
-                                                title: {
-                                                    text: 'Speed (km/h)'
-                                                },
-                                                xAxis: {
-                                                    title: {
-                                                        text: "Speed (km/h)"
-                                                    },
-                                                    events: {
-                                                        afterSetExtremes: function (evt) {
+        function kmhConv() {
+
+            var speedJSON = <jsp:getProperty name="routeBean" property = "routeSpeedKmhValues"/>
+
+            speedChart = new Highcharts.Chart({
+                chart: {
+                    renderTo: 'speedChart',
+                    type: 'area',
+                    zoomType: "x",
+                    events: {
+                        load: function () {
+                            myTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
+                        }
+                    }
+                },
+                title: {
+                    text: 'Speed (km/h)'
+                },
+                xAxis: {
+                    title: {
+                        text: "Speed (km/h)"
+                    },
+                    events: {
+                        afterSetExtremes: function (evt) {
 //                            console.log(altitudeChart.xAxis[0].getExtremes());
 
-                                                            altitudeChart.xAxis[0].setExtremes(speedChart.xAxis[0].getExtremes().min, speedChart.xAxis[0].getExtremes().max);
-                                                            if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
-                                                                console.log('speedChart reset zoom');
-                                                                $('.highcharts-button').hide();
+                            altitudeChart.xAxis[0].setExtremes(speedChart.xAxis[0].getExtremes().min, speedChart.xAxis[0].getExtremes().max);
+                            if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
+                                console.log('speedChart reset zoom');
+                                $('.highcharts-button').hide();
 
-                                                            } else {
-                                                                altitudeButton = altitudeChart.showResetZoom();
-                                                                console.log('speedChart zoom-in');
+                            } else {
+                                altitudeButton = altitudeChart.showResetZoom();
+                                console.log('speedChart zoom-in');
 
-                                                            }
-                                                        }
-                                                    }
-                                                },
-                                                credits: {
-                                                    enabled: false
-                                                },
-                                                animation: true,
-                                                tooltip: {
-                                                    enabled: false
-                                                },
-                                                series: [{
-                                                        name: 'Speed (km/h)',
-                                                        data: speedJSON,
-                                                        color: '#3880aa',
-                                                        fillOpacity: 0.1,
-                                                        lineWidth: 3,
-                                                        turboThreshold: 0,
-                                                        point: {
-                                                            events: {
-                                                                mouseOver: function (evt) {
+                            }
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                animation: true,
+                tooltip: {
+                    enabled: false
+                },
+                series: [{
+                        name: 'Speed (km/h)',
+                        data: speedJSON,
+                        color: '#3880aa',
+                        fillOpacity: 0.1,
+                        lineWidth: 3,
+                        turboThreshold: 0,
+                        point: {
+                            events: {
+                                mouseOver: function (evt) {
 //                                    console.log('mouseOver');
-                                                                    //   myTooltip.enabled = false;
-                                                                    //myTooltip.enabled = false;
-                                                                    // myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
-                                                                    myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
-                                                                    //altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
-                                                                    altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
+                                    //   myTooltip.enabled = false;
+                                    //myTooltip.enabled = false;
+                                    // myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
+                                    myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
+                                    //altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
+                                    altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
 
-                                                                }}}
-                                                    }]
-                                            });
+                                }}}
+                    }]
+            });
 
-                                            document.getElementById("kmhButton").className = 'btn btn-primary';
-                                            document.getElementById("kmhButton").disabled = true;
-                                            document.getElementById("msecButton").className = 'btn btn-default';
-                                            document.getElementById("msecButton").disabled = false;
+            document.getElementById("kmhButton").className = 'btn btn-primary';
+            document.getElementById("kmhButton").disabled = true;
+            document.getElementById("msecButton").className = 'btn btn-default';
+            document.getElementById("msecButton").disabled = false;
 
-                                        }
+        }
 
-                                        function msecConv() {
+        function msecConv() {
 //alert("denemedir");
 
-                                            var speedJSON = <jsp:getProperty name="routeBean" property = "routeSpeedValues"/>
+            var speedJSON = <jsp:getProperty name="routeBean" property = "routeSpeedValues"/>
 
-                                            speedChart = new Highcharts.Chart({
-                                                chart: {
-                                                    renderTo: 'speedChart',
-                                                    type: 'area',
-                                                    zoomType: "x",
-                                                    events: {
-                                                        load: function () {
-                                                            myTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
-                                                        }
-                                                    }
-                                                },
-                                                title: {
-                                                    text: 'Speed (m/sec)'
-                                                },
-                                                credits: {
-                                                    enabled: false
-                                                },
-                                                xAxis: {
-                                                    title: {
-                                                        text: "Speed (m/sec)"
-                                                    },
-                                                    events: {
-                                                        afterSetExtremes: function (evt) {
+            speedChart = new Highcharts.Chart({
+                chart: {
+                    renderTo: 'speedChart',
+                    type: 'area',
+                    zoomType: "x",
+                    events: {
+                        load: function () {
+                            myTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
+                        }
+                    }
+                },
+                title: {
+                    text: 'Speed (m/sec)'
+                },
+                credits: {
+                    enabled: false
+                },
+                xAxis: {
+                    title: {
+                        text: "Speed (m/sec)"
+                    },
+                    events: {
+                        afterSetExtremes: function (evt) {
 //                            console.log(altitudeChart.xAxis[0].getExtremes());
 
-                                                            altitudeChart.xAxis[0].setExtremes(speedChart.xAxis[0].getExtremes().min, speedChart.xAxis[0].getExtremes().max);
-                                                            if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
-                                                                console.log('speedChart reset zoom');
-                                                                $('.highcharts-button').hide();
+                            altitudeChart.xAxis[0].setExtremes(speedChart.xAxis[0].getExtremes().min, speedChart.xAxis[0].getExtremes().max);
+                            if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
+                                console.log('speedChart reset zoom');
+                                $('.highcharts-button').hide();
 
-                                                            } else {
-                                                                altitudeButton = altitudeChart.showResetZoom();
-                                                                console.log('speedChart zoom-in');
+                            } else {
+                                altitudeButton = altitudeChart.showResetZoom();
+                                console.log('speedChart zoom-in');
 
-                                                            }
+                            }
 
-                                                        }
-                                                    }
-                                                },
-                                                tooltip: {
-                                                    enabled: false
-                                                },
-                                                animation: true,
-                                                series: [{
-                                                        name: 'Speed (m/sec)',
-                                                        data: speedJSON,
-                                                        color: '#3880aa',
-                                                        fillOpacity: 0.1,
-                                                        lineWidth: 3,
-                                                        turboThreshold: 0,
-                                                        point: {
-                                                            events: {
-                                                                mouseOver: function (evt) {
+                        }
+                    }
+                },
+                tooltip: {
+                    enabled: false
+                },
+                animation: true,
+                series: [{
+                        name: 'Speed (m/sec)',
+                        data: speedJSON,
+                        color: '#3880aa',
+                        fillOpacity: 0.1,
+                        lineWidth: 3,
+                        turboThreshold: 0,
+                        point: {
+                            events: {
+                                mouseOver: function (evt) {
 //                                    console.log('mouseOver');
-                                                                    //    myTooltip.enabled = false;
-                                                                    // myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
-                                                                    myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
-                                                                    //altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
-                                                                    altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
-                                                                     var str = "[" + "<jsp:getProperty name="routeBean" property = "routePoints"/>";
-                                                                     str = str.substring(0, str.length - 1) + "]";
-                                                                        var routePoints = JSON.parse(str);
-                                                                    if ( mapMarker != null){
-                                                                        // myMap.geoObjects.remove(mapMarker);
-                                                                        myMap.geoObjects.remove(mapMarker);
-                                                                        mapMarker = new ymaps.GeoObject({
-                                                                            geometry: {
-                                                                                type: "Point",
-                                                                                coordinates: routePoints[evt.target.index]
-                                                                            }});
-                                                                        myMap.geoObjects.add(mapMarker);
-                                                                    } else {
-                                                                        //myMap.geoObjects.remove(mapMarker);
-                                                                        mapMarker = new ymaps.GeoObject({
-                                                                            geometry: {
-                                                                                type: "Point",
-                                                                                coordinates: routePoints[evt.target.index]
-                                                                            }});
-                                                                        myMap.geoObjects.add(mapMarker);
-                                                                    }
-                                                                }}}
-                                                    }]
-                                            });
-                                            document.getElementById("kmhButton").className = 'btn btn-default';
-                                            document.getElementById("kmhButton").disabled = false;
-                                            document.getElementById("msecButton").className = 'btn btn-primary';
-                                            document.getElementById("msecButton").disabled = true;
+                                    //    myTooltip.enabled = false;
+                                    // myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
+                                    myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
+                                    //altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
+                                    altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
+                                    var str = "[" + "<jsp:getProperty name="routeBean" property = "routePoints"/>";
+                                    str = str.substring(0, str.length - 1) + "]";
+                                    var routePoints = JSON.parse(str);
+                                    if (mapMarker != null) {
+                                        // myMap.geoObjects.remove(mapMarker);
+                                        myMap.geoObjects.remove(mapMarker);
+                                        mapMarker = new ymaps.GeoObject({
+                                            geometry: {
+                                                type: "Point",
+                                                coordinates: routePoints[evt.target.index]
+                                            }});
+                                        myMap.geoObjects.add(mapMarker);
+                                    } else {
+                                        //myMap.geoObjects.remove(mapMarker);
+                                        mapMarker = new ymaps.GeoObject({
+                                            geometry: {
+                                                type: "Point",
+                                                coordinates: routePoints[evt.target.index]
+                                            }});
+                                        myMap.geoObjects.add(mapMarker);
+                                    }
+                                }}}
+                    }]
+            });
+            document.getElementById("kmhButton").className = 'btn btn-default';
+            document.getElementById("kmhButton").disabled = false;
+            document.getElementById("msecButton").className = 'btn btn-primary';
+            document.getElementById("msecButton").disabled = true;
 
-                                        }
+        }
 
 
+    </script>
+    <script>function deleteRoute(routeId) {
+            console.log("delete clicked for route: " + routeId);
+            var link = "../DeleteRoute?routeId=" + routeId;
+            console.log(link);
+            $.ajax({url: link, success: function (result) {
+
+                    var info = JSON.parse(result);
+
+                    console.log(info);
+
+                    if (info.result === "success") {
+                        window.location.replace("./routes.jsp?message=dr");
+                    }
+                }});
+
+        }
     </script>
     <script>
         $(document).ready(function () {
