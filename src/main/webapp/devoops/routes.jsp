@@ -50,18 +50,20 @@
                         </ol>
                     </div>
                 </div>
-<c:choose>
-    <c:when test="${param.message=='dr'}">
-       <div class="alert alert-success">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <strong>Success!</strong> Route successfully deleted.
-                </div>
-    </c:when>    
-    <c:otherwise>
-      
-    </c:otherwise>
-</c:choose>
-                
+                <c:choose>
+                    <c:when test="${param.message=='dr'}">
+                        <div class="row">
+                            <div class="alert alert-success" class="col-xs-12">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Success!</strong> Route successfully deleted.
+                            </div>
+                        </div>
+                    </c:when>    
+                    <c:otherwise>
+
+                    </c:otherwise>
+                </c:choose>
+
 
                 <div class="row">
                     <div id="routes" class="col-xs-12">

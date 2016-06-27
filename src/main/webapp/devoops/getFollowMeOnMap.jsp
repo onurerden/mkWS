@@ -32,8 +32,9 @@
                         </ol>
                     </div>
                 </div>
-                        <div id="results"></div>
-                        
+          <div class="row">
+                        <div id="results" class="col-xs-12"></div>
+          </div>
                 <div class="row">
                     <div id="routes" class="col-md-8 col-lg-9">
                         <div class="box">
@@ -188,21 +189,22 @@
 
                                         function sendMMR() {
                                             console.log("clicked");
-                                            $("#divResult").html("");
+                                            //$("#divResult").html("");
                                             var routeId = <% out.println(Integer.parseInt(request.getParameter("routeId")));%>;
                                             var link = "../SendWorkoutToMMR?routeId=" + routeId;
                                             $.ajax({url: link, success: function (result) {
 
                                                     var info = JSON.parse(result);
-                                                    $("#divResult").html(info.result);
+                                            //        $("#divResult").html(info.result);
 
                                                     console.log(info.result);
 
                                                     if (info.result === "success") {
                                                         $('#btn').prop('disabled', true);
+                                                        $("#results").html("<div class=\"alert alert-danger fade in\" class=\"col-xs-12\"><a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a><strong>Success!</strong> Route successfully exported to MapMyRide servers.</div>");
                                                     }else{
-                                                        $("#result").html("success")};
-                                                }});
+                                                        $("#results").html("<div class=\"alert alert-danger fade in\" class=\"col-xs-12\"><a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a><strong>Warning!</strong> There was an error during route export process.</div>");
+                                                }}});
 
                                         }
                                         ;
