@@ -101,6 +101,7 @@
                                             <th>Route Id</th>
                                             <th>Device Name</th>
                                             <th>DateTime</th>
+                                            <th>Commands</th>
 
                                         </tr>
                                     </thead>
@@ -115,7 +116,7 @@
                                                 <a href="getFollowMeOnMap.jsp?routeId=<%= resultset.getInt("routeId")%>" role="button" class="btn btn-danger">Live</a>
                                                 <% }%>
                                             </td>
-                                            <td>
+                                            <td style="width: 50px">
                                                 <button class="btn btn-primary"
                                                         onClick="deleteRoute(<%=resultset.getInt("routeId")%>)">
                                                     Delete
