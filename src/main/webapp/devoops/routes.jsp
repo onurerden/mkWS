@@ -50,22 +50,23 @@
                         </ol>
                     </div>
                 </div>
-                <c:choose>
-                    <c:when test="${param.message=='dr'}">
-                        <div class="row">
-                            <div id="results" class="col-xs-12">
+                <div class="row">
+                    <div id="results" class="col-xs-12">
+                        <c:choose>
+                            <c:when test="${param.message=='dr'}">
+
                                 <div class="alert alert-success" class="col-xs-12">
                                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                     <strong>Success!</strong> Route successfully deleted.
                                 </div>
-                            </div>
-                        </div>
-                    </c:when>    
-                    <c:otherwise>
 
-                    </c:otherwise>
-                </c:choose>
+                            </c:when>    
+                            <c:otherwise>
 
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
 
                 <div class="row">
                     <div id="routes" class="col-xs-12">
@@ -177,6 +178,10 @@
 
                     if (info.result === "success") {
                         window.location.replace("./routes.jsp?message=dr");
+                    } else {
+                        $("#results").html("<div class=\"alert alert-danger\" class=\"col-xs-12\">\n\
+        <a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>\n\
+<strong>Failed!</strong> Route cannot be deleted. " +info.description +"</div>");
                     }
                 }});
 

@@ -37,7 +37,7 @@ public class DeleteRoute extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             if (request.getSession().getAttribute("userid") == null) {
-                out.println("{\"result\": failed, description : \"mkWS authentication failed\"}");
+                out.println("{\"result\": \"failed\", \"description\" : \"mkWS authentication failed.\"}");
                 return;
             };
             
