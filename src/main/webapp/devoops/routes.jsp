@@ -53,9 +53,11 @@
                 <c:choose>
                     <c:when test="${param.message=='dr'}">
                         <div class="row">
-                            <div class="alert alert-success" class="col-xs-12">
-                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                <strong>Success!</strong> Route successfully deleted.
+                            <div id="results" class="col-xs-12">
+                                <div class="alert alert-success" class="col-xs-12">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    <strong>Success!</strong> Route successfully deleted.
+                                </div>
                             </div>
                         </div>
                     </c:when>    
@@ -101,6 +103,7 @@
                                             <th>Route Id</th>
                                             <th>Device Name</th>
                                             <th>DateTime</th>
+                                            <th>Live</th>
                                             <th>Commands</th>
 
                                         </tr>
@@ -111,13 +114,14 @@
                                             <td><a href="getFollowMeOnMap.jsp?routeId=<%= resultset.getInt("routeId")%>">
                                                     <%= resultset.getInt("routeId")%></a></td>
                                             <td><%= resultset.getString("name")%></td>
-                                            <td><%= resultset.getTimestamp("time")%>
+                                            <td><%= resultset.getTimestamp("time")%></td>
+                                            <td style="width: 60px">
                                                 <% if (resultset.getInt("isEnded") == 0) {%>
-                                                <a href="getFollowMeOnMap.jsp?routeId=<%= resultset.getInt("routeId")%>" role="button" class="btn btn-danger">Live</a>
+                                                <a href="getFollowMeOnMap.jsp?routeId=<%= resultset.getInt("routeId")%>" role="button" class="btn btn-primary">Live</a>
                                                 <% }%>
                                             </td>
-                                            <td style="width: 50px">
-                                                <button class="btn btn-primary"
+                                            <td style="width: 60px">
+                                                <button class="btn btn-danger"
                                                         onClick="deleteRoute(<%=resultset.getInt("routeId")%>)">
                                                     Delete
                                                 </button>
