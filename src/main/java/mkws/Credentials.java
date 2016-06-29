@@ -12,9 +12,9 @@ package mkws;
 public class Credentials {
 
     String server = "127.5.211.2:3306"; //mk
-   // String server = "127.2.57.130:3306";//mknew
+ //   String server = "127.2.57.130:3306";//mknew
   //  String server = "localhost:3306";
-//    String server = "onur-mac-mini.local:3306";
+ //   String server = "onur-mac-mini.local:3306";
     String database = "mk";
 //    String dbUserName = "adminGStcLXX";
 //    String dbPassword = "Wc_flbnyklZt";
@@ -24,6 +24,9 @@ public class Credentials {
     private String mmrClientId= "kd8sw2eft3bmy3hft7x9yezqgfhwezcz";
     private String mmrClientSecret = "smAfN8CYndqQSuUMR5p8Tt4pNPkuhGv5DT6pns3B3sW";
 
+    private String mmrClientIdForWeb= "48tedwecj3aum5uewqyprd6m9behtu3j";
+    private String mmrClientSecretForWeb = "yfmhmf9f8szPYtraVu8DtwZtyFnnVHUr5Teqksb7f7z";
+    
     public String getMysqlConnectionString() {
         String connectionString = new String();
         connectionString = "jdbc:mysql://" + server + "/" + database +"?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true";
@@ -62,5 +65,33 @@ public class Credentials {
      */
     public void setMmrClientSecret(String mmrClientSecret) {
         this.mmrClientSecret = mmrClientSecret;
+    }
+
+    /**
+     * @return the mmrClientIdForWeb
+     */
+    public String getMmrClientIdForWeb() {
+        return mmrClientIdForWeb;
+    }
+
+    /**
+     * @param mmrClientIdForWeb the mmrClientIdForWeb to set
+     */
+    public void setMmrClientIdForWeb(String mmrClientIdForWeb) {
+        this.mmrClientIdForWeb = mmrClientIdForWeb;
+    }
+
+    /**
+     * @return the mmrClientSecretForWeb
+     */
+    public String getMmrClientSecretForWeb() {
+        return mmrClientSecretForWeb;
+    }
+
+    /**
+     * @param mmrClientSecretForWeb the mmrClientSecretForWeb to set
+     */
+    public void setMmrClientSecretForWeb(String mmrClientSecretForWeb) {
+        this.mmrClientSecretForWeb = mmrClientSecretForWeb;
     }
 }
