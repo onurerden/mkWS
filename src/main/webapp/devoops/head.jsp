@@ -106,7 +106,7 @@
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li>
-                                            <a href="#">
+                                            <a href="./mapmyride.jsp">
                                                 <i class="fa fa-bicycle"></i>
                                                 <span>MapMyRide</span>
                                             </a>

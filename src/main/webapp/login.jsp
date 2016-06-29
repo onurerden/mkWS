@@ -20,6 +20,7 @@
         String first_name = rs.getString("first_name");
         String last_name = rs.getString("last_name");
         session.setAttribute("userid", userid);
+        session.setAttribute("id", rs.getInt("id"));
         session.setAttribute("first_name",first_name);
         session.setAttribute("last_name",last_name);
         //out.println("welcome " + userid);

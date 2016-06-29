@@ -32,7 +32,22 @@ public class MMRWorkout {
     private String notes = "Workout is submitted by FollowMe (mkWS)";
     private Aggregates aggregates;
     private transient int deviceId;
+    private transient int userId;
     private String activity_type="/v7.1/activity_type/11/";
+
+    /**
+     * @return the userId
+     */
+    public int getUserId() {
+        return userId;
+    }
+
+    /**
+     * @param userId the userId to set
+     */
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
     
     public class Sharing{
         boolean facebook=false;

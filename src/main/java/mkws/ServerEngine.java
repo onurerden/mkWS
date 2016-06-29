@@ -28,6 +28,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import mkws.Model.MKMission;
+import mkws.Model.MMRUser;
 import mkws.Model.MMRWorkout;
 import mkws.Model.OAuthToken;
 import mkws.Model.Waypoint;
@@ -1103,6 +1104,29 @@ public class ServerEngine implements IDeviceServer {
         return 1;
     }
     
+    public int saveMMRauthorizationCodeForUser(Integer userId, String code) {
+                
+        Credentials cr = new Credentials();
+        Connection con_1 = null;
+        Statement st_1;
+        String query;
+        
+                query = "INSERT INTO mk.mmrauthorization (code,userId ) VALUES (\""
+                        + code + "\","
+                        + userId + ")";
+                
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            st_1 = con_1.createStatement();
+            st_1.executeUpdate(query);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+            System.out.println("Error while saving MMR Authorization code: " + ex.getMessage());
+            return -1;
+        }
+        return 1;
+    }
+    
     public int saveMMRauthorizationToken(int deviceId, String deviceType, OAuthToken token) {
         deviceType = deviceType.toLowerCase();
         DeviceTypes dt = DeviceTypes.OTHER;
@@ -1157,6 +1181,78 @@ public class ServerEngine implements IDeviceServer {
         return 1;
     }
     
+    public int saveMMRauthorizationTokenForUser(int userId, OAuthToken token) {
+                
+        Credentials cr = new Credentials();
+        Connection con_1 = null;
+        Statement st_1;
+        String query;
+        
+       
+                
+                query = "INSERT INTO mmrauthorization (code,userId,access_token,refresh_token,expires_in) VALUES (\""
+                        + token.getAuthorizationCode() + "\","
+                        + userId + ",\""
+                        + token.getAccess_token() + "\",\""
+                        + token.getRefresh_token() + "\","
+                        + token.getExpires_in()
+                        + ")";
+                      
+        try {
+            System.out.println(query);
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            st_1 = con_1.createStatement();
+            st_1.executeUpdate(query);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+            System.out.println("Error while saving MMR Authorization code: " + ex.getMessage());
+            return -1;
+        }
+        return 1;
+    }
+    
+    public String mmrAccessTokenForUser(int userId) throws Exception{
+        OAuthToken token = new OAuthToken();
+        Credentials cr = new Credentials();
+        token.setClientId(cr.getMmrClientIdForWeb());
+        token.setClientSecret(cr.getMmrClientSecretForWeb());
+        String queryString = "SELECT code, access_token, refresh_token, scope, expires_in FROM mk.mmrauthorization WHERE userId = " + userId + " ORDER BY id DESC LIMIT 1";
+        Connection con_1 = null;
+        Statement st_1 = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            st_1 = con_1.createStatement();
+            ResultSet rs = st_1.executeQuery(queryString);
+            
+            if (rs.next()) {
+                token.setAuthorizationCode(rs.getString("code"));
+                token.setAccess_token(rs.getString("access_token"));
+                token.setRefresh_token(rs.getString("refresh_token"));
+                token.setScope(rs.getString("scope"));
+                token.setExpires_in(String.valueOf(rs.getInt("expires_in")));
+            } else {
+                System.out.println("no authorization record found for userId: " + userId);
+            }
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+            System.out.println("Error on querying MMR OAuth2 Code");
+            return "Error on querying MMR OAuth2 Code";
+        }
+        if (!token.getRefresh_token().equals("Not Set")) {
+            String newToken = token.refreshToken();
+            saveMMRauthorizationTokenForUser(userId, token);
+            return newToken;
+        }
+        
+        if (!token.getAuthorizationCode().equals("Not Set")) {
+            String newToken = token.getNewAccessToken();
+            saveMMRauthorizationTokenForUser(userId, token);
+            return newToken;
+        }
+        
+        return "No Authorization Code";
+        
+    }
     public String mmrAccessToken(int deviceId, String deviceType) throws Exception {
         OAuthToken token = new OAuthToken();
         Credentials cr = new Credentials();
@@ -1260,6 +1356,48 @@ public class ServerEngine implements IDeviceServer {
         
         return types;
     }
+    public String getMMRUserInfo(int userId) {
+        
+        Credentials cr = new Credentials();
+        String responseString="";
+        try {
+            HttpClient httpclient = new DefaultHttpClient();
+            httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
+
+            //HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/activity_type/");
+            HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/user/self/");
+            
+            httpget.addHeader("Api-Key", cr.getMmrClientIdForWeb());
+            httpget.addHeader("Content-Type", cr.getMmrClientIdForWeb());
+            httpget.addHeader("Authorization", "Bearer " + mmrAccessTokenForUser(userId));
+            
+            MultipartEntity mpEntity = new MultipartEntity();
+            //  mpEntity.addPart("grant_type", new StringBody("authorization_code"));
+            //  mpEntity.addPart("code", new StringBody(getAuthorizationCode()));
+            //  mpEntity.addPart("client_id", new StringBody(getClientId()));
+            //  mpEntity.addPart("client_secret", new StringBody(getClientSecret()));
+
+            //  httppost.setEntity(mpEntity);
+            System.out.println("executing request " + httpget.getRequestLine());
+            HttpResponse response = httpclient.execute(httpget);
+            HttpEntity resEntity = response.getEntity();
+            responseString = EntityUtils.toString(resEntity, "UTF-8");
+            Gson gson = new Gson();
+            
+            MMRUser user = gson.fromJson(responseString, MMRUser.class);
+            System.out.println("MMR User name is " + user.getDisplay_name());
+            if (responseString.contains("error")) {
+                System.out.println("Error while getting MMR user info: " + responseString);
+                return "Error while getting MMR user info: " + responseString;
+            }
+            //System.out.println(responseString);
+            
+        } catch (Exception ex) {
+            
+        }
+        
+        return responseString;
+    }
     
     @Override
     public int endRoute(int routeId, boolean sendToMMR) {
@@ -1283,6 +1421,49 @@ public class ServerEngine implements IDeviceServer {
             httppost.addHeader("Api-Key", cr.getMmrClientId());
             httppost.addHeader("Content-Type", "application/json");
             httppost.addHeader("Authorization", "Bearer " + mmrAccessToken(workout.getDeviceId(), "MP"));
+            
+            StringEntity entity = new StringEntity(new Gson().toJson(workout));
+            httppost.setEntity(entity);
+            
+            HttpResponse response = httpclient.execute(httppost);
+            HttpEntity resEntity = response.getEntity();
+            String responseString = EntityUtils.toString(resEntity, "UTF-8");
+            System.out.println(responseString);
+            System.out.println("MMR response code is:" + response.getStatusLine().getStatusCode());
+            if ((int) response.getStatusLine().getStatusCode() / 100 == 2) {
+                
+                result = 1;
+            } else {
+                LogMessage msg = new LogMessage();
+                msg.logLevel = 1;
+                msg.deviceType = DeviceTypes.SERVER.getName();
+                msg.logMessage = "MMR response code is: " + response.getStatusLine().getStatusCode() + " while sending Route: " + routeId + ".\n"
+                        + "Response is: \n"
+                        + responseString;
+                Gson gson = new Gson();
+                sendLog(gson.toJson(msg));
+            }
+            
+        } catch (Exception ex) {
+            System.out.println("Error while sendMMRWorkout: " + ex.getMessage());
+        }
+        return result;
+    }
+    public int sendMMRWorkout(int routeId,int userId) {
+        
+        MMRWorkout workout = new MMRWorkout();
+        workout.populateWorkout(routeId);
+        //MMRUser user = new Gson().fromJson(getMMRUserInfo(workout.getDeviceId(), "MP"), MMRUser.class);
+        Credentials cr = new Credentials();
+        int result = 0;
+        try {
+            HttpClient httpclient = new DefaultHttpClient();
+            httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
+            
+            HttpPost httppost = new HttpPost("https://oauth2-api.mapmyapi.com/v7.1/workout/");
+            httppost.addHeader("Api-Key", cr.getMmrClientIdForWeb());
+            httppost.addHeader("Content-Type", "application/json");
+            httppost.addHeader("Authorization", "Bearer " + mmrAccessTokenForUser(userId));
             
             StringEntity entity = new StringEntity(new Gson().toJson(workout));
             httppost.setEntity(entity);

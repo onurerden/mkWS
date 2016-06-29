@@ -201,7 +201,7 @@
 
                                                     if (info.result === "success") {
                                                         $('#btn').prop('disabled', true);
-                                                        $("#results").html("<div class=\"alert alert-danger fade in\" class=\"col-xs-12\"><a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a><strong>Success!</strong> Route successfully exported to MapMyRide servers.</div>");
+                                                        $("#results").html("<div class=\"alert alert-success fade in\" class=\"col-xs-12\"><a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a><strong>Success!</strong> Route successfully exported to MapMyRide servers.</div>");
                                                     }else{
                                                         $("#results").html("<div class=\"alert alert-danger fade in\" class=\"col-xs-12\"><a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a><strong>Warning!</strong> There was an error during route export process.</div>");
                                                 }}});

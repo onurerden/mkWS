@@ -5,7 +5,6 @@
  */
 package mkws.servlets;
 
-import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -13,16 +12,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import mkws.Model.MMRUser;
-import mkws.Model.MMRWorkout;
 import mkws.ServerEngine;
 
 /**
  *
  * @author onurerden
  */
-@WebServlet(name = "SendWorkoutToMMR", urlPatterns = {"/SendWorkoutToMMR"})
-public class SendWorkoutToMMR extends HttpServlet {
+@WebServlet(name = "SaveMMRauthorizationCodeForUser", urlPatterns = {"/SaveMMRauthorizationCodeForUser"})
+public class SaveMMRauthorizationCodeForUser extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,31 +32,23 @@ public class SendWorkoutToMMR extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         response.setContentType("text/html;charset=UTF-8");
-        ServerEngine server = new ServerEngine();
-        int routeId = Integer.parseInt(request.getParameter("routeId"));
+        
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            //String jsonString=server.getMMRUserInfo(25,"MP");
-            // Gson json = new Gson();
-            //MMRUser user = json.fromJson(jsonString,MMRUser.class);
-            //out.println("User Name: " + user.getDisplay_name() + "<br>");
-            //out.println("User Id  : " + user.getId());
-            if (request.getSession().getAttribute("userid") == null) {
-                out.println("{\"result\": \"mkWS authentication failed\"}");
-                return;
-            };
-            int result = server.sendMMRWorkout(routeId,(int)Integer.valueOf(request.getSession().getAttribute("id").toString()));
-            if (result == 1) {
-                out.println("{\"result\": \"success\"}");
-            } else {
-                out.println("{\"result\": \"failed\"}");
+            ServerEngine server = new ServerEngine();
+            int userId = Integer.valueOf(request.getSession().getAttribute("id").toString());
+            
+            
+            String code = request.getParameter("code");
+            if (request.getSession().getAttribute("userid") != null) {                   
+            out.print(server.saveMMRauthorizationCodeForUser(userId, code));
+            return;
+            }else {
+               out.print("-4"); 
             }
-        } catch (Exception ex) {
-            System.out.println("result: \"Error; "+ ex.getMessage()+"\"");
+            
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
