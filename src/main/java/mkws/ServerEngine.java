@@ -755,8 +755,10 @@ public class ServerEngine implements IDeviceServer {
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1 = null;
+        
+        msg.logMessage = msg.logMessage.replace("'","\\'");
         String query = "INSERT INTO mk.logs SET logLevel = '" + msg.logLevel
-                + "', logMessage = '" + msg.logMessage + "' ";
+                + "', logMessage = '" + msg.logMessage + "'";
         
         
         try {

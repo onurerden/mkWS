@@ -64,7 +64,7 @@ public class SaveGpxFile extends HttpServlet {
 
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            out.println(result);
+            out.print(result);
             
 
         }

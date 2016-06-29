@@ -90,6 +90,7 @@
                                 <div class="no-move"></div>
                             </div>
                             <div class="box-content">
+                                <a href="uploadGPX.jsp" role="button" class="btn btn-primary">Upload New Route</a><br>
                                 <p>Routes defined in mkWS system listed below:</p>
                                 <!--   <a href ="#" onclick="load_home()"> HOME </a> </div>
                <script>
