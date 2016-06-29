@@ -70,9 +70,9 @@
                             <div class="box-content">
                                 <p>FollowMe Device</p>
                                 <div class="row form-group">
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-12">
                                         <form enctype="multipart/form-data">
-                                            <select id="uid" name="uid" class="form-control">
+                                            <select id="uid" name="uid" class="form-control" style="width:200px">
                                                 <% while (followMeResultset.next()) {
                                                         out.println("<option value=\"" + followMeResultset.getString("UID") + "\">"
                                                                 + followMeResultset.getInt("followMeDeviceId") + ": "

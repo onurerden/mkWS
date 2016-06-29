@@ -1001,16 +1001,22 @@ public class ServerEngine implements IDeviceServer {
                     Element eElement = (Element) nNode;
                     
                     try {
+                        
                         fmData.setLat(Double.valueOf(eElement.getAttribute("lat")));
                         fmData.setLon(Double.valueOf(eElement.getAttribute("lon")));
+                         if(eElement.getElementsByTagName("ele").item(0)!=null){
                         fmData.setAltitude(Double.valueOf(eElement.getElementsByTagName("ele").item(0).getTextContent()));
+                         }
+                        if(eElement.getElementsByTagName("speed").item(0)!=null){
                         fmData.setSpeed(Double.valueOf(eElement.getElementsByTagName("speed").item(0).getTextContent()));
+                        }
                         fmData.setRouteId(routeId);
                         fmData.setSessionId(session.getSessionId());
                         fmData.setFollowMeDeviceId(session.getDeviceId());
                         
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                        Date parsedDate = dateFormat.parse(eElement.getElementsByTagName("time").item(0).getTextContent());
+                        String date = eElement.getElementsByTagName("time").item(0).getTextContent().replace("T", " ").replace("Z","");
+                        Date parsedDate = dateFormat.parse(date);
                         Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
                         
                         fmData.setTime(timestamp);
