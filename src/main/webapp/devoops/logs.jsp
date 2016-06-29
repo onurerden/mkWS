@@ -83,28 +83,32 @@
                                     <tbody>
                                         <% while (resultset.next()) {%>
                                         <tr>
-                                            <% switch (resultset.getInt("logLevel")) {
+                                            <td>
+                                            <% 
+
+                                            out.println(resultset.getInt("id")+"</td>");
+                                            out.println("<td>" +resultset.getInt("logLevel")+"</td>");
+                                            out.println("<td>" +resultset.getInt("kopterId")+"</td>");
+                                            out.println("<td>" +resultset.getInt("followMeDeviceId")+"</td>");
+                                            out.println("<td>");
+                                            switch (resultset.getInt("logLevel")) {
                                                     case 1:
-                                            %>
-                                    <p style="color:#CC0000">
+                                                        out.println("<p style=\"color:#CC0000\">");
+                                                        break;
+                                                    case 2:
+                                                        out.println("<p style=\"color:#00CC00\">");
+                                                        break;
+                                                    default:
+                                                        out.println("<p style=\"color:#000000\">");
+                                                        break;
+                                                }
+                                            out.println(resultset.getString("logMessage")+"</p></td>");
+                                            
+                                            out.println("<td>" +resultset.getTimestamp("time")+"</td>");
+                                            
+                                            out.println("</tr>");
 
-                                        <% break;
-                                                case 2:%>
-                                    <p style="color:#000000">
-                                        <% break;
-                                                default:
-                                                    break;
-                                            }%>
-                                    <td><%= resultset.getInt("id")%></td>
-                                    <td><%= resultset.getInt("logLevel")%></td>
-                                    <td><%= resultset.getInt("kopterId")%></td>
-                                    <td><%= resultset.getInt("followMeDeviceId")%></td>
-                                    <td><%= resultset.getString("logMessage")%></td>
-                                    <td><%= resultset.getTimestamp("time")%></td>
-                                    </p>
-
-                                    </tr>
-                                    <% }%>
+                                         }%>
 
                                     </tbody>
                                     <% connection.close();%>
