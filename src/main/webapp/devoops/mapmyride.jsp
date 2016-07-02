@@ -58,9 +58,7 @@
                                 <div class="no-move"></div>
                             </div>
                             <div class="box-content">
-                                <p>Pair MapMyRide Account</p>
-                                <a href="https://www.mapmyfitness.com/v7.1/oauth2/uacf/authorize/?client_id=<% Credentials cr = new Credentials();
-                                    out.print(cr.getMmrClientIdForWeb());%>&response_type=code" role="button" class="btn btn-primary">MapMyRide</a>
+                                
                                 <div id="authCode">
                                     <c:choose>
                                         <c:when test="${param.code!=null}">
@@ -140,6 +138,9 @@
                                             <button class="btn btn-danger" disabled="true">Unlink MMR Account</button>
                                         </c:when>
                                         <c:otherwise>
+                                            <p>Pair MapMyRide Account</p>
+                                <a href="https://www.mapmyfitness.com/v7.1/oauth2/uacf/authorize/?client_id=<% Credentials cr = new Credentials();
+                                    out.print(cr.getMmrClientIdForWeb());%>&response_type=code" role="button" class="btn btn-primary">MapMyRide</a>
                                             <p class="small"> User account isn't linked with an <abbr title="Under Armour">MapMyRide</abbr> account.</p>
                                         </c:otherwise>
                                     </c:choose>
