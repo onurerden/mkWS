@@ -1319,7 +1319,7 @@ public class ServerEngine implements IDeviceServer {
     }
     
     public String getMMRUserInfo(int deviceId, String deviceType) {
-        String types = "";
+        String responseString = "";
         Credentials cr = new Credentials();
         try {
             HttpClient httpclient = new DefaultHttpClient();
@@ -1342,8 +1342,8 @@ public class ServerEngine implements IDeviceServer {
             System.out.println("executing request " + httpget.getRequestLine());
             HttpResponse response = httpclient.execute(httpget);
             HttpEntity resEntity = response.getEntity();
-            String responseString = EntityUtils.toString(resEntity, "UTF-8");
-            types = responseString;
+            responseString = EntityUtils.toString(resEntity, "UTF-8");
+            
             if (responseString.contains("error")) {
                 System.out.println("Error while getting Activity Types: " + responseString);
                 return "Error while getting Activity Types: " + responseString;
@@ -1354,7 +1354,7 @@ public class ServerEngine implements IDeviceServer {
             
         }
         
-        return types;
+        return responseString;
     }
     public String getMMRUserInfo(int userId) {
         

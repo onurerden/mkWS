@@ -21,18 +21,18 @@
             <%@ include file="nav.jsp" %>                                                 
             <div id="content" class="col-xs-12 col-sm-10">
 
-                
+
                 <div class="row">
                     <div id="breadcrumb" class="col-xs-12">
                         <ol class="breadcrumb">
                             <li><a href="index.jsp">Home</a></li>
                             <li><a href="routes.jsp">MapMyRide</a></li>
-                            
+
                         </ol>
                     </div>
                 </div>
                 <div class="row">
-                <div id="results" class="col-xs-12">
+                    <div id="results" class="col-xs-12">
                     </div>
                 </div>
 
@@ -60,37 +60,90 @@
                             <div class="box-content">
                                 <p>Pair MapMyRide Account</p>
                                 <a href="https://www.mapmyfitness.com/v7.1/oauth2/uacf/authorize/?client_id=<% Credentials cr = new Credentials();
-out.print(cr.getMmrClientIdForWeb());%>&response_type=code" role="button" class="btn btn-primary">MapMyRide</a>
+                                    out.print(cr.getMmrClientIdForWeb());%>&response_type=code" role="button" class="btn btn-primary">MapMyRide</a>
                                 <div id="authCode">
                                     <c:choose>
-                            <c:when test="${param.code!=null}">
+                                        <c:when test="${param.code!=null}">
 
-                                <div class="alert alert-success" class="col-xs-12">
-                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                    <strong>Success!</strong> MapMyRide paired successfully. Key is: 
-                                    <% out.print(request.getParameter("code"));
-                                    ServerEngine server = new ServerEngine();
-                                    server.saveMMRauthorizationCodeForUser(Integer.valueOf(session.getAttribute("id").toString()),request.getParameter("code"));
-                                    %>
-                                </div>
-                                <p>
-                                    
-                                    <% 
-Gson gson = new Gson();                                    
-MMRUser user = gson.fromJson(server.getMMRUserInfo(Integer.valueOf(session.getAttribute("id").toString())),MMRUser.class);
-                                    
-                                    out.print("User Name: " + user.getDisplay_name() + "<br>");
-                                    out.print("Gender: " + user.getGender() + "<br>");
-                                    out.print("eMail: " + user.getEmail() + "<br>");
-                                    out.print("Date Joined " + user.getDate_joined()+ "<br>");
-                                            %>
-                                </p>
+                                            <div class="alert alert-success" class="col-xs-12">
+                                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                                <strong>Success!</strong> MapMyRide paired successfully. Key is: 
+                                                <% out.print(request.getParameter("code"));
+                                                    ServerEngine server = new ServerEngine();
+                                                    server.saveMMRauthorizationCodeForUser(Integer.valueOf(session.getAttribute("id").toString()), request.getParameter("code"));
+                                                %>
+                                            </div>
 
-                            </c:when>    
-                            <c:otherwise>
 
-                            </c:otherwise>
-                        </c:choose>
+                                        </c:when>    
+
+                                    </c:choose>
+                                     <c:choose>
+                                        <c:when test="${param.message!=ad}">
+
+                                            <div class="alert alert-success" class="col-xs-12">
+                                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                                <strong>Success!</strong> MapMyRide account deleted successfully.%>
+                                            </div>
+
+
+                                        </c:when>    
+
+                                    </c:choose>
+
+                                    <jsp:useBean
+                                        id = "userBean" class= "mkws.webbeans.GetMMRUserInfo">
+                                    </jsp:useBean>
+                                    <jsp:setProperty name="userBean" property = "userId" value="${sessionScope.id}"/>
+
+
+                                    <c:choose>
+                                        <c:when test="${userBean.email!=null}">
+                                            <table>
+                                                <tr>
+                                                    <td style="width:100px">Name</td>
+                                                    <td style="width:10px">:</td>
+                                                    <td><jsp:getProperty name="userBean" property="display_name"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Email</td>
+                                                    <td>:</td>
+                                                    <td><jsp:getProperty name="userBean" property="email"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Gender</td>
+                                                    <td>:</td>
+                                                    <td><jsp:getProperty name="userBean" property="gender"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>MMR User Id</td>
+                                                    <td>:</td>
+                                                    <td><jsp:getProperty name="userBean" property="id"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Height</td>
+                                                    <td>:</td>
+                                                    <td><jsp:getProperty name="userBean" property="height"/> m</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Weight</td>
+                                                    <td>:</td>
+                                                    <td><jsp:getProperty name="userBean" property="weight"/> kg</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Date Joined</td>
+                                                    <td>:</td>
+                                                    <td><jsp:getProperty name="userBean" property="date_joined"/></td>
+                                                </tr>
+                                            </table>
+                                            <br>
+                                            <button class="btn btn-danger" disabled="true">Unlink MMR Account</button>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <p class="small"> User account isn't linked with an <abbr title="Under Armour">MapMyRide</abbr> account.</p>
+                                        </c:otherwise>
+                                    </c:choose>
+
                                 </div>
 
                             </div>
@@ -103,7 +156,7 @@ MMRUser user = gson.fromJson(server.getMMRUserInfo(Integer.valueOf(session.getAt
         </div>
     </div>
 
-    
+
 
 </body>
 </html>    
