@@ -11,7 +11,7 @@
 <%@page import="mkws.Credentials"%>
 <%@ page import="java.sql.*" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="selectedMenu" value="logs"/>
+<c:set var="selectedMenu" value=""/>
 <!DOCTYPE html>
 <html>
     <%@ include file="head.jsp" %> 
@@ -37,7 +37,7 @@
                 </div>
 
                 <div class="row">
-                    <div id="uploadGPX" class="col-xs-12">
+                    <div class="col-xs-12">
                         <div class="box">
                             <div class="box-header">
                                 <div class="box-name">
@@ -97,8 +97,13 @@
 
                                     <c:choose>
                                         <c:when test="${userBean.email!=null}">
+                                           
                                             <table>
                                                 <tr>
+                                                    <td rowspan="7" style="width: 120px" valign="top">
+                                                         <img src="<jsp:getProperty name="userBean" property="MMRProfilePhoto"/>"
+                                                 alt="Profile Photo" height="100" width="100">
+                                                    </td>
                                                     <td style="width:100px">Name</td>
                                                     <td style="width:10px">:</td>
                                                     <td><jsp:getProperty name="userBean" property="display_name"/></td>

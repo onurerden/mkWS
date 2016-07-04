@@ -5,11 +5,14 @@
  */
 package mkws.Model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author onurerden
  */
 public class MMRUser {
+
     private String last_name;
     private double weight;
     private double height;
@@ -26,12 +29,163 @@ public class MMRUser {
     private String email;
     private String user_name;
     private String time_zone;
+    private String goal_statement;
+    private Links _links;
+    private MMRUserProfilePhoto photoLinks;
+    
 
     /**
      * @return the communication
      */
     public Communication getCommunication() {
         return communication;
+    }
+
+    /**
+     * @return the _links
+     */
+    public Links getLinks() {
+        return _links;
+    }
+
+    public String getMMRProfilePhoto(){
+        return photoLinks._links.large.get(0).href;
+    }
+    
+    /**
+     * @param _links the _links to set
+     */
+    public void setLinks(Links _links) {
+        this._links = _links;
+    }
+
+    /**
+     * @return the photoLinks
+     */
+    public MMRUserProfilePhoto getPhotoLinks() {
+        return photoLinks;
+    }
+
+    /**
+     * @param photoLinks the photoLinks to set
+     */
+    public void setPhotoLinks(MMRUserProfilePhoto photoLinks) {
+        this.photoLinks = photoLinks;
+    }
+
+    public class MMRUserProfilePhoto{
+        private MMRProfilePhotoLinks _links;
+
+        /**
+         * @return the _links
+         */
+        public MMRProfilePhotoLinks getLinks() {
+            return _links;
+        }
+
+        /**
+         * @param _links the _links to set
+         */
+        public void setLinks(MMRProfilePhotoLinks _links) {
+            this._links = _links;
+        }
+    }
+    public class MMRProfilePhotoLinks{
+        private ArrayList<HrefIdName> small;
+        private ArrayList<HrefIdName> medium;
+        private ArrayList<HrefIdName> large;
+        private ArrayList<HrefIdName> self;
+        private ArrayList<HrefIdName> documentation;
+
+        /**
+         * @return the small
+         */
+        public ArrayList<HrefIdName> getSmall() {
+            return small;
+        }
+
+        /**
+         * @param small the small to set
+         */
+        public void setSmall(ArrayList<HrefIdName> small) {
+            this.small = small;
+        }
+
+        /**
+         * @return the medium
+         */
+        public ArrayList<HrefIdName> getMedium() {
+            return medium;
+        }
+
+        /**
+         * @param medium the medium to set
+         */
+        public void setMedium(ArrayList<HrefIdName> medium) {
+            this.medium = medium;
+        }
+
+        /**
+         * @return the large
+         */
+        public ArrayList<HrefIdName> getLarge() {
+            return large;
+        }
+
+        /**
+         * @param large the large to set
+         */
+        public void setLarge(ArrayList<HrefIdName> large) {
+            this.large = large;
+        }
+
+        /**
+         * @return the self
+         */
+        public ArrayList<HrefIdName> getSelf() {
+            return self;
+        }
+
+        /**
+         * @param self the self to set
+         */
+        public void setSelf(ArrayList<HrefIdName> self) {
+            this.self = self;
+        }
+
+        /**
+         * @return the documentation
+         */
+        public ArrayList<HrefIdName> getDocumentation() {
+            return documentation;
+        }
+
+        /**
+         * @param documentation the documentation to set
+         */
+        public void setDocumentation(ArrayList<HrefIdName> documentation) {
+            this.documentation = documentation;
+        }
+    }
+    
+    public class Links {
+
+        public ArrayList<HrefIdName> stats;
+        public ArrayList<HrefIdName> privacy;
+        public ArrayList<HrefIdName> image;
+        public ArrayList<HrefIdName> documentation;
+        public ArrayList<HrefIdName> deactivation;
+        public ArrayList<HrefIdName> user_achievements;
+        public ArrayList<HrefIdName> friendships;
+        public ArrayList<HrefIdName> workouts;
+        public ArrayList<HrefIdName> self;
+    }
+
+    public class HrefIdName {
+
+        public String href;
+        public String id;
+        public String name;
     }
 
     /**
@@ -152,16 +306,31 @@ public class MMRUser {
     public void setTime_zone(String time_zone) {
         this.time_zone = time_zone;
     }
-    
-    
-    public class Location{
+
+    /**
+     * @return the goal_statement
+     */
+    public String getGoal_statement() {
+        return goal_statement;
+    }
+
+    /**
+     * @param goal_statement the goal_statement to set
+     */
+    public void setGoal_statement(String goal_statement) {
+        this.goal_statement = goal_statement;
+    }
+
+    public class Location {
+
         public String country;
         public String region;
         public String locality;
         public String address;
     }
-    
-    public class Communication{
+
+    public class Communication {
+
         boolean promotions;
         boolean newsletter;
         boolean system_messages;
@@ -264,5 +433,5 @@ public class MMRUser {
     public void setGender(String gender) {
         this.gender = gender;
     }
-    
+
 }

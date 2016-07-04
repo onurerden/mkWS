@@ -45,6 +45,11 @@ public class GetMMRUserInfo extends MMRUser {
             this.setDate_joined(user.getDate_joined());
             this.setDisplay_measurement_system(user.getDisplay_measurement_system());
             this.setWeight(user.getWeight());
+            this.setPhotoLinks(user.getPhotoLinks());
+            this.setLinks(user.getLinks());
+            this.setGoal_statement(user.getGoal_statement());
+            
+            
             
             
         } catch (Exception ex) {

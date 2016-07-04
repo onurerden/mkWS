@@ -1356,6 +1356,46 @@ public class ServerEngine implements IDeviceServer {
         
         return responseString;
     }
+    
+    public String getMMRUserProfilePicture(int mmrUserId,int userId){
+    Credentials cr = new Credentials();
+        String responseString="";
+        try {
+            HttpClient httpclient = new DefaultHttpClient();
+            httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
+
+            //HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/activity_type/");
+            HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/user_profile_photo/"+mmrUserId+"/");
+            
+            httpget.addHeader("Api-Key", cr.getMmrClientIdForWeb());
+            httpget.addHeader("Content-Type", cr.getMmrClientIdForWeb());
+            httpget.addHeader("Authorization", "Bearer " + mmrAccessTokenForUser(userId));
+            
+            MultipartEntity mpEntity = new MultipartEntity();
+            
+            System.out.println("executing request " + httpget.getRequestLine());
+            
+            HttpResponse response = httpclient.execute(httpget);
+            HttpEntity resEntity = response.getEntity();
+            responseString = EntityUtils.toString(resEntity, "UTF-8");
+            Gson gson = new Gson();
+            
+            MMRUser user = gson.fromJson(responseString, MMRUser.class);
+            System.out.println("MMR User name is " + user.getDisplay_name());
+            System.out.println(responseString);
+            if (responseString.contains("error")) {
+                System.out.println("Error while getting MMR user info: " + responseString);
+                return "Error while getting MMR user info: " + responseString;
+            }
+            //System.out.println(responseString);
+            
+        } catch (Exception ex) {
+            
+        }
+        
+        return responseString;
+        
+    }
     public String getMMRUserInfo(int userId) {
         
         Credentials cr = new Credentials();
@@ -1385,15 +1425,21 @@ public class ServerEngine implements IDeviceServer {
             Gson gson = new Gson();
             
             MMRUser user = gson.fromJson(responseString, MMRUser.class);
+            Gson gson2 = new Gson();
+            user.setPhotoLinks(gson.fromJson(getMMRUserProfilePicture(user.getId(), userId),MMRUser.MMRUserProfilePhoto.class));
+                   
             System.out.println("MMR User name is " + user.getDisplay_name());
+            
             if (responseString.contains("error")) {
                 System.out.println("Error while getting MMR user info: " + responseString);
                 return "Error while getting MMR user info: " + responseString;
             }
             //System.out.println(responseString);
-            
+            gson2 = new Gson();
+            responseString=gson2.toJson(user);
+            System.out.println(responseString);
         } catch (Exception ex) {
-            
+            System.out.println("Error while constructing responseString");
         }
         
         return responseString;
