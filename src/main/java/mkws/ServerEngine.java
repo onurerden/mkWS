@@ -40,7 +40,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.StringBody;
+//import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.util.EntityUtils;
@@ -1661,5 +1661,20 @@ public class ServerEngine implements IDeviceServer {
             
         }
         return isSent;
+    }
+    
+    public boolean deleteMapMyRideToken(int userId){
+        OAuthToken token = new OAuthToken();
+        token.setAuthorizationCode("Not Set");
+        token.setClientSecret("Not Set");
+        token.setRefresh_token("Not Set");
+        token.setExpires_in("0");
+        token.setScope("Not Set");
+        if(saveMMRauthorizationTokenForUser(userId, token)==1){
+            return true;
+        }else {
+            return false;
+        }     
+        
     }
 }

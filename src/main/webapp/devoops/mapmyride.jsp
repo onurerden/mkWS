@@ -1,5 +1,5 @@
 <%-- 
-    Document   : kopters
+    Document   : mapmyride.jsp
     Created on : 17.Mar.2015, 15:03:08
     Author     : oerden
 --%>
@@ -33,6 +33,35 @@
                 </div>
                 <div class="row">
                     <div id="results" class="col-xs-12">
+                        <c:choose>
+                            <c:when test="${param.code!=null}">
+
+                                <div class="alert alert-success" class="col-xs-12">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    <strong>Success!</strong> MapMyRide paired successfully. Key is: 
+                                    <% out.print(request.getParameter("code"));
+                                        ServerEngine server = new ServerEngine();
+                                        server.saveMMRauthorizationCodeForUser(Integer.valueOf(session.getAttribute("id").toString()), request.getParameter("code"));
+                                    %>
+                                </div>
+
+
+                            </c:when> 
+
+
+                        </c:choose>
+                        <c:choose>
+                            <c:when test="${param.message!=ad}">
+
+                                <div class="alert alert-success" class="col-xs-12">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    <strong>Success!</strong> MapMyRide account deleted successfully.
+                                </div>
+
+
+                            </c:when>    
+
+                        </c:choose>
                     </div>
                 </div>
 
@@ -58,36 +87,11 @@
                                 <div class="no-move"></div>
                             </div>
                             <div class="box-content">
-                                
-                                <div id="authCode">
-                                    <c:choose>
-                                        <c:when test="${param.code!=null}">
 
-                                            <div class="alert alert-success" class="col-xs-12">
-                                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                                <strong>Success!</strong> MapMyRide paired successfully. Key is: 
-                                                <% out.print(request.getParameter("code"));
-                                                    ServerEngine server = new ServerEngine();
-                                                    server.saveMMRauthorizationCodeForUser(Integer.valueOf(session.getAttribute("id").toString()), request.getParameter("code"));
-                                                %>
-                                            </div>
+                                <div id="authCode">                           
 
 
-                                        </c:when>    
 
-                                    </c:choose>
-                                     <c:choose>
-                                        <c:when test="${param.message!=ad}">
-
-                                            <div class="alert alert-success" class="col-xs-12">
-                                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                                <strong>Success!</strong> MapMyRide account deleted successfully.%>
-                                            </div>
-
-
-                                        </c:when>    
-
-                                    </c:choose>
 
                                     <jsp:useBean
                                         id = "userBean" class= "mkws.webbeans.GetMMRUserInfo">
@@ -97,12 +101,12 @@
 
                                     <c:choose>
                                         <c:when test="${userBean.email!=null}">
-                                           
+
                                             <table>
                                                 <tr>
                                                     <td rowspan="7" style="width: 120px" valign="top">
-                                                         <img src="<jsp:getProperty name="userBean" property="MMRProfilePhoto"/>"
-                                                 alt="Profile Photo" height="100" width="100">
+                                                        <img src="<jsp:getProperty name="userBean" property="MMRProfilePhoto"/>"
+                                                             alt="Profile Photo" height="100" width="100" class="img-rounded">
                                                     </td>
                                                     <td style="width:100px">Name</td>
                                                     <td style="width:10px">:</td>
@@ -140,11 +144,11 @@
                                                 </tr>
                                             </table>
                                             <br>
-                                            <button class="btn btn-danger" disabled="true">Unlink MMR Account</button>
+                                            <button id="deleteButton" class="btn btn-danger" onclick="deleteMapMyRideToken()" style="width:150px">Unlink MMR Account</button>
                                         </c:when>
                                         <c:otherwise>
                                             <p>Pair MapMyRide Account</p>
-                                <a href="https://www.mapmyfitness.com/v7.1/oauth2/uacf/authorize/?client_id=<% Credentials cr = new Credentials();
+                                            <a href="https://www.mapmyfitness.com/v7.1/oauth2/uacf/authorize/?client_id=<% Credentials cr = new Credentials();
                                     out.print(cr.getMmrClientIdForWeb());%>&response_type=code" role="button" class="btn btn-primary">MapMyRide</a>
                                             <p class="small"> User account isn't linked with an <abbr title="Under Armour">MapMyRide</abbr> account.</p>
                                         </c:otherwise>
@@ -161,6 +165,35 @@
             </div>
         </div>
     </div>
+    <script>
+        function deleteMapMyRideToken() {
+            console.log("Deleting Token...")
+            $.ajax({
+                url: "../DeleteMapMyRideToken",
+                success: function (response) {
+                    console.log("delete response: " + response)
+                    $("#deleteButton").html("<i class=\"fa fa-spinner fa-spin\"></i>")
+                    var button = document.getElementById("deleteButton");
+                    button.disabled = true;
+                    button.style.width="150px";
+                    var serverResponse = JSON.parse(response);
+
+                    if (serverResponse.result === "success") {
+                        window.location.replace("./mapmyride.jsp?message=ad");
+                    } else {
+                        $("#results").html("<div class=\"alert alert-danger\" class=\"col-xs-12\">\n\
+<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>\n\
+<strong>Failed!</strong> There was an error during unlinking MapMyRide account.");
+                        button.disabled = false;
+                        $("#deleteButton").html("Unlink MMR Account")
+                    }
+                },
+                error: function (jqXHR, textStatus, errorMessage) {
+                    console.log(errorMessage); // Optional
+                }
+            });
+        }
+    </script>
 
 
 
