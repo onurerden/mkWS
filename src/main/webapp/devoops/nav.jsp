@@ -64,6 +64,24 @@
                 <span class="hidden-xs">Logs</span>
             </a>
         </li>
+        <c:choose>
+            <c:when test="${sessionScope.isAdmin}">
+                <li>
+           <c:choose>
+                <c:when test="${selectedMenu=='users'}">
+                <a href="users.jsp" class="active">
+                </c:when>
+                <c:otherwise>
+                    <a href="users.jsp">
+                </c:otherwise>
+            </c:choose>
+                <i class="fa fa-users"></i>
+                <span class="hidden-xs">Users</span>
+            </a>
+                </li>
+        </c:when>
+        </c:choose>
+        
 <li>
             <a href="http://mk-onurerden.rhcloud.com/phpmyadmin" target="_blank">
                 <i class="fa fa-book"></i>
