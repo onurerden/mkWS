@@ -6,6 +6,7 @@
 
 <%
 session.setAttribute("userid", null);
+session.setAttribute("isAdmin", false);
 session.invalidate();
 response.sendRedirect("index.html");
 %>

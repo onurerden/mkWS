@@ -6,7 +6,7 @@
 
 <%@page import="mkws.ServerEngine"%>
 <%
-    if ((boolean) session.getAttribute("isAdmin")){
+    if ((Boolean)session.getAttribute("isAdmin")){
     ServerEngine server = new ServerEngine();
     String first_name = request.getParameter("first_name"); 
     String last_name = request.getParameter("last_name"); 
