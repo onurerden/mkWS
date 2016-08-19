@@ -16,10 +16,10 @@ import mkws.ServerEngine;
 
 /**
  *
- * @author oerden
+ * @author onurerden
  */
-@WebServlet(name = "DeleteRoute", urlPatterns = {"/DeleteRoute"})
-public class DeleteRoute extends HttpServlet {
+@WebServlet(name = "DeleteUser", urlPatterns = {"/DeleteUser"})
+public class DeleteUser extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,19 +33,18 @@ public class DeleteRoute extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            if ((request.getSession().getAttribute("userid") == null)&& ((Boolean)request.getSession().getAttribute("isAdmin"))) {
+            if (request.getSession().getAttribute("userid") == null) {
                 out.println("{\"result\": \"failed\", \"description\" : \"mkWS authentication failed.\"}");
                 return;
             };
             
-            int routeId = 0;
+            int userId = 0;
             try {
-                routeId = Integer.valueOf(request.getParameter("routeId"));
+                userId = Integer.valueOf(request.getParameter("userId"));
                 ServerEngine engine = new ServerEngine();
-                if (engine.deleteRoute(routeId)) {
+                if (engine.deleteUser(userId)) {
                     out.println("{\"result\": \"success\"}");
                 } else {
                     out.println("{\"result\": \"failed\"}");

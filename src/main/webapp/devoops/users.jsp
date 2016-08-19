@@ -39,31 +39,31 @@
                         </ol>
                     </div>
                 </div>
-                  <div class="row">
-                      <div id="results" class="col-xs-12">
-                          <c:choose>
-                              <c:when test="${param.success!=null}">
-                                 <div class="alert alert-success" class="col-xs-12">
+                <div class="row">
+                    <div id="results" class="col-xs-12">
+                        <c:choose>
+                            <c:when test="${param.success!=null}">
+                                <div class="alert alert-success" class="col-xs-12">
                                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                     <strong>Success!</strong> User <em> <% out.print(request.getParameter("success"));%> </em>added successfully.
-                                    
+
                                 </div> 
-                                  
-                              </c:when>
-                          </c:choose>
-                          <c:choose>
-                              <c:when test="${param.error!=null}">
-                                 <div class="alert alert-danger" class="col-xs-12">
+
+                            </c:when>
+                        </c:choose>
+                        <c:choose>
+                            <c:when test="${param.error!=null}">
+                                <div class="alert alert-danger" class="col-xs-12">
                                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                     <strong>Error!</strong> An error occured while adding the user <em> <% out.print(request.getParameter("error"));%> </em> to the mkWS .
-                                    
+
                                 </div> 
-                                  
-                              </c:when>
-                          </c:choose>
-                      </div>
-                  </div>
-                
+
+                            </c:when>
+                        </c:choose>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div id="kopters" class="col-xs-12">
                         <div class="box">
@@ -119,6 +119,10 @@
                                                     <td><%= resultset.getString("uname")%></td>
                                                     <td><%= resultset.getTimestamp("regdate")%></td>
                                                     <td><%= resultset.getBoolean("isAdmin")%></td>
+                                                    <td><button class="btn btn-danger"
+                                                                onClick="deleteUser(<%= resultset.getInt("id")%>)">
+                                                            Delete
+                                                        </button></td>
 
                                                 </tr>
                                                 <% }%>
@@ -159,10 +163,10 @@
                                             <div class="form-group">
                                                 <label class="control-label">is Admin?</label>
                                                 <input type="checkbox" unchecked name="isAdmin">                                              
-                                            <div class="text-center">
-                                                <!--		<a href="../index.html" class="btn btn-primary">Sign in</a>-->
-                                                <input type="submit" value="Add User" />
-                                            </div>
+                                                <div class="text-center">
+                                                    <!--		<a href="../index.html" class="btn btn-primary">Sign in</a>-->
+                                                    <input type="submit" value="Add User" />
+                                                </div>
                                         </form>
 
 
@@ -185,6 +189,28 @@
                     // Create jQuery-UI tabs
                     $("#tabs").tabs();
                 });
+
+                function deleteUser(userId) {
+                    console.log("delete clicked for user: " + userId);
+                    var link = "../DeleteUser?userId=" + userId;
+                    console.log(link);
+                    $.ajax({url: link, success: function (result) {
+
+                            var info = JSON.parse(result);
+
+                            console.log(info);
+
+                            if (info.result === "success") {
+                                window.location.replace("./users.jsp?success=");
+                            } else {
+                                $("#results").html("<div class=\"alert alert-danger\" class=\"col-xs-12\">\n\
+        <a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>\n\
+<strong>Failed!</strong> User cannot be deleted. " + info.description + "</div>");
+                            }
+                        }});
+
+                }
+
             </script>
             </html>
 

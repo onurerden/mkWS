@@ -1707,4 +1707,31 @@ public class ServerEngine implements IDeviceServer {
         
         return true;
     }
+    
+    public boolean deleteUser(int userId){
+        
+        try {
+            Credentials cr = new Credentials();
+            Connection con_1 = null;
+            Statement st_1 = null;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            st_1 = con_1.createStatement();
+            String query = "DELETE FROM mk.members WHERE id = " + userId;
+            st_1.execute(query);
+            con_1.close();
+            LogMessage msg = new LogMessage();
+            msg.deviceType  = DeviceTypes.SERVER.getName();
+            msg.logLevel=2;
+            msg.logMessage= "User "+ userId + " is deleted.";
+            Gson gson = new Gson();
+            sendLog(gson.toJson(msg));
+            
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return true;
+    }
+    
 }
