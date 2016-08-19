@@ -122,7 +122,7 @@
                                                     <td>
                                                         <% if (Integer.valueOf(session.getAttribute("id").toString())!=resultset.getInt("id")) { %>
                                                                 <button class="btn btn-danger"
-                                                                        onClick="deleteUser(<%= resultset.getInt("id")%>)">
+                                                                        onClick="deleteUser(<%= resultset.getInt("id")%>)" style="font-size:12px">
                                                                     Delete
                                                                 </button>
                                                                         <% } %>
