@@ -47,7 +47,7 @@ public class DeleteUser extends HttpServlet {
                 if (engine.deleteUser(userId)) {
                     out.println("{\"result\": \"success\"}");
                 } else {
-                    out.println("{\"result\": \"failed\"}");
+                    out.println("{\"result\": \"failed\", \"description\": \"Reason is unknown\"}");
                 }
             } catch (NumberFormatException ex) {
                     out.println("{\"result\": \"failed\", \"description\": \"" + ex.getMessage()+ "\"}");

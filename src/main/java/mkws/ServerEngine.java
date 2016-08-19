@@ -757,20 +757,20 @@ public class ServerEngine implements IDeviceServer {
         Connection con_1 = null;
         Statement st_1 = null;
         
-        msg.logMessage = msg.logMessage.replace("'","\\'");
-        String query = "INSERT INTO mk.logs SET logLevel = '" + msg.logLevel
-                + "', logMessage = '" + msg.logMessage + "'";
+        msg.setLogMessage(msg.getLogMessage().replace("'", "\\'"));
+        String query = "INSERT INTO mk.logs SET logLevel = '" + msg.getLogLevel()
+                + "', logMessage = '" + msg.getLogMessage() + "'";
         
         
         try {
-            DeviceTypes deviceType = DeviceTypes.valueOf(msg.deviceType.toUpperCase());
+            DeviceTypes deviceType = DeviceTypes.valueOf(msg.getDeviceType().toUpperCase());
             switch (deviceType) {
                 case MK: {
-                    query = query + ", " +  "kopterId = '" + msg.deviceId + "'";
+                    query = query + ", " +  "kopterId = '" + msg.getDeviceId() + "'";
                     break;
                 }
                 case MP: {
-                    query = query + ", " + "followMeDeviceId = '" + msg.deviceId + "'";
+                    query = query + ", " + "followMeDeviceId = '" + msg.getDeviceId() + "'";
                     break;
                 }
                 case SERVER: {
@@ -1039,10 +1039,10 @@ public class ServerEngine implements IDeviceServer {
             }
             if (success) {
                 LogMessage log = new LogMessage();
-                log.logMessage = session.getDeviceId() + " id\'li followMe cihazı " + temp + " adet konum içeren GPX dosyasını başarıyla yükledi. RouteId: " + routeId;
-                log.deviceId = session.getDeviceId();
-                log.deviceType = "MP";
-                log.logLevel = 2;
+                log.setLogMessage(session.getDeviceId() + " id\'li followMe cihazı " + temp + " adet konum içeren GPX dosyasını başarıyla yükledi. RouteId: " + routeId);
+                log.setDeviceId(session.getDeviceId());
+                log.setDeviceType("MP");
+                log.setLogLevel(2);
                 endRoute(routeId);
                 System.out.println("GPX dosyası başarıyla girildi.");
                 sendLog(new Gson().toJson(log));
@@ -1481,11 +1481,11 @@ public class ServerEngine implements IDeviceServer {
                 result = 1;
             } else {
                 LogMessage msg = new LogMessage();
-                msg.logLevel = 1;
-                msg.deviceType = DeviceTypes.SERVER.getName();
-                msg.logMessage = "MMR response code is: " + response.getStatusLine().getStatusCode() + " while sending Route: " + routeId + ".\n"
+                msg.setLogLevel(1);
+                msg.setDeviceType(DeviceTypes.SERVER.getName());
+                msg.setLogMessage("MMR response code is: " + response.getStatusLine().getStatusCode() + " while sending Route: " + routeId + ".\n"
                         + "Response is: \n"
-                        + responseString;
+                        + responseString);
                 Gson gson = new Gson();
                 sendLog(gson.toJson(msg));
             }
@@ -1524,11 +1524,11 @@ public class ServerEngine implements IDeviceServer {
                 result = 1;
             } else {
                 LogMessage msg = new LogMessage();
-                msg.logLevel = 1;
-                msg.deviceType = DeviceTypes.SERVER.getName();
-                msg.logMessage = "MMR response code is: " + response.getStatusLine().getStatusCode() + " while sending Route: " + routeId + ".\n"
+                msg.setLogLevel(1);
+                msg.setDeviceType(DeviceTypes.SERVER.getName());
+                msg.setLogMessage("MMR response code is: " + response.getStatusLine().getStatusCode() + " while sending Route: " + routeId + ".\n"
                         + "Response is: \n"
-                        + responseString;
+                        + responseString);
                 Gson gson = new Gson();
                 sendLog(gson.toJson(msg));
             }
@@ -1627,9 +1627,9 @@ public class ServerEngine implements IDeviceServer {
             st_1.execute(query);
             con_1.close();
             LogMessage msg = new LogMessage();
-            msg.deviceType  = DeviceTypes.SERVER.getName();
-            msg.logLevel=2;
-            msg.logMessage= "Route "+ routeId + " is deleted.";
+            msg.setDeviceType(DeviceTypes.SERVER.getName());
+            msg.setLogLevel(2);
+            msg.setLogMessage("Route "+ routeId + " is deleted.");
             Gson gson = new Gson();
             sendLog(gson.toJson(msg));
             
@@ -1709,7 +1709,7 @@ public class ServerEngine implements IDeviceServer {
     }
     
     public boolean deleteUser(int userId){
-        
+       
         try {
             Credentials cr = new Credentials();
             Connection con_1 = null;
@@ -1721,9 +1721,9 @@ public class ServerEngine implements IDeviceServer {
             st_1.execute(query);
             con_1.close();
             LogMessage msg = new LogMessage();
-            msg.deviceType  = DeviceTypes.SERVER.getName();
-            msg.logLevel=2;
-            msg.logMessage= "User "+ userId + " is deleted.";
+            msg.setDeviceType(DeviceTypes.SERVER.getName());
+            msg.setLogLevel(2);
+            msg.setLogMessage("User "+ userId + " is deleted.");
             Gson gson = new Gson();
             sendLog(gson.toJson(msg));
             

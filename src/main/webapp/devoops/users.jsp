@@ -120,7 +120,7 @@
                                                     <td><%= resultset.getTimestamp("regdate")%></td>
                                                     <td><%= resultset.getBoolean("isAdmin")%></td>
                                                     <td>
-                                                        <% if ((int) session.getAttribute("id")!=resultset.getInt("id")) { %>
+                                                        <% if (Integer.valueOf(session.getAttribute("id").toString())!=resultset.getInt("id")) { %>
                                                                 <button class="btn btn-danger"
                                                                         onClick="deleteUser(<%= resultset.getInt("id")%>)">
                                                                     Delete
