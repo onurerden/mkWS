@@ -205,7 +205,7 @@
                             console.log(info);
 
                             if (info.result === "success") {
-                                window.location.replace("./users.jsp?success=");
+                                window.location.replace("./users.jsp?success=\"User deleted successfully\"");
                             } else {
                                 $("#results").html("<div class=\"alert alert-danger\" class=\"col-xs-12\">\n\
         <a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>\n\
