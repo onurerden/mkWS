@@ -45,7 +45,7 @@
                             <c:when test="${param.success!=null}">
                                 <div class="alert alert-success" class="col-xs-12">
                                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                    <strong>Success!</strong> User <em> <% out.print(request.getParameter("success"));%> </em>added successfully.
+                                    <strong>Success!</strong> <% out.print(request.getParameter("success"));%>
 
                                 </div> 
 
@@ -55,7 +55,7 @@
                             <c:when test="${param.error!=null}">
                                 <div class="alert alert-danger" class="col-xs-12">
                                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                    <strong>Error!</strong> An error occured while adding the user <em> <% out.print(request.getParameter("error"));%> </em> to the mkWS .
+                                    <strong>Error!</strong> <% out.print(request.getParameter("error"));%>
 
                                 </div> 
 
@@ -119,10 +119,14 @@
                                                     <td><%= resultset.getString("uname")%></td>
                                                     <td><%= resultset.getTimestamp("regdate")%></td>
                                                     <td><%= resultset.getBoolean("isAdmin")%></td>
-                                                    <td><button class="btn btn-danger"
-                                                                onClick="deleteUser(<%= resultset.getInt("id")%>)">
-                                                            Delete
-                                                        </button></td>
+                                                    <td>
+                                                        <% if ((int) session.getAttribute("id")!=resultset.getInt("id")) { %>
+                                                                <button class="btn btn-danger"
+                                                                        onClick="deleteUser(<%= resultset.getInt("id")%>)">
+                                                                    Delete
+                                                                </button>
+                                                                        <% } %>
+                                                    </td>
 
                                                 </tr>
                                                 <% }%>

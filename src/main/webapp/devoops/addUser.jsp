@@ -4,6 +4,9 @@
     Author     : onurerden
 --%>
 
+<%@page import="com.google.gson.Gson"%>
+<%@page import="mkws.DeviceTypes"%>
+<%@page import="mkws.LogMessage"%>
 <%@page import="mkws.ServerEngine"%>
 <%
     if ((Boolean)session.getAttribute("isAdmin")){
@@ -26,11 +29,17 @@
     
     boolean result = server.addMkwsUser(first_name, last_name, email, uname, password, isAdmin);
     if (result){
-        response.sendRedirect("users.jsp?success=\""+uname+"\"");
+         LogMessage msg = new LogMessage();
+         msg.setDeviceType(DeviceTypes.SERVER.getName());
+         msg.setLogLevel(2);
+         msg.setLogMessage("User "+ uname + " is added.");
+            Gson gson = new Gson();
+            server.sendLog(gson.toJson(msg));
+        response.sendRedirect("users.jsp?success=\"User <em>"+uname+"</em> was added successfully.\"");
         
     
     }else{
-    response.sendRedirect("users.jsp?error=\""+ uname+"\"");
+    response.sendRedirect("users.jsp?error=\"An error occured while adding the user <em> "+ uname+"\" </em> to the mkWS.");
     }
     }else {
         response.sendRedirect("users.jsp");
