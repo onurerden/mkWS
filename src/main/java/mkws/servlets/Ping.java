@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mkws.servlets;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.IncorrectClaimException;
+import io.jsonwebtoken.Jws;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -13,6 +15,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MissingClaimException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.impl.TextCodec;
+import mkws.Credentials;
 
 /**
  *
@@ -33,11 +41,49 @@ public class Ping extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+String token = request.getParameter("token");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
+            Credentials cr = new Credentials();
             
-            out.println("Pong");            
-            
+            if(request.getParameter("token")!=null){
+            try {
+                Jws<Claims> claims = Jwts.parser()
+                        .requireSubject("user")
+                        .require("userType", "FollowMeUser")
+                        .setSigningKey(cr.getJjwtKey())
+                        .parseClaimsJws(token);
+                
+                out.println("token is valid");
+                
+                
+            } catch (MissingClaimException e) {
+                out.println("missing exception");
+                // we get here if the required claim is not present
+
+            } catch (IncorrectClaimException e) {
+                out.println("incorrect claim exception");
+                // we get here if ther required claim has the wrong value
+
+            } catch (SignatureException e) {
+                out.println("signature exception");
+            }
+            } else {
+            String jwtStr = Jwts.builder()
+                    .setSubject("user")
+                    .claim("userType", "FollowMeUser")
+                    .signWith(
+                            SignatureAlgorithm.HS256,
+                            TextCodec.BASE64.decode(
+                                    // This generated signing key is
+                                    // the proper length for the
+                                    // HS256 algorithm.
+                                    cr.getJjwtKey()
+                            )
+                    )
+                    .compact();
+            out.println(jwtStr);
+            }
         }
     }
 
