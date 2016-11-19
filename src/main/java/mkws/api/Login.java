@@ -44,10 +44,17 @@ public class Login extends HttpServlet {
     while ((line = reader.readLine()) != null)
       jb.append(line);
   } catch (Exception e) { /*report an error*/ }
-
+ String[] nameValuePairs = jb.toString().split("&");
+  for(String nameValuePair: nameValuePairs) {
+    if(nameValuePair.startsWith("userName" + "=")) {
+     out.println("User Name is: " + nameValuePair.replaceAll("userName=", ""));
+    }
+    if(nameValuePair.startsWith("password" + "=")) {
+     out.println("password is: " + nameValuePair.replaceAll("password=", ""));
+    }
   
             
-           out.println("Post Data is: " + jb);
+           
         }
     }
 
