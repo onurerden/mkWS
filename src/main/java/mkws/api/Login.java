@@ -34,7 +34,7 @@ public class Login extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-      out.println("login page");   
+      out.println("login test page");   
     //       String postData = request.getParameter("cmd");
     //       out.println("Post Data is: " + request.getParameter("cmd"));
         }
