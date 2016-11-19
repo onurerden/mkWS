@@ -14,19 +14,24 @@ public class Credentials {
     String server = "127.5.211.2:3306"; //mk
  //   String server = "127.2.57.130:3306";//mknew
   //  String server = "localhost:3306";
- //   String server = "onur-mac-mini.local:3306";
+//    String server = "onur-mac-mini.local:3306";
     String database = "mk";
 //    String dbUserName = "adminGStcLXX";
 //    String dbPassword = "Wc_flbnyklZt";
     private String dbUserName = "adminHr8UXvV";
     private String dbPassword = "UrtgKUvL3deC";
     
+    private String jjwtKey = "3zciEFR2rf+beofy3rh0Ak/2L8NOLS0GGnNODeSBNUI=";
+    
     private String mmrClientId= "kd8sw2eft3bmy3hft7x9yezqgfhwezcz";
     private String mmrClientSecret = "smAfN8CYndqQSuUMR5p8Tt4pNPkuhGv5DT6pns3B3sW";
 
-    private String mmrClientIdForWeb= "48tedwecj3aum5uewqyprd6m9behtu3j";
-    private String mmrClientSecretForWeb = "yfmhmf9f8szPYtraVu8DtwZtyFnnVHUr5Teqksb7f7z";
+//    private String mmrClientIdForWeb= "48tedwecj3aum5uewqyprd6m9behtu3j";
+//    private String mmrClientSecretForWeb = "yfmhmf9f8szPYtraVu8DtwZtyFnnVHUr5Teqksb7f7z";
     
+     private String mmrClientIdForWeb= "ewekuaubbgj38f4qtabjhknphhhp5sxb";
+    private String mmrClientSecretForWeb = "fthrDs2EpSUtMWZxzDpxRBGEmYnCDj6sNWW2AuDFP7v";
+  
     public String getMysqlConnectionString() {
         String connectionString = new String();
         connectionString = "jdbc:mysql://" + server + "/" + database +"?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true";
@@ -93,5 +98,12 @@ public class Credentials {
      */
     public void setMmrClientSecretForWeb(String mmrClientSecretForWeb) {
         this.mmrClientSecretForWeb = mmrClientSecretForWeb;
+    }
+
+    /**
+     * @return the jjwtKey
+     */
+    public String getJjwtKey() {
+        return jjwtKey;
     }
 }
