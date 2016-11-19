@@ -1821,4 +1821,42 @@ public class ServerEngine implements IDeviceServer {
         return user;
     }
     
+    public MkwsUser getUserNameByCredentials(String userName, String password){
+        MkwsUser user =  new MkwsUser();
+        
+        try {
+            Credentials cr = new Credentials();
+            Connection con_1 = null;
+            Statement st_1 = null;
+            ResultSet rs_1=null;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            st_1 = con_1.createStatement();
+            String query = "SELECT * FROM mk.members WHERE userName= " + userName +" AND password= " +password;
+            System.out.println(query);
+            rs_1 = st_1.executeQuery(query);
+           
+            while (rs_1.next()){
+            
+            user.setId(rs_1.getInt("id"));
+            user.setFirst_name(rs_1.getString("first_name"));
+            user.setLast_name(rs_1.getString("last_name"));
+            user.setUname(rs_1.getString("uname"));
+            user.setPass(rs_1.getString("pass"));
+            user.setRegdate(rs_1.getTimestamp("regdate"));
+            user.setEmail(rs_1.getString("email"));
+            user.setIsAdmin(rs_1.getBoolean("isAdmin"));
+            }
+            
+             con_1.close();
+            
+            
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                        
+        
+        return user;
+    }
+    
 }

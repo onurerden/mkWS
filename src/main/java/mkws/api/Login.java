@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import mkws.ServerEngine;
 
 /**
  *
@@ -36,25 +37,36 @@ public class Login extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
    //   out.println("login test page");   
-           
+
             StringBuffer jb = new StringBuffer();
-  String line = null;
-  try {
-    BufferedReader reader = request.getReader();
-    while ((line = reader.readLine()) != null)
-      jb.append(line);
-  } catch (Exception e) { /*report an error*/ }
- String[] nameValuePairs = jb.toString().split("&");
-  for(String nameValuePair: nameValuePairs) {
-    if(nameValuePair.startsWith("userName" + "=")) {
-     out.println("User Name is: " + nameValuePair.replaceAll("userName=", ""));
-    }
-    if(nameValuePair.startsWith("password" + "=")) {
-     out.println("password is: " + nameValuePair.replaceAll("password=", ""));
-    }
-  
+            String line = null;
+            String userName = "";
+            String password = "";
+            try {
+                BufferedReader reader = request.getReader();
+                while ((line = reader.readLine()) != null) {
+                    jb.append(line);
+                }
+            } catch (Exception e) { /*report an error*/ }
+            String[] nameValuePairs = jb.toString().split("&");
+            for (String nameValuePair : nameValuePairs) {
+                if (nameValuePair.startsWith("userName" + "=")) {
+                    userName = nameValuePair.replaceAll("userName=", "");
+                    out.println("User Name is: " + userName);
+                }
+                if (nameValuePair.startsWith("password" + "=")) {
+                    password = nameValuePair.replaceAll("password=", "");
+                    out.println("password is: " + password);
+                }
+
+            }
+            ServerEngine server = new ServerEngine();
+            if(server.getUserNameByCredentials(userName, password)!=null){
+                out.println("user entry granted");
+            }else{
+                out.println("user entry denied");
+            }
             
-  }    
         }
     }
 
