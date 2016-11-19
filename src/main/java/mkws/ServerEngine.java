@@ -1832,7 +1832,7 @@ public class ServerEngine implements IDeviceServer {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
-            String query = "SELECT * FROM mk.members WHERE uname= " + userName +" AND pass= " +password;
+            String query = "SELECT * FROM mk.members WHERE uname=\"" + userName +"\" AND pass=\"" +password+"\"";
             System.out.println(query);
             rs_1 = st_1.executeQuery(query);
            
