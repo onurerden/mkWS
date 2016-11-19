@@ -21,6 +21,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.impl.TextCodec;
 import mkws.Credentials;
+import mkws.ServerEngine;
+import mkws.TokenEvaluator;
 
 /**
  *
@@ -41,37 +43,39 @@ public class Ping extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-    String token = request.getParameter("token");
-    int userId = Integer.valueOf(request.getParameter("userId"));
+        TokenEvaluator te = new TokenEvaluator();
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            Credentials cr = new Credentials();
-            
-            if(request.getParameter("token")!=null){
-            try {
-                Jws<Claims> claims = Jwts.parser()
-                        .requireSubject("user")
-                        .require("userId", userId)
-                        .setSigningKey(cr.getJjwtKey())
-                        .parseClaimsJws(token);
-                
-                out.println("token is valid");
-                
-                
-            } catch (MissingClaimException e) {
-                out.println("missing exception");
-                // we get here if the required claim is not present
+            out.print("User Id is " + te.evaluateRequestForToken(request));
+//    int userId = Integer.valueOf(request.getParameter("userId"));
 
-            } catch (IncorrectClaimException e) {
-                out.println("incorrect claim exception");
-                // we get here if ther required claim has the wrong value
-
-            } catch (SignatureException e) {
-                out.println("signature exception");
-            }
-            } else {            
-            out.println("No Token");
-            }
+//            /* TODO output your page here. You may use following sample code. */
+//            Credentials cr = new Credentials();
+//            
+//            if(request.getParameter("token")!=null){
+//            try {
+//                Jws<Claims> claims = Jwts.parser()
+//                        .requireSubject("user")
+//                        .require("userId", userId)
+//                        .setSigningKey(cr.getJjwtKey())
+//                        .parseClaimsJws(token);
+//                
+//                out.println("token is valid");
+//                
+//                
+//            } catch (MissingClaimException e) {
+//                out.println("missing exception");
+//                // we get here if the required claim is not present
+//
+//            } catch (IncorrectClaimException e) {
+//                out.println("incorrect claim exception");
+//                // we get here if ther required claim has the wrong value
+//
+//            } catch (SignatureException e) {
+//                out.println("signature exception");
+//            }
+//            } else {            
+//            out.println("No Token");
+//            }
         }
     }
 
