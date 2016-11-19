@@ -68,7 +68,7 @@ public class Login extends HttpServlet {
                 String token = server.createTokenForUser(user.getId());
                 out.println("{\"token\" : \""+token+"\"}");
             }else{
-                response.setStatus(400);
+                response.setStatus(401);
                 out.println("user entry denied");
             }
             

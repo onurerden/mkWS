@@ -41,7 +41,8 @@ public class Ping extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-String token = request.getParameter("token");
+    String token = request.getParameter("token");
+    int userId = Integer.valueOf(request.getParameter("userId"));
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             Credentials cr = new Credentials();
@@ -50,7 +51,7 @@ String token = request.getParameter("token");
             try {
                 Jws<Claims> claims = Jwts.parser()
                         .requireSubject("user")
-                        .require("userType", "FollowMeUser")
+                        .require("userId", userId)
                         .setSigningKey(cr.getJjwtKey())
                         .parseClaimsJws(token);
                 
