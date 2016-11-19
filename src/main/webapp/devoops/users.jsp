@@ -22,11 +22,63 @@
                     <h4 class="modal-title" id="myModalLabel">Delete User</h4>
                 </div>
                 <div class="modal-body" id="modalBody">
-                  
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-danger" onclick=deleteUser()>Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Edit User</h4>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <form method="post" action="editUser.jsp">
+                        <div class="form-group">
+                            <label class="control-label">User Login Name</label>
+                            <input id="editUname" type="text" class="form-control" placeholder="User Login Name" name="uname" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">User Login Id</label>
+                            <input id="editUserId" type="number" class="form-control" placeholder="User Login Id" name="userId" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">First Name</label>
+                            <input id="editFirstName" type="text" class="form-control" placeholder="User Name" name="first_name">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Last Name</label>
+                            <input id="editLastName" type="text" class="form-control" placeholder="User Last Name" name="last_name">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">User Email</label>
+                            <input id="editEmail" type="text" class="form-control" placeholder="User Email" name="email">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Password</label>
+                            <input id="editPassword" type="password" class="form-control" placeholder="Password" name="password">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">is Admin?</label>
+                            <input id="editIsAdmin" type="checkbox" unchecked name="isAdmin">                                              
+                            <div class="text-center">
+                                <!--		<a href="../index.html" class="btn btn-primary">Sign in</a>-->
+                                <input type="submit" value="Save User" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
                 </div>
             </div>
         </div>
@@ -58,6 +110,7 @@
                     </div>
                 </div>
                 <div class="row">
+                    
                     <div id="results" class="col-xs-12">
                         <c:choose>
                             <c:when test="${param.success!=null}">
@@ -104,7 +157,7 @@
                                 <div class="no-move"></div>
                             </div>
                             <div class="box-content">
-                              
+
 
                                 <div id="tabs">
                                     <ul>
@@ -139,6 +192,10 @@
                                                     <td><%= resultset.getTimestamp("regdate")%></td>
                                                     <td><%= resultset.getBoolean("isAdmin")%></td>
                                                     <td>
+                                                        <button class="btn btn-info"
+                                                                onClick="toggleEdit(<%= resultset.getInt("id")%>)" style="font-size:12px">
+                                                            Edit
+                                                        </button>
                                                         <% if (Integer.valueOf(session.getAttribute("id").toString()) != resultset.getInt("id")) {%>
                                                         <button class="btn btn-danger"
                                                                 onClick="askToBeDeleted(<%= resultset.getInt("id")%>)" style="font-size:12px">
@@ -213,7 +270,8 @@
                     // Create jQuery-UI tabs
                     $("#tabs").tabs();
                 });
-                var userIdToBeDeleted=-1;
+                var userIdToBeDeleted = -1;
+                var userIdToBeEdited = -1;
 
                 function deleteUser() {
                     console.log("delete clicked for user: " + userIdToBeDeleted);
@@ -236,12 +294,34 @@
 
                 }
                 function askToBeDeleted(userId) {
-                                        console.log("modal loaded for user: " +userId);
-                                        userIdToBeDeleted=userId;
-                    $("#modalBody").html("Are you sure you want to delete user with id number: " + userId );
+                    console.log("modal loaded for user: " + userId);
+                    userIdToBeDeleted = userId;
+                    $("#modalBody").html("Are you sure you want to delete user with id number: " + userId);
                     $('#myModal').modal('toggle');
                 }
+                function toggleEdit(userId) {
+                    $("#editModal").modal("toggle");
+                    userIdToBeEdited = userId;
+                    var link = "../GetUserInfo?userId=" + userIdToBeEdited;
+                    
+                    $.ajax({url: link, success: function (result) {
 
+                            var info = JSON.parse(result);
+
+                            console.log(info);
+                            $("#editUname").val(info.uname);
+                            $("#editUserId").val(info.id);
+                            $("#editEmail").val(info.email);
+                            $("#editFirstName").val(info.first_name);
+                            $("#editLastName").val(info.last_name);
+                            $("#editPassword").val(info.pass);
+                            $("#editIsAdmin").prop('checked',info.isAdmin);
+                            
+                            
+                            
+
+                        }});
+                }
 
             </script>
             </html>
