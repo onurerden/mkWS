@@ -5,6 +5,7 @@
  */
 package mkws.api;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -35,8 +36,18 @@ public class Login extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
    //   out.println("login test page");   
-           String postData = request.getParameter("cmd");
-           out.println("Post Data is: " + request.getParameter("cmd"));
+           
+            StringBuffer jb = new StringBuffer();
+  String line = null;
+  try {
+    BufferedReader reader = request.getReader();
+    while ((line = reader.readLine()) != null)
+      jb.append(line);
+  } catch (Exception e) { /*report an error*/ }
+
+  
+            
+           out.println("Post Data is: " + jb);
         }
     }
 
