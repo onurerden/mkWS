@@ -41,6 +41,7 @@ public class TokenEvaluator {
             
             } else {            
             System.out.println("No Token");
+            return null;
             }
         
 return tokenModel;    

@@ -21,6 +21,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.impl.TextCodec;
 import mkws.Credentials;
+import mkws.Model.Token;
 import mkws.ServerEngine;
 import mkws.TokenEvaluator;
 
@@ -45,8 +46,13 @@ public class Ping extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         TokenEvaluator te = new TokenEvaluator();
         try (PrintWriter out = response.getWriter()) {
-            out.println("User Id is " + te.evaluateRequestForToken(request).getUserId());
-            out.println("issuer is " + te.evaluateRequestForToken(request).getIssuer());
+            Token token=te.evaluateRequestForToken(request);
+            if (token==null){
+                out.println("No Token");
+                return;
+            }
+            out.println("User Id is " + token.getUserId());
+            out.println("issuer is " + token.getIssuer());
 //    int userId = Integer.valueOf(request.getParameter("userId"));
 
 //            /* TODO output your page here. You may use following sample code. */
