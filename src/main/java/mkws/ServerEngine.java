@@ -60,6 +60,8 @@ import org.xml.sax.SAXException;
  * @author oerden
  */
 public class ServerEngine implements IDeviceServer {
+    private int userId = 1;
+    
     
     @Override
     public String touchServer(String uid, String deviceType) {
@@ -166,6 +168,7 @@ public class ServerEngine implements IDeviceServer {
         return json.toJson(sessionInfo);
     }
     
+    
     @Override
     public int registerDevice(String uid, String name, String deviceType) {
         //    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -193,7 +196,7 @@ public class ServerEngine implements IDeviceServer {
                     break;
                 }
                 case MP: {
-                    queryString = "INSERT INTO `followmedevices`(`UID`, `name`, `registerDate`) VALUES ('" + uid + "', '" + name + "', NOW())";
+                    queryString = "INSERT INTO `followmedevices`(`UID`, `name`, `userId`, `registerDate`) VALUES ('" + uid + "', '" + name + "','" + userId + "', NOW())";
                     break;
                 }
             }
@@ -1875,5 +1878,19 @@ public class ServerEngine implements IDeviceServer {
                 )
                 .compact();
         return jwtStr;
+    }
+
+    /**
+     * @return the userId
+     */
+    public int getUserId() {
+        return userId;
+    }
+
+    /**
+     * @param userId the userId to set
+     */
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

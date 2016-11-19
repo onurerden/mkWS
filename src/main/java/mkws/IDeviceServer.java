@@ -23,6 +23,7 @@ public interface IDeviceServer {
     //uid cihaz tekil numarasi maks 45 hane, name cihaz ismi
     //deviceType mk (mikrokopter) ya da mp (mobilephone)
     //-1 ise db erişim hatası. -2 ya da -3 ise kaydı yok ancak yine de kayıt edilemedi.
+    //401 status alınırsa token hatası
 
     int sendStatus(String jsonStatus);
     //gelecek olan json KopterStatus sınıfındaki gibi olmalıdır. (parametre adı jsonstatus)
@@ -75,6 +76,7 @@ public interface IDeviceServer {
     //logLevel hata mesajları için 1, bilgi mesajları için 2, diğer mesajlar için 99 olacaktır.
     //logMessage için bir kısıtlama yoktur, istenen şey yazılabilir.
     //başarılı gönderim halinde 0, hatalı json -2, db erişim hatası -1 dönüş yapar.
+
 
     int endRoute(int routeId);
     //Rotanın sonuçlandırılması için followme aksiyonunun bitirilmesi ile çağırılan metoddur.

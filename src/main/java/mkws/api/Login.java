@@ -20,7 +20,7 @@ import mkws.ServerEngine;
  *
  * @author onurerden
  */
-@WebServlet(name = "Login", urlPatterns = {"/Login"})
+@WebServlet(name = "Login", urlPatterns = {"/api/Login"})
 public class Login extends HttpServlet {
 
     /**

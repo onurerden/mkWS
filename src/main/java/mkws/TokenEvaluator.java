@@ -22,8 +22,9 @@ public class TokenEvaluator {
     
     public Token evaluateRequestForToken(HttpServletRequest request)  throws SignatureException, IncorrectClaimException, MissingClaimException{
        Token tokenModel = new Token();
-        if(request.getParameter("token")!=null){
-            String token = request.getParameter("token");
+       if(request.getHeader("Authorization").startsWith("Bearer ")){
+            String token = request.getHeader("Authorization").replaceFirst("Bearer ", "");
+        
             Credentials cr = new Credentials();
             
                 Jws<Claims> claims = Jwts.parser()

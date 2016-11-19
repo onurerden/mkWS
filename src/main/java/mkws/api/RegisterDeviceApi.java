@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mkws.servlets;
+package mkws.api;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.IncorrectClaimException;
-import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.MissingClaimException;
+import io.jsonwebtoken.SignatureException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -15,21 +15,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MissingClaimException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.impl.TextCodec;
-import mkws.Credentials;
+import mkws.Model.Token;
 import mkws.ServerEngine;
 import mkws.TokenEvaluator;
 
 /**
  *
- * @author oerden
+ * @author onurerden
  */
-@WebServlet(name = "Ping", urlPatterns = {"/Ping"})
-public class Ping extends HttpServlet {
+@WebServlet(name = "RegisterDeviceApi", urlPatterns = {"/api/RegisterDevice"})
+public class RegisterDeviceApi extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,39 +39,27 @@ public class Ping extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         TokenEvaluator te = new TokenEvaluator();
+        
         try (PrintWriter out = response.getWriter()) {
-            out.println("User Id is " + te.evaluateRequestForToken(request).getUserId());
-            out.println("issuer is " + te.evaluateRequestForToken(request).getIssuer());
-//    int userId = Integer.valueOf(request.getParameter("userId"));
-
-//            /* TODO output your page here. You may use following sample code. */
-//            Credentials cr = new Credentials();
-//            
-//            if(request.getParameter("token")!=null){
-//            try {
-//                Jws<Claims> claims = Jwts.parser()
-//                        .requireSubject("user")
-//                        .require("userId", userId)
-//                        .setSigningKey(cr.getJjwtKey())
-//                        .parseClaimsJws(token);
-//                
-//                out.println("token is valid");
-//                
-//                
-//            } catch (MissingClaimException e) {
-//                out.println("missing exception");
-//                // we get here if the required claim is not present
-//
-//            } catch (IncorrectClaimException e) {
-//                out.println("incorrect claim exception");
-//                // we get here if ther required claim has the wrong value
-//
-//            } catch (SignatureException e) {
-//                out.println("signature exception");
-//            }
-//            } else {            
-//            out.println("No Token");
-//            }
+            /* TODO output your page here. You may use following sample code. */
+            /* TODO output your page here. You may use following sample code. */
+            String name = request.getParameter("name");
+            String uid = request.getParameter("uid");
+            String deviceType = request.getParameter("deviceType");
+            
+            try {
+                Token token = te.evaluateRequestForToken(request);
+                ServerEngine server = new ServerEngine();
+                server.setUserId(token.getUserId());
+                server.registerDevice(uid, name, deviceType);
+                
+                out.println(server.registerDevice(uid, name, deviceType));
+                
+            } catch (SignatureException | IncorrectClaimException | MissingClaimException ex) {
+                response.setStatus(401);
+                out.println("token hatası: " + ex.getLocalizedMessage());
+            }
+            
         }
     }
 
