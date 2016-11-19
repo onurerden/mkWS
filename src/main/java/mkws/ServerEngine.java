@@ -1855,7 +1855,9 @@ public class ServerEngine implements IDeviceServer {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
                         
-        
+        if(user.getUname()==null){
+            return null;
+        }
         return user;
     }
     
