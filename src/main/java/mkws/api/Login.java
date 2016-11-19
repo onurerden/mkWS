@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import mkws.Model.MkwsUser;
 import mkws.ServerEngine;
 
 /**
@@ -52,18 +53,22 @@ public class Login extends HttpServlet {
             for (String nameValuePair : nameValuePairs) {
                 if (nameValuePair.startsWith("userName" + "=")) {
                     userName = nameValuePair.replaceAll("userName=", "");
-                    out.println("User Name is: " + userName);
+              //      out.println("User Name is: " + userName);
                 }
                 if (nameValuePair.startsWith("password" + "=")) {
                     password = nameValuePair.replaceAll("password=", "");
-                    out.println("password is: " + password);
+                //    out.println("password is: " + password);
                 }
 
             }
             ServerEngine server = new ServerEngine();
-            if(server.getUserNameByCredentials(userName, password)!=null){
-                out.println("user entry granted");
+            MkwsUser user = server.getUserByCredentials(userName, password);
+            if(user!=null){
+                //out.println("user entry granted");
+                String token = server.createTokenForUser(user.getId());
+                out.println("{\"token\" : \""+token+"\"}");
             }else{
+                response.setStatus(400);
                 out.println("user entry denied");
             }
             

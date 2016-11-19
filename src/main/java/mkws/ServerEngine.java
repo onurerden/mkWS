@@ -9,6 +9,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.sun.org.apache.xerces.internal.parsers.DOMParser;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.impl.TextCodec;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -1821,7 +1824,7 @@ public class ServerEngine implements IDeviceServer {
         return user;
     }
     
-    public MkwsUser getUserNameByCredentials(String userName, String password){
+    public MkwsUser getUserByCredentials(String userName, String password){
         MkwsUser user =  new MkwsUser();
         
         try {
@@ -1833,7 +1836,7 @@ public class ServerEngine implements IDeviceServer {
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             String query = "SELECT * FROM mk.members WHERE uname=\"" + userName +"\" AND pass=\"" +password+"\"";
-            System.out.println(query);
+            //System.out.println(query);
             rs_1 = st_1.executeQuery(query);
            
             while (rs_1.next()){
@@ -1860,5 +1863,21 @@ public class ServerEngine implements IDeviceServer {
         }
         return user;
     }
-    
+   public String createTokenForUser(int userId){
+       Credentials cr = new Credentials();
+       String jwtStr = Jwts.builder()
+                    .setSubject("user")
+                    .claim("userId", userId)
+                    .signWith(
+                            SignatureAlgorithm.HS256,
+                            TextCodec.BASE64.decode(
+                                    // This generated signing key is
+                                    // the proper length for the
+                                    // HS256 algorithm.
+                                    cr.getJjwtKey()
+                            )
+                    )
+                    .compact();
+       return jwtStr;
+   }
 }

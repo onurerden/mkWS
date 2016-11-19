@@ -68,21 +68,8 @@ String token = request.getParameter("token");
             } catch (SignatureException e) {
                 out.println("signature exception");
             }
-            } else {
-            String jwtStr = Jwts.builder()
-                    .setSubject("user")
-                    .claim("userType", "FollowMeUser")
-                    .signWith(
-                            SignatureAlgorithm.HS256,
-                            TextCodec.BASE64.decode(
-                                    // This generated signing key is
-                                    // the proper length for the
-                                    // HS256 algorithm.
-                                    cr.getJjwtKey()
-                            )
-                    )
-                    .compact();
-            out.println(jwtStr);
+            } else {            
+            out.println("No Token");
             }
         }
     }
