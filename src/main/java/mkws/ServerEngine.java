@@ -414,9 +414,9 @@ public class ServerEngine implements IDeviceServer {
     @Override
     public int sendFollowMeData(String json) {
         FollowMeData data;
-      //  Gson gson = new Gson();
+        //  Gson gson = new Gson();
         Gson gson = new GsonBuilder()
-   .setDateFormat("yyyy-MM-dd hh:mm:ss").create();
+                .setDateFormat("yyyy-MM-dd hh:mm:ss").create();
         
         try {
             data = gson.fromJson(json, FollowMeData.class);
@@ -765,12 +765,11 @@ public class ServerEngine implements IDeviceServer {
         String query = "INSERT INTO mk.logs SET logLevel = '" + msg.getLogLevel()
                 + "', logMessage = '" + msg.getLogMessage() + "'";
         
-        
         try {
             DeviceTypes deviceType = DeviceTypes.valueOf(msg.getDeviceType().toUpperCase());
             switch (deviceType) {
                 case MK: {
-                    query = query + ", " +  "kopterId = '" + msg.getDeviceId() + "'";
+                    query = query + ", " + "kopterId = '" + msg.getDeviceId() + "'";
                     break;
                 }
                 case MP: {
@@ -786,7 +785,6 @@ public class ServerEngine implements IDeviceServer {
                     break;
                 }
             }
-            
             
         } catch (NullPointerException ex) {
             System.out.println("NullPointerException at sendLog: " + ex.toString());
@@ -1009,23 +1007,23 @@ public class ServerEngine implements IDeviceServer {
                         
                         fmData.setLat(Double.valueOf(eElement.getAttribute("lat")));
                         fmData.setLon(Double.valueOf(eElement.getAttribute("lon")));
-                         if(eElement.getElementsByTagName("ele").item(0)!=null){
-                        fmData.setAltitude(Double.valueOf(eElement.getElementsByTagName("ele").item(0).getTextContent()));
-                         }
-                        if(eElement.getElementsByTagName("speed").item(0)!=null){
-                        fmData.setSpeed(Double.valueOf(eElement.getElementsByTagName("speed").item(0).getTextContent()));
+                        if (eElement.getElementsByTagName("ele").item(0) != null) {
+                            fmData.setAltitude(Double.valueOf(eElement.getElementsByTagName("ele").item(0).getTextContent()));
+                        }
+                        if (eElement.getElementsByTagName("speed").item(0) != null) {
+                            fmData.setSpeed(Double.valueOf(eElement.getElementsByTagName("speed").item(0).getTextContent()));
                         }
                         fmData.setRouteId(routeId);
                         fmData.setSessionId(session.getSessionId());
                         fmData.setFollowMeDeviceId(session.getDeviceId());
                         
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                        String date = eElement.getElementsByTagName("time").item(0).getTextContent().replace("T", " ").replace("Z","");
+                        String date = eElement.getElementsByTagName("time").item(0).getTextContent().replace("T", " ").replace("Z", "");
                         Date parsedDate = dateFormat.parse(date);
                         Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
                         
                         fmData.setTime(timestamp);
-                                                
+                        
                         System.out.println("Latitude: " + fmData.getLat());
                         System.out.println("Longitude: " + fmData.getLat());
                         System.out.println("Elevation: " + fmData.getAltitude());
@@ -1109,16 +1107,16 @@ public class ServerEngine implements IDeviceServer {
     }
     
     public int saveMMRauthorizationCodeForUser(Integer userId, String code) {
-                
+        
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1;
         String query;
         
-                query = "INSERT INTO mk.mmrauthorization (code,userId ) VALUES (\""
-                        + code + "\","
-                        + userId + ")";
-                
+        query = "INSERT INTO mk.mmrauthorization (code,userId ) VALUES (\""
+                + code + "\","
+                + userId + ")";
+        
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
@@ -1186,22 +1184,20 @@ public class ServerEngine implements IDeviceServer {
     }
     
     public int saveMMRauthorizationTokenForUser(int userId, OAuthToken token) {
-                
+        
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1;
         String query;
         
-       
-                
-                query = "INSERT INTO mmrauthorization (code,userId,access_token,refresh_token,expires_in) VALUES (\""
-                        + token.getAuthorizationCode() + "\","
-                        + userId + ",\""
-                        + token.getAccess_token() + "\",\""
-                        + token.getRefresh_token() + "\","
-                        + token.getExpires_in()
-                        + ")";
-                      
+        query = "INSERT INTO mmrauthorization (code,userId,access_token,refresh_token,expires_in) VALUES (\""
+                + token.getAuthorizationCode() + "\","
+                + userId + ",\""
+                + token.getAccess_token() + "\",\""
+                + token.getRefresh_token() + "\","
+                + token.getExpires_in()
+                + ")";
+        
         try {
             System.out.println(query);
             Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -1215,7 +1211,7 @@ public class ServerEngine implements IDeviceServer {
         return 1;
     }
     
-    public String mmrAccessTokenForUser(int userId) throws Exception{
+    public String mmrAccessTokenForUser(int userId) throws Exception {
         OAuthToken token = new OAuthToken();
         Credentials cr = new Credentials();
         token.setClientId(cr.getMmrClientIdForWeb());
@@ -1257,6 +1253,7 @@ public class ServerEngine implements IDeviceServer {
         return "No Authorization Code";
         
     }
+
     public String mmrAccessToken(int deviceId, String deviceType) throws Exception {
         OAuthToken token = new OAuthToken();
         Credentials cr = new Credentials();
@@ -1361,15 +1358,15 @@ public class ServerEngine implements IDeviceServer {
         return responseString;
     }
     
-    public String getMMRUserProfilePicture(int mmrUserId,int userId){
-    Credentials cr = new Credentials();
-        String responseString="";
+    public String getMMRUserProfilePicture(int mmrUserId, int userId) {
+        Credentials cr = new Credentials();
+        String responseString = "";
         try {
             HttpClient httpclient = new DefaultHttpClient();
             httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
 
             //HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/activity_type/");
-            HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/user_profile_photo/"+mmrUserId+"/");
+            HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/user_profile_photo/" + mmrUserId + "/");
             
             httpget.addHeader("Api-Key", cr.getMmrClientIdForWeb());
             httpget.addHeader("Content-Type", cr.getMmrClientIdForWeb());
@@ -1400,10 +1397,11 @@ public class ServerEngine implements IDeviceServer {
         return responseString;
         
     }
+
     public String getMMRUserInfo(int userId) {
         
         Credentials cr = new Credentials();
-        String responseString="";
+        String responseString = "";
         try {
             HttpClient httpclient = new DefaultHttpClient();
             httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
@@ -1430,8 +1428,8 @@ public class ServerEngine implements IDeviceServer {
             
             MMRUser user = gson.fromJson(responseString, MMRUser.class);
             Gson gson2 = new Gson();
-            user.setPhotoLinks(gson.fromJson(getMMRUserProfilePicture(user.getId(), userId),MMRUser.MMRUserProfilePhoto.class));
-                   
+            user.setPhotoLinks(gson.fromJson(getMMRUserProfilePicture(user.getId(), userId), MMRUser.MMRUserProfilePhoto.class));
+            
             System.out.println("MMR User name is " + user.getDisplay_name());
             
             if (responseString.contains("error")) {
@@ -1440,7 +1438,7 @@ public class ServerEngine implements IDeviceServer {
             }
             //System.out.println(responseString);
             gson2 = new Gson();
-            responseString=gson2.toJson(user);
+            responseString = gson2.toJson(user);
             System.out.println(responseString);
         } catch (Exception ex) {
             System.out.println("Error while constructing responseString");
@@ -1499,7 +1497,8 @@ public class ServerEngine implements IDeviceServer {
         }
         return result;
     }
-    public int sendMMRWorkout(int routeId,int userId) {
+
+    public int sendMMRWorkout(int routeId, int userId) {
         
         MMRWorkout workout = new MMRWorkout();
         workout.populateWorkout(routeId);
@@ -1619,7 +1618,7 @@ public class ServerEngine implements IDeviceServer {
         
     }
     
-    public boolean deleteRoute(int routeId){
+    public boolean deleteRoute(int routeId) {
         try {
             Credentials cr = new Credentials();
             Connection con_1 = null;
@@ -1633,7 +1632,7 @@ public class ServerEngine implements IDeviceServer {
             LogMessage msg = new LogMessage();
             msg.setDeviceType(DeviceTypes.SERVER.getName());
             msg.setLogLevel(2);
-            msg.setLogMessage("Route "+ routeId + " is deleted.");
+            msg.setLogMessage("Route " + routeId + " is deleted.");
             Gson gson = new Gson();
             sendLog(gson.toJson(msg));
             
@@ -1667,35 +1666,35 @@ public class ServerEngine implements IDeviceServer {
         return isSent;
     }
     
-    public boolean deleteMapMyRideToken(int userId){
+    public boolean deleteMapMyRideToken(int userId) {
         OAuthToken token = new OAuthToken();
         token.setAuthorizationCode("Not Set");
         token.setClientSecret("Not Set");
         token.setRefresh_token("Not Set");
         token.setExpires_in("0");
         token.setScope("Not Set");
-        if(saveMMRauthorizationTokenForUser(userId, token)==1){
+        if (saveMMRauthorizationTokenForUser(userId, token) == 1) {
             return true;
-        }else {
+        } else {
             return false;
-        }     
+        }        
         
     }
     
-    public boolean addMkwsUser(String first_name, String last_name, String email, String uname, String password, boolean isAdmin){
+    public boolean addMkwsUser(String first_name, String last_name, String email, String uname, String password, boolean isAdmin) {
         Credentials cr = new Credentials();
-            Connection con_1 = null;
-            Statement st_1 = null;
+        Connection con_1 = null;
+        Statement st_1 = null;
         
-            String query = "INSERT INTO mk.members (`first_name`,`last_name`,`email`,`uname`,`pass`,`isAdmin`,`regdate`) VALUES ("
-                    + "\""+ first_name+"\""+", "
-                    + "\""+last_name +"\""+", "
-                    + "\""+email +"\""+ ", "
-                    + "\""+uname +"\""+ ", "
-                    +  "\""+password +"\""+ ", "
-                    + isAdmin + ", NOW())";
-            System.out.println(query);
-            
+        String query = "INSERT INTO mk.members (`first_name`,`last_name`,`email`,`uname`,`pass`,`isAdmin`,`regdate`) VALUES ("
+                + "\"" + first_name + "\"" + ", "
+                + "\"" + last_name + "\"" + ", "
+                + "\"" + email + "\"" + ", "
+                + "\"" + uname + "\"" + ", "
+                + "\"" + password + "\"" + ", "
+                + isAdmin + ", NOW())";
+        System.out.println(query);
+        
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
@@ -1712,8 +1711,8 @@ public class ServerEngine implements IDeviceServer {
         return true;
     }
     
-    public boolean deleteUser(int userId){
-       
+    public boolean deleteUser(int userId) {
+        
         try {
             Credentials cr = new Credentials();
             Connection con_1 = null;
@@ -1727,7 +1726,7 @@ public class ServerEngine implements IDeviceServer {
             LogMessage msg = new LogMessage();
             msg.setDeviceType(DeviceTypes.SERVER.getName());
             msg.setLogLevel(2);
-            msg.setLogMessage("User "+ userId + " is deleted.");
+            msg.setLogMessage("User " + userId + " is deleted.");
             Gson gson = new Gson();
             sendLog(gson.toJson(msg));
             
@@ -1738,7 +1737,7 @@ public class ServerEngine implements IDeviceServer {
         return true;
     }
     
-    public MkwsUser editMkwsUser(int id, String first_name, String last_name, String email, String password,boolean isAdmin){
+    public MkwsUser editMkwsUser(int id, String first_name, String last_name, String email, String password, boolean isAdmin) {
         
         try {
             Credentials cr = new Credentials();
@@ -1748,20 +1747,20 @@ public class ServerEngine implements IDeviceServer {
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             String query = "UPDATE mk.members SET ";
-                    if (first_name!=null){
-                        query = query + "first_name = " + first_name +", ";
-                    }
-                    if (last_name!=null){
-                        query = query + "last_name = " + last_name +", ";
-                    }
-                    if (email!=null){
-                        query = query + "email = " + email +", ";
-                    }
-                    if (password!=null){
-                        query = query + "pass = " + password +", ";
-                    }
-                    query = query + "isAdmin = " + isAdmin; 
-                    System.out.println(query);
+            if (first_name != null) {
+                query = query + "first_name = " + first_name + ", ";
+            }
+            if (last_name != null) {
+                query = query + "last_name = " + last_name + ", ";
+            }
+            if (email != null) {
+                query = query + "email = " + email + ", ";
+            }
+            if (password != null) {
+                query = query + "pass = " + password + ", ";
+            }
+            query = query + "isAdmin = " + isAdmin;            
+            System.out.println(query);
             st_1.execute(query);
             con_1.close();
         } catch (SQLException ex) {
@@ -1773,44 +1772,43 @@ public class ServerEngine implements IDeviceServer {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        
         return getUserInfoById(id);
     }
     
-    public MkwsUser getUserInfoById(int id){
+    public MkwsUser getUserInfoById(int id) {
         
-        MkwsUser user =  new MkwsUser();
+        MkwsUser user = new MkwsUser();
         
         try {
             Credentials cr = new Credentials();
             Connection con_1 = null;
             Statement st_1 = null;
-            ResultSet rs_1=null;
+            ResultSet rs_1 = null;
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             String query = "SELECT * FROM mk.members WHERE id= " + id;
             System.out.println(query);
             rs_1 = st_1.executeQuery(query);
-           
-            while (rs_1.next()){
             
-            user.setId(rs_1.getInt("id"));
-            user.setFirst_name(rs_1.getString("first_name"));
-            user.setLast_name(rs_1.getString("last_name"));
-            user.setUname(rs_1.getString("uname"));
-            user.setPass(rs_1.getString("pass"));
-            user.setRegdate(rs_1.getTimestamp("regdate"));
-            user.setEmail(rs_1.getString("email"));
-            user.setIsAdmin(rs_1.getBoolean("isAdmin"));
+            while (rs_1.next()) {
+                
+                user.setId(rs_1.getInt("id"));
+                user.setFirst_name(rs_1.getString("first_name"));
+                user.setLast_name(rs_1.getString("last_name"));
+                user.setUname(rs_1.getString("uname"));
+                user.setPass(rs_1.getString("pass"));
+                user.setRegdate(rs_1.getTimestamp("regdate"));
+                user.setEmail(rs_1.getString("email"));
+                user.setIsAdmin(rs_1.getBoolean("isAdmin"));
             }
             
-             con_1.close();
+            con_1.close();
             LogMessage msg = new LogMessage();
             
             msg.setDeviceType(DeviceTypes.SERVER.getName());
             msg.setLogLevel(2);
-            msg.setLogMessage("User "+ id + " is edited.");
+            msg.setLogMessage("User " + id + " is edited.");
             Gson gson = new Gson();
             sendLog(gson.toJson(msg));
             
@@ -1818,66 +1816,64 @@ public class ServerEngine implements IDeviceServer {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        
-        
-        
         return user;
     }
     
-    public MkwsUser getUserByCredentials(String userName, String password){
-        MkwsUser user =  new MkwsUser();
+    public MkwsUser getUserByCredentials(String userName, String password) {
+        MkwsUser user = new MkwsUser();
         
         try {
             Credentials cr = new Credentials();
             Connection con_1 = null;
             Statement st_1 = null;
-            ResultSet rs_1=null;
+            ResultSet rs_1 = null;
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
-            String query = "SELECT * FROM mk.members WHERE uname=\"" + userName +"\" AND pass=\"" +password+"\"";
+            String query = "SELECT * FROM mk.members WHERE uname=\"" + userName + "\" AND pass=\"" + password + "\"";
             //System.out.println(query);
             rs_1 = st_1.executeQuery(query);
-           
-            while (rs_1.next()){
             
-            user.setId(rs_1.getInt("id"));
-            user.setFirst_name(rs_1.getString("first_name"));
-            user.setLast_name(rs_1.getString("last_name"));
-            user.setUname(rs_1.getString("uname"));
-            user.setPass(rs_1.getString("pass"));
-            user.setRegdate(rs_1.getTimestamp("regdate"));
-            user.setEmail(rs_1.getString("email"));
-            user.setIsAdmin(rs_1.getBoolean("isAdmin"));
+            while (rs_1.next()) {
+                
+                user.setId(rs_1.getInt("id"));
+                user.setFirst_name(rs_1.getString("first_name"));
+                user.setLast_name(rs_1.getString("last_name"));
+                user.setUname(rs_1.getString("uname"));
+                user.setPass(rs_1.getString("pass"));
+                user.setRegdate(rs_1.getTimestamp("regdate"));
+                user.setEmail(rs_1.getString("email"));
+                user.setIsAdmin(rs_1.getBoolean("isAdmin"));
             }
             
-             con_1.close();
-            
+            con_1.close();
             
         } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
-                        
-        if(user.getUname()==null){
+        
+        if (user.getUname() == null) {
             return null;
         }
         return user;
     }
-   public String createTokenForUser(int userId){
-       Credentials cr = new Credentials();
-       String jwtStr = Jwts.builder()
-                    .setSubject("user")
-                    .claim("userId", userId)
-                    .signWith(
-                            SignatureAlgorithm.HS256,
-                            TextCodec.BASE64.decode(
-                                    // This generated signing key is
-                                    // the proper length for the
-                                    // HS256 algorithm.
-                                    cr.getJjwtKey()
-                            )
-                    )
-                    .compact();
-       return jwtStr;
-   }
+
+    public String createTokenForUser(int userId) {
+        Credentials cr = new Credentials();
+        String jwtStr = Jwts.builder()
+                .setSubject("user")
+                .setIssuer("mkws")
+                .claim("userId", userId)
+                .signWith(
+                        SignatureAlgorithm.HS256,
+                        TextCodec.BASE64.decode(
+                                // This generated signing key is
+                                // the proper length for the
+                                // HS256 algorithm.
+                                cr.getJjwtKey()
+                        )
+                )
+                .compact();
+        return jwtStr;
+    }
 }

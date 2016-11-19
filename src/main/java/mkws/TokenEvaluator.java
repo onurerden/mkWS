@@ -12,6 +12,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MissingClaimException;
 import io.jsonwebtoken.SignatureException;
 import javax.servlet.http.HttpServletRequest;
+import mkws.Model.Token;
 
 /**
  *
@@ -19,37 +20,29 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class TokenEvaluator {
     
-    public int evaluateRequestForToken(HttpServletRequest request){
-       int userId=-1;
+    public Token evaluateRequestForToken(HttpServletRequest request)  throws SignatureException, IncorrectClaimException, MissingClaimException{
+       Token tokenModel = new Token();
         if(request.getParameter("token")!=null){
             String token = request.getParameter("token");
             Credentials cr = new Credentials();
-            try {
+            
                 Jws<Claims> claims = Jwts.parser()
                         .requireSubject("user")
                         .setSigningKey(cr.getJjwtKey())
                         .parseClaimsJws(token);
-                userId = claims.getBody().get("userId",Integer.class);
+                tokenModel.setUserId(claims.getBody().get("userId",Integer.class));
+                tokenModel.setIssuer(claims.getBody().getIssuer());
                 
                 System.out.println("token is valid");
                 
-                System.out.println("user id is " + userId );
-                
-            } catch (MissingClaimException e) {
-                System.out.println("missing exception");
-                // we get here if the required claim is not present
-
-            } catch (IncorrectClaimException e) {
-                System.out.println("incorrect claim exception");
-                // we get here if ther required claim has the wrong value
-
-            } catch (SignatureException e) {
-                System.out.println("signature exception");
-            }
+                System.out.println("user id is " + tokenModel.getUserId() );
+                tokenModel.setSubject("user");
+            
             } else {            
             System.out.println("No Token");
             }
-return userId;    
+        
+return tokenModel;    
     }
 
 }

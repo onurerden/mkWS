@@ -45,7 +45,8 @@ public class Ping extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         TokenEvaluator te = new TokenEvaluator();
         try (PrintWriter out = response.getWriter()) {
-            out.print("User Id is " + te.evaluateRequestForToken(request));
+            out.print("User Id is " + te.evaluateRequestForToken(request).getUserId());
+            out.print("issuer is " + te.evaluateRequestForToken(request).getIssuer());
 //    int userId = Integer.valueOf(request.getParameter("userId"));
 
 //            /* TODO output your page here. You may use following sample code. */
