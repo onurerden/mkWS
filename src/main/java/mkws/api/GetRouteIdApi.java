@@ -40,9 +40,10 @@ public class GetRouteIdApi extends HttpServlet {
         response.setContentType("text/json");
         PrintWriter out = response.getWriter();
                 TokenEvaluator te = new TokenEvaluator();
-            Token token = te.evaluateRequestForToken(request);
+            
 
         try {
+            Token token = te.evaluateRequestForToken(request);
             int deviceId = Integer.parseInt(request.getParameter("deviceId"));
             ServerEngine server = new ServerEngine();
             server.setUserId(token.getUserId());
