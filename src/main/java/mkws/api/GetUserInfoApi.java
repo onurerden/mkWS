@@ -5,6 +5,7 @@
  */
 package mkws.api;
 
+import com.google.gson.Gson;
 import io.jsonwebtoken.IncorrectClaimException;
 import io.jsonwebtoken.MissingClaimException;
 import io.jsonwebtoken.SignatureException;
@@ -23,8 +24,8 @@ import mkws.TokenEvaluator;
  *
  * @author onurerden
  */
-@WebServlet(name = "RegisterDeviceApi", urlPatterns = {"/api/RegisterDevice"})
-public class RegisterDeviceApi extends HttpServlet {
+@WebServlet(name = "GetUserInfoApi", urlPatterns = {"/api/GetUserInfo"})
+public class GetUserInfoApi extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,33 +40,34 @@ public class RegisterDeviceApi extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         TokenEvaluator te = new TokenEvaluator();
-        
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            /* TODO output your page here. You may use following sample code. */
-            String name = request.getParameter("name");
-            String uid = request.getParameter("uid");
-            String deviceType = request.getParameter("deviceType");
-            
-            try {
-                Token token = te.evaluateRequestForToken(request);
-                  if (token == null) {
+
+        ServerEngine server = new ServerEngine();
+        PrintWriter out = response.getWriter();
+        try {
+            Token token = te.evaluateRequestForToken(request);
+            if (token == null) {
                 response.setStatus(401);
-                out.println("token hatası: token yok" );
+                out.println("token hatası: token yok");
                 out.close();
                 return;
             }
-                ServerEngine server = new ServerEngine();
-                server.setUserId(token.getUserId());
-                server.registerDevice(uid, name, deviceType);
-                
-                out.println(server.registerDevice(uid, name, deviceType));
-                
-            } catch (SignatureException | IncorrectClaimException | MissingClaimException ex) {
-                response.setStatus(401);
-                out.println("token hatası: " + ex.getLocalizedMessage());
+            server.setUserId(token.getUserId());
+            /* TODO output your page here. You may use following sample code. */
+            //System.out.println("parameter is: " + request.getParameter("userId"));
+            int userId = 0;
+            if (request.getParameter("userId").isEmpty()) {
+                userId = token.getUserId();
+            } else {
+                userId = Integer.valueOf(request.getParameter("userId"));
             }
-            
+            Gson gson = new Gson();
+            out.println(gson.toJson(server.getUserInfoById(userId)));
+
+        }catch (SignatureException | IncorrectClaimException | MissingClaimException ex) {
+            response.setStatus(401);
+            out.println("token hatası: " + ex.getLocalizedMessage());
+        } finally{
+            out.close();
         }
     }
 

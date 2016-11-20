@@ -40,12 +40,12 @@ public class SaveGpxFile extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("Request geldi");
-        System.out.println("Request:" + request.toString());
-        
+      //  System.out.println("Request geldi");
+      //  System.out.println("Request:" + request.toString());
+                        
         response.setContentType("text/html;charset=UTF-8");
         String uid = request.getParameter("uid");
-        System.out.println(uid+ "'den request geldi.");
+      //  System.out.println(uid+ "'den request geldi.");
         String description = request.getParameter("description"); // Retrieves <input type="text" name="description">
         Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">
         String fileName = getSubmittedFileName(filePart);

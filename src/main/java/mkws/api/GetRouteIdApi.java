@@ -39,19 +39,24 @@ public class GetRouteIdApi extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/json");
         PrintWriter out = response.getWriter();
-                TokenEvaluator te = new TokenEvaluator();
-            
+        TokenEvaluator te = new TokenEvaluator();
 
         try {
             Token token = te.evaluateRequestForToken(request);
+            if (token == null) {
+                response.setStatus(401);
+                out.println("token hatası: token yok" );
+                out.close();
+                return;
+            }
             int deviceId = Integer.parseInt(request.getParameter("deviceId"));
             ServerEngine server = new ServerEngine();
             server.setUserId(token.getUserId());
             /* TODO output your page here. You may use following sample code. */
-            
+
             out.println(server.getRouteId(deviceId));
-            
-        } catch (NumberFormatException e){
+
+        } catch (NumberFormatException e) {
             response.setStatus(500);
             out.println(-2);
         } catch (SignatureException | IncorrectClaimException | MissingClaimException ex) {

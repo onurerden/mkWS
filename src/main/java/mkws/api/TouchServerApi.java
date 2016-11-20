@@ -43,6 +43,12 @@ public class TouchServerApi extends HttpServlet {
         try {
             /* TODO output your page here. You may use following sample code. */
             Token token = te.evaluateRequestForToken(request);
+              if (token == null) {
+                response.setStatus(401);
+                out.println("token hatası: token yok" );
+                out.close();
+                return;
+            }
             String requestIdByUID = "";
             String requestedDeviceType = "";
             requestIdByUID = request.getParameter("uid");

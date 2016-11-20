@@ -23,8 +23,8 @@ import mkws.TokenEvaluator;
  *
  * @author onurerden
  */
-@WebServlet(name = "RegisterDeviceApi", urlPatterns = {"/api/RegisterDevice"})
-public class RegisterDeviceApi extends HttpServlet {
+@WebServlet(name = "EndRouteApi", urlPatterns = {"/api/EndRoute"})
+public class EndRouteApi extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,33 +39,32 @@ public class RegisterDeviceApi extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         TokenEvaluator te = new TokenEvaluator();
-        
-        try (PrintWriter out = response.getWriter()) {
+        PrintWriter out = response.getWriter();
+        /* TODO output your page here. You may use following sample code. */
+        try {
             /* TODO output your page here. You may use following sample code. */
-            /* TODO output your page here. You may use following sample code. */
-            String name = request.getParameter("name");
-            String uid = request.getParameter("uid");
-            String deviceType = request.getParameter("deviceType");
-            
-            try {
-                Token token = te.evaluateRequestForToken(request);
-                  if (token == null) {
+            Token token = te.evaluateRequestForToken(request);
+            if (token == null) {
                 response.setStatus(401);
-                out.println("token hatası: token yok" );
+                out.println("token hatası: token yok");
                 out.close();
                 return;
             }
-                ServerEngine server = new ServerEngine();
-                server.setUserId(token.getUserId());
-                server.registerDevice(uid, name, deviceType);
-                
-                out.println(server.registerDevice(uid, name, deviceType));
-                
-            } catch (SignatureException | IncorrectClaimException | MissingClaimException ex) {
-                response.setStatus(401);
-                out.println("token hatası: " + ex.getLocalizedMessage());
+            ServerEngine server = new ServerEngine();
+            server.setUserId(token.getUserId());
+            String routeIdString = request.getParameter("routeId");
+            int roudeId = -1;
+            try {
+                roudeId = Integer.valueOf(routeIdString);
+            } catch (Exception ex) {
+                System.out.println("Cannot parse routeId while EndRoute");
             }
-            
+
+            out.println(server.endRoute(roudeId));
+
+        } catch (SignatureException | IncorrectClaimException | MissingClaimException ex) {
+            response.setStatus(401);
+            out.println("token hatası: " + ex.getLocalizedMessage());
         }
     }
 

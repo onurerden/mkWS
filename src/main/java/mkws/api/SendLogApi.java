@@ -23,8 +23,8 @@ import mkws.TokenEvaluator;
  *
  * @author onurerden
  */
-@WebServlet(name = "RegisterDeviceApi", urlPatterns = {"/api/RegisterDevice"})
-public class RegisterDeviceApi extends HttpServlet {
+@WebServlet(name = "SendLogApi", urlPatterns = {"/api/SendLog"})
+public class SendLogApi extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,35 +37,35 @@ public class RegisterDeviceApi extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         TokenEvaluator te = new TokenEvaluator();
+        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("text/json");
+        request.setCharacterEncoding("UTF-8");
+        System.out.println(request.getCharacterEncoding());
+        System.out.println(request.getParameter("logJson"));
         
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            /* TODO output your page here. You may use following sample code. */
-            String name = request.getParameter("name");
-            String uid = request.getParameter("uid");
-            String deviceType = request.getParameter("deviceType");
-            
-            try {
-                Token token = te.evaluateRequestForToken(request);
-                  if (token == null) {
+        PrintWriter out = response.getWriter();
+        ServerEngine server = new ServerEngine();
+        
+        try {
+            Token token = te.evaluateRequestForToken(request);
+            if (token == null) {
                 response.setStatus(401);
-                out.println("token hatası: token yok" );
+                out.println("token hatası: token yok");
                 out.close();
                 return;
             }
-                ServerEngine server = new ServerEngine();
-                server.setUserId(token.getUserId());
-                server.registerDevice(uid, name, deviceType);
-                
-                out.println(server.registerDevice(uid, name, deviceType));
-                
-            } catch (SignatureException | IncorrectClaimException | MissingClaimException ex) {
-                response.setStatus(401);
-                out.println("token hatası: " + ex.getLocalizedMessage());
-            }
+            server.setUserId(token.getUserId());
+            /* TODO output your page here. You may use following sample code. */
+            int result=-1;
+            result=server.sendLog(request.getParameter("logJson"));
             
+            out.println(result);
+        } catch (SignatureException | IncorrectClaimException | MissingClaimException ex) {
+            response.setStatus(401);
+            out.println("token hatası: " + ex.getLocalizedMessage());
+        } finally {
+            out.close();
         }
     }
 
