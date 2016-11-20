@@ -22,8 +22,9 @@ public class TokenEvaluator {
     
     public Token evaluateRequestForToken(HttpServletRequest request)  throws SignatureException, IncorrectClaimException, MissingClaimException{
        Token tokenModel = new Token();
-       if(request.getHeader("Authorization").startsWith("Bearer ")){
-            String token = request.getHeader("Authorization").replaceFirst("Bearer ", "");
+       String auth = "" + request.getHeader("Authorization");
+       if((auth!=null)&&(auth.startsWith("Bearer "))){
+            String token = auth.replaceFirst("Bearer ", "");
         
             Credentials cr = new Credentials();
             
