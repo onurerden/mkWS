@@ -35,6 +35,7 @@ import mkws.Model.MMRUser;
 import mkws.Model.MMRWorkout;
 import mkws.Model.MkwsUser;
 import mkws.Model.OAuthToken;
+import mkws.Model.RouteModel;
 import mkws.Model.Waypoint;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -676,21 +677,21 @@ public class ServerEngine implements IDeviceServer {
         Connection con_1 = null;
         Statement st_1;
         ResultSet rs_1;
-        String queryString = "INSERT INTO route SET followMeDeviceId = " + deviceId + " , time = NOW()";
+        String queryString = "INSERT INTO route SET followMeDeviceId = " + deviceId + " , time = NOW() , userId = " +userId;
         Statement st_2;
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            System.out.println("Instance Created");
+            //System.out.println("Instance Created");
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
-            System.out.println("Connection Created");
+            //System.out.println("Connection Created");
             st_1 = con_1.createStatement();
-            System.out.println("StatementCreated:");
+           // System.out.println("StatementCreated:");
             System.out.println(queryString);
             st_1.executeUpdate(queryString);
-            System.out.println("routeId for deviceId = " + deviceId + " is created.");
+            //System.out.println("routeId for deviceId = " + deviceId + " is created.");
             
             st_2 = con_1.createStatement();
-            queryString = "SELECT MAX(id) AS maxId from mk.route WHERE followMeDeviceId = " + deviceId;
+            //queryString = "SELECT MAX(id) AS maxId from mk.route WHERE followMeDeviceId = " + deviceId;
             System.out.println(queryString);
             rs_1 = st_2.executeQuery(queryString);
             
@@ -715,6 +716,42 @@ public class ServerEngine implements IDeviceServer {
         }
         
         return routeId;
+    }
+    
+    public RouteModel getRouteInfo(int routeId){
+        Credentials cr = new Credentials();
+        Connection con_1 = null;
+        Statement st_1;
+        ResultSet rs_1;
+        String queryString;
+        RouteModel route = new RouteModel();
+        try {
+            
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            st_1 = con_1.createStatement();
+            String query = "SELECT * FROM mk.route WHERE id= " + routeId;
+            System.out.println(query);
+            rs_1 = st_1.executeQuery(query);
+            
+            while (rs_1.next()) {
+                route.setRouteId(rs_1.getInt("id"));
+                route.setRouteLength(rs_1.getDouble("length"));
+                route.setIsDeleted(rs_1.getBoolean("isDeleted"));
+                route.setIsEnded(rs_1.getBoolean("isEnded"));
+                route.setRouteMeanSpeed(rs_1.getDouble("meanSpeed"));
+                route.setTime(rs_1.getTimestamp("time"));
+                route.setUserId(rs_1.getInt("userId"));
+                
+            }
+            
+            con_1.close();
+           
+            
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return route;
     }
     
     @Override
@@ -1622,6 +1659,8 @@ public class ServerEngine implements IDeviceServer {
     }
     
     public boolean deleteRoute(int routeId) {
+        
+        
         try {
             Credentials cr = new Credentials();
             Connection con_1 = null;
@@ -1862,11 +1901,13 @@ public class ServerEngine implements IDeviceServer {
     }
 
     public String createTokenForUser(int userId) {
-        Credentials cr = new Credentials();
+     Credentials cr = new Credentials();
+     
         String jwtStr = Jwts.builder()
                 .setSubject("user")
                 .setIssuer("mkws")
                 .claim("userId", userId)
+                .claim("isAdmin",getUserInfoById(userId).isIsAdmin())
                 .signWith(
                         SignatureAlgorithm.HS256,
                         TextCodec.BASE64.decode(
@@ -1877,8 +1918,9 @@ public class ServerEngine implements IDeviceServer {
                         )
                 )
                 .compact();
-        return jwtStr;
+        return jwtStr;   
     }
+    
 
     /**
      * @return the userId

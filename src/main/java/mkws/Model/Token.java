@@ -5,15 +5,27 @@
  */
 package mkws.Model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author onurerden
  */
 public class Token {
+
     private int userId;
     private String subject;
     private String issuer;
-    
+    private ArrayList roles = new ArrayList();
+    private boolean isAdmin ;
+
+    public void addRole(String role) {
+        roles.add(role);
+    }
+
+    public ArrayList getRoles() {
+        return this.roles;
+    }
 
     /**
      * @return the userId
@@ -56,5 +68,19 @@ public class Token {
     public void setIssuer(String issuer) {
         this.issuer = issuer;
     }
-    
+
+    /**
+     * @return the isAdmin
+     */
+    public boolean isIsAdmin() {
+        return isAdmin;
+    }
+
+    /**
+     * @param isAdmin the isAdmin to set
+     */
+    public void setIsAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
 }

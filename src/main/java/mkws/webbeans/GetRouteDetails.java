@@ -36,6 +36,8 @@ public class GetRouteDetails {
     private double maxSpeed = 0.0;
     private double maxAltitude = 0.0;
     private double minAltitude = 10000;
+    
+    private double userId = 1;
 
     public List<String> points = new ArrayList<>();
     private List<Double> altitudeList = new ArrayList<>();
@@ -211,6 +213,20 @@ public class GetRouteDetails {
      */
     public void setTimeList(List<Timestamp> timeList) {
         this.timeList = timeList;
+    }
+
+    /**
+     * @return the userId
+     */
+    public double getUserId() {
+        return userId;
+    }
+
+    /**
+     * @param userId the userId to set
+     */
+    public void setUserId(double userId) {
+        this.userId = userId;
     }
 
     class Koordinat {

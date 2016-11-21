@@ -63,7 +63,7 @@ public class SendLogApi extends HttpServlet {
             out.println(result);
         } catch (SignatureException | IncorrectClaimException | MissingClaimException ex) {
             response.setStatus(401);
-            out.println("token hatası: " + ex.getLocalizedMessage());
+            out.println("{\"result\": \"failed\", \"description\" : \"" + ex.getLocalizedMessage() + "\"");
         } finally {
             out.close();
         }

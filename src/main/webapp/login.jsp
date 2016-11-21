@@ -4,6 +4,8 @@
     Author     : oerden
 --%>
 
+<%@page import="mkws.Model.Token"%>
+<%@page import="mkws.ServerEngine"%>
 <%@page import="mkws.Credentials"%>
 <%@ page import ="java.sql.*" %>
 <%
@@ -27,7 +29,9 @@
         session.setAttribute("isAdmin",isAdmin);
         //out.println("welcome " + userid);
         //out.println("<a href='logout.jsp'>Log out</a>");
-        response.sendRedirect("homepage.jsp");
+        ServerEngine server = new ServerEngine();
+        String token = server.createTokenForUser(rs.getInt("id"));
+        response.sendRedirect("homepage.jsp?token="+token);
     } else {
         out.println("Invalid login credentials. <a href='index.html'>Try again</a>.");
     }

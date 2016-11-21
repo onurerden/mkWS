@@ -33,11 +33,12 @@ public class TokenEvaluator {
                         .setSigningKey(cr.getJjwtKey())
                         .parseClaimsJws(token);
                 tokenModel.setUserId(claims.getBody().get("userId",Integer.class));
+                tokenModel.setIsAdmin(claims.getBody().get("isAdmin", boolean.class));
                 tokenModel.setIssuer(claims.getBody().getIssuer());
                 
-                System.out.println("token is valid");
+                //System.out.println("token is valid");
                 
-                System.out.println("user id is " + tokenModel.getUserId() );
+                //System.out.println("user id is " + tokenModel.getUserId() );
                 tokenModel.setSubject("user");
             
             } else {            

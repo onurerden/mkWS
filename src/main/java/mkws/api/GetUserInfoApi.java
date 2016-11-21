@@ -57,16 +57,21 @@ public class GetUserInfoApi extends HttpServlet {
             int userId = 0;
             if (request.getParameter("userId").isEmpty()) {
                 userId = token.getUserId();
-            } else {
+                Gson gson = new Gson();
+                out.println(gson.toJson(server.getUserInfoById(userId)));
+            } else if (token.isIsAdmin()) {
                 userId = Integer.valueOf(request.getParameter("userId"));
+                Gson gson = new Gson();
+                out.println(gson.toJson(server.getUserInfoById(userId)));
+            } else {
+                response.setStatus(401);
+                out.println("{\"error\" : \"you are not an admin\"");
             }
-            Gson gson = new Gson();
-            out.println(gson.toJson(server.getUserInfoById(userId)));
 
-        }catch (SignatureException | IncorrectClaimException | MissingClaimException ex) {
+        } catch (SignatureException | IncorrectClaimException | MissingClaimException ex) {
             response.setStatus(401);
-            out.println("token hatası: " + ex.getLocalizedMessage());
-        } finally{
+            out.println("{\"result\": \"failed\", \"description\" : \"" + ex.getLocalizedMessage() + "\"");
+        } finally {
             out.close();
         }
     }

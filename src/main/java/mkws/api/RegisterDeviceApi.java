@@ -51,7 +51,7 @@ public class RegisterDeviceApi extends HttpServlet {
                 Token token = te.evaluateRequestForToken(request);
                   if (token == null) {
                 response.setStatus(401);
-                out.println("token hatası: token yok" );
+                out.println("{\"result\": \"failed\", \"description\" : \"There is no token or token is invalid.\"}");
                 out.close();
                 return;
             }
@@ -63,7 +63,7 @@ public class RegisterDeviceApi extends HttpServlet {
                 
             } catch (SignatureException | IncorrectClaimException | MissingClaimException ex) {
                 response.setStatus(401);
-                out.println("token hatası: " + ex.getLocalizedMessage());
+                out.println("{\"result\": \"failed\", \"description\" : \"" + ex.getLocalizedMessage() + "\"");
             }
             
         }

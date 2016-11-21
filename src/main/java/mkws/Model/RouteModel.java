@@ -19,6 +19,10 @@ public class RouteModel {
     private int sessionId;
     private double routeLength;
     private double routeMeanSpeed;
+    private int userId = 1;
+    private boolean isDeleted;
+    private boolean isEnded;
+    private int followMeDeviceId;
 
     /**
      * @return the routeId
@@ -88,5 +92,61 @@ public class RouteModel {
      */
     public void setRouteMeanSpeed(double routeMeanSpeed) {
         this.routeMeanSpeed = routeMeanSpeed;
+    }
+
+    /**
+     * @return the userId
+     */
+    public int getUserId() {
+        return userId;
+    }
+
+    /**
+     * @param userId the userId to set
+     */
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    /**
+     * @return the isDeleted
+     */
+    public boolean isIsDeleted() {
+        return isDeleted;
+    }
+
+    /**
+     * @param isDeleted the isDeleted to set
+     */
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    /**
+     * @return the isEnded
+     */
+    public boolean isIsEnded() {
+        return isEnded;
+    }
+
+    /**
+     * @param isEnded the isEnded to set
+     */
+    public void setIsEnded(boolean isEnded) {
+        this.isEnded = isEnded;
+    }
+
+    /**
+     * @return the followMeDeviceId
+     */
+    public int getFollowMeDeviceId() {
+        return followMeDeviceId;
+    }
+
+    /**
+     * @param followMeDeviceId the followMeDeviceId to set
+     */
+    public void setFollowMeDeviceId(int followMeDeviceId) {
+        this.followMeDeviceId = followMeDeviceId;
     }
 }

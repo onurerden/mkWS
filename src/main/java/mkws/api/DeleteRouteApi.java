@@ -5,9 +5,6 @@
  */
 package mkws.api;
 
-import io.jsonwebtoken.IncorrectClaimException;
-import io.jsonwebtoken.MissingClaimException;
-import io.jsonwebtoken.SignatureException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -18,13 +15,14 @@ import javax.servlet.http.HttpServletResponse;
 import mkws.Model.Token;
 import mkws.ServerEngine;
 import mkws.TokenEvaluator;
+import mkws.webbeans.GetRouteDetails;
 
 /**
  *
  * @author onurerden
  */
-@WebServlet(name = "EndRouteApi", urlPatterns = {"/api/EndRoute"})
-public class EndRouteApi extends HttpServlet {
+@WebServlet(name = "DeleteRouteApi", urlPatterns = {"/api/DeleteRoute"})
+public class DeleteRouteApi extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,11 +36,16 @@ public class EndRouteApi extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+
         TokenEvaluator te = new TokenEvaluator();
-        PrintWriter out = response.getWriter();
-        /* TODO output your page here. You may use following sample code. */
-        try {
+
+        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
+            if (request.getSession().getAttribute("userid") == null) {
+                out.println("{\"result\": \"failed\", \"description\" : \"mkWS authentication failed.\"}");
+                out.close();
+                return;
+            };
             Token token = te.evaluateRequestForToken(request);
             if (token == null) {
                 response.setStatus(401);
@@ -50,25 +53,29 @@ public class EndRouteApi extends HttpServlet {
                 out.close();
                 return;
             }
-            ServerEngine server = new ServerEngine();
-            server.setUserId(token.getUserId());
-            String routeIdString = request.getParameter("routeId");
-            int routeId = -1;
+            int routeId = 0;
             try {
-                routeId = Integer.valueOf(routeIdString);
-            } catch (Exception ex) {
-                System.out.println("Cannot parse routeId while EndRoute");
-            }
-            if (token.isIsAdmin() || (server.getRouteInfo(routeId).getUserId() == token.getUserId())) {
+                routeId = Integer.valueOf(request.getParameter("routeId"));
+                ServerEngine engine = new ServerEngine();
+                engine.setUserId(token.getUserId());
+                if (token.isIsAdmin() || (engine.getRouteInfo(routeId).getUserId() == token.getUserId())) {
 
-                out.println(server.endRoute(routeId));
-            } else {
-                response.setStatus(401);
-                out.println("-2");
+                    if (engine.deleteRoute(routeId)) {
+                        out.println("{\"result\": \"success\"}");
+                    } else {
+                        response.setStatus(401);
+                        out.println("{\"result\": \"failed\"}");
+                    }
+                } else {
+                    response.setStatus(401);
+                    out.println("{\"result\": \"You don't have permission to delete this route.\"}");
+                }
+            } catch (NumberFormatException ex) {
+                out.println("{\"result\": \"failed\", \"description\": \"" + ex.getMessage() + "\"}");
             }
-        } catch (SignatureException | IncorrectClaimException | MissingClaimException ex) {
-            response.setStatus(401);
-             out.println("{\"result\": \"failed\", \"description\" : \"" + ex.getLocalizedMessage() + "\"");
+
+        } catch (Exception ex) {
+
         }
     }
 
