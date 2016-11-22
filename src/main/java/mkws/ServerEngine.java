@@ -1848,12 +1848,12 @@ public class ServerEngine implements IDeviceServer {
             con_1.close();
             LogMessage msg = new LogMessage();
             
-            msg.setDeviceType(DeviceTypes.SERVER.getName());
-            msg.setLogLevel(2);
-            msg.setLogMessage("User " + id + " is edited.");
-            Gson gson = new Gson();
-            sendLog(gson.toJson(msg));
-            
+//            msg.setDeviceType(DeviceTypes.SERVER.getName());
+//            msg.setLogLevel(2);
+//            msg.setLogMessage("User " + id + " is edited.");
+//            Gson gson = new Gson();
+//            sendLog(gson.toJson(msg));
+//            
         } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
