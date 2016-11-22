@@ -34,8 +34,16 @@
                     //        + "GROUP BY followme.routeId "
                     //      + "ORDER BY time DESC");
                     
-                    ResultSet resultset;
-                    if((Boolean)session.getAttribute("isAdmin")){
+                    ResultSet resultset ;
+                    int i=0;
+                    boolean isAdmin=false;
+                    try{
+                        i=(Integer)session.getAttribute("id");
+                        isAdmin=(Boolean)session.getAttribute("isAdmin");
+                    } catch(Exception ex){
+                        System.out.println("Log: " + ex.getLocalizedMessage());
+                    }
+                    if(isAdmin){
                      resultset       = statement.executeQuery("SELECT followme.routeId, followmedevices.name, route.time, route.isEnded FROM  followme "
                                     + "INNER JOIN followmedevices ON followme.followMeDeviceId = followmedevices.id "
                                     + "INNER JOIN route ON followme.routeId = route.id "
@@ -45,9 +53,10 @@
                         resultset       = statement.executeQuery("SELECT followme.routeId, followmedevices.name, route.time, route.isEnded FROM  followme "
                                     + "INNER JOIN followmedevices ON followme.followMeDeviceId = followmedevices.id "
                                     + "INNER JOIN route ON followme.routeId = route.id "
-                                    + "WHERE route.isDeleted=FALSE AND route.userId=" + session.getAttribute("id")
+                                    + "WHERE route.isDeleted=FALSE AND route.userId=" + i + " "
                                     + "GROUP BY followme.routeId "
                                     + "ORDER BY time DESC");
+                    
                     }
 
                 %>
