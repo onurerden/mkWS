@@ -691,7 +691,7 @@ public class ServerEngine implements IDeviceServer {
             //System.out.println("routeId for deviceId = " + deviceId + " is created.");
             
             st_2 = con_1.createStatement();
-            //queryString = "SELECT MAX(id) AS maxId from mk.route WHERE followMeDeviceId = " + deviceId;
+            queryString = "SELECT MAX(id) AS maxId from mk.route WHERE followMeDeviceId = " + deviceId;
             System.out.println(queryString);
             rs_1 = st_2.executeQuery(queryString);
             

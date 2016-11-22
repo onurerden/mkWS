@@ -33,7 +33,7 @@ public class TokenEvaluator {
                         .setSigningKey(cr.getJjwtKey())
                         .parseClaimsJws(token);
                 tokenModel.setUserId(claims.getBody().get("userId",Integer.class));
-                tokenModel.setIsAdmin(claims.getBody().get("isAdmin", boolean.class));
+                tokenModel.setIsAdmin(claims.getBody().get("isAdmin", Boolean.class));
                 tokenModel.setIssuer(claims.getBody().getIssuer());
                 
                 //System.out.println("token is valid");

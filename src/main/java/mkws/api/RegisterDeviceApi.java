@@ -65,7 +65,6 @@ public class RegisterDeviceApi extends HttpServlet {
                 response.setStatus(401);
                 out.println("{\"result\": \"failed\", \"description\" : \"" + ex.getLocalizedMessage() + "\"");
             }
-            
         }
     }
 

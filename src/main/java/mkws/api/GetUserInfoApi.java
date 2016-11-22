@@ -47,7 +47,7 @@ public class GetUserInfoApi extends HttpServlet {
             Token token = te.evaluateRequestForToken(request);
             if (token == null) {
                 response.setStatus(401);
-                out.println("token hatası: token yok");
+                out.println("{\"token hatası\": \"token yok\"}");
                 out.close();
                 return;
             }
@@ -58,19 +58,19 @@ public class GetUserInfoApi extends HttpServlet {
             if (request.getParameter("userId").isEmpty()) {
                 userId = token.getUserId();
                 Gson gson = new Gson();
-                out.println(gson.toJson(server.getUserInfoById(userId)));
+                out.print(gson.toJson(server.getUserInfoById(userId)));
             } else if (token.isIsAdmin()) {
                 userId = Integer.valueOf(request.getParameter("userId"));
                 Gson gson = new Gson();
-                out.println(gson.toJson(server.getUserInfoById(userId)));
+                out.print(gson.toJson(server.getUserInfoById(userId)));
             } else {
                 response.setStatus(401);
-                out.println("{\"error\" : \"you are not an admin\"");
+                out.print("{\"error\" : \"you are not an admin\"");
             }
 
         } catch (SignatureException | IncorrectClaimException | MissingClaimException ex) {
             response.setStatus(401);
-            out.println("{\"result\": \"failed\", \"description\" : \"" + ex.getLocalizedMessage() + "\"");
+            out.print("{\"result\": \"failed\", \"description\" : \"" + ex.getLocalizedMessage() + "\"");
         } finally {
             out.close();
         }

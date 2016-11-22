@@ -45,7 +45,7 @@ public class GetRouteIdApi extends HttpServlet {
             Token token = te.evaluateRequestForToken(request);
             if (token == null) {
                 response.setStatus(401);
-                out.println("{\"result\": \"failed\", \"description\" : \"There is no token or token is invalid.\"}");
+                out.print("{\"result\": \"failed\", \"description\" : \"There is no token or token is invalid.\"}");
                 out.close();
                 return;
             }
@@ -54,14 +54,14 @@ public class GetRouteIdApi extends HttpServlet {
             server.setUserId(token.getUserId());
             /* TODO output your page here. You may use following sample code. */
 
-            out.println(server.getRouteId(deviceId));
+            out.print(server.getRouteId(deviceId));
 
         } catch (NumberFormatException e) {
             response.setStatus(500);
-            out.println(-2);
+            out.print(-2);
         } catch (SignatureException | IncorrectClaimException | MissingClaimException ex) {
             response.setStatus(401);
-            out.println("{\"result\": \"failed\", \"description\" : \"" + ex.getLocalizedMessage() + "\"");
+            out.print("{\"result\": \"failed\", \"description\" : \"" + ex.getLocalizedMessage() + "\"");
         } finally {
             out.close();
         }
