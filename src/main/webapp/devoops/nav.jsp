@@ -79,15 +79,16 @@
                 <span class="hidden-xs">Users</span>
             </a>
                 </li>
-        </c:when>
-        </c:choose>
-        
+                       
 <li>
             <a href="http://mk-onurerden.rhcloud.com/phpmyadmin" target="_blank">
                 <i class="fa fa-book"></i>
                 <span class="hidden-xs">phpMyAdmin</span>
             </a>
         </li>
+        </c:when>
+        </c:choose>
+ 
 
 
     </ul>
