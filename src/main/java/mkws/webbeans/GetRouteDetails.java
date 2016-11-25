@@ -280,7 +280,7 @@ public class GetRouteDetails {
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             String query = "SELECT latitude, longitude, speed, altitude, followMeDeviceId, time from followme WHERE routeId = " + routeId + " "
-                    + "ORDER BY followme.id ASC";
+                    + "ORDER BY followme.time ASC";
 
             rs_1 = st_1.executeQuery(query);
             int a = -2;
