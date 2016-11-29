@@ -418,19 +418,35 @@ public class ServerEngine implements IDeviceServer {
     @Override
     public int sendFollowMeData(String json) {
         FollowMeData data;
+        FollowMeData[] dataArray;
+        int result = -2;
         //  Gson gson = new Gson();
         Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd hh:mm:ss").create();
-        
-        try {
-            data = gson.fromJson(json, FollowMeData.class);
-        } catch (JsonSyntaxException ex) {
-            System.out.println("FollowMeData parse error: " + ex.toString());
-            return -2;
+                .setDateFormat("yyyy-MM-dd hh:mm:ss")
+                .create();
+              
+        try{
+            dataArray=gson.fromJson(json, FollowMeData[].class);
+            for (FollowMeData d :dataArray){
+                result = sendFollowMeData(d);
+            }
+            return result;
+        }catch(JsonSyntaxException ex){
+             System.out.println("It is not FollowMeData Array: " + ex.toString());   
         }
-        int result = sendFollowMeData(data);
+        
+        try {            
+            data = gson.fromJson(json, FollowMeData.class);
+            result = sendFollowMeData(data);
+            return result;
+        } catch (JsonSyntaxException ex) {
+            System.out.println("It is not FollowMeData: " + ex.toString());            
+        }
+        
         return result;
     }
+    
+    
     
     public int sendFollowMeData(FollowMeData data) {
         
@@ -1839,7 +1855,7 @@ public class ServerEngine implements IDeviceServer {
                 user.setFirst_name(rs_1.getString("first_name"));
                 user.setLast_name(rs_1.getString("last_name"));
                 user.setUname(rs_1.getString("uname"));
-                user.setPass(rs_1.getString("pass"));
+                user.setPass("__MASKED__");
                 user.setRegdate(rs_1.getTimestamp("regdate"));
                 user.setEmail(rs_1.getString("email"));
                 user.setIsAdmin(rs_1.getBoolean("isAdmin"));

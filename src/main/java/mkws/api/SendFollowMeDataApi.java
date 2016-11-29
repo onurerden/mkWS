@@ -5,6 +5,8 @@
  */
 package mkws.api;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import io.jsonwebtoken.IncorrectClaimException;
 import io.jsonwebtoken.MissingClaimException;
 import io.jsonwebtoken.SignatureException;
@@ -15,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import mkws.Model.Token;
 import mkws.ServerEngine;
 import mkws.TokenEvaluator;
@@ -46,22 +49,24 @@ public class SendFollowMeDataApi extends HttpServlet {
             Token token = te.evaluateRequestForToken(request);
             if (token == null) {
                 response.setStatus(401);
-                out.println("token hatası: token yok");
+                out.print("{\"token hatası\": \"token yok\"}");
                 out.close();
                 return;
             }
             String jsonString = request.getParameter("jsonfollowme");
             System.out.println(jsonString);
-
+            
             ServerEngine server = new ServerEngine();
             server.setUserId(token.getUserId());
             i = server.sendFollowMeData(jsonString);
-
-            out.println(i);
-
+            if (i < 0) {
+                response.setStatus(401);
+            }
+            out.print(i);
+            
         } catch (SignatureException | IncorrectClaimException | MissingClaimException ex) {
             response.setStatus(401);
-            out.println("{\"result\": \"failed\", \"description\" : \"" + ex.getLocalizedMessage() + "\"");
+            out.print("{\"result\": \"failed\", \"description\" : \"" + ex.getLocalizedMessage() + "\"");
         } finally {
             out.close();
         }

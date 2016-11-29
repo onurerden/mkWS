@@ -55,7 +55,7 @@ public class GetUserInfoApi extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             //System.out.println("parameter is: " + request.getParameter("userId"));
             int userId = 0;
-            if (request.getParameter("userId").isEmpty()) {
+            if ((request.getParameter("userId")==null)) {
                 userId = token.getUserId();
                 Gson gson = new Gson();
                 out.print(gson.toJson(server.getUserInfoById(userId)));
