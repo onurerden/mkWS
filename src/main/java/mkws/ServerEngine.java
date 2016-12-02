@@ -1806,18 +1806,20 @@ public class ServerEngine implements IDeviceServer {
             st_1 = con_1.createStatement();
             String query = "UPDATE mk.members SET ";
             if (first_name != null) {
-                query = query + "first_name = " + first_name + ", ";
+                query = query + "first_name = \"" + first_name + "\", ";
             }
             if (last_name != null) {
-                query = query + "last_name = " + last_name + ", ";
+                query = query + "last_name = \"" + last_name + "\", ";
             }
             if (email != null) {
-                query = query + "email = " + email + ", ";
+                query = query + "email = \"" + email + "\", ";
             }
             if (password != null) {
-                query = query + "pass = " + password + ", ";
+                query = query + "pass = \"" + password + "\", ";
             }
-            query = query + "isAdmin = " + isAdmin;            
+            query = query + "isAdmin = " + isAdmin;
+                    query = query + " WHERE id = " + id;
+                                
             System.out.println(query);
             st_1.execute(query);
             con_1.close();

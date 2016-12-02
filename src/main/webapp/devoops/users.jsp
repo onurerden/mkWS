@@ -41,12 +41,12 @@
                 <div class="modal-body" id="modalBody">
                     <form method="post" action="editUser.jsp">
                         <div class="form-group">
-                            <label class="control-label">User Login Name</label>
-                            <input id="editUname" type="text" class="form-control" placeholder="User Login Name" name="uname" disabled>
+                            <label class="control-label ">User Login Name</label>
+                            <input id="editUname" type="text" class="form-control" placeholder="User Login Name" name="uname" readonly>
                         </div>
                         <div class="form-group">
-                            <label class="control-label">User Login Id</label>
-                            <input id="editUserId" type="number" class="form-control" placeholder="User Login Id" name="userId" disabled>
+                            <label class="control-label ">User Login Id</label>
+                            <input id="editUserId" type="number" class="form-control" placeholder="User Login Id" name="userId" readonly>
                         </div>
                         <div class="form-group">
                             <label class="control-label">First Name</label>
@@ -67,8 +67,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label">is Admin?</label>
-                            <input id="editIsAdmin" type="checkbox" unchecked name="isAdmin">                                              
+                            <label class="control-label unchecked">is Admin?</label>
+                            <input id="editIsAdmin" type="checkbox" name="isAdmin">                                              
                             <div class="text-center">
                                 <!--		<a href="../index.html" class="btn btn-primary">Sign in</a>-->
                                 <input type="submit" value="Save User" />
@@ -314,7 +314,7 @@
                             $("#editEmail").val(info.email);
                             $("#editFirstName").val(info.first_name);
                             $("#editLastName").val(info.last_name);
-                            $("#editPassword").val(info.pass);
+                           // $("#editPassword").val(info.pass);
                             $("#editIsAdmin").prop('checked',info.isAdmin);
                             
                             

@@ -11,25 +11,20 @@
 <%@page import="mkws.ServerEngine"%>
 <%
     if ((Boolean)session.getAttribute("isAdmin")){
-    
+      try{
     String first_name = request.getParameter("first_name"); 
     String last_name = request.getParameter("last_name"); 
-    String password = request.getParameter("password");
+    String password=null;
+    if(!request.getParameter("password").isEmpty()){
+    password = request.getParameter("password");}
     String uname = request.getParameter("uname");
     int id = Integer.valueOf(request.getParameter("userId")); 
     String email = request.getParameter("email"); 
+     boolean isAdmin=false;
+    if(request.getParameter("isAdmin")!=null){
+    isAdmin= request.getParameter("isAdmin").equals("on");}
+    
     System.out.println(uname);
-    
-    boolean isAdmin = false;
-    
-    try{
-    if (request.getParameter("isAdmin").equals("on")){
-       isAdmin=true;
-    }
-    }catch (Exception ex){
-        
-    }
-    
     System.out.println("isAdmin value is: " + request.getParameter("isAdmin"));
     
     ServerEngine server = new ServerEngine();
@@ -45,9 +40,16 @@
         
     
     }else{
-    response.sendRedirect("users.jsp?error=\"An error occured while adding the user <em> "+ result.getUname()+"\" </em> to the mkWS.");
+    response.sendRedirect("users.jsp?error=\"An error occured while editing the user <em> "+ result.getUname()+"\" </em> to the mkWS.");
     }
-    }else {
+    }  catch (Exception ex){
+        response.sendRedirect("users.jsp?error=\"An error occured while editing the user.\"");
+        System.out.println(ex.getLocalizedMessage());
+    }  
+    }
+    else {
         response.sendRedirect("users.jsp");
     }
+    
+    
     %>
