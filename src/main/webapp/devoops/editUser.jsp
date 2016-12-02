@@ -16,11 +16,12 @@
     String last_name = request.getParameter("last_name"); 
     String password = request.getParameter("password");
     String uname = request.getParameter("uname");
-    int id = request.getParameter("userId"); 
+    int id = Integer.valueOf(request.getParameter("userId")); 
     String email = request.getParameter("email"); 
     System.out.println(uname);
     
     boolean isAdmin = false;
+    
     try{
     if (request.getParameter("isAdmin").equals("on")){
        isAdmin=true;
