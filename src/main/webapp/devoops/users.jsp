@@ -95,7 +95,7 @@
                     Credentials cr = new Credentials();
                     Connection connection = DriverManager.getConnection(
                             cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
-                    //   cr.getMysqlConnectionString(),  "onur", "19861986");
+                    
 
                     Statement statement = connection.createStatement();
                     ResultSet resultset

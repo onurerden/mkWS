@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import mkws.Model.Token;
 import mkws.ServerEngine;
 import mkws.TokenEvaluator;
-import mkws.webbeans.GetRouteDetails;
+
 
 /**
  *
@@ -71,11 +71,12 @@ public class DeleteRouteApi extends HttpServlet {
                     out.println("{\"result\": \"You don't have permission to delete this route.\"}");
                 }
             } catch (NumberFormatException ex) {
+                response.setStatus(401);
                 out.println("{\"result\": \"failed\", \"description\": \"" + ex.getMessage() + "\"}");
             }
 
         } catch (Exception ex) {
-
+System.out.println(ex.getLocalizedMessage());
         }
     }
 
