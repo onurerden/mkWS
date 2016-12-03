@@ -38,21 +38,32 @@ public class DeleteRouteApi extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         TokenEvaluator te = new TokenEvaluator();
-
+boolean sessionUserExists=true;
+boolean tokenExists = true;
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             if (request.getSession().getAttribute("userid") == null) {
-                out.println("{\"result\": \"failed\", \"description\" : \"mkWS authentication failed.\"}");
-                out.close();
-                return;
-            };
+               // response.setStatus(401);
+               // out.println("{\"result\": \"failed\", \"description\" : \"mkWS authentication failed.\"}");
+               // out.close();
+               // return;
+                sessionUserExists=false;
+            }
             Token token = te.evaluateRequestForToken(request);
             if (token == null) {
+           //     response.setStatus(401);
+           //     out.println("{\"result\": \"failed\", \"description\" : \"There is no token or token is invalid.\"}");
+           //     out.close();
+           //     return;
+                tokenExists=false;
+            }
+            if(!tokenExists||!sessionUserExists){
                 response.setStatus(401);
                 out.println("{\"result\": \"failed\", \"description\" : \"There is no token or token is invalid.\"}");
                 out.close();
                 return;
             }
+            
             int routeId = 0;
             try {
                 routeId = Integer.valueOf(request.getParameter("routeId"));
