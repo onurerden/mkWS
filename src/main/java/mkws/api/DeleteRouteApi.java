@@ -47,6 +47,7 @@ boolean tokenExists = true;
                // out.println("{\"result\": \"failed\", \"description\" : \"mkWS authentication failed.\"}");
                // out.close();
                // return;
+                System.out.println("No Session");
                 sessionUserExists=false;
             }
             Token token = te.evaluateRequestForToken(request);
@@ -55,9 +56,10 @@ boolean tokenExists = true;
            //     out.println("{\"result\": \"failed\", \"description\" : \"There is no token or token is invalid.\"}");
            //     out.close();
            //     return;
+                System.out.println("No token");
                 tokenExists=false;
             }
-            if(!tokenExists||!sessionUserExists){
+            if(!tokenExists && !sessionUserExists){
                 response.setStatus(401);
                 out.println("{\"result\": \"failed\", \"description\" : \"There is no token or token is invalid.\"}");
                 out.close();
