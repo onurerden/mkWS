@@ -57,6 +57,9 @@ public class TouchServerApi extends HttpServlet {
             ServerEngine server = new ServerEngine();
             server.setUserId(token.getUserId());
             output = server.touchServer(requestIdByUID, requestedDeviceType);
+            if(Integer.valueOf(output)<0){
+                response.setStatus(401);
+            }
             out.println(output);
         } catch (SignatureException | IncorrectClaimException | MissingClaimException ex) {
                 response.setStatus(401);
