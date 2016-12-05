@@ -5,6 +5,7 @@
  */
 package mkws.api;
 
+import com.google.gson.Gson;
 import io.jsonwebtoken.IncorrectClaimException;
 import io.jsonwebtoken.MissingClaimException;
 import io.jsonwebtoken.SignatureException;
@@ -15,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import mkws.MKSession;
 import mkws.Model.Token;
 import mkws.ServerEngine;
 import mkws.TokenEvaluator;
@@ -57,10 +59,12 @@ public class TouchServerApi extends HttpServlet {
             ServerEngine server = new ServerEngine();
             server.setUserId(token.getUserId());
             output = server.touchServer(requestIdByUID, requestedDeviceType);
-            if(Integer.valueOf(output)<0){
+            Gson gson=new Gson();
+            MKSession session = gson.fromJson(output, MKSession.class);
+            if(session.getDeviceId()<0){
                 response.setStatus(401);
             }
-            out.println(output);
+            out.print(output);
         } catch (SignatureException | IncorrectClaimException | MissingClaimException ex) {
                 response.setStatus(401);
                 out.println("{\"result\": \"failed\", \"description\" : \"" + ex.getLocalizedMessage() + "\"");
