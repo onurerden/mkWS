@@ -41,14 +41,18 @@ public class Login extends HttpServlet {
 
             StringBuffer jb = new StringBuffer();
             String line = null;
-            String userName = "";
-            String password = "";
+            String userName = request.getParameter("userName");
+            String password = request.getParameter("password");
             try {
                 BufferedReader reader = request.getReader();
                 while ((line = reader.readLine()) != null) {
                     jb.append(line);
                 }
-            } catch (Exception e) { /*report an error*/ }
+            } catch (Exception e) {
+            System.out.println(e.getMessage());
+                        }
+            
+            
             String[] nameValuePairs = jb.toString().split("&");
             for (String nameValuePair : nameValuePairs) {
                 if (nameValuePair.startsWith("userName" + "=")) {
@@ -61,6 +65,11 @@ public class Login extends HttpServlet {
                 }
 
             }
+            if(userName.isEmpty()||password.isEmpty()){
+                response.setStatus(401);
+                out.print("user entry denied");
+                return;
+            }
             ServerEngine server = new ServerEngine();
             MkwsUser user = server.getUserByCredentials(userName, password);
             if(user!=null){
@@ -69,7 +78,7 @@ public class Login extends HttpServlet {
                 out.println("{\"token\" : \""+token+"\"}");
             }else{
                 response.setStatus(401);
-                out.println("user entry denied");
+                out.print("user entry denied");
             }
             
         }

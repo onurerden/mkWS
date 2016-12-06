@@ -20,7 +20,7 @@ import mkws.ServerEngine;
  *
  * @author onurerden
  */
-@WebServlet(name = "RegisterUserApi", urlPatterns = {"/RegisterUserApi"})
+@WebServlet(name = "RegisterUserApi", urlPatterns = {"/api/RegisterUser"})
 public class RegisterUserApi extends HttpServlet {
 
     /**
@@ -39,18 +39,20 @@ public class RegisterUserApi extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
               StringBuffer jb = new StringBuffer();
             String line = null;
-            String name = "";
-            String last_name="";
-            String password = "";
-            String email="";
-            String passwordAgain="";
-            String uname="";
+            String name = request.getParameter("name");
+            String last_name=request.getParameter("last_name");
+            String password = request.getParameter("password");
+            String email=request.getParameter("email");
+            String passwordAgain=request.getParameter("passwordAgain");
+            String uname=request.getParameter("uname");
             try {
                 BufferedReader reader = request.getReader();
                 while ((line = reader.readLine()) != null) {
                     jb.append(line);
                 }
-            } catch (Exception e) { /*report an error*/ }
+            } catch (Exception e) { /*report an error*/ 
+            System.out.println(e.getMessage());
+            }
             String[] nameValuePairs = jb.toString().split("&");
             for (String nameValuePair : nameValuePairs) {
                 if (nameValuePair.startsWith("uname" + "=")) {
@@ -84,10 +86,14 @@ public class RegisterUserApi extends HttpServlet {
                     email = nameValuePair.replaceAll("email=", "");
                 //    out.println("password is: " + password);
                 }
-                if(!password.equals(passwordAgain)){
-                    out.print("{\"result\": \"failed\", \"description\" : \"Passwords aren't equal.\"}");
-                }
                 
+            }
+            if(!password.equals(passwordAgain)){
+                response.setStatus(401);
+                out.print("{\"result\": \"failed\", \"description\" : \"Passwords aren't equal.\"}");
+                return;
+                }
+            
                 ServerEngine server = new ServerEngine();
                if( server.addMkwsUser(name, last_name, email, uname, password, false)){
                    MkwsUser user = server.getUserByCredentials(uname, password);
@@ -107,7 +113,7 @@ public class RegisterUserApi extends HttpServlet {
                         
 
 
-            }
+            
         }
     }
 

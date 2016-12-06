@@ -1740,6 +1740,10 @@ public class ServerEngine implements IDeviceServer {
     }
     
     public boolean addMkwsUser(String first_name, String last_name, String email, String uname, String password, boolean isAdmin) {
+        if(first_name.isEmpty()||last_name.isEmpty()||email.isEmpty()||uname.isEmpty()||password.isEmpty()){
+            return false;
+        }
+        
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1 = null;
