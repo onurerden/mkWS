@@ -68,7 +68,12 @@ public class TouchServerApi extends HttpServlet {
         } catch (SignatureException | IncorrectClaimException | MissingClaimException ex) {
                 response.setStatus(401);
                 out.println("{\"result\": \"failed\", \"description\" : \"" + ex.getLocalizedMessage() + "\"");
-            }finally {
+            }catch (NumberFormatException ex){
+                response.setStatus(401);
+                out.println("{\"result\": \"failed\", \"description\" : \"" + ex.getLocalizedMessage() + "\"");
+            }
+        
+        finally {
             out.close();
         }
     }
