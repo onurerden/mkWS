@@ -1973,6 +1973,7 @@ public ArrayList getRoutes(int lowerThan){
                 model.setTime(rs_1.getTimestamp("time"));
                 model.setUserId(rs_1.getInt("userId"));
                 model.setRouteMeanSpeed(rs_1.getDouble("meanSpeed"));
+                model.setSessionId(rs_1.getInt("sessionId"));
                         
                 list.add(model);
                
