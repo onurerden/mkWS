@@ -38,7 +38,12 @@ public class GetMyRoutesApi extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-        int lowerThan = Integer.valueOf(request.getParameter("lowerThan"));
+            int lowerThan=0;
+            try{
+        lowerThan = Integer.valueOf(request.getParameter("lowerThan"));
+            }catch(Exception ex){
+                System.out.println("No limit");
+            }
          TokenEvaluator te = new TokenEvaluator();
          Token token = te.evaluateRequestForToken(request);
             if (token == null) {
@@ -50,7 +55,7 @@ public class GetMyRoutesApi extends HttpServlet {
         
             ServerEngine server = new ServerEngine();
                     server.setUserId(token.getUserId());
-                    ArrayList list = server.getRoutes(0);
+                    ArrayList list = server.getRoutes(lowerThan);
             Gson gson = new Gson();
             String output = gson.toJson(list);
             out.printf(output);
