@@ -6,6 +6,7 @@
 package mkws.api;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -56,7 +57,9 @@ public class GetMyRoutesApi extends HttpServlet {
             ServerEngine server = new ServerEngine();
                     server.setUserId(token.getUserId());
                     ArrayList list = server.getRoutes(lowerThan);
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder()
+   .setDateFormat("yyyy-MM-dd' 'HH:mm:ss").create();
+            
             String output = gson.toJson(list);
             out.printf(output);
             
