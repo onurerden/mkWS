@@ -53,8 +53,16 @@ public class GetRouteIdApi extends HttpServlet {
             ServerEngine server = new ServerEngine();
             server.setUserId(token.getUserId());
             /* TODO output your page here. You may use following sample code. */
-
-            out.print(server.getRouteId(deviceId));
+Integer routeId=-1;
+try{
+   routeId= server.getRouteId(deviceId);
+}catch (Exception ex){
+    
+}
+            if(routeId<0){
+                response.setStatus(401);
+            }
+            out.print(routeId);
 
         } catch (NumberFormatException e) {
             response.setStatus(500);
