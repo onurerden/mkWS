@@ -1943,7 +1943,52 @@ public class ServerEngine implements IDeviceServer {
         return jwtStr;   
     }
     
-
+public ArrayList getRoutes(int lowerThan){
+    ArrayList<RouteModel> list = new ArrayList<>();
+    
+    try {
+            Credentials cr = new Credentials();
+            Connection con_1 = null;
+            Statement st_1 = null;
+            ResultSet rs_1 = null;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            st_1 = con_1.createStatement();
+            String query = "SELECT * FROM mk.route WHERE isDeleted=false AND userId=" + this.userId;
+            if (lowerThan!=0){
+                query = query + " AND id<" +lowerThan; 
+            }
+            query = query + " ORDER BY id DESC LIMIT 10";
+            
+            System.out.println(query);
+            rs_1 = st_1.executeQuery(query);
+            
+            while (rs_1.next()) {
+                RouteModel model = new RouteModel();
+                model.setRouteId(rs_1.getInt("id"));
+                model.setIsEnded(rs_1.getBoolean("isEnded"));
+                model.setIsDeleted(rs_1.getBoolean("isDeleted"));
+                model.setFollowMeDeviceId(rs_1.getInt("followMeDeviceId"));
+                model.setRouteLength(rs_1.getDouble("length"));
+                model.setTime(rs_1.getTimestamp("time"));
+                model.setUserId(rs_1.getInt("userId"));
+                model.setRouteMeanSpeed(rs_1.getDouble("meanSpeed"));
+                        
+                list.add(model);
+               
+            }
+            
+            
+            
+    }catch (Exception ex){
+        
+    }
+    
+    return list;
+    
+}
+    
+    
     /**
      * @return the userId
      */
