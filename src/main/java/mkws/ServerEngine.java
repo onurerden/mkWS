@@ -879,6 +879,7 @@ public class ServerEngine implements IDeviceServer {
         Connection con_1 = null;
         Statement st_1 = null;
         double length = getRouteDetails(routeId).getRouteLength();
+        
         String query = "UPDATE  `route` SET isEnded =1, length = "+length +" WHERE id =" + routeId;
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
