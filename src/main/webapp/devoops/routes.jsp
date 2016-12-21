@@ -121,7 +121,9 @@
                                     <thead>
                                         <tr>
                                             <th>Route Id</th>
+                                            <% if(isAdmin){%>
                                             <th>Device Name</th>
+                                            <%} %>
                                             <th>DateTime</th>
                                             <th>Live</th>
                                             <th>Commands</th>
@@ -133,7 +135,10 @@
                                         <tr>
                                             <td><a href="getFollowMeOnMap.jsp?routeId=<%= resultset.getInt("routeId")%>">
                                                     <%= resultset.getInt("routeId")%></a></td>
+                                            <% if(isAdmin){%>
                                             <td><%= resultset.getString("name")%></td>
+                                            <%} %>
+                                            
                                             <td><%= resultset.getTimestamp("time")%></td>
                                             <td style="width: 60px">
                                                 <% if (resultset.getInt("isEnded") == 0) {%>
