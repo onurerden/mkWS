@@ -37,6 +37,7 @@ import mkws.Model.MkwsUser;
 import mkws.Model.OAuthToken;
 import mkws.Model.RouteModel;
 import mkws.Model.Waypoint;
+import mkws.webbeans.GetRouteDetails;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
@@ -877,8 +878,8 @@ public class ServerEngine implements IDeviceServer {
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1 = null;
-        
-        String query = "UPDATE  `route` SET isEnded =1 WHERE id =" + routeId;
+        double length = getRouteDetails(routeId).getRouteLength();
+        String query = "UPDATE  `route` SET isEnded =1, length = "+length +" WHERE id =" + routeId;
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
@@ -1008,9 +1009,7 @@ public class ServerEngine implements IDeviceServer {
         return sessionList;
         
     }
-    
-    ;
-
+   
     @Override
     public int saveGPXContent(String gpxString, String uid) {
         
@@ -2002,5 +2001,11 @@ public ArrayList getRoutes(int lowerThan){
      */
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+    
+    public GetRouteDetails getRouteDetails(int routeId){
+        GetRouteDetails route = new GetRouteDetails();
+        route.setRouteId(routeId);
+        return route;
     }
 }
