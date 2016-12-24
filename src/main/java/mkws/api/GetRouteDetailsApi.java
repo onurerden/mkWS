@@ -40,8 +40,15 @@ public class GetRouteDetailsApi extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             /* TODO output your page here. You may use following sample code. */
-            int routeId = Integer.valueOf(request.getParameter("routeId"));
-            System.out.println(routeId);
+            int routeId = 0;
+            try{
+            Integer.valueOf(request.getParameter("routeId"));
+            }catch (Exception ex){
+                response.setStatus(401);
+                out.print("{\"result\": \"failed\", \"description\" : \"Invalid routeId.\"}");
+                out.close();
+                return;
+            }
             ServerEngine server = new ServerEngine();
             TokenEvaluator te = new TokenEvaluator();
             Token token = te.evaluateRequestForToken(request);
@@ -51,8 +58,7 @@ public class GetRouteDetailsApi extends HttpServlet {
                 out.print("{\"result\": \"failed\", \"description\" : \"There is no token or token is invalid.\"}");
                 out.close();
                 return;
-            }
-            
+            }            
             server.setUserId(token.getUserId());
             RouteModel route = server.getRouteDetails(routeId, token.isIsAdmin());
             
