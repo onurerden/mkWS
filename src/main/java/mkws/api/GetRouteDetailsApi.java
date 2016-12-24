@@ -41,6 +41,7 @@ public class GetRouteDetailsApi extends HttpServlet {
         try {
             /* TODO output your page here. You may use following sample code. */
             int routeId = Integer.valueOf(request.getParameter("routeId"));
+            System.out.println(routeId);
             ServerEngine server = new ServerEngine();
             TokenEvaluator te = new TokenEvaluator();
             Token token = te.evaluateRequestForToken(request);
