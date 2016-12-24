@@ -2025,7 +2025,7 @@ public ArrayList getRoutes(int lowerThan){
             st_1 = con_1.createStatement();
             String query = "SELECT * FROM mk.route WHERE isDeleted=false AND id=" + routeId;
             if(!isAdmin){
-                query = query + "AND userId=" + this.userId;
+                query = query + " AND userId=" + this.userId;
             }
             query = query + " LIMIT 1";
             
