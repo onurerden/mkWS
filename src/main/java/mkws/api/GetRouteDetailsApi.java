@@ -42,7 +42,7 @@ public class GetRouteDetailsApi extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             int routeId = 0;
             try{
-            Integer.valueOf(request.getParameter("routeId"));
+            routeId=Integer.valueOf(request.getParameter("routeId"));
             }catch (Exception ex){
                 response.setStatus(401);
                 out.print("{\"result\": \"failed\", \"description\" : \"Invalid routeId.\"}");
