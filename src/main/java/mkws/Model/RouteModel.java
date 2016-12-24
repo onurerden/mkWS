@@ -7,6 +7,7 @@
 package mkws.Model;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 /**
  *
@@ -23,6 +24,7 @@ public class RouteModel {
     private boolean isDeleted;
     private boolean isEnded;
     private int followMeDeviceId;
+    private ArrayList followMeData;
 
     /**
      * @return the routeId
@@ -148,5 +150,19 @@ public class RouteModel {
      */
     public void setFollowMeDeviceId(int followMeDeviceId) {
         this.followMeDeviceId = followMeDeviceId;
+    }
+
+    /**
+     * @return the followMeData
+     */
+    public ArrayList getFollowMeData() {
+        return followMeData;
+    }
+
+    /**
+     * @param followMeData the followMeData to set
+     */
+    public void setFollowMeData(ArrayList followMeData) {
+        this.followMeData = followMeData;
     }
 }

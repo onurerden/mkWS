@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import mkws.Model.FollowMeDataModel;
 import mkws.Model.MKMission;
 import mkws.Model.MMRUser;
 import mkws.Model.MMRWorkout;
@@ -878,7 +879,7 @@ public class ServerEngine implements IDeviceServer {
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1 = null;
-        double length = getRouteDetails(routeId).getRouteLength();
+        double length = getRouteDetailsWithBean(routeId).getRouteLength();
         
         String query = "UPDATE  `route` SET isEnded =1, length = "+length +" WHERE id =" + routeId;
         try {
@@ -2003,10 +2004,79 @@ public ArrayList getRoutes(int lowerThan){
     public void setUserId(int userId) {
         this.userId = userId;
     }
-    
-    public GetRouteDetails getRouteDetails(int routeId){
+    //getRouteDetailsWithBean followMe dataları üzerinden hesap yapar, 
+    //yavaş çalışır. hızlı cevap için getRouteDetails kullanılmalıdır.
+    public GetRouteDetails getRouteDetailsWithBean(int routeId){
         GetRouteDetails route = new GetRouteDetails();
         route.setRouteId(routeId);
+        return route;
+    }
+    
+    public RouteModel getRouteDetails(int routeId, boolean isAdmin){
+        RouteModel route=new RouteModel();
+        
+         try {
+            Credentials cr = new Credentials();
+            Connection con_1 = null;
+            Statement st_1 = null;
+            ResultSet rs_1 = null;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            st_1 = con_1.createStatement();
+            String query = "SELECT * FROM mk.route WHERE isDeleted=false AND id=" + routeId;
+            if(!isAdmin){
+                query = query + "AND userId=" + this.userId;
+            }
+            query = query + " LIMIT 1";
+            
+            System.out.println(query);
+            rs_1 = st_1.executeQuery(query);
+            
+            while (rs_1.next()) {
+                
+                route.setRouteId(rs_1.getInt("id"));
+                route.setIsEnded(rs_1.getBoolean("isEnded"));
+                route.setIsDeleted(rs_1.getBoolean("isDeleted"));
+                route.setFollowMeDeviceId(rs_1.getInt("followMeDeviceId"));
+                route.setRouteLength(rs_1.getDouble("length"));
+                route.setTime(rs_1.getTimestamp("time"));
+                route.setUserId(rs_1.getInt("userId"));
+                route.setRouteMeanSpeed(rs_1.getDouble("meanSpeed"));
+                             
+            }
+            con_1.close();
+           
+            con_1 = null;
+            st_1 = null;
+            rs_1 = null;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            st_1 = con_1.createStatement();
+            query = "SELECT * FROM mk.followme WHERE routeId=" + routeId 
+                    +" ORDER BY time ASC";
+            rs_1 = st_1.executeQuery(query);
+            ArrayList followMeData = new ArrayList();
+            while (rs_1.next()) {
+                FollowMeDataModel fm=new FollowMeDataModel();
+            fm.setLat(rs_1.getDouble("latitude"));
+            fm.setLng(rs_1.getDouble("longitude"));
+            fm.setBearing(rs_1.getInt("bearing"));    
+            fm.setEvent(rs_1.getInt("event"));
+            fm.setTime(rs_1.getTimestamp("time"));
+            fm.setFollowMeDeviceId(rs_1.getInt("followMeDeviceId"));
+            fm.setRouteId(rs_1.getInt("routeId"));
+            fm.setSessionId(rs_1.getInt("sessionId"));
+            fm.setSpeed(rs_1.getDouble("speed"));
+            fm.setAltitude(rs_1.getDouble("altitude"));
+            
+                followMeData.add(fm);
+            }
+            route.setFollowMeData(followMeData);
+            
+    }catch (Exception ex){
+             System.out.println("Error while getting route details: " + ex.getLocalizedMessage());
+        return null;
+    }
         return route;
     }
 }
