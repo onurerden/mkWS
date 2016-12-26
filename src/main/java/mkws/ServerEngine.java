@@ -703,6 +703,7 @@ public class ServerEngine implements IDeviceServer {
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             //System.out.println("Connection Created");
             st_1 = con_1.createStatement();
+            
            // System.out.println("StatementCreated:");
             System.out.println(queryString);
             st_1.executeUpdate(queryString);
@@ -714,9 +715,10 @@ public class ServerEngine implements IDeviceServer {
             rs_1 = st_2.executeQuery(queryString);
             
             while (rs_1.next()) {
-                routeId = rs_1.getInt("maxId");
+                //routeId = rs_1.getInt("maxId");
                 System.out.println("New routeId for deviceId = " + deviceId + " is " + routeId);
             }
+            System.out.println("generated key is: " + st_1.getGeneratedKeys().getInt(1));
             
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
