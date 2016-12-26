@@ -717,10 +717,13 @@ public class ServerEngine implements IDeviceServer {
             while (rs_1.next()) {
                 routeId = rs_1.getInt("maxId");
                 System.out.println("New routeId for deviceId = " + deviceId + " is " + routeId);
-            }
-            System.out.println("generated key is: " + st_1.getGeneratedKeys().getInt(1));
+            }ResultSet rs = st_1.getGeneratedKeys();
+             rs.next();
+   
+            System.out.println("generated key is: " + rs.getInt(1));
             
         } catch (SQLException ex) {
+            
             System.out.println(ex.getMessage());
             return -1;
             
