@@ -170,6 +170,7 @@ public class SendFollowMeDataApi extends HttpServlet {
     }
 
     body = stringBuilder.toString();
+    System.out.println(body);
     return body;
 }
 }
