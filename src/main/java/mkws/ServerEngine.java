@@ -709,18 +709,19 @@ public class ServerEngine implements IDeviceServer {
             st_1.executeUpdate(queryString,Statement.RETURN_GENERATED_KEYS);
             //System.out.println("routeId for deviceId = " + deviceId + " is created.");
             
-            st_2 = con_1.createStatement();
-            queryString = "SELECT MAX(id) AS maxId from mk.route WHERE followMeDeviceId = " + deviceId;
-            System.out.println(queryString);
-            rs_1 = st_2.executeQuery(queryString);
+            //st_2 = con_1.createStatement();
+            //queryString = "SELECT MAX(id) AS maxId from mk.route WHERE followMeDeviceId = " + deviceId;
+            //System.out.println(queryString);
+            //rs_1 = st_2.executeQuery(queryString);
             
-            while (rs_1.next()) {
-                routeId = rs_1.getInt("maxId");
-                System.out.println("New routeId for deviceId = " + deviceId + " is " + routeId);
-            }ResultSet rs = st_1.getGeneratedKeys();
+          //  while (rs_1.next()) {
+           //     routeId = rs_1.getInt("maxId");
+           //     System.out.println("New routeId for deviceId = " + deviceId + " is " + routeId);
+        //    }
+        ResultSet rs = st_1.getGeneratedKeys();
              rs.next();
-   
-            System.out.println("generated key is: " + rs.getInt(1));
+   routeId=rs.getInt(1);
+            System.out.println("generated key is: " + routeId);
             
         } catch (SQLException ex) {
             
