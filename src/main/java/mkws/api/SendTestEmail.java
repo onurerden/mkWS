@@ -53,7 +53,8 @@ public class SendTestEmail extends HttpServlet {
             email2.setSmtpPort(25);
             email.setAuthenticator(new DefaultAuthenticator(cr.getEmailUserName(), cr.getEmailUserPassword()));
             email2.setAuthenticator(new DefaultAuthenticator(cr.getEmailUserName(), cr.getEmailUserPassword()));
-            email.setSSLOnConnect(false);
+            email.setSSLOnConnect(true);
+            email2.setSSLOnConnect(false);
             try {
                 email.setFrom("no-reply@followmeapp.xyz");
 
