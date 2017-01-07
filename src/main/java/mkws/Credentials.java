@@ -14,12 +14,17 @@ public class Credentials {
     String server = "127.5.211.2:3306"; //mk
  //   String server = "127.2.57.130:3306";//mknew
   //  String server = "localhost:3306";
-//    String server = "onur-mac-mini.local:3306";
+ //   String server = "onur-mac-mini.local:3306";
     String database = "mk";
 //    String dbUserName = "adminGStcLXX";
 //    String dbPassword = "Wc_flbnyklZt";
     private String dbUserName = "adminHr8UXvV";
     private String dbPassword = "UrtgKUvL3deC";
+    
+      private String emailHost="ns333456.ip-176-31-104.eu";
+    private String emailUserName="no-reply@followmeapp.xyz";
+    private String emailUserPassword = "xb0VSSWq";
+    
     
     private String jjwtKey = "3zciEFR2rf+beofy3rh0Ak/2L8NOLS0GGnNODeSBNUI=";
     
@@ -105,5 +110,47 @@ public class Credentials {
      */
     public String getJjwtKey() {
         return jjwtKey;
+    }
+
+    /**
+     * @return the emailHost
+     */
+    public String getEmailHost() {
+        return emailHost;
+    }
+
+    /**
+     * @param emailHost the emailHost to set
+     */
+    public void setEmailHost(String emailHost) {
+        this.emailHost = emailHost;
+    }
+
+    /**
+     * @return the emailUserName
+     */
+    public String getEmailUserName() {
+        return emailUserName;
+    }
+
+    /**
+     * @param emailUserName the emailUserName to set
+     */
+    public void setEmailUserName(String emailUserName) {
+        this.emailUserName = emailUserName;
+    }
+
+    /**
+     * @return the emailUserPassword
+     */
+    public String getEmailUserPassword() {
+        return emailUserPassword;
+    }
+
+    /**
+     * @param emailUserPassword the emailUserPassword to set
+     */
+    public void setEmailUserPassword(String emailUserPassword) {
+        this.emailUserPassword = emailUserPassword;
     }
 }
