@@ -46,17 +46,27 @@ public class SendTestEmail extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             Credentials cr = new Credentials();
             Email email = new SimpleEmail();
+            Email email2= new SimpleEmail();
             email.setHostName(cr.getEmailHost());
+            email2.setHostName(cr.getEmailHost());
             email.setSmtpPort(465);
+            email2.setSmtpPort(25);
             email.setAuthenticator(new DefaultAuthenticator(cr.getEmailUserName(), cr.getEmailUserPassword()));
-            email.setSSLOnConnect(true);
+            email2.setAuthenticator(new DefaultAuthenticator(cr.getEmailUserName(), cr.getEmailUserPassword()));
+            email.setSSLOnConnect(false);
             try {
                 email.setFrom("no-reply@followmeapp.xyz");
 
                 email.setSubject("FollowMe App Test Mail");
-                email.setMsg("This is a test mail ... :-)");
+                email.setMsg("This is a test mail with ssl... :-)");
                 email.addTo("posta@onurerden.com");
                 email.send();
+                email2.setFrom("no-reply@followmeapp.xyz");
+
+                email2.setSubject("FollowMe App Test Mail");
+                email2.setMsg("This is a test mail with non-ssl ... :-)");
+                email2.addTo("posta@onurerden.com");
+                email2.send();
             } catch (EmailException ex) {
                 Logger.getLogger(SendTestEmail.class.getName()).log(Level.SEVERE, null, ex);
                 ServerEngine server = new ServerEngine();
