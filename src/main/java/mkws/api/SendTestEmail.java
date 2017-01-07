@@ -21,6 +21,7 @@ import mkws.ServerEngine;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.SimpleEmail;
 
 /**
@@ -45,28 +46,29 @@ public class SendTestEmail extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             Credentials cr = new Credentials();
-            Email email = new SimpleEmail();
-            Email email2= new SimpleEmail();
-            email.setHostName(cr.getEmailHost());
+            HtmlEmail email2 = new HtmlEmail();
             email2.setHostName(cr.getEmailHost());
-            email.setSmtpPort(465);
             email2.setSmtpPort(25);
-            email.setAuthenticator(new DefaultAuthenticator(cr.getEmailUserName(), cr.getEmailUserPassword()));
             email2.setAuthenticator(new DefaultAuthenticator(cr.getEmailUserName(), cr.getEmailUserPassword()));
-            email.setSSLOnConnect(true);
             email2.setSSLOnConnect(false);
             try {
-                email.setFrom("no-reply@followmeapp.xyz");
-
-                email.setSubject("FollowMe App Test Mail");
-                email.setMsg("This is a test mail with ssl... :-)");
-                email.addTo("posta@onurerden.com");
                 email2.setFrom("no-reply@followmeapp.xyz");
                 email2.setSubject("FollowMe App Test Mail");
-                email2.setMsg("This is a test mail with non-ssl ... :-)");
+                // set the html message
+                email2.setHtmlMsg("<html><body><h2>Welcome to FollowMeApp;</h2>\n" +
+"<p>To activate your account, please click the link given below.</p>\n" +
+"<p><a href=\"http://followmeapp.com/activate?token=wqoueyqwoueyoqwuye\">http://followmeapp.com/activate?token=wqoueyqwoueyoqwuye</a></p>\n" +
+"<p>&nbsp;</p>\n" +
+"<p>Have nice workouts!</p>\n" +
+"<p>&nbsp;</p>\n" +
+"<p>FollowMe&nbsp;App Team!</p>\n" +
+"<p>&nbsp;</p></body></html>");
+
+                // set the alternative message
+                email2.setTextMsg("Your email client does not support HTML messages");
+
                 email2.addTo("posta@onurerden.com");
                 email2.send();
-                email.send();
             } catch (EmailException ex) {
                 Logger.getLogger(SendTestEmail.class.getName()).log(Level.SEVERE, null, ex);
                 ServerEngine server = new ServerEngine();
