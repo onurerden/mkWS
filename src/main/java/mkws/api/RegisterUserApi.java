@@ -103,14 +103,10 @@ public class RegisterUserApi extends HttpServlet {
             if(user!=null){
                 MailSender sender = new MailSender();
                 String actToken = server.createTokenForActivation(user.getId());
-               String activationmessage =  "<html><body><h2>Welcome to FollowMeApp;</h2>\n" +
-"<p>To activate your account, please click the link given below.</p>\n" +
-"<p><a href=\"http://www.followmeapp.xyz/api/ActivateUser?token="+actToken+ "\">Activate your FollowMe App Account</a></p>\n" +
-"<p>&nbsp;</p>\n" +
-"<p>Have nice workouts!</p>\n" +
-"<p>&nbsp;</p>\n" +
-"<p>FollowMe&nbsp;App Team!</p>\n" +
-"<p>&nbsp;</p></body></html>";
+                String activationmessage =server.getMailTemplate(1).getText();
+               activationmessage = activationmessage.replaceAll("<%userName%>", user.getFirst_name() + " " + user.getLast_name());
+               activationmessage = activationmessage.replaceAll("<%activationToken%>", actToken);
+               
                 sender.sendMail(user.getEmail(), activationmessage, "FollowMe Account Activation");
                 //out.println("user entry granted");
                 

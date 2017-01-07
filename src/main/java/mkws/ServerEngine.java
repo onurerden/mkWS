@@ -34,6 +34,7 @@ import mkws.Model.FollowMeDataModel;
 import mkws.Model.MKMission;
 import mkws.Model.MMRUser;
 import mkws.Model.MMRWorkout;
+import mkws.Model.MailTemplate;
 import mkws.Model.MkwsUser;
 import mkws.Model.OAuthToken;
 import mkws.Model.RouteModel;
@@ -2132,5 +2133,31 @@ public ArrayList getRoutes(int lowerThan){
                 )
                 .compact();
         return jwtStr;   
+    }
+    public MailTemplate getMailTemplate(int templateId){
+        MailTemplate template = new MailTemplate();
+         try {
+            Credentials cr = new Credentials();
+            Connection con_1 = null;
+            Statement st_1 = null;
+            ResultSet rs_1 = null;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            st_1 = con_1.createStatement();
+            String query = "SELECT * FROM mk.mailtemplates WHERE id=" + templateId;
+            rs_1=st_1.executeQuery(query);
+            while (rs_1.next()){
+                template.setId(rs_1.getInt("id"));
+                template.setVersion(rs_1.getInt("version"));
+                template.setText(rs_1.getString("text"));
+                template.setDescription(rs_1.getString("description"));
+                template.setDate(rs_1.getTimestamp("date"));
+            }
+            
+         }catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex){
+             
+         }
+         return template;
+        
     }
 }
