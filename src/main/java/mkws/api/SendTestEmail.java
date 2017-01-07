@@ -67,6 +67,7 @@ public class SendTestEmail extends HttpServlet {
                 email2.setMsg("This is a test mail with non-ssl ... :-)");
                 email2.addTo("posta@onurerden.com");
                 email2.send();
+                email.send();
             } catch (EmailException ex) {
                 Logger.getLogger(SendTestEmail.class.getName()).log(Level.SEVERE, null, ex);
                 ServerEngine server = new ServerEngine();
