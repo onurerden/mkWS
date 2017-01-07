@@ -1916,6 +1916,7 @@ public class ServerEngine implements IDeviceServer {
                 user.setRegdate(rs_1.getTimestamp("regdate"));
                 user.setEmail(rs_1.getString("email"));
                 user.setIsAdmin(rs_1.getBoolean("isAdmin"));
+                user.setIsActivated(rs_1.getBoolean("isActivated"));
             }
             
             con_1.close();
