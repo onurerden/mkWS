@@ -38,6 +38,7 @@ public class ActivateUserApi extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
          ActivationEvaluator ev = new ActivationEvaluator();
          ev.activateUser(token);
+         out.println("User activation completed successfully");
          
         }
     }

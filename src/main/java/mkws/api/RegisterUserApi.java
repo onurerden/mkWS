@@ -114,11 +114,11 @@ public class RegisterUserApi extends HttpServlet {
                 sender.sendMail(user.getEmail(), activationmessage, "FollowMe Account Activation");
                 //out.println("user entry granted");
                 
-                String token = server.createTokenForUser(user.getId());
-                out.print("{\"token\" : \""+token+"\"}");
+               // String token = server.createTokenForUser(user.getId());
+                out.print("{\"result\" : \"success\", \"description\" : \"User registration completed successfully. Please check your e-mail inbox in order to complete your activation.\" }");
             }else{
                 response.setStatus(401);
-                out.print("user entry denied");
+                   out.print("{\"result\": \"failed\", \"description\" : \"User entry denied.\"}");
             }
                    
                }else{
