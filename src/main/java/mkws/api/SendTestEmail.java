@@ -61,9 +61,7 @@ public class SendTestEmail extends HttpServlet {
                 email.setSubject("FollowMe App Test Mail");
                 email.setMsg("This is a test mail with ssl... :-)");
                 email.addTo("posta@onurerden.com");
-                email.send();
                 email2.setFrom("no-reply@followmeapp.xyz");
-
                 email2.setSubject("FollowMe App Test Mail");
                 email2.setMsg("This is a test mail with non-ssl ... :-)");
                 email2.addTo("posta@onurerden.com");
