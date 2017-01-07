@@ -5,6 +5,7 @@
  */
 package mkws.api;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import mkws.Credentials;
+import mkws.LogMessage;
+import mkws.ServerEngine;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
@@ -44,23 +47,30 @@ public class SendTestEmail extends HttpServlet {
             Credentials cr = new Credentials();
             Email email = new SimpleEmail();
             email.setHostName(cr.getEmailHost());
-email.setSmtpPort(465);
-email.setAuthenticator(new DefaultAuthenticator(cr.getEmailUserName(), cr.getEmailUserPassword()));
-email.setSSLOnConnect(true);
+            email.setSmtpPort(465);
+            email.setAuthenticator(new DefaultAuthenticator(cr.getEmailUserName(), cr.getEmailUserPassword()));
+            email.setSSLOnConnect(true);
             try {
                 email.setFrom("no-reply@followmeapp.xyz");
-           
-email.setSubject("FollowMe App Test Mail");
-email.setMsg("This is a test mail ... :-)");
-email.addTo("posta@onurerden.com");
-email.send();
- } catch (EmailException ex) {
+
+                email.setSubject("FollowMe App Test Mail");
+                email.setMsg("This is a test mail ... :-)");
+                email.addTo("posta@onurerden.com");
+                email.send();
+            } catch (EmailException ex) {
                 Logger.getLogger(SendTestEmail.class.getName()).log(Level.SEVERE, null, ex);
+                ServerEngine server = new ServerEngine();
+                LogMessage log = new LogMessage();
+                log.setLogLevel(1);
+                log.setLogMessage(ex.getLocalizedMessage());
+                Gson gson = new Gson();
+                server.sendLog(gson.toJson(log));
             }
+
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SendTestEmail</title>");            
+            out.println("<title>Servlet SendTestEmail</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Mail sent by " + request.getContextPath() + "</h1>");
