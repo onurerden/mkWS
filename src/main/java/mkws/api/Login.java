@@ -74,6 +74,7 @@ public class Login extends HttpServlet {
             MkwsUser user = server.getUserByCredentials(userName, password);
             if((user!=null)&&(user.isIsActivated())){
                 //out.println("user entry granted");
+                response.setStatus(200);
                 String token = server.createTokenForUser(user.getId());
                 out.println("{\"token\" : \""+token+"\"}");
             }else if((user!=null)&&(!user.isIsActivated())){
