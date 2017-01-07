@@ -59,6 +59,12 @@ boolean tokenExists = true;
                 System.out.println("No token");
                 tokenExists=false;
             }
+            if (!token.isIsActivated()){
+                  response.setStatus(402);
+                out.print("{\"result\": \"failed\", \"description\" : \"You should first activate your email address by clicking on the link sent in activation mail.\"}");
+                out.close();
+                return;
+              }
             if(!tokenExists && !sessionUserExists){
                 response.setStatus(401);
                 out.println("{\"result\": \"failed\", \"description\" : \"There is no token or token is invalid.\"}");

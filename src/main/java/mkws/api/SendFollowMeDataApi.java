@@ -58,6 +58,12 @@ public class SendFollowMeDataApi extends HttpServlet {
                 out.close();
                 return;
             }
+            if (!token.isIsActivated()){
+                  response.setStatus(402);
+                out.print("{\"result\": \"failed\", \"description\" : \"You should first activate your email address by clicking on the link sent in activation mail.\"}");
+                out.close();
+                return;
+              }
            // String jsonString = request.getParameter("jsonfollowme");
            // String jsonString = "" + request.getHeader("jsonfollowme");
             String jsonString = getBody(request);

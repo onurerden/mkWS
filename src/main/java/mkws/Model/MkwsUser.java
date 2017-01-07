@@ -21,6 +21,7 @@ public class MkwsUser {
     private String pass;
     private Timestamp regdate;
     private boolean isAdmin;
+    private boolean isActivated;
 
     /**
      * @return the uname
@@ -132,5 +133,19 @@ public class MkwsUser {
      */
     public void setIsAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
+    }
+
+    /**
+     * @return the isActivated
+     */
+    public boolean isIsActivated() {
+        return isActivated;
+    }
+
+    /**
+     * @param isActivated the isActivated to set
+     */
+    public void setIsActivated(boolean isActivated) {
+        this.isActivated = isActivated;
     }
 }

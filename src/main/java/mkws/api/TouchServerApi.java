@@ -47,10 +47,16 @@ public class TouchServerApi extends HttpServlet {
             Token token = te.evaluateRequestForToken(request);
               if (token == null) {
                 response.setStatus(401);
-                out.println("{\"result\": \"failed\", \"description\" : \"There is no token or token is invalid.\"}");
+                out.print("{\"result\": \"failed\", \"description\" : \"There is no token or token is invalid.\"}");
                 out.close();
                 return;
             }
+              if (!token.isIsActivated()){
+                  response.setStatus(402);
+                out.print("{\"result\": \"failed\", \"description\" : \"You should first activate your email address by clicking on the link sent in activation mail.\"}");
+                out.close();
+                return;
+              }
             String requestIdByUID = "";
             String requestedDeviceType = "";
             requestIdByUID = request.getParameter("uid");

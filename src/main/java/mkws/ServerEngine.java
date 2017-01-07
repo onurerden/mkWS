@@ -1872,6 +1872,7 @@ public class ServerEngine implements IDeviceServer {
                 user.setRegdate(rs_1.getTimestamp("regdate"));
                 user.setEmail(rs_1.getString("email"));
                 user.setIsAdmin(rs_1.getBoolean("isAdmin"));
+                user.setIsActivated(rs_1.getBoolean("isActivated"));
             }
             
             con_1.close();
@@ -1937,6 +1938,7 @@ public class ServerEngine implements IDeviceServer {
                 .setIssuer("mkws")
                 .claim("userId", userId)
                 .claim("isAdmin",getUserInfoById(userId).isIsAdmin())
+                .claim("isActivated",getUserInfoById(userId).isIsActivated())
                 .signWith(
                         SignatureAlgorithm.HS256,
                         TextCodec.BASE64.decode(

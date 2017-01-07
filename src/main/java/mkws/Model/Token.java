@@ -18,6 +18,7 @@ public class Token {
     private String issuer;
     private ArrayList roles = new ArrayList();
     private boolean isAdmin ;
+    private boolean isActivated;
 
     public void addRole(String role) {
         roles.add(role);
@@ -81,6 +82,20 @@ public class Token {
      */
     public void setIsAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
+    }
+
+    /**
+     * @return the isActivated
+     */
+    public boolean isIsActivated() {
+        return isActivated;
+    }
+
+    /**
+     * @param isActivated the isActivated to set
+     */
+    public void setIsActivated(boolean isActivated) {
+        this.isActivated = isActivated;
     }
 
 }
