@@ -2021,6 +2021,8 @@ public ArrayList getRoutes(int lowerThan){
         return route;
     }
     
+    
+    
     public RouteModel getRouteDetails(int routeId, boolean isAdmin){
         RouteModel route=new RouteModel();
         
@@ -2087,5 +2089,48 @@ public ArrayList getRoutes(int lowerThan){
         return null;
     }
         return route;
+    }
+    
+    public boolean activateUser(int userId){
+    Credentials cr = new Credentials();
+        Connection con_1 = null;
+        Statement st_1 = null;
+                
+        String query = "UPDATE  `members` SET isActivated =1, WHERE id =" + userId;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            st_1 = con_1.createStatement();
+            st_1.executeUpdate(query);
+            
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+            LogMessage message = new LogMessage();
+                    message.setLogLevel(1);
+                    message.setLogMessage("User cannot be activated. " + ex.getLocalizedMessage());
+                    Gson gson = new Gson();
+            sendLog(gson.toJson(message));
+            return false;
+        }
+        return true;
+}
+    
+    public String createTokenForActivation(int userId) {
+     Credentials cr = new Credentials();
+     
+        String jwtStr = Jwts.builder()
+                .setSubject("activation")
+                .setIssuer("mkws")
+                .claim("userId", userId)
+                .signWith(
+                        SignatureAlgorithm.HS256,
+                        TextCodec.BASE64.decode(
+                                // This generated signing key is
+                                // the proper length for the
+                                // HS256 algorithm.
+                                cr.getJjwtKey()
+                        )
+                )
+                .compact();
+        return jwtStr;   
     }
 }

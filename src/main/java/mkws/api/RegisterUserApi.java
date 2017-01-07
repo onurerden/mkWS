@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import mkws.MailSender;
 import mkws.Model.MkwsUser;
 import mkws.ServerEngine;
 
@@ -94,11 +95,25 @@ public class RegisterUserApi extends HttpServlet {
                 return;
                 }
             
-                ServerEngine server = new ServerEngine();
+                ServerEngine server = new ServerEngine();                
+                
                if( server.addMkwsUser(name, last_name, email, uname, password, false)){
                    MkwsUser user = server.getUserByCredentials(uname, password);
+                   
             if(user!=null){
+                MailSender sender = new MailSender();
+                String actToken = server.createTokenForActivation(user.getId());
+               String activationmessage =  "<html><body><h2>Welcome to FollowMeApp;</h2>\n" +
+"<p>To activate your account, please click the link given below.</p>\n" +
+"<p><a href=\"http://followmeapp.com/activate?token="+actToken+ "\">Activate your FollowMe App Account</a></p>\n" +
+"<p>&nbsp;</p>\n" +
+"<p>Have nice workouts!</p>\n" +
+"<p>&nbsp;</p>\n" +
+"<p>FollowMe&nbsp;App Team!</p>\n" +
+"<p>&nbsp;</p></body></html>";
+                sender.sendMail(user.getEmail(), activationmessage, "FollowMe Account Activation");
                 //out.println("user entry granted");
+                
                 String token = server.createTokenForUser(user.getId());
                 out.print("{\"token\" : \""+token+"\"}");
             }else{
