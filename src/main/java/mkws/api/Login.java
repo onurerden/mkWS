@@ -72,11 +72,11 @@ public class Login extends HttpServlet {
             }
             ServerEngine server = new ServerEngine();
             MkwsUser user = server.getUserByCredentials(userName, password);
-            if(user!=null){
+            if((user!=null)&&(user.isIsActivated())){
                 //out.println("user entry granted");
                 String token = server.createTokenForUser(user.getId());
                 out.println("{\"token\" : \""+token+"\"}");
-            }else if(!user.isIsActivated()){
+            }else if((user!=null)&&(!user.isIsActivated())){
                 response.setStatus(402);
                 out.print("{\"result\": \"failed\", \"description\" : \"You should first activate your email address by clicking on the link sent in activation mail.\"}");
                 out.close();
