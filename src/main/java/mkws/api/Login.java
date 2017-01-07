@@ -76,6 +76,10 @@ public class Login extends HttpServlet {
                 //out.println("user entry granted");
                 String token = server.createTokenForUser(user.getId());
                 out.println("{\"token\" : \""+token+"\"}");
+            }else if(!user.isIsActivated()){
+                response.setStatus(402);
+                out.print("{\"result\": \"failed\", \"description\" : \"You should first activate your email address by clicking on the link sent in activation mail.\"}");
+                out.close();
             }else{
                 response.setStatus(401);
                 out.print("user entry denied");
