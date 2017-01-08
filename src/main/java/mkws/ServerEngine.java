@@ -886,9 +886,12 @@ public class ServerEngine implements IDeviceServer {
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1 = null;
-        double length = getRouteDetailsWithBean(routeId).getRouteLength();
+       GetRouteDetails routeDetails= getRouteDetailsWithBean(routeId);
+        double length = routeDetails.getRouteLength();
+        long duration = routeDetails.getTimeList().get(routeDetails.getTimeList().size()-1).getTime()/1000 -  routeDetails.getTimeList().get(0).getTime()/1000;
         
-        String query = "UPDATE  `route` SET isEnded =1, length = "+length +" WHERE id =" + routeId;
+        double average=length/duration;
+        String query = "UPDATE  `route` SET isEnded =1, length = "+length +", meanSpeed= "+ average+" WHERE id =" + routeId;
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
