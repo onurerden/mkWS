@@ -890,7 +890,7 @@ public class ServerEngine implements IDeviceServer {
         double length = routeDetails.getRouteLength();
         long duration = routeDetails.getTimeList().get(routeDetails.getTimeList().size()-1).getTime()/1000 -  routeDetails.getTimeList().get(0).getTime()/1000;
         
-        double average=length/duration;
+        double average=length*1000.0/duration;
         String query = "UPDATE  `route` SET isEnded =1, length = "+length +", meanSpeed= "+ average+" WHERE id =" + routeId;
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
