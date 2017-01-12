@@ -43,12 +43,15 @@ public class RegisterUserWithFacebookApi extends HttpServlet {
             System.out.println("User name = " + user.getName());
             System.out.println("User email= " + user.getEmail());
             System.out.println("User Id= " + user.getId());
-
+             
+            
             out.println("User name = " + user.getName());
             out.println("User email= " + user.getEmail());
             out.println("User Id= " + user.getId());
-        }catch (Exception ex){
+        }catch(Exception ex){
             System.out.println(ex.getLocalizedMessage());
+            response.setStatus(401);
+            out.println("{\"result\":\"failed\", \"description\":\"User info cannot be retrieved.\"}");
         }
     }
 
