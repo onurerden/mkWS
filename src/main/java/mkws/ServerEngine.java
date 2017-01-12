@@ -1952,7 +1952,7 @@ public class ServerEngine implements IDeviceServer {
             rs_1 = st_1.executeQuery(query);
             
             while (rs_1.next()) {
-                
+                System.out.println("User found:");
                 user.setId(rs_1.getInt("id"));
                 user.setFirst_name(rs_1.getString("first_name"));
                 user.setLast_name(rs_1.getString("last_name"));
