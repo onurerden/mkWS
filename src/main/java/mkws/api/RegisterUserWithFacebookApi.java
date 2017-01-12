@@ -49,18 +49,18 @@ static SecureRandom rnd = new SecureRandom();
             out.println("{\"result\":\"failed\", \"description\":\"User info cannot be retrieved.\"}");
             return;
             }       
-            /*
-            out.println("User name = " + user.getName());
-            out.println("User email= " + user.getEmail());
-            out.println("User Id= " + user.getId());
-            */
+            
+            System.out.println("User name = " + user.getName());
+            System.out.println("User email= " + user.getEmail());
+            System.out.println("User Id= " + user.getId());
+            
             MkwsUser mkwsUser = server.getUserByEmail(user.getEmail());
-            /*
-            out.println("MkwsUser First Name = " + mkwsUser.getFirst_name());
-            out.println("MkwsUser Last Name = " + mkwsUser.getLast_name());
-            out.println("MkwsUser mkwsId = " + mkwsUser.getId());
-            out.println("MkwsUser user Name = " + mkwsUser.getUname());
-            */
+            
+            System.out.println("MkwsUser First Name = " + mkwsUser.getFirst_name());
+            System.out.println("MkwsUser Last Name = " + mkwsUser.getLast_name());
+            System.out.println("MkwsUser mkwsId = " + mkwsUser.getId());
+            System.out.println("MkwsUser user Name = " + mkwsUser.getUname());
+            
             if(mkwsUser.getEmail()==null){
                 
             server.addMkwsUser(user.getName().substring(0, user.getName().indexOf(" ")),
