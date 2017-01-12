@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import mkws.Model.FacebookUserModel;
 import mkws.Model.FollowMeDataModel;
 import mkws.Model.MKMission;
 import mkws.Model.MMRUser;
@@ -2162,5 +2163,30 @@ public ArrayList getRoutes(int lowerThan){
          }
          return template;
         
+    }
+    
+    public FacebookUserModel getUserInfoFromFacebook(String access_token, String fields){
+       FacebookUserModel fbUser = null;
+        try {
+            
+            Credentials cr = new Credentials();
+            HttpClient httpclient = new DefaultHttpClient();
+            httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
+            
+            HttpGet httpget = new HttpGet("https://graph.facebook.com/me?fields="+fields+"&access_token="+access_token);
+                                   
+            
+            HttpResponse response = httpclient.execute(httpget);
+            HttpEntity resEntity = response.getEntity();
+            String responseString = EntityUtils.toString(resEntity, "UTF-8");
+            
+            Gson gson =new Gson();
+            fbUser = gson.fromJson(responseString, FacebookUserModel.class);
+                    
+           
+        } catch (IOException  ex) {
+            
+        }
+         return fbUser;
     }
 }
