@@ -61,7 +61,7 @@ static SecureRandom rnd = new SecureRandom();
             System.out.println("MkwsUser mkwsId = " + mkwsUser.getId());
             System.out.println("MkwsUser user Name = " + mkwsUser.getUname());
             
-            if(mkwsUser.getEmail()==null){
+            if(mkwsUser==null){
                 
             server.addMkwsUser(user.getName().substring(0, user.getName().indexOf(" ")),
                     user.getName().substring(user.getName().indexOf(" ")+1,user.getName().length()-1), 
