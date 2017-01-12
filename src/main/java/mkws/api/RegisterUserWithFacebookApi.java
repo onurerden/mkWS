@@ -7,6 +7,7 @@ package mkws.api;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.SecureRandom;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import mkws.Model.FacebookUserModel;
 import mkws.Model.MkwsUser;
+import mkws.Model.Token;
 import mkws.ServerEngine;
 
 /**
@@ -22,7 +24,8 @@ import mkws.ServerEngine;
  */
 @WebServlet(name = "RegisterUserWithFacebook", urlPatterns = {"/api/RegisterUserWithFacebook"})
 public class RegisterUserWithFacebookApi extends HttpServlet {
-
+static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+static SecureRandom rnd = new SecureRandom();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -45,16 +48,30 @@ public class RegisterUserWithFacebookApi extends HttpServlet {
                  response.setStatus(401);
             out.println("{\"result\":\"failed\", \"description\":\"User info cannot be retrieved.\"}");
             return;
-            }            
+            }       
+            /*
             out.println("User name = " + user.getName());
             out.println("User email= " + user.getEmail());
             out.println("User Id= " + user.getId());
-            
+            */
             MkwsUser mkwsUser = server.getUserByEmail(user.getEmail());
+            /*
             out.println("MkwsUser First Name = " + mkwsUser.getFirst_name());
             out.println("MkwsUser Last Name = " + mkwsUser.getLast_name());
             out.println("MkwsUser mkwsId = " + mkwsUser.getId());
             out.println("MkwsUser user Name = " + mkwsUser.getUname());
+            */
+            if(mkwsUser.getEmail()==null){
+                
+            server.addMkwsUser(user.getName().substring(0, user.getName().indexOf(" ")),
+                    user.getName().substring(user.getName().indexOf(" ")+1,user.getName().length()-1), 
+                    user.getEmail(), user.getName()+user.getId(),randomString(8) , false);
+            server.activateUser(server.getUserByEmail(user.getEmail()).getId());
+            }
+            
+            
+            String token=server.createTokenForUser(mkwsUser.getId());
+             out.println("{\"token\" : \""+token+"\"}");        
             
         }catch(Exception ex){
             System.out.println(ex.getLocalizedMessage());
@@ -102,4 +119,10 @@ public class RegisterUserWithFacebookApi extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    String randomString( int len ){
+   StringBuilder sb = new StringBuilder( len );
+   for( int i = 0; i < len; i++ ) 
+      sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
+   return sb.toString();
+}
 }
