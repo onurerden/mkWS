@@ -56,10 +56,10 @@ static SecureRandom rnd = new SecureRandom();
             
             MkwsUser mkwsUser = server.getUserByEmail(user.getEmail());
             
-            System.out.println("MkwsUser First Name = " + mkwsUser.getFirst_name());
-            System.out.println("MkwsUser Last Name = " + mkwsUser.getLast_name());
-            System.out.println("MkwsUser mkwsId = " + mkwsUser.getId());
-            System.out.println("MkwsUser user Name = " + mkwsUser.getUname());
+          //  System.out.println("MkwsUser First Name = " + mkwsUser.getFirst_name());
+          //  System.out.println("MkwsUser Last Name = " + mkwsUser.getLast_name());
+          //  System.out.println("MkwsUser mkwsId = " + mkwsUser.getId());
+          //  System.out.println("MkwsUser user Name = " + mkwsUser.getUname());
             
             if(mkwsUser==null){
                 
