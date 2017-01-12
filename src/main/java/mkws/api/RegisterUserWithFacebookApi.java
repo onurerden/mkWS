@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import mkws.Model.FacebookUserModel;
+import mkws.Model.MkwsUser;
 import mkws.ServerEngine;
 
 /**
@@ -48,6 +49,13 @@ public class RegisterUserWithFacebookApi extends HttpServlet {
             out.println("User name = " + user.getName());
             out.println("User email= " + user.getEmail());
             out.println("User Id= " + user.getId());
+            
+            MkwsUser mkwsUser = server.getUserByEmail(user.getEmail());
+            out.println("MkwsUser First Name = " + mkwsUser.getFirst_name());
+            out.println("MkwsUser Last Name = " + mkwsUser.getLast_name());
+            out.println("MkwsUser mkwsId = " + mkwsUser.getId());
+            out.println("MkwsUser user Name = " + mkwsUser.getUname());
+            
         }catch(Exception ex){
             System.out.println(ex.getLocalizedMessage());
             response.setStatus(401);
