@@ -64,9 +64,10 @@ static SecureRandom rnd = new SecureRandom();
             if(mkwsUser==null){
                 
             server.addMkwsUser(user.getName().substring(0, user.getName().indexOf(" ")),
-                    user.getName().substring(user.getName().indexOf(" ")+1,user.getName().length()-1), 
+                    user.getName().substring(user.getName().indexOf(" ")+1,user.getName().length()), 
                     user.getEmail(), user.getName()+user.getId(),randomString(8) , false);
-            server.activateUser(server.getUserByEmail(user.getEmail()).getId());
+            mkwsUser = server.getUserByEmail(user.getEmail());
+            server.activateUser(mkwsUser.getId());
             }
             
             
