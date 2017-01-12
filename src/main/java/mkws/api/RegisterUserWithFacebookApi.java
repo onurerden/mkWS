@@ -40,11 +40,11 @@ public class RegisterUserWithFacebookApi extends HttpServlet {
           String access_token = request.getParameter("access_token");
           ServerEngine server = new ServerEngine();
             FacebookUserModel user = server.getUserInfoFromFacebook(access_token, "name,email,id");
-            System.out.println("User name = " + user.getName());
-            System.out.println("User email= " + user.getEmail());
-            System.out.println("User Id= " + user.getId());
-             
-            
+            if(user.getEmail()==null){
+                 response.setStatus(401);
+            out.println("{\"result\":\"failed\", \"description\":\"User info cannot be retrieved.\"}");
+            return;
+            }            
             out.println("User name = " + user.getName());
             out.println("User email= " + user.getEmail());
             out.println("User Id= " + user.getId());
