@@ -73,7 +73,7 @@ public class ChangePasswordApi extends HttpServlet {
             
             boolean result = server.changeUserPasswordTo(user.getId(),newPassword);
             
-            if (result){
+            if (result||(user==null)){
                 response.setStatus(200);
                 out.println("{\"result\":\"success\", \"description\":\"Your password is changed\"}");
             }else{
@@ -87,7 +87,7 @@ public class ChangePasswordApi extends HttpServlet {
                 out.println("{\"result\":\"failed\", \"description\":\"Unknown error.\"}");
         } catch (NullPointerException ex){
              response.setStatus(401);
-                out.println("{\"result\":\"failed\", \"description\":\"NullPointer error. "+ex.getLocalizedMessage() +"\"}");
+                out.println("{\"result\":\"failed\", \"description\":\"NullPointer error. "+ex.getMessage()+"\"}");
         }
 
     }
