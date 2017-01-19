@@ -70,10 +70,15 @@ public class ChangePasswordApi extends HttpServlet {
                 return;   
             }
             MkwsUser user = server.getUserByCredentials(token.getUname(), oldPassword);
+            if(user==null){
+                response.setStatus(401);
+                out.println("{\"result\":\"failed\", \"description\":\"Please check your credentials\"}");
+                return;
+            }
             
             boolean result = server.changeUserPasswordTo(user.getId(),newPassword);
             
-            if (result||(user==null)){
+            if (result){
                 response.setStatus(200);
                 out.println("{\"result\":\"success\", \"description\":\"Your password is changed\"}");
             }else{
