@@ -85,6 +85,9 @@ public class ChangePasswordApi extends HttpServlet {
         } catch (SignatureException | IncorrectClaimException | MissingClaimException ex){
             response.setStatus(401);
                 out.println("{\"result\":\"failed\", \"description\":\"Unknown error.\"}");
+        } catch (NullPointerException ex){
+             response.setStatus(401);
+                out.println("{\"result\":\"failed\", \"description\":\"NullPointer error. "+ex.getLocalizedMessage() +"\"}");
         }
 
     }
