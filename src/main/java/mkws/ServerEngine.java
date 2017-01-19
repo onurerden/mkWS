@@ -2210,7 +2210,7 @@ public ArrayList getRoutes(int lowerThan){
         Connection con_1 = null;
         Statement st_1 = null;
                 
-        String query = "UPDATE  `members` SET pass ="+ newPassword+" WHERE id = " + userId;
+        String query = "UPDATE  `members` SET pass =\""+ newPassword+"\" WHERE id = " + userId;
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
