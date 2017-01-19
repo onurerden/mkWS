@@ -19,6 +19,7 @@ public class Token {
     private ArrayList roles = new ArrayList();
     private boolean isAdmin ;
     private boolean isActivated;
+    private String uname;
 
     public void addRole(String role) {
         roles.add(role);
@@ -96,6 +97,20 @@ public class Token {
      */
     public void setIsActivated(boolean isActivated) {
         this.isActivated = isActivated;
+    }
+
+    /**
+     * @return the uname
+     */
+    public String getUname() {
+        return uname;
+    }
+
+    /**
+     * @param uname the uname to set
+     */
+    public void setUname(String uname) {
+        this.uname = uname;
     }
 
 }

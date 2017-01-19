@@ -1984,6 +1984,7 @@ public class ServerEngine implements IDeviceServer {
                 .setIssuer("mkws")
                 .claim("userId", userId)
                 .claim("isAdmin",getUserInfoById(userId).isIsAdmin())
+                .claim("uname" ,getUserInfoById(userId).getUname())
                 .claim("isActivated",getUserInfoById(userId).isIsActivated())
                 .signWith(
                         SignatureAlgorithm.HS256,
@@ -2203,6 +2204,28 @@ public ArrayList getRoutes(int lowerThan){
          }
          return template;
         
+    }
+    public boolean changeUserPasswordTo(int userId, String newPassword){
+        Credentials cr = new Credentials();
+        Connection con_1 = null;
+        Statement st_1 = null;
+                
+        String query = "UPDATE  `members` SET pass ="+ newPassword+" WHERE id = " + userId;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            st_1 = con_1.createStatement();
+            st_1.executeUpdate(query);
+            
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+            LogMessage message = new LogMessage();
+                    message.setLogLevel(1);
+                    message.setLogMessage("User password cannot be updated. " + ex.getLocalizedMessage());
+                    Gson gson = new Gson();
+            sendLog(gson.toJson(message));
+            return false;
+        }
+        return true;
     }
     
     public FacebookUserModel getUserInfoFromFacebook(String access_token, String fields){

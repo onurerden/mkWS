@@ -35,6 +35,7 @@ public class TokenEvaluator {
                 tokenModel.setUserId(claims.getBody().get("userId",Integer.class));
                 tokenModel.setIsAdmin(claims.getBody().get("isAdmin", Boolean.class));
                 tokenModel.setIsActivated(claims.getBody().get("isActivated",Boolean.class));
+                tokenModel.setUname(claims.getBody().get("uname", String.class));
                 tokenModel.setIssuer(claims.getBody().getIssuer());
                 
                 //System.out.println("token is valid");
