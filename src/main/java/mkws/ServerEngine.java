@@ -1765,7 +1765,7 @@ public class ServerEngine implements IDeviceServer {
                 + "\"" + last_name + "\"" + ", "
                 + "\"" + email + "\"" + ", "
                 + "\"" + uname + "\"" + ", "
-                + "\"" + password + "\"" + ", "
+                + "MD5(\"" + password + "\")" + ", "
                 + isAdmin + ", NOW())";
         System.out.println(query);
         
@@ -1907,7 +1907,7 @@ public class ServerEngine implements IDeviceServer {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
-            String query = "SELECT * FROM mk.members WHERE uname=\"" + userName + "\" AND pass=\"" + password + "\"";
+            String query = "SELECT * FROM mk.members WHERE uname=\"" + userName + "\" AND pass= MD5(\"" + password + "\")";
             //System.out.println(query);
             rs_1 = st_1.executeQuery(query);
             
@@ -2210,7 +2210,7 @@ public ArrayList getRoutes(int lowerThan){
         Connection con_1 = null;
         Statement st_1 = null;
                 
-        String query = "UPDATE  `members` SET pass =\""+ newPassword+"\" WHERE id = " + userId;
+        String query = "UPDATE  `members` SET pass =MD5(\""+ newPassword+"\") WHERE id = " + userId;
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
