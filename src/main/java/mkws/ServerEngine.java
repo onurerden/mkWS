@@ -905,6 +905,30 @@ public class ServerEngine implements IDeviceServer {
 
         return 0;
     }
+    @Override
+    public int endRoute(int routeId,int duration) {
+        Credentials cr = new Credentials();
+        Connection con_1 = null;
+        Statement st_1 = null;
+        GetRouteDetails routeDetails = getRouteDetailsWithBean(routeId);
+        double length = routeDetails.getRouteLength();
+        
+
+        double average = length * 1000.0 / duration;
+        String query = "UPDATE  `route` SET isEnded =1, length = " + length + ", meanSpeed= " + average + " , duration = " + duration + " WHERE id =" + routeId;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            st_1 = con_1.createStatement();
+            st_1.executeUpdate(query);
+
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            return -1;
+        }
+
+        return 0;
+    }
 
     private int createSession(int deviceId, DeviceTypes type) {
         int sessionId = -1;
