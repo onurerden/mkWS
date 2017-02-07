@@ -2241,7 +2241,7 @@ public class ServerEngine implements IDeviceServer {
         String token = "";
         Credentials cr = new Credentials();
 
-        Date date = new Date(System.currentTimeMillis() + 259200l);
+        Date date = new Date(System.currentTimeMillis() + 259200);
         token = Jwts.builder()
                 .setSubject("passwordReset")
                 .setIssuer("mkws")
