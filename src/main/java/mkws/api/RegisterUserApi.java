@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import mkws.MailSender;
+import mkws.Model.MailTemplate;
 import mkws.Model.MkwsUser;
 import mkws.ServerEngine;
 
@@ -103,11 +104,12 @@ public class RegisterUserApi extends HttpServlet {
             if(user!=null){
                 MailSender sender = new MailSender();
                 String actToken = server.createTokenForActivation(user.getId());
-                String activationmessage =server.getMailTemplate(1).getText();
+                MailTemplate mail = server.getMailTemplate(1);
+                String activationmessage =mail.getText();
                activationmessage = activationmessage.replaceAll("<%userName%>", user.getFirst_name() + " " + user.getLast_name());
                activationmessage = activationmessage.replaceAll("<%activationToken%>", actToken);
                
-                sender.sendMail(user.getEmail(), activationmessage, "FollowMe Account Activation");
+                sender.sendMail(user.getEmail(), activationmessage,mail.getSubject() );
                 //out.println("user entry granted");
                 
                // String token = server.createTokenForUser(user.getId());

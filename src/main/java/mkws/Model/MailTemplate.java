@@ -17,6 +17,7 @@ public class MailTemplate {
     private int version;
     private Timestamp date;
     private String description;
+    private String subject;
 
     /**
      * @return the id
@@ -86,6 +87,20 @@ public class MailTemplate {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    /**
+     * @return the subject
+     */
+    public String getSubject() {
+        return subject;
+    }
+
+    /**
+     * @param subject the subject to set
+     */
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
     
 }
