@@ -2027,6 +2027,7 @@ public class ServerEngine implements IDeviceServer {
                 model.setTime(rs_1.getTimestamp("time"));
                 model.setUserId(rs_1.getInt("userId"));
                 model.setRouteMeanSpeed(rs_1.getDouble("meanSpeed"));
+                model.setDuration(rs_1.getInt("duration"));
                 //model.setSessionId(rs_1.getInt("sessionId"));
 
                 list.add(model);
@@ -2094,6 +2095,7 @@ public class ServerEngine implements IDeviceServer {
                 route.setTime(rs_1.getTimestamp("time"));
                 route.setUserId(rs_1.getInt("userId"));
                 route.setRouteMeanSpeed(rs_1.getDouble("meanSpeed"));
+                route.setDuration(rs_1.getInt("duration"));
 
             }
             con_1.close();

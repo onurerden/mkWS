@@ -24,6 +24,7 @@ public class RouteModel {
     private boolean isDeleted;
     private boolean isEnded;
     private int followMeDeviceId;
+    private int duration=0;
     private ArrayList followMeData;
 
     /**
@@ -164,5 +165,19 @@ public class RouteModel {
      */
     public void setFollowMeData(ArrayList followMeData) {
         this.followMeData = followMeData;
+    }
+
+    /**
+     * @return the duration
+     */
+    public int getDuration() {
+        return duration;
+    }
+
+    /**
+     * @param duration the duration to set
+     */
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 }
