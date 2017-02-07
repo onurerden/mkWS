@@ -39,12 +39,12 @@ public class SendPasswordResetEmailApi extends HttpServlet {
         
         if(server.sendResetPasswordEmail(email)){
            response.setStatus(200);
-                out.println("{\"result\": \"success\", \"description\" : An email with instructions to reset password is sent to your mail address. "
-                        + "Please check your inbox and follow instructions.\"\"}");
+                out.println("{\"result\": \"success\", \"description\" : \"An email with instructions to reset password is sent to your mail address. "
+                        + "Please check your inbox and follow instructions.\"}");
                 out.close();
         }else{
             response.setStatus(401);
-                out.println("{\"result\": \"failed\", \"description\" : There was an error. Check your email address.\"\"}");
+                out.println("{\"result\": \"failed\", \"description\" : \"There was an error. Check your email address.\"}");
                 out.close();
         }
     }
