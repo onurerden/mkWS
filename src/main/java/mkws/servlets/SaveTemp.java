@@ -49,7 +49,7 @@ public class SaveTemp extends HttpServlet {
         Statement st_1 = null;
        
        
-        String query = "INSERT INTO `temp` (`temp`) VALUES (`"+temp +"`)";
+        String query = "INSERT INTO `temp` (`temp`,`date`) VALUES (`"+temp +"`,NOW())";
             System.out.println(query);
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
