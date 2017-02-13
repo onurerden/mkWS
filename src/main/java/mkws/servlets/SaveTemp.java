@@ -50,7 +50,7 @@ public class SaveTemp extends HttpServlet {
        
        
         String query = "INSERT INTO `temps` (`temp`,`date`) VALUES ("+temp +", NOW())";
-            System.out.println(query);
+          //  System.out.println(query);
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
