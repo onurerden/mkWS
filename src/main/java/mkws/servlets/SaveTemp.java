@@ -55,7 +55,7 @@ public class SaveTemp extends HttpServlet {
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             st_1.executeUpdate(query);
-out.println("Temp saved as "+temp +"C.");
+out.println("Temp saved as "+temp +" C.");
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
            out.println("There was an error.");
