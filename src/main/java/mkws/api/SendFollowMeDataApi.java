@@ -68,7 +68,7 @@ public class SendFollowMeDataApi extends HttpServlet {
            // String jsonString = "" + request.getHeader("jsonfollowme");
             String jsonString = getBody(request);
             
-            System.out.println(jsonString);
+          //  System.out.println(jsonString);
             
             ServerEngine server = new ServerEngine();
             server.setUserId(token.getUserId());
@@ -176,7 +176,7 @@ public class SendFollowMeDataApi extends HttpServlet {
     }
 
     body = stringBuilder.toString();
-    System.out.println(body);
+   // System.out.println(body);
     return body;
 }
 }
