@@ -699,7 +699,7 @@ public class ServerEngine implements IDeviceServer {
         Statement st_1;
         ResultSet rs_1;
         String queryString = "INSERT INTO route SET followMeDeviceId = " + deviceId + " , time = NOW() , userId = " + userId;
-        Statement st_2;
+        //Statement st_2;
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             //System.out.println("Instance Created");
@@ -708,7 +708,7 @@ public class ServerEngine implements IDeviceServer {
             st_1 = con_1.createStatement();
 
             // System.out.println("StatementCreated:");
-            System.out.println(queryString);
+            //System.out.println(queryString);
             st_1.executeUpdate(queryString, Statement.RETURN_GENERATED_KEYS);
             //System.out.println("routeId for deviceId = " + deviceId + " is created.");
 
