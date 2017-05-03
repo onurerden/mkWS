@@ -1746,7 +1746,6 @@ public class ServerEngine implements IDeviceServer {
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             String query = "UPDATE route SET time = \""+route.getTime() +"\" , length = " + route.getRouteLength()+", duration = "+route.getDuration()+ " WHERE id = " + route.getRouteId();
-            System.out.println(query);
             st_1.execute(query);
             con_1.close();
             LogMessage msg = new LogMessage();

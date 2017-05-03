@@ -85,7 +85,6 @@ boolean tokenExists = true;
             
             try {
                 String routeString = getBody(request);
-                System.out.println(routeString);
                 ServerEngine engine = new ServerEngine();
                 engine.setUserId(token.getUserId());
                 Gson gson = new GsonBuilder()
