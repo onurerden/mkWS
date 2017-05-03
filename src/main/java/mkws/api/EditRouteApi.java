@@ -84,6 +84,7 @@ boolean tokenExists = true;
             
             try {
                 String routeString = getBody(request);
+                System.out.println(routeString);
                 ServerEngine engine = new ServerEngine();
                 engine.setUserId(token.getUserId());
                 Gson gson = new Gson();
@@ -100,10 +101,7 @@ boolean tokenExists = true;
                     response.setStatus(401);
                     out.println("{\"result\": \"You don't have permission to edit this route.\"}");
                 }
-            } catch (NumberFormatException ex) {
-                response.setStatus(401);
-                out.println("{\"result\": \"failed\", \"description\": \"" + ex.getMessage() + "\"}");
-            } catch (JsonParseException ex){
+            } catch (NumberFormatException | JsonParseException ex) {
                 response.setStatus(401);
                 out.println("{\"result\": \"failed\", \"description\": \"" + ex.getMessage() + "\"}");
             }
