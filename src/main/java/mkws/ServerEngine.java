@@ -1730,8 +1730,35 @@ public class ServerEngine implements IDeviceServer {
 
         } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
 
+        return true;
+    }
+    
+    public boolean editRoute(RouteModel route){
+        
+        try {
+            Credentials cr = new Credentials();
+            Connection con_1 = null;
+            Statement st_1 = null;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            st_1 = con_1.createStatement();
+            String query = "UPDATE route SET time = "+route.getTime() +" , length = " + route.getRouteLength()+", duration = "+route.getDuration()+ " WHERE id = " + route.getRouteId();
+            st_1.execute(query);
+            con_1.close();
+            LogMessage msg = new LogMessage();
+            msg.setDeviceType(DeviceTypes.SERVER.getName());
+            msg.setLogLevel(2);
+            msg.setLogMessage("Route " + route.getRouteId() + " is edited.");
+            Gson gson = new Gson();
+            sendLog(gson.toJson(msg));
+
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         return true;
     }
 
