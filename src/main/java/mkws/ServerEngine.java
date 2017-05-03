@@ -1757,6 +1757,7 @@ public class ServerEngine implements IDeviceServer {
 
         } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
         
         return true;

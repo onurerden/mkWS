@@ -7,8 +7,13 @@ package mkws.api;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,6 +23,7 @@ import mkws.Model.RouteModel;
 import mkws.Model.Token;
 import mkws.ServerEngine;
 import mkws.TokenEvaluator;
+import static mkws.api.SendFollowMeDataApi.getBody;
 
 
 /**
@@ -25,7 +31,7 @@ import mkws.TokenEvaluator;
  * @author onurerden
  */
 @WebServlet(name = "EditRouteApi", urlPatterns = {"/api/EditRoute"})
-public class EditRoute extends HttpServlet {
+public class EditRouteApi extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -75,9 +81,9 @@ boolean tokenExists = true;
                 return;
             }
             
-            String routeString = "";
+            
             try {
-                routeString = request.getParameter("route");
+                String routeString = getBody(request);
                 ServerEngine engine = new ServerEngine();
                 engine.setUserId(token.getUserId());
                 Gson gson = new Gson();
@@ -145,5 +151,60 @@ System.out.println(ex.getLocalizedMessage());
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+            
+    // <editor-fold defaultstate="collapsed" desc="inputStream'ı stringe çeviren method.">
+    public static String slurp(final InputStream is, final int bufferSize) {
+        final char[] buffer = new char[bufferSize];
+        final StringBuilder out = new StringBuilder();
+        try (Reader in = new InputStreamReader(is, "UTF-8")) {
+            for (;;) {
+                int rsz = in.read(buffer, 0, buffer.length);
+                if (rsz < 0) {
+                    break;
+                }
+                out.append(buffer, 0, rsz);
+            }
+        } catch (UnsupportedEncodingException ex) {
+            /* ... */
+        } catch (IOException ex) {
+            /* ... */
+        }
+        return out.toString();
+    }// </editor-fold>
+   
+    // <editor-fold defaultstate="collapsed" desc="Body'i extract eden method.">
+    public static String getBody(HttpServletRequest request) throws IOException {
 
+    String body = null;
+    StringBuilder stringBuilder = new StringBuilder();
+    BufferedReader bufferedReader = null;
+
+    try {
+        InputStream inputStream = request.getInputStream();
+        if (inputStream != null) {
+            bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            char[] charBuffer = new char[128];
+            int bytesRead = -1;
+            while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
+                stringBuilder.append(charBuffer, 0, bytesRead);
+            }
+        } else {
+            stringBuilder.append("");
+        }
+    } catch (IOException ex) {
+        throw ex;
+    } finally {
+        if (bufferedReader != null) {
+            try {
+                bufferedReader.close();
+            } catch (IOException ex) {
+                throw ex;
+            }
+        }
+    }
+
+    body = stringBuilder.toString();
+   // System.out.println(body);
+    return body;
 }
+}// </editor-fold>
