@@ -6,6 +6,7 @@
 package mkws.api;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -87,7 +88,9 @@ boolean tokenExists = true;
                 System.out.println(routeString);
                 ServerEngine engine = new ServerEngine();
                 engine.setUserId(token.getUserId());
-                Gson gson = new Gson();
+                Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                .create();
                 RouteModel route = gson.fromJson(routeString, RouteModel.class);
                 if (token.isIsAdmin() || (engine.getRouteInfo(route.getRouteId()).getUserId() == token.getUserId())) {
 
