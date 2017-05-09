@@ -98,7 +98,7 @@ public class RegisterUserApi extends HttpServlet {
             
                 ServerEngine server = new ServerEngine();                
                 
-               if( server.addMkwsUser(name, last_name, email, uname, password, false)){
+               if( server.addMkwsUser(name, last_name, email, uname, password, false,false)){
                    MkwsUser user = server.getUserByCredentials(uname, password);
                    
             if(user!=null){
