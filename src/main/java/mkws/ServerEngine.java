@@ -1807,14 +1807,16 @@ public class ServerEngine implements IDeviceServer {
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1 = null;
+        
+        boolean isActivated = true;
 
-        String query = "INSERT INTO mk.members (`first_name`,`last_name`,`email`,`uname`,`pass`,`isAdmin`,`regdate`) VALUES ("
+        String query = "INSERT INTO mk.members (`first_name`,`last_name`,`email`,`uname`,`pass`,`isAdmin`,`isActivated`,`regdate`) VALUES ("
                 + "\"" + first_name + "\"" + ", "
                 + "\"" + last_name + "\"" + ", "
                 + "\"" + email + "\"" + ", "
                 + "\"" + uname + "\"" + ", "
                 + "MD5(\"" + password + "\")" + ", "
-                + isAdmin + ", NOW())";
+                + isAdmin + ", "+isActivated+", NOW())";
         System.out.println(query);
 
         try {
