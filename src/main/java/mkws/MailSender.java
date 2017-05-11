@@ -23,9 +23,9 @@ public class MailSender {
         Credentials cr = new Credentials();
         HtmlEmail email2 = new HtmlEmail();
         email2.setHostName(cr.getEmailHost());
-        email2.setSmtpPort(25);
+        email2.setSmtpPort(465);
         email2.setAuthenticator(new DefaultAuthenticator(cr.getEmailUserName(), cr.getEmailUserPassword()));
-        email2.setSSLOnConnect(false);
+        email2.setSSLOnConnect(true);
         try {
             email2.setFrom("no-reply@followmeapp.xyz");
             email2.setSubject(subject);

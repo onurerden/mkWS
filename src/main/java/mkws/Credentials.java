@@ -21,9 +21,9 @@ public class Credentials {
     private String dbUserName = "adminHr8UXvV";
     private String dbPassword = "UrtgKUvL3deC";
     
-      private String emailHost="plane-pictures.com";
+      private String emailHost="smtp.yandex.com.tr";
     private String emailUserName="no-reply@followmeapp.xyz";
-    private String emailUserPassword = "xb0VSSWq";
+    private String emailUserPassword = "19861986";
     
     
     private String jjwtKey = "3zciEFR2rf+beofy3rh0Ak/2L8NOLS0GGnNODeSBNUI=";
