@@ -102,6 +102,8 @@ public class RegisterUserApi extends HttpServlet {
                    MkwsUser user = server.getUserByCredentials(uname, password);
                    
             if(user!=null){
+                
+                if(!withoutActivation){
                 MailSender sender = new MailSender();
                 String actToken = server.createTokenForActivation(user.getId());
                 MailTemplate mail = server.getMailTemplate(1);
@@ -110,11 +112,8 @@ public class RegisterUserApi extends HttpServlet {
                activationmessage = activationmessage.replaceAll("<%activationToken%>", actToken);
                
                 sender.sendMail(user.getEmail(), activationmessage,mail.getSubject() );
-                //out.println("user entry granted");
+                    out.print("{\"result\" : \"success\", \"description\" : \"User registration completed successfully. Please check your e-mail inbox in order to complete your activation.\" }");
                 
-               // String token = server.createTokenForUser(user.getId());
-                if(!withoutActivation){
-                out.print("{\"result\" : \"success\", \"description\" : \"User registration completed successfully. Please check your e-mail inbox in order to complete your activation.\" }");
                 }else{
                     out.print("{\"result\" : \"success\", \"description\" : \"User registration completed successfully.}");
                 }
