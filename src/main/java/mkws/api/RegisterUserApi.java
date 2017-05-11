@@ -115,7 +115,7 @@ public class RegisterUserApi extends HttpServlet {
                     out.print("{\"result\" : \"success\", \"description\" : \"User registration completed successfully. Please check your e-mail inbox in order to complete your activation.\" }");
                 
                 }else{
-                    out.print("{\"result\" : \"success\", \"description\" : \"User registration completed successfully.}");
+                    out.print("{\"result\" : \"success\", \"description\" : \"User registration completed successfully.\"}");
                 }
                 
             }else{
