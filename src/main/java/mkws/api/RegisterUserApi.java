@@ -97,8 +97,8 @@ public class RegisterUserApi extends HttpServlet {
                 }
             
                 ServerEngine server = new ServerEngine();                
-                
-               if( server.addMkwsUser(name, last_name, email, uname, password, false,false)){
+               boolean withoutActivation = true; 
+               if( server.addMkwsUser(name, last_name, email, uname, password, false,withoutActivation)){
                    MkwsUser user = server.getUserByCredentials(uname, password);
                    
             if(user!=null){
@@ -113,7 +113,12 @@ public class RegisterUserApi extends HttpServlet {
                 //out.println("user entry granted");
                 
                // String token = server.createTokenForUser(user.getId());
+                if(!withoutActivation){
                 out.print("{\"result\" : \"success\", \"description\" : \"User registration completed successfully. Please check your e-mail inbox in order to complete your activation.\" }");
+                }else{
+                    out.print("{\"result\" : \"success\", \"description\" : \"User registration completed successfully.}");
+                }
+                
             }else{
                 response.setStatus(401);
                    out.print("{\"result\": \"failed\", \"description\" : \"User entry denied.\"}");
