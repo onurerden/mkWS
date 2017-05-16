@@ -8,7 +8,6 @@ package mkws;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.sun.org.apache.xerces.internal.parsers.DOMParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.TextCodec;
@@ -23,7 +22,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -147,7 +145,10 @@ public class ServerEngine implements IDeviceServer {
                         phone.name = rs_1.getString("name");
                         phone.uid = rs_1.getString("uid");
                         phone.registerDate = rs_1.getTimestamp("registerDate");
-
+                        
+                        Statement st_2 = con_1.createStatement();
+                        st_2.executeUpdate("UPDATE members SET latestTouch = NOW() WHERE id = " + this.userId);
+                        
                         System.out.println("query device uid = " + phone.uid + " device type phone");
 
                         deviceId = phone.id;
