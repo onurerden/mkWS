@@ -40,6 +40,13 @@ public class GetRouteIdApi extends HttpServlet {
         response.setContentType("text/json");
         PrintWriter out = response.getWriter();
         TokenEvaluator te = new TokenEvaluator();
+        int type = 1;
+        
+        try{
+           type =  Integer.valueOf(request.getParameter("type"));
+        }catch (Exception ex){
+            System.out.println("No route type.\n" + ex.getMessage());
+        }
 
         try {
             Token token = te.evaluateRequestForToken(request);
@@ -61,7 +68,7 @@ public class GetRouteIdApi extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
 Integer routeId=-1;
 try{
-   routeId= server.getRouteId(deviceId);
+   routeId= server.getRouteId(deviceId,type);
 }catch (Exception ex){
     
 }

@@ -60,11 +60,14 @@ public class EndRouteApi extends HttpServlet {
             server.setUserId(token.getUserId());
             String routeIdString = request.getParameter("routeId");
             String durationString = request.getParameter("duration");
+            
             int routeId = -1;
             int duration = 0;
+            
             try {
                 routeId = Integer.valueOf(routeIdString);
                 duration = Integer.valueOf(durationString);
+               
             } catch (Exception ex) {
                 System.out.println("Cannot parse routeId while EndRoute");
             }

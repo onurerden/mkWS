@@ -65,10 +65,11 @@ public interface IDeviceServer {
     //deviceId 0 girilirse tüm followme cihazlarına ait bilgiler array olarak döndürülür.
     //SQL hatası -1
 
-    int getRouteId(int deviceId);
+    int getRouteId(int deviceId, int type);
     //followMeDevice tarafından çağrılır. İlgili followMeDevice'ının session rotasını çıkartmak 
     //amacıyla kullanılır. Bu fonksiyon sonrasında dönen integer, FollowMeData'sındaki route değişkenine
     //girilmelidir. -1 ise db hatası, -2 ise deviceId parametresi Integer değil.
+    //type 1 koşu, 2 cycle, 3 drive, 4 other.
 
     int sendLog(String logJson);
     //DeviceType DeviceTypes.java dosyasındaki gibi olacaktır. (MK ya da MP)

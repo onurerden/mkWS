@@ -26,6 +26,7 @@ public class RouteModel {
     private int followMeDeviceId;
     private int duration=0;
     private ArrayList followMeData;
+    private int type;
 
     /**
      * @return the routeId
@@ -179,5 +180,19 @@ public class RouteModel {
      */
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    /**
+     * @return the type
+     */
+    public int getType() {
+        return type;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(int type) {
+        this.type = type;
     }
 }

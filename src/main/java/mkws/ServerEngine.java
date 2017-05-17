@@ -694,13 +694,13 @@ public class ServerEngine implements IDeviceServer {
     }
 
     @Override
-    public int getRouteId(int deviceId) {
+    public int getRouteId(int deviceId,int type) {
         int routeId = -1;
         Credentials cr = new Credentials();
         Connection con_1 = null;
-        Statement st_1;
-        ResultSet rs_1;
-        String queryString = "INSERT INTO route SET followMeDeviceId = " + deviceId + " , time = NOW() , userId = " + userId;
+        Statement st_1;       
+        String queryString = "INSERT INTO route SET followMeDeviceId = " + deviceId + " , time = NOW() , userId = " + userId 
+                + ", type = " + type;
         //Statement st_2;
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -770,6 +770,7 @@ public class ServerEngine implements IDeviceServer {
                 route.setRouteMeanSpeed(rs_1.getDouble("meanSpeed"));
                 route.setTime(rs_1.getTimestamp("time"));
                 route.setUserId(rs_1.getInt("userId"));
+                route.setType(rs_1.getInt("type"));
 
             }
 
@@ -1073,7 +1074,7 @@ public class ServerEngine implements IDeviceServer {
             if (session.getDeviceId() < 0) {
                 return -2;
             }
-            routeId = getRouteId(session.getDeviceId());
+            routeId = getRouteId(session.getDeviceId(),1);
 
             NodeList nl = doc.getElementsByTagName("*");
             Node n;
@@ -1747,7 +1748,7 @@ public class ServerEngine implements IDeviceServer {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
-            String query = "UPDATE route SET time = \""+route.getTime() +"\" , length = " + route.getRouteLength()+", duration = "+route.getDuration()+ " WHERE id = " + route.getRouteId();
+            String query = "UPDATE route SET time = \""+route.getTime() +"\" , length = " + route.getRouteLength()+", duration = "+route.getDuration()+ ", type = " + route.getType()+" WHERE id = " + route.getRouteId();
             st_1.execute(query);
             con_1.close();
             LogMessage msg = new LogMessage();
@@ -2080,6 +2081,7 @@ public class ServerEngine implements IDeviceServer {
                 model.setUserId(rs_1.getInt("userId"));
                 model.setRouteMeanSpeed(rs_1.getDouble("meanSpeed"));
                 model.setDuration(rs_1.getInt("duration"));
+                model.setType(rs_1.getInt("type"));
                 //model.setSessionId(rs_1.getInt("sessionId"));
 
                 list.add(model);
@@ -2148,6 +2150,7 @@ public class ServerEngine implements IDeviceServer {
                 route.setUserId(rs_1.getInt("userId"));
                 route.setRouteMeanSpeed(rs_1.getDouble("meanSpeed"));
                 route.setDuration(rs_1.getInt("duration"));
+                route.setType(rs_1.getInt("type"));
 
             }
             con_1.close();

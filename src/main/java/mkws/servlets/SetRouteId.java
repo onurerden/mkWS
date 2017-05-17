@@ -41,7 +41,7 @@ public class SetRouteId extends HttpServlet {
             ServerEngine server = new ServerEngine();
             /* TODO output your page here. You may use following sample code. */
             
-            out.println(server.getRouteId(deviceId));
+            out.println(server.getRouteId(deviceId,1));
             
         } catch (NumberFormatException e){
             out.println(-2);
