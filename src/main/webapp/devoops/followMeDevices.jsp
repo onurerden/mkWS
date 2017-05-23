@@ -64,28 +64,30 @@
                             </div>
                             <div class="box-content">
                                 <p>FollowMe Devices defined in mkWS system listed below:</p>
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>FollowMe Device Id</th>
-                                            <th>FollowMe Device Name</th>
-                                            <th>FollowMe Device UID</th>
-                                            <th>Latest Data</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <% while (resultset.next()) {%>
-                                        <tr>
-                                            <td><%= resultset.getInt("followMeDeviceId")%></td>
-                                            <td><%= resultset.getString("name")%></td>
-                                            <td><%= resultset.getString("UID")%></td>
-                                            <td><%= resultset.getTimestamp("time")%></td>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>FollowMe Device Id</th>
+                                                <th>FollowMe Device Name</th>
+                                                <th>FollowMe Device UID</th>
+                                                <th>Latest Data</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% while (resultset.next()) {%>
+                                            <tr>
+                                                <td><%= resultset.getInt("followMeDeviceId")%></td>
+                                                <td><%= resultset.getString("name")%></td>
+                                                <td><%= resultset.getString("UID")%></td>
+                                                <td><%= resultset.getTimestamp("time")%></td>
 
-                                        </tr>
-                                        <% }%>
+                                            </tr>
+                                            <% }%>
 
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -94,5 +96,5 @@
         </div>
     </body>
 </html>    
-<% connection.close(); %>
+<% connection.close();%>
 <%@ include file="foot.jsp" %> 
