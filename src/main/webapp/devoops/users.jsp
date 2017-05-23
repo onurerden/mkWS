@@ -168,7 +168,7 @@
 
                                     <div id="tabs-1">
                                         <p style="font-size:14px">Users defined on the mkWS system are given below:</p>
-
+ <div class="table-responsive">
                                         <table class="table">
                                             <thead>
                                                 <tr>
@@ -210,6 +210,7 @@
                                             </tbody>
                                             <% connection.close();%>
                                         </table>
+ </div>
                                     </div>
 
                                     <div id="tabs-2" >
