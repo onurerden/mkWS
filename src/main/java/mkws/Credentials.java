@@ -29,7 +29,7 @@ public class Credentials {
     private String jjwtKey = "3zciEFR2rf+beofy3rh0Ak/2L8NOLS0GGnNODeSBNUI=";
     
     private String mmrClientId= "kd8sw2eft3bmy3hft7x9yezqgfhwezcz";
-    private String mmrClientSecret = "smAfN8CYndqQSuUMR5p8Tt4pNPkuhGv5DT6pns3B3sW";
+    private String mmrClientSecret = "smAfN8CYndqQSuUMR5p8Tt4pNPkuhGv5DT6pns3B3sW"; 
 
 //    private String mmrClientIdForWeb= "48tedwecj3aum5uewqyprd6m9behtu3j";
 //    private String mmrClientSecretForWeb = "yfmhmf9f8szPYtraVu8DtwZtyFnnVHUr5Teqksb7f7z";
