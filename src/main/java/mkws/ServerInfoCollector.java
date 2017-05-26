@@ -47,7 +47,7 @@ public class ServerInfoCollector {
             rs_1 = st_1.executeQuery(query);
 
             while (rs_1.next()) {
-                userCount = rs_1.getInt(0);
+                userCount = rs_1.getInt(1);
             }
 
             con_1.close();
@@ -69,7 +69,7 @@ public class ServerInfoCollector {
             rs_1 = st_1.executeQuery(query);
 
             while (rs_1.next()) {
-                userCount = rs_1.getInt(0);
+                userCount = rs_1.getInt(1);
             }
 
             con_1.close();
@@ -95,7 +95,7 @@ public class ServerInfoCollector {
             rs_1 = st_1.executeQuery(query);
 
             while (rs_1.next()) {
-                dbSize = rs_1.getInt(0);
+                dbSize = rs_1.getDouble(1);
             }
 
             con_1.close();
