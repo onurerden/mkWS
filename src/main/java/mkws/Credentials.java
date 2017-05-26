@@ -14,7 +14,7 @@ public class Credentials {
     String server = "127.5.211.2:3306"; //mk
  //   String server = "127.2.57.130:3306";//mknew
   //  String server = "localhost:3306";
- //   String server = "onur-mac-mini.local:3306";
+//    String server = "onur-mac-mini.local:3306";
     String database = "mk";
 //    String dbUserName = "adminGStcLXX";
 //    String dbPassword = "Wc_flbnyklZt";
