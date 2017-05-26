@@ -95,7 +95,7 @@ public class ServerInfoCollector {
             rs_1 = st_1.executeQuery(query);
 
             while (rs_1.next()) {
-                dbSize = rs_1.getDouble(1);
+                dbSize = rs_1.getDouble(2);
             }
 
             con_1.close();
