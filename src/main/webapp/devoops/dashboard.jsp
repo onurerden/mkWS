@@ -47,13 +47,23 @@
                             </div>
                             <div class="box-content">
                                 <div class="row">
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-3">
                                         <h4 class="page-header"><i class="fa fa-users"></i> User Count</h4>
-                                        <div id="userCount">652</div>
+                                        <div id="userCount">-</div>
                                     </div>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-3">
                                         <h4 class="page-header"><i class="fa fa-map-marker"></i> Routes</h4>
-                                        <div id="routeCount">853</div>
+                                        <div id="routeCount">-</div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <h4 class="page-header"><i class="fa fa-map-marker"></i> DB Size</h4>
+                                        <div class="row">
+                                            <div id="dbSize" class="col-xs-4">-</div>
+                                            <div class="col-xs-8">
+                                                <div id="donut-example" style="width:120px;height:120px;"></div>
+                                                    
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -67,11 +77,19 @@
     </div>
 
     <%@ include file="foot.jsp" %> 
-
+    <script src="plugins/raphael/raphael-min.js"></script>
+    <script src="plugins/morris/morris.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             WinMove();
             populateDashboard();
+            Morris.Donut({
+                element: 'donut-example',
+                data: [
+                    {label: "Download Sales", value: 0},
+                    {label: "In-Store Sales", value: 0}                    
+                ]
+            });
         });
         function  populateDashboard() {
             $.ajax({
@@ -85,7 +103,18 @@
                     $('#routeCount').append(response.routeCount);
                     $('#userCount').html("");
                     $('#userCount').append(response.userCount);
-                  console.log(response);
+                    $('#dbSize').html("");
+                    $('#dbSize').append(response.dbSize + " MB");
+                    Morris.Donut({
+                element: 'donut-example',
+                resize : true,
+                data: [
+                {label: "Available Space", value: (1000 - response.dbSize)},         
+                {label: "Used Space", value: response.dbSize}                                   
+                ],
+                colors: ["#95bbd7","#3980b5"]
+            });
+                    console.log(response);
                 },
                 error: function (error) {
                     alert('Hata!' + error.description);
