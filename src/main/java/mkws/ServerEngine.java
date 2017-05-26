@@ -23,6 +23,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -164,13 +165,7 @@ public class ServerEngine implements IDeviceServer {
                 }
             }
             con_1.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
         sessionInfo.setSessionId(createSession(sessionInfo.getDeviceId(), sessionInfo.getDeviceType()));
@@ -224,13 +219,7 @@ public class ServerEngine implements IDeviceServer {
                 deviceId = jsonObject.fromJson(touchServer(uid, deviceType), MKSession.class).getDeviceId();
 
                 con_1.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InstantiationException ex) {
-                Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
+            } catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException ex) {
                 Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
             }
 
@@ -366,13 +355,7 @@ public class ServerEngine implements IDeviceServer {
                         }
                     }
 
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InstantiationException ex) {
-                    Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalAccessException ex) {
-                    Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
                     Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
@@ -497,8 +480,6 @@ public class ServerEngine implements IDeviceServer {
             return -1;
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Exception: " + ex.getMessage());
-        } catch (Exception ex) {
             System.out.println("Exception: " + ex.getMessage());
         }
 
@@ -1123,10 +1104,7 @@ public class ServerEngine implements IDeviceServer {
                         System.out.println("Elevation: " + fmData.getAltitude());
                         System.out.println("Speed: " + fmData.getSpeed());
                         sendFollowMeData(fmData);
-                    } catch (NumberFormatException | DOMException ex) {
-                        System.out.println("Error Message:" + ex.toString());
-                        success = false;
-                    } catch (Exception ex) {
+                    } catch (NumberFormatException | DOMException | ParseException ex) {
                         System.out.println("Error Message:" + ex.toString());
                         success = false;
                     }
@@ -1748,7 +1726,7 @@ public class ServerEngine implements IDeviceServer {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
-            String query = "UPDATE route SET time = \""+route.getTime() +"\" , length = " + route.getRouteLength()+", duration = "+route.getDuration()+ ", type = " + route.getType()+" WHERE id = " + route.getRouteId();
+            String query = "UPDATE route SET time = \""+route.getTime() +"\" , length = " + route.getRouteLength()+", duration = "+route.getDuration()+ ", type = " + route.getType()+", isEnded = TRUE WHERE id = " + route.getRouteId();
             st_1.execute(query);
             con_1.close();
             LogMessage msg = new LogMessage();
@@ -1891,11 +1869,7 @@ public class ServerEngine implements IDeviceServer {
             st_1.execute(query);
             con_1.close();
         } catch (SQLException ex) {
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
 

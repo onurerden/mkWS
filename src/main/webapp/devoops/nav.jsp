@@ -6,7 +6,7 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+
 <div id="sidebar-left" class="col-xs-2 col-sm-2">
     <ul class="nav main-menu">
 
@@ -77,6 +77,19 @@
             </c:choose>
                 <i class="fa fa-users"></i>
                 <span class="hidden-xs">Users</span>
+            </a>
+                </li>
+                <li>
+           <c:choose>
+                <c:when test="${selectedMenu=='dashboard'}">
+                <a href="dashboard.jsp" class="active">
+                </c:when>
+                <c:otherwise>
+                    <a href="dashboard.jsp">
+                </c:otherwise>
+            </c:choose>
+                <i class="fa fa-dashboard"></i>
+                <span class="hidden-xs">Dashboard</span>
             </a>
                 </li>
                        
