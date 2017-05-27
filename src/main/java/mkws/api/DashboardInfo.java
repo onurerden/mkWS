@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import mkws.Model.DashboardInfoModel;
+import mkws.Model.Token;
 import mkws.ServerInfoCollector;
+import mkws.TokenEvaluator;
 
 /**
  *
@@ -36,14 +38,22 @@ public class DashboardInfo extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-         ServerInfoCollector sic = new ServerInfoCollector();
+            TokenEvaluator te = new TokenEvaluator();
+            Token token = te.evaluateRequestForToken(request);
+            if(token.isIsAdmin()){
+                 ServerInfoCollector sic = new ServerInfoCollector();
             DashboardInfoModel info = sic.getServerInfo();
             
             Gson gson = new Gson();
             //System.out.println(gson.toJson(info));
             out.print(gson.toJson(info));
             out.close();
+            }else{
+            response.setStatus(401);
+                    out.print("{\"result\":\"error\", \"description\":\"Invalid or no token.\"}");
+            }
+            
+        
         }
     }
 

@@ -30,11 +30,11 @@
                             <div class="box-header">
                                 <div class="box-name">
                                     <i class="fa fa-table"></i>
-                                    <span>Welcome</span>
+                                    <span>Stats</span>
                                 </div>
                                 <div class="box-icons">
                                     <a class="collapse-link">
-                                        <i class="fa fa-chevron-up"></i>
+                                        <i class="  fa fa-chevron-up"></i>
                                     </a>
                                     <a class="expand-link">
                                         <i class="fa fa-expand"></i>
@@ -56,11 +56,11 @@
                                         <div id="routeCount">-</div>
                                     </div>
                                     <div class="col-sm-3">
-                                        <h4 class="page-header"><i class="fa fa-map-marker"></i> DB Size</h4>
+                                        <h4 class="page-header"><i class="fa fa-file"></i> DB Size</h4>
                                         <div class="row">
                                             <div id="dbSize" class="col-xs-4">-</div>
                                             <div class="col-xs-8">
-                                                <div id="donut-example" style="width:120px;height:120px;"></div>
+                                                <div id="donut-example" style="width:120x;height:120px;"></div>
                                                     
                                             </div>
                                         </div>
