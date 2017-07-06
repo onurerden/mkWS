@@ -2346,4 +2346,27 @@ public class ServerEngine implements IDeviceServer {
         }
         return sb.toString();
     }
+
+    public boolean sendFeedback(String feedbackMessage) {
+          Credentials cr = new Credentials();
+        Connection con_1 = null;
+        Statement st_1 = null;
+
+        String query = "INSERT INTO `feedback` (`memberId`, `message`) VALUES (" + this.userId +", \""+feedbackMessage + "\")" ;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            st_1 = con_1.createStatement();
+            st_1.executeUpdate(query);
+
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+            LogMessage message = new LogMessage();
+            message.setLogLevel(1);
+            message.setLogMessage("Feedback cannot be saved. " + ex.getLocalizedMessage());
+            Gson gson = new Gson();
+            sendLog(gson.toJson(message));
+            return false;
+        }
+        return true;
+    }
 }
