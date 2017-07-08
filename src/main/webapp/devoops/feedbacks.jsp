@@ -100,7 +100,7 @@
 
                                     $('#feedbacks tbody').append('<tr>\
                                                                 <td>' + entry.feedbackId + '</td>\
-                                                                <td> ' + entry.uname + '</td>\
+                                                                <td> ' + entry.userName + '</td>\
                                                                 <td> ' + entry.message + '</td>\
                                                                 <td> ' + entry.time + '</td></tr>');
 
