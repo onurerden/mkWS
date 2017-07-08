@@ -52,6 +52,7 @@
                             </div>
                             <div class="box-content">
                                 <p>Feedbacks Listed Below</p>
+                                <div class="table-responsive">
                                 <table id="feedbacks" class="table table-hover">
                                     <thead>
                                         <tr>
@@ -68,7 +69,7 @@
                                     </tbody>
 
                                 </table>
-
+                                </div>
                             </div>
                         </div>
                     </div>
