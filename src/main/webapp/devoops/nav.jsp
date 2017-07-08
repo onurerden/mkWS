@@ -92,7 +92,19 @@
                 <span class="hidden-xs">Dashboard</span>
             </a>
                 </li>
-                       
+                  <li>
+           <c:choose>
+                <c:when test="${selectedMenu=='feedbacks'}">
+                <a href="feedbacks.jsp" class="active">
+                </c:when>
+                <c:otherwise>
+                    <a href="feedbacks.jsp">
+                </c:otherwise>
+            </c:choose>
+                <i class="fa fa-comment"></i>
+                <span class="hidden-xs">Feedbacks</span>
+            </a>
+                </li>     
 <li>
             <a href="http://mk-onurerden.rhcloud.com/phpmyadmin" target="_blank">
                 <i class="fa fa-book"></i>
