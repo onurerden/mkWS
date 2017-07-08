@@ -203,7 +203,12 @@
                                                                     onClick="toggleEdit(<%= resultset.getInt("id")%>)" style="font-size:12px">
                                                                 Edit
                                                             </button>
-                                                            <% if (Integer.valueOf(session.getAttribute("id").toString()) != resultset.getInt("id")) {%>
+                                                            <% int i =0;
+                                                            try{i=Integer.valueOf(session.getAttribute("id").toString());
+                                                            }catch (Exception ex){
+                                                                
+                                                            }
+                                                            if (i != resultset.getInt("id")) {%>
                                                             <button class="btn btn-danger"
                                                                     onClick="askToBeDeleted(<%= resultset.getInt("id")%>)" style="font-size:12px">
                                                                 Delete
