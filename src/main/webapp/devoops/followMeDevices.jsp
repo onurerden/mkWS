@@ -27,9 +27,16 @@
                             cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
 
                     Statement statement = connection.createStatement();
+                    
+                    String isAdminQuery = "";
+                    boolean isAdmin = Boolean.parseBoolean(session.getAttribute("isAdmin").toString());
+                    if(!isAdmin){
+                        isAdminQuery = "WHERE userId = " + session.getAttribute("id").toString() + " ";
+                    }
                     ResultSet resultset
                             = statement.executeQuery("SELECT * FROM `followme` AS f INNER JOIN followmedevices "
                                     + "ON f.followMeDeviceId = followmedevices.id "
+                                    + isAdminQuery 
                                     + "GROUP BY f.followMeDeviceId ORDER BY `time` DESC");%>
 
 
