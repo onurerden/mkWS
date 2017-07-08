@@ -13,7 +13,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>mkWS Portal</title>
+    <title>Follow Me GPS Tracker</title>
     <meta name="description" content="description">
     <meta name="author" content="DevOOPS">
     <meta name="viewport" content="width=device-width, initial-scale=1">

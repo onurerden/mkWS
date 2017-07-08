@@ -82,13 +82,13 @@
 
                     $(document).ready(function () {
                         WinMove();
-                        getAllFeedbacks()
+                        getAllFeedbacks();
                     });
                     function setHeader(xhr) {
                         xhr.setRequestHeader('Authorization', 'Bearer ' + sessionStorage.getItem("access_token"));
                     }
 
-                    function getAllFeedbacks(orderId) {
+                    function getAllFeedbacks() {
                         $.ajax({
                             url: '../api/GetFeedbacks',
                             type: 'GET',
