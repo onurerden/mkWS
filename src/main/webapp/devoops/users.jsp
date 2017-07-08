@@ -1,8 +1,3 @@
-<%-- 
-    Document   : kopters
-    Created on : 17.Mar.2015, 15:03:08
-    Author     : oerden
---%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -15,9 +10,13 @@
     <%@ include file="head.jsp" %> 
     <style>
         .table-responsive
-{
-    overflow-x: auto;
-}
+        {
+            overflow-x: auto;
+        }
+        td.shrink {
+            white-space: nowrap;
+            width: 1px;
+        }
     </style>
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
@@ -100,7 +99,6 @@
                     Credentials cr = new Credentials();
                     Connection connection = DriverManager.getConnection(
                             cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
-                    
 
                     Statement statement = connection.createStatement();
                     ResultSet resultset
@@ -115,11 +113,11 @@
                     </div>
                 </div>
                 <div class="row">
-                    
+
                     <div id="results" class="col-xs-12">
                         <c:choose>
                             <c:when test="${param.success!=null}">
-                                <div class="alert alert-success" class="col-xs-12">
+                                <div class="alert alert-success col-xs-12">
                                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                     <strong>Success!</strong> <% out.print(request.getParameter("success"));%>
 
@@ -129,7 +127,7 @@
                         </c:choose>
                         <c:choose>
                             <c:when test="${param.error!=null}">
-                                <div class="alert alert-danger" class="col-xs-12">
+                                <div class="alert alert-danger col-xs-12">
                                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                     <strong>Error!</strong> <% out.print(request.getParameter("error"));%>
 
@@ -173,49 +171,53 @@
 
                                     <div id="tabs-1">
                                         <p style="font-size:14px">Users defined on the mkWS system are given below:</p>
- <div class="table-responsive">
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th>User Id</th>
-                                                    <th>User Name</th>
-                                                    <th>User Surname</th>
-                                                    <th>User Email</th>
-                                                    <th>Login Name</th>
-                                                    <th>Register Date</th>
-                                                    <th>is Admin?</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody style="font-size:14px">
-                                                <% while (resultset.next()) {%>
-                                                <tr>
-                                                    <td><%= resultset.getInt("id")%></td>
-                                                    <td><%= resultset.getString("first_name")%></td>
-                                                    <td><%= resultset.getString("last_name")%></td>
-                                                    <td><%= resultset.getString("email")%></td>
-                                                    <td><%= resultset.getString("uname")%></td>
-                                                    <td><%= resultset.getTimestamp("regdate")%></td>
-                                                    <td><%= resultset.getBoolean("isAdmin")%></td>
-                                                    <td>
-                                                        <button class="btn btn-info"
-                                                                onClick="toggleEdit(<%= resultset.getInt("id")%>)" style="font-size:12px">
-                                                            Edit
-                                                        </button>
-                                                        <% if (Integer.valueOf(session.getAttribute("id").toString()) != resultset.getInt("id")) {%>
-                                                        <button class="btn btn-danger"
-                                                                onClick="askToBeDeleted(<%= resultset.getInt("id")%>)" style="font-size:12px">
-                                                            Delete
-                                                        </button>
-                                                        <% } %>
-                                                    </td>
 
-                                                </tr>
-                                                <% }%>
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>User Id</th>
+                                                        <th>User Name</th>
+                                                        <th>User Surname</th>
+                                                        <th>User Email</th>
+                                                        <th>Login Name</th>
+                                                        <th>Register Date</th>
+                                                        <th>Last Login</th>
+                                                        <th>is Admin?</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody style="font-size:14px">
+                                                    <% while (resultset.next()) {%>
+                                                    <tr>
+                                                        <td><%= resultset.getInt("id")%></td>
+                                                        <td><%= resultset.getString("first_name")%></td>
+                                                        <td><%= resultset.getString("last_name")%></td>
+                                                        <td><%= resultset.getString("email")%></td>
+                                                        <td><%= resultset.getString("uname")%></td>
+                                                        <td class="shrink"><%= resultset.getTimestamp("regdate")%></td>
+                                                        <td class="shrink"><%= resultset.getTimestamp("latestTouch")%></td>
 
-                                            </tbody>
-                                            <% connection.close();%>
-                                        </table>
- </div>
+                                                        <td><%= resultset.getBoolean("isAdmin")%></td>
+                                                        <td>
+                                                            <button class="btn btn-info"
+                                                                    onClick="toggleEdit(<%= resultset.getInt("id")%>)" style="font-size:12px">
+                                                                Edit
+                                                            </button>
+                                                            <% if (Integer.valueOf(session.getAttribute("id").toString()) != resultset.getInt("id")) {%>
+                                                            <button class="btn btn-danger"
+                                                                    onClick="askToBeDeleted(<%= resultset.getInt("id")%>)" style="font-size:12px">
+                                                                Delete
+                                                            </button>
+                                                            <% } %>
+                                                        </td>
+
+                                                    </tr>
+                                                    <% }%>
+
+                                                </tbody>
+                                                <% connection.close();%>
+                                            </table>
+                                        </div>
                                     </div>
 
                                     <div id="tabs-2" >
@@ -309,7 +311,7 @@
                     $("#editModal").modal("toggle");
                     userIdToBeEdited = userId;
                     var link = "../GetUserInfo?userId=" + userIdToBeEdited;
-                    
+
                     $.ajax({url: link, success: function (result) {
 
                             var info = JSON.parse(result);
@@ -320,11 +322,11 @@
                             $("#editEmail").val(info.email);
                             $("#editFirstName").val(info.first_name);
                             $("#editLastName").val(info.last_name);
-                           // $("#editPassword").val(info.pass);
-                            $("#editIsAdmin").prop('checked',info.isAdmin);
-                            
-                            
-                            
+                            // $("#editPassword").val(info.pass);
+                            $("#editIsAdmin").prop('checked', info.isAdmin);
+
+
+
 
                         }});
                 }

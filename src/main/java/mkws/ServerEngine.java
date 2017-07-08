@@ -33,6 +33,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import mkws.Model.FacebookUserModel;
+import mkws.Model.FeedbackModel;
 import mkws.Model.FollowMeDataModel;
 import mkws.Model.MKMission;
 import mkws.Model.MMRUser;
@@ -2368,5 +2369,42 @@ public class ServerEngine implements IDeviceServer {
             return false;
         }
         return true;
+    }
+
+    public ArrayList getFeedbacks() {
+       ArrayList<FeedbackModel> list = new ArrayList<>();
+
+        try {
+            Credentials cr = new Credentials();
+            Connection con_1 = null;
+            Statement st_1 = null;
+            ResultSet rs_1 = null;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            st_1 = con_1.createStatement();
+            String query = "SELECT * FROM mk.v_feedback";
+                     
+            System.out.println(query);
+            rs_1 = st_1.executeQuery(query);
+
+            while (rs_1.next()) {
+                FeedbackModel model = new FeedbackModel();
+                model.setFeedbackId(rs_1.getInt("id"));
+                model.setUserId(rs_1.getInt("memberId"));
+                model.setIsRead(rs_1.getBoolean("isRead"));
+                model.setUserName(rs_1.getString("uname"));
+                model.setMessage(rs_1.getString("message"));
+                model.setTime(rs_1.getTimestamp("time"));
+                model.setPlatformId(rs_1.getInt("platformId"));
+                
+                list.add(model);
+
+            }
+
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+
+        }
+
+        return list;
     }
 }

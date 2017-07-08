@@ -12,7 +12,12 @@
 <!DOCTYPE html>
 <html>
     <%@ include file="head.jsp" %> 
-
+    <style>
+        td.shrink {
+  white-space: nowrap;
+  width: 1px;
+}
+        </style>
     <div id="main" class="container-fluid">
         <div class="row">
             <%@ include file="nav.jsp" %>                                                 
@@ -67,6 +72,7 @@
    document.getElementById("content").innerHTML='<object type="text/html" data="mkWS/getFollowMeOnMap.jsp?routeId=171" ></object>';
    }
            </script> -->
+                                <div class="table-responsive">
                                 <table class="table">
 
                                     <thead>
@@ -104,7 +110,7 @@
                                                 }
                                             out.println(resultset.getString("logMessage")+"</p></td>");
                                             
-                                            out.println("<td>" +resultset.getTimestamp("time")+"</td>");
+                                            out.println("<td class=\"shrink\">" +resultset.getTimestamp("time")+"</td>");
                                             
                                             out.println("</tr>");
 
@@ -113,6 +119,7 @@
                                     </tbody>
                                     <% connection.close();%>
                                 </table>
+                                </div>
                             </div>
                         </div>
                     </div>
