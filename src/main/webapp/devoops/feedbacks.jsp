@@ -14,7 +14,7 @@
 <c:set var="selectedMenu" value="feedbacks"/>
 <html>
     <%@ include file="head.jsp" %> 
-    
+
 
     <div id="main" class="container-fluid">
         <div class="row">
@@ -59,7 +59,7 @@
                                             <th>User</th>
                                             <th>Message</th>
                                             <th>Feedback Time</th>
-                                            
+
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -68,58 +68,56 @@
                                     </tbody>
 
                                 </table>
-                               
+
                             </div>
                         </div>
                     </div>
 
                 </div>
                 </body>
-               <!-- <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script> -->
-                   <%@ include file="foot.jsp" %> 
+                <!-- <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script> -->
+                <%@ include file="foot.jsp" %> 
                 <script type="text/javascript">
-                        var selectedOrder = 0;
+                    var selectedOrder = 0;
 
-                        $(document).ready(function () {
-                            WinMove();
-                            
-    }
-                        function setHeader(xhr) {
-                            xhr.setRequestHeader('Authorization', 'Bearer ' + sessionStorage.getItem("access_token"));
-                        }
+                    $(document).ready(function () {
+                        WinMove();
+                    });
+                    function setHeader(xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + sessionStorage.getItem("access_token"));
+                    }
 
-                        function getAllOrders(orderId) {
-                            $.ajax({
-                                url: '../api/GetFeedbacks',
-                                type: 'GET',
-                                dataType: 'json',
-                                contentType: "json;charset=utf-8",
-                                success: function (response) {
-                                    $('#feedbacks tbody').html("");
-                                    response.forEach(function (entry) {
+                    function getAllOrders(orderId) {
+                        $.ajax({
+                            url: '../api/GetFeedbacks',
+                            type: 'GET',
+                            dataType: 'json',
+                            contentType: "json;charset=utf-8",
+                            success: function (response) {
+                                $('#feedbacks tbody').html("");
+                                response.forEach(function (entry) {
 
-                                        $('#feedbacks tbody').append('<tr>\
+                                    $('#feedbacks tbody').append('<tr>\
                                                                 <td>' + entry.feedbackId + '</td>\
                                                                 <td> ' + entry.uname + '</td>\
                                                                 <td> ' + entry.message + '</td>\
                                                                 <td> ' + entry.time + '</td></tr>');
-                                       
-                                    });
+
+                                });
 
 
-                                },
-                                error: function (error) {
-                                    alert('Hata!' + error.description);
-                                },
-                                beforeSend: setHeader
+                            },
+                            error: function (error) {
+                                alert('Hata!' + error.description);
+                            },
+                            beforeSend: setHeader
 
-                            });
-                        }
-                      
+                        });
+                    }
+
 
                 </script>
-                                    
-                
+
+
                 </html>
 
-             
