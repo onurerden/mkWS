@@ -60,23 +60,31 @@ public class EndRouteApi extends HttpServlet {
             server.setUserId(token.getUserId());
             String routeIdString = request.getParameter("routeId");
             String durationString = request.getParameter("duration");
+            String routeLengthString = request.getParameter("length");
             
             int routeId = -1;
             int duration = 0;
+            double length = -1;
             
             try {
                 routeId = Integer.valueOf(routeIdString);
                 duration = Integer.valueOf(durationString);
                
             } catch (Exception ex) {
-                System.out.println("Cannot parse routeId while EndRoute");
+                System.out.println("Cannot parse routeId while EndRoute: " +  ex.getMessage());
+            }
+            try{
+                length = Double.valueOf(routeLengthString);
+            }catch (Exception ex){
+                System.out.println("No length data sent to Endroute api: " + ex.getMessage());
             }
             if (token.isIsAdmin() || (server.getRouteInfo(routeId).getUserId() == token.getUserId())) {
 
                 if(duration==0){
-                out.println(server.endRoute(routeId));}
+                out.println(server.endRoute(routeId,length));}
                 else{
-                    out.println(server.endRoute(routeId,duration));}
+                    out.println(server.endRoute(routeId,duration,length));
+                }
                 
             } else {
                 response.setStatus(401);

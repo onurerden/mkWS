@@ -85,7 +85,18 @@ public interface IDeviceServer {
     //1: başarılı, -1 db erişim hatası ya da geçersiz rota id
     //-2 yetkisiz endRoute işlemi
     
+        int endRoute(int routeId, double length);
+    //Rotanın sonuçlandırılması için followme aksiyonunun bitirilmesi ile çağırılan metoddur.
+    //sonlandırılmak istenen rota gönderilir.
+    //1: başarılı, -1 db erişim hatası ya da geçersiz rota id
+    //-2 yetkisiz endRoute işlemi
+    
     int endRoute(int routeId, int duration);
+    //Rotanın sonuçlandırılması için followme aksiyonunun bitirilmesi ile çağırılan metoddur.
+    //sonlandırılmak istenen rota gönderilir.
+    //1: başarılı, -1 db erişim hatası ya da geçersiz rota id
+    //-2 yetkisiz endRoute işlemi
+    int endRoute(int routeId, int duration, double length);
     //Rotanın sonuçlandırılması için followme aksiyonunun bitirilmesi ile çağırılan metoddur.
     //sonlandırılmak istenen rota gönderilir.
     //1: başarılı, -1 db erişim hatası ya da geçersiz rota id

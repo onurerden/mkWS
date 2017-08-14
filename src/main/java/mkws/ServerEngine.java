@@ -148,10 +148,10 @@ public class ServerEngine implements IDeviceServer {
                         phone.name = rs_1.getString("name");
                         phone.uid = rs_1.getString("uid");
                         phone.registerDate = rs_1.getTimestamp("registerDate");
-                        
+
                         Statement st_2 = con_1.createStatement();
                         st_2.executeUpdate("UPDATE members SET latestTouch = NOW() WHERE id = " + this.userId);
-                        
+
                         System.out.println("query device uid = " + phone.uid + " device type phone");
 
                         deviceId = phone.id;
@@ -430,8 +430,10 @@ public class ServerEngine implements IDeviceServer {
 
         try {
             data = gson.fromJson(json, FollowMeData.class);
-            result = sendFollowMeData(data);
-            return result;
+            Runnable r = new FollowMeDataStorerThread(data);
+            new Thread(r).start();
+
+            return 0;
         } catch (JsonSyntaxException ex) {
             System.out.println("It is not FollowMeData: " + ex.toString());
         }
@@ -471,7 +473,7 @@ public class ServerEngine implements IDeviceServer {
                     + "'" + data.getSpeed() + "', "
                     + "'" + data.getAltitude() + "')";
 
-            System.out.println(queryString);
+            //System.out.println(queryString);
             st_1.executeUpdate(queryString);
             con_1.close();
 
@@ -676,12 +678,12 @@ public class ServerEngine implements IDeviceServer {
     }
 
     @Override
-    public int getRouteId(int deviceId,int type) {
+    public int getRouteId(int deviceId, int type) {
         int routeId = -1;
         Credentials cr = new Credentials();
         Connection con_1 = null;
-        Statement st_1;       
-        String queryString = "INSERT INTO route SET followMeDeviceId = " + deviceId + " , time = NOW() , userId = " + userId 
+        Statement st_1;
+        String queryString = "INSERT INTO route SET followMeDeviceId = " + deviceId + " , time = NOW() , userId = " + userId
                 + ", type = " + type;
         //Statement st_2;
         try {
@@ -700,7 +702,7 @@ public class ServerEngine implements IDeviceServer {
             //queryString = "SELECT MAX(id) AS maxId from mk.route WHERE followMeDeviceId = " + deviceId;
             //System.out.println(queryString);
             //rs_1 = st_2.executeQuery(queryString);
-          //  while (rs_1.next()) {
+            //  while (rs_1.next()) {
             //     routeId = rs_1.getInt("maxId");
             //     System.out.println("New routeId for deviceId = " + deviceId + " is " + routeId);
             //    }
@@ -872,7 +874,9 @@ public class ServerEngine implements IDeviceServer {
         Connection con_1 = null;
         Statement st_1 = null;
         GetRouteDetails routeDetails = getRouteDetailsWithBean(routeId);
+
         double length = routeDetails.getRouteLength();
+
         long duration = routeDetails.getTimeList().get(routeDetails.getTimeList().size() - 1).getTime() / 1000 - routeDetails.getTimeList().get(0).getTime() / 1000;
 
         double average = length * 1000.0 / duration;
@@ -890,14 +894,70 @@ public class ServerEngine implements IDeviceServer {
 
         return 0;
     }
+
     @Override
-    public int endRoute(int routeId,int duration) {
+    public int endRoute(int routeId, double length) {
+        Credentials cr = new Credentials();
+        Connection con_1 = null;
+        Statement st_1 = null;
+        GetRouteDetails routeDetails = getRouteDetailsWithBean(routeId);
+
+        if (length == -1) {
+            length = routeDetails.getRouteLength();
+        }
+
+        long duration = routeDetails.getTimeList().get(routeDetails.getTimeList().size() - 1).getTime() / 1000 - routeDetails.getTimeList().get(0).getTime() / 1000;
+
+        double average = length * 1000.0 / duration;
+        String query = "UPDATE  `route` SET isEnded =1, length = " + length + ", meanSpeed= " + average + " WHERE id =" + routeId;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            st_1 = con_1.createStatement();
+            st_1.executeUpdate(query);
+
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            return -1;
+        }
+
+        return 0;
+    }
+
+    @Override
+    public int endRoute(int routeId, int duration) {
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1 = null;
         GetRouteDetails routeDetails = getRouteDetailsWithBean(routeId);
         double length = routeDetails.getRouteLength();
-        
+
+        double average = length * 1000.0 / duration;
+        String query = "UPDATE  `route` SET isEnded =1, length = " + length + ", meanSpeed= " + average + " , duration = " + duration + " WHERE id =" + routeId;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            st_1 = con_1.createStatement();
+            st_1.executeUpdate(query);
+
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            return -1;
+        }
+
+        return 0;
+    }
+
+    @Override
+    public int endRoute(int routeId, int duration, double length) {
+        Credentials cr = new Credentials();
+        Connection con_1 = null;
+        Statement st_1 = null;
+        GetRouteDetails routeDetails = getRouteDetailsWithBean(routeId);
+
+        if (length == -1) {
+            length = routeDetails.getRouteLength();
+        }
 
         double average = length * 1000.0 / duration;
         String query = "UPDATE  `route` SET isEnded =1, length = " + length + ", meanSpeed= " + average + " , duration = " + duration + " WHERE id =" + routeId;
@@ -1056,7 +1116,7 @@ public class ServerEngine implements IDeviceServer {
             if (session.getDeviceId() < 0) {
                 return -2;
             }
-            routeId = getRouteId(session.getDeviceId(),1);
+            routeId = getRouteId(session.getDeviceId(), 1);
 
             NodeList nl = doc.getElementsByTagName("*");
             Node n;
@@ -1717,9 +1777,9 @@ public class ServerEngine implements IDeviceServer {
 
         return true;
     }
-    
-    public boolean editRoute(RouteModel route){
-        
+
+    public boolean editRoute(RouteModel route) {
+
         try {
             Credentials cr = new Credentials();
             Connection con_1 = null;
@@ -1727,7 +1787,7 @@ public class ServerEngine implements IDeviceServer {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
-            String query = "UPDATE route SET time = \""+route.getTime() +"\" , length = " + route.getRouteLength()+", duration = "+route.getDuration()+ ", type = " + route.getType()+", isEnded = TRUE WHERE id = " + route.getRouteId();
+            String query = "UPDATE route SET time = \"" + route.getTime() + "\" , length = " + route.getRouteLength() + ", duration = " + route.getDuration() + ", type = " + route.getType() + ", isEnded = TRUE WHERE id = " + route.getRouteId();
             st_1.execute(query);
             con_1.close();
             LogMessage msg = new LogMessage();
@@ -1738,8 +1798,8 @@ public class ServerEngine implements IDeviceServer {
             sendLog(gson.toJson(msg));
         } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-          return false;
-        }        
+            return false;
+        }
         return true;
     }
 
@@ -1781,7 +1841,7 @@ public class ServerEngine implements IDeviceServer {
 
     }
 
-    public boolean addMkwsUser(String first_name, String last_name, String email, String uname, String password, boolean isAdmin,boolean isActivated) {
+    public boolean addMkwsUser(String first_name, String last_name, String email, String uname, String password, boolean isAdmin, boolean isActivated) {
         if (first_name.isEmpty() || last_name.isEmpty() || email.isEmpty() || uname.isEmpty() || password.isEmpty()) {
             return false;
         }
@@ -1789,14 +1849,14 @@ public class ServerEngine implements IDeviceServer {
         Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1 = null;
-        
+
         String query = "INSERT INTO mk.members (`first_name`,`last_name`,`email`,`uname`,`pass`,`isAdmin`,`isActivated`,`regdate`) VALUES ("
                 + "\"" + first_name + "\"" + ", "
                 + "\"" + last_name + "\"" + ", "
                 + "\"" + email + "\"" + ", "
                 + "\"" + uname + "\"" + ", "
                 + "MD5(\"" + password + "\")" + ", "
-                + isAdmin + ", "+isActivated+", NOW())";
+                + isAdmin + ", " + isActivated + ", NOW())";
         System.out.println(query);
 
         try {
@@ -1890,7 +1950,7 @@ public class ServerEngine implements IDeviceServer {
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             String query = "SELECT * FROM mk.members WHERE id= " + id;
-            System.out.println(query);
+            //System.out.println(query);
             rs_1 = st_1.executeQuery(query);
 
             while (rs_1.next()) {
@@ -2042,7 +2102,7 @@ public class ServerEngine implements IDeviceServer {
             }
             query = query + " ORDER BY id DESC LIMIT 10";
 
-            System.out.println(query);
+            //System.out.println(query);
             rs_1 = st_1.executeQuery(query);
 
             while (rs_1.next()) {
@@ -2087,7 +2147,6 @@ public class ServerEngine implements IDeviceServer {
 
     //getRouteDetailsWithBean followMe dataları üzerinden hesap yapar, 
     //yavaş çalışır. hızlı cevap için getRouteDetails kullanılmalıdır.
-
     public GetRouteDetails getRouteDetailsWithBean(int routeId) {
         GetRouteDetails route = new GetRouteDetails();
         route.setRouteId(routeId);
@@ -2111,7 +2170,7 @@ public class ServerEngine implements IDeviceServer {
             }
             query = query + " LIMIT 1";
 
-            System.out.println(query);
+            //System.out.println(query);
             rs_1 = st_1.executeQuery(query);
 
             while (rs_1.next()) {
@@ -2157,7 +2216,7 @@ public class ServerEngine implements IDeviceServer {
             }
             route.setFollowMeData(followMeData);
 
-        } catch (Exception ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
             System.out.println("Error while getting route details: " + ex.getLocalizedMessage());
             return null;
         }
@@ -2349,11 +2408,11 @@ public class ServerEngine implements IDeviceServer {
     }
 
     public boolean sendFeedback(String feedbackMessage) {
-          Credentials cr = new Credentials();
+        Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1 = null;
 
-        String query = "INSERT INTO `feedback` (`memberId`, `message`) VALUES (" + this.userId +", \""+feedbackMessage + "\")" ;
+        String query = "INSERT INTO `feedback` (`memberId`, `message`) VALUES (" + this.userId + ", \"" + feedbackMessage + "\")";
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
@@ -2372,7 +2431,7 @@ public class ServerEngine implements IDeviceServer {
     }
 
     public ArrayList getFeedbacks() {
-       ArrayList<FeedbackModel> list = new ArrayList<>();
+        ArrayList<FeedbackModel> list = new ArrayList<>();
 
         try {
             Credentials cr = new Credentials();
@@ -2383,8 +2442,8 @@ public class ServerEngine implements IDeviceServer {
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             String query = "SELECT * FROM mk.v_feedback";
-                     
-            System.out.println(query);
+
+            //System.out.println(query);
             rs_1 = st_1.executeQuery(query);
 
             while (rs_1.next()) {
@@ -2396,7 +2455,7 @@ public class ServerEngine implements IDeviceServer {
                 model.setMessage(rs_1.getString("message"));
                 model.setTime(rs_1.getTimestamp("time"));
                 model.setPlatformId(rs_1.getInt("platformId"));
-                
+
                 list.add(model);
 
             }
@@ -2406,5 +2465,18 @@ public class ServerEngine implements IDeviceServer {
         }
 
         return list;
+    }
+}
+
+class FollowMeDataStorerThread implements Runnable {
+private FollowMeData data;
+    public FollowMeDataStorerThread(FollowMeData data) {
+       this.data = data;
+
+    }
+
+    public void run() {
+        ServerEngine server = new ServerEngine();
+        server.sendFollowMeData(data);
     }
 }
