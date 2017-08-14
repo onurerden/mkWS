@@ -16,7 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import mkws.FollowMeData;
+import mkws.Model.FollowMeDataModel;
 import mkws.Model.RouteModel;
 import mkws.ServerEngine;
 
@@ -58,7 +58,7 @@ public class samplefiledownload extends HttpServlet {
                     + "  <trk>\n"
                     + "    <name>Example GPX Document</name>\n"
                     + "    <trkseg>";
-            for (FollowMeData fm : model.getFollowMeData()) {
+            for (FollowMeDataModel fm : model.getFollowMeData()) {
                 String timeStamp = new SimpleDateFormat("yyyy-MM-ddTHH.mm.ss").format(new Date());
                 outputResult = outputResult + "<trkpt lat=" + fm.getLat() + " lon=" + fm.getLon() + ">\n"
                         + "        <ele>" + fm.getAltitude() + " </ele>\n"
