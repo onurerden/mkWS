@@ -223,6 +223,7 @@
         var myMap;
         var mapMarker;
         var followMeData;
+        var coordinates = [];
         var routeData;
 
         // Initializes the map as soon as the API is loaded and DOM is ready
@@ -235,7 +236,7 @@
             }),
                     // A polyline
                     myPolyline = new ymaps.Polyline(
-                       followMeData
+                       coordinates
 
                     , {
                         // The balloon content
@@ -255,7 +256,7 @@
             myStartPoint = new ymaps.GeoObject({
             geometry: {
             type: "Point",
-                    coordinates:followMeData[0]
+                    coordinates:coordinates[0]
             },
                     properties: {
                     iconContent: "Başlangıç"}
@@ -263,7 +264,7 @@
                     myEndPoint = new ymaps.GeoObject({
                     geometry: {
                     type: "Point",
-                            coordinates:followMeData[followMeData.length-1]
+                            coordinates:coordinates[coordinates.length-1]
                     },
                             properties: {
                             iconContent: "Bitiş"}
@@ -601,10 +602,12 @@
         function DrawAllToolTips(event) {
 
         }
+        
         function HideAllToolTips() {
 //            myTooltip.hide();
 //            altitudeTooltip.hide();
         }
+        
         function getRouteDetails(routeId) {
             $.ajax({
                 url: '../api/GetRouteDetails?routeId=' + routeId,
@@ -613,6 +616,10 @@
                 contentType: "json;charset=utf-8",
                 success: function (response) {
                 followMeData = response.followMeData;
+                for (var data in response.followMeData){
+                    var newCoordinate = [data.lat,data.lng];
+                    coordinates.push(newCoordinate);
+                }
                 routeData = response;
                 //console.log(response);
 
