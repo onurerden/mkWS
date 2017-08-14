@@ -250,7 +250,7 @@
                     coordinates: coordinates[0]
                 },
                 properties: {
-                    iconContent: "Başlangıç"}
+                    iconContent: "Start"}
             }, {preset: 'twirl#greenStretchyIcon'});
             myEndPoint = new ymaps.GeoObject({
                 geometry: {
@@ -258,7 +258,7 @@
                     coordinates: coordinates[coordinates.length - 1]
                 },
                 properties: {
-                    iconContent: "Bitiş"}
+                    iconContent: "Finish"}
             }, {preset: 'twirl#redStretchyIcon'});
             // Adds geo objects to the map 
 
