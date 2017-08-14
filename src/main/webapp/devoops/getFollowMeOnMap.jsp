@@ -255,7 +255,7 @@
             myStartPoint = new ymaps.GeoObject({
             geometry: {
             type: "Point",
-                    coordinates:followMeData[0];
+                    coordinates:followMeData[0]
             },
                     properties: {
                     iconContent: "Başlangıç"}
