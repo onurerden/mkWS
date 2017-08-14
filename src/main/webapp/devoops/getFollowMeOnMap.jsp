@@ -617,6 +617,7 @@
                 success: function (response) {
                 followMeData = response.followMeData;
                 for (var data in response.followMeData){
+                    console.log(data);
                     var newCoordinate = [data.lat,data.lng];
                     coordinates.push(newCoordinate);
                 }
