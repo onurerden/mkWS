@@ -255,7 +255,7 @@
             myStartPoint = new ymaps.GeoObject({
             geometry: {
             type: "Point",
-                    coordinates:
+                    coordinates:followMeData[0];
             },
                     properties: {
                     iconContent: "Başlangıç"}
@@ -263,7 +263,7 @@
                     myEndPoint = new ymaps.GeoObject({
                     geometry: {
                     type: "Point",
-                            coordinates:
+                            coordinates:followMeData[followMeData.length-1]
                     },
                             properties: {
                             iconContent: "Bitiş"}
