@@ -503,7 +503,7 @@
             // Load required scripts and callback to draw
             var routeId = <% out.println(Integer.parseInt(request.getParameter("routeId")));%>;
             getRouteDetails(routeId);
-            ymaps.ready(init);
+            
             DrawAllxCharts();
             //   LoadXChartScript(DrawAllxCharts);
             // Required for correctly resize charts, when boxes expand
@@ -623,6 +623,7 @@
                         var newCoordinate = [entry.lat, entry.lng];
                         coordinates.push(newCoordinate);
                     });
+                    ymaps.ready(init);
                             routeData = response;
                     //console.log(response);
 
