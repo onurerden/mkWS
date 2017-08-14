@@ -18,10 +18,7 @@
         <div class="row">
             <%@ include file="nav.jsp" %>                                                 
             <div id="content" class="col-xs-12 col-sm-10">
-                <jsp:useBean
-                    id = "routeBean" class= "mkws.webbeans.GetRouteDetails">
-                </jsp:useBean>
-                <jsp:setProperty name="routeBean" property = "routeId" value="${param.routeId}"/>
+                
 
                 <div class="row">
                     <div id="breadcrumb" class="col-xs-12">
@@ -82,21 +79,13 @@
                             </div>
                             <div class="box-content" style="width:auto; height:430px">
                                 <h2>Route Id: <% out.println(Integer.parseInt(request.getParameter("routeId")));%> </h2>
-                                <b>Device Name :</b> <i><jsp:getProperty name="routeBean" property="deviceName"/> </i><br/>
-                                <b>Route Date : </b> <i><jsp:getProperty name="routeBean" property="routeCreationDate"/> </i><br/>
-                                <b>Route length: </b>
-                                <c:choose> 
-                                    <c:when test="${routeBean.getRouteLength()>1}">
-                                        <fmt:formatNumber type="number" maxFractionDigits="2" value="0" /> km
-                                    </c:when>
-                                    <c:otherwise>
-                                        <fmt:formatNumber type="number" maxFractionDigits="2" value="0" /> m
-                                    </c:otherwise>
-                                </c:choose>   
+                                <b>Device Name :</b> <i> </i><br/>
+                                <b>Route Date : </b> <i> </i><br/>
+                                
                                 <br>
-                                <b>Max Speed : </b> <i><jsp:getProperty name="routeBean" property="maxSpeed"/> m/sec</i><br/>
-                                <b>Max Altitude : </b> <i><jsp:getProperty name="routeBean" property="maxAltitude"/> m </i><br/>
-                                <b>Min Altitude : </b> <i><jsp:getProperty name="routeBean" property="minAltitude"/> m </i><br/>
+                                <b>Max Speed : </b> <i></i><br/>
+                                <b>Max Altitude : </b><i> m </i><br/>
+                                <b>Min Altitude : </b> <i> m </i><br/>
 
                                 <br>
                                 <button id="btn" class="btn btn-danger"  onclick="sendMMR()"> Upload to MMR</button>
@@ -225,6 +214,8 @@
         var followMeData;
         var coordinates = [];
         var routeData;
+        var bounds=[];
+        var altitudeJSON;
 
         // Initializes the map as soon as the API is loaded and DOM is ready
 
@@ -232,7 +223,7 @@
             myMap = new ymaps.Map("yandex", {
                 //    center: 
                 //    zoom: 15,
-                bounds:<jsp:getProperty name="routeBean" property="mapBounds"/>
+                bounds:bounds
             }),
                     // A polyline
                     myPolyline = new ymaps.Polyline(
@@ -519,7 +510,7 @@
     </script>
     <script>
         function drawAltitudeChart() {
-            var altitudeJSON;
+            //var altitudeJSON;
 //            var yData = altitudeJSON.y;
 //            (function (H) {
 //                H.wrap(H.Tooltip.prototype, 'hide', function () {
@@ -616,12 +607,14 @@
                 contentType: "json;charset=utf-8",
                 success: function (response) {
                     coordinates=[];
+                    altitudeJSON=[];
                     followMeData = response.followMeData;
                     
                     followMeData.forEach(function (entry) {
-                        console.log(entry);
+                        //console.log(entry);
                         var newCoordinate = [entry.lat, entry.lng];
                         coordinates.push(newCoordinate);
+                        altitudeJSON.push(entry.altitude);
                     });
                     ymaps.ready(init);
                             routeData = response;
