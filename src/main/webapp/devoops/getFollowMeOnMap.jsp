@@ -621,7 +621,7 @@
                         console.log(entry);
                         var newCoordinate = [entry.lat, entry.lng];
                         coordinates.push(newCoordinate);
-                    };
+                    )};
                             routeData = response;
                     //console.log(response);
 
