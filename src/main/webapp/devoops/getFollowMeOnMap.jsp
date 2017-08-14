@@ -222,7 +222,8 @@
         var altitudeButton;
         var myMap;
         var mapMarker;
-        var followMeData
+        var followMeData;
+        var routeData;
 
         // Initializes the map as soon as the API is loaded and DOM is ready
         
@@ -612,7 +613,8 @@
                 contentType: "json;charset=utf-8",
                 success: function (response) {
                 followMeData = response.followMeData;
-                    console.log(response);
+                routeData = response;
+                //console.log(response);
 
 
                 },
