@@ -18,7 +18,7 @@
         <div class="row">
             <%@ include file="nav.jsp" %>                                                 
             <div id="content" class="col-xs-12 col-sm-10">
-                
+
 
                 <div class="row">
                     <div id="breadcrumb" class="col-xs-12">
@@ -81,7 +81,7 @@
                                 <h2>Route Id: <% out.println(Integer.parseInt(request.getParameter("routeId")));%> </h2>
                                 <b>Device Name :</b> <i> </i><br/>
                                 <b>Route Date : </b> <i> </i><br/>
-                                
+
                                 <br>
                                 <b>Max Speed : </b> <i></i><br/>
                                 <b>Max Altitude : </b><i> m </i><br/>
@@ -214,8 +214,8 @@
         var followMeData;
         var coordinates = [];
         var routeData;
-        var bounds=[];
-        var altitudeJSON;
+        var bounds = [];
+        var altitudeJSON = [];
 
         // Initializes the map as soon as the API is loaded and DOM is ready
 
@@ -223,7 +223,7 @@
             myMap = new ymaps.Map("yandex", {
                 //    center: 
                 //    zoom: 15,
-                bounds:bounds
+                bounds: bounds
             }),
                     // A polyline
                     myPolyline = new ymaps.Polyline(
@@ -494,16 +494,11 @@
             // Load required scripts and callback to draw
             var routeId = <% out.println(Integer.parseInt(request.getParameter("routeId")));%>;
             getRouteDetails(routeId);
-            
-            DrawAllxCharts();
+
+
             //   LoadXChartScript(DrawAllxCharts);
             // Required for correctly resize charts, when boxes expand
-            var graphxChartsResize;
-            $(".box").resize(function (event) {
-                event.preventDefault();
-                clearTimeout(graphxChartsResize);
-                graphxChartsResize = setTimeout(DrawAllxCharts, 500);
-            });
+
             WinMove();
 //            kmhConv();            
         });
@@ -606,10 +601,10 @@
                 dataType: 'json',
                 contentType: "json;charset=utf-8",
                 success: function (response) {
-                    coordinates=[];
-                    altitudeJSON=[];
+                    coordinates = [];
+                    altitudeJSON = [];
                     followMeData = response.followMeData;
-                    
+
                     followMeData.forEach(function (entry) {
                         //console.log(entry);
                         var newCoordinate = [entry.lat, entry.lng];
@@ -617,9 +612,15 @@
                         altitudeJSON.push(entry.altitude);
                     });
                     ymaps.ready(init);
-                            routeData = response;
+                    routeData = response;
                     //console.log(response);
-
+                    DrawAllxCharts();
+                    var graphxChartsResize;
+                    $(".box").resize(function (event) {
+                        event.preventDefault();
+                        clearTimeout(graphxChartsResize);
+                        graphxChartsResize = setTimeout(DrawAllxCharts, 500);
+                    });
 
                 },
                 error: function (error) {
