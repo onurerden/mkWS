@@ -58,15 +58,18 @@ public class samplefiledownload extends HttpServlet {
                     + "  <trk>\n"
                     + "    <name>Example GPX Document</name>\n"
                     + "    <trkseg>";
+            outputStream.write(outputResult.getBytes());
             for (FollowMeDataModel fm : model.getFollowMeData()) {
                 String timeStamp = new SimpleDateFormat("yyyy-MM-dd'T'HH.mm.ss'Z'").format(new Date());
-                outputResult = outputResult + "<trkpt lat=" + fm.getLat() + " lon=" + fm.getLng() + ">\n"
+                outputResult =  "<trkpt lat=" + fm.getLat() + " lon=" + fm.getLng() + ">\n"
                         + "        <ele>" + fm.getAltitude() + " </ele>\n"
                         + "        <speed>" + fm.getSpeed() + " </speed>\n"
                         + "        <time>" + timeStamp + "</time>\n"
                         + "      </trkpt>";
+            outputStream.write(outputResult.getBytes());
             }
-            outputResult = outputResult + " </trkseg>\n"
+            
+            outputResult = " </trkseg>\n"
                     + "  </trk>\n"
                     + "</gpx>";
             outputStream.write(outputResult.getBytes());
