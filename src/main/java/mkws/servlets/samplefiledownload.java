@@ -60,7 +60,7 @@ public class samplefiledownload extends HttpServlet {
                     + "    <trkseg>";
             for (FollowMeDataModel fm : model.getFollowMeData()) {
                 String timeStamp = new SimpleDateFormat("yyyy-MM-ddTHH.mm.ss").format(new Date());
-                outputResult = outputResult + "<trkpt lat=" + fm.getLat() + " lon=" + fm.getLon() + ">\n"
+                outputResult = outputResult + "<trkpt lat=" + fm.getLat() + " lon=" + fm.getLng() + ">\n"
                         + "        <ele>" + fm.getAltitude() + " </ele>\n"
                         + "        <speed>" + fm.getSpeed() + " </speed>\n"
                         + "        <time>" + timeStamp + "</time>\n"
