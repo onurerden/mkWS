@@ -611,7 +611,7 @@
                 dataType: 'json',
                 contentType: "json;charset=utf-8",
                 success: function (response) {
-followMeData = response.followmedata;
+                followMeData = response.followMeData;
                     console.log(response);
 
 
