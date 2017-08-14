@@ -214,7 +214,7 @@
         var followMeData;
         var coordinates = [];
         var routeData;
-        var bounds = [];
+        var bounds = [[0,0],[20,20]];
         var altitudeJSON = [];
 
         // Initializes the map as soon as the API is loaded and DOM is ready
