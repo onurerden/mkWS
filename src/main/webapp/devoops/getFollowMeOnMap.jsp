@@ -222,10 +222,10 @@
         var altitudeButton;
         var myMap;
         var mapMarker;
+        var followMeData
 
         // Initializes the map as soon as the API is loaded and DOM is ready
-        ymaps.ready(init);
-
+        
         function init() {
             myMap = new ymaps.Map("yandex", {
                 //    center: 
@@ -233,10 +233,10 @@
                 bounds:<jsp:getProperty name="routeBean" property="mapBounds"/>
             }),
                     // A polyline
-                    myPolyline = new ymaps.Polyline([
-                        // The coordinates of polyline vertices.
+                    myPolyline = new ymaps.Polyline(
+                       followMeData
 
-                    ], {
+                    , {
                         // The balloon content
                         balloonContent: "FollowMe Device Route for device:"
                     }, {
@@ -501,7 +501,7 @@
             // Load required scripts and callback to draw
             var routeId = <% out.println(Integer.parseInt(request.getParameter("routeId")));%>;
             getRouteDetails(routeId);
-            
+            ymaps.ready(init);
             DrawAllxCharts();
             //   LoadXChartScript(DrawAllxCharts);
             // Required for correctly resize charts, when boxes expand
@@ -611,7 +611,7 @@
                 dataType: 'json',
                 contentType: "json;charset=utf-8",
                 success: function (response) {
-
+followMeData = response.followmedata;
                     console.log(response);
 
 
