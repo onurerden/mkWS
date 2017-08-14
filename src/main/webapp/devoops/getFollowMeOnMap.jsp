@@ -616,7 +616,7 @@
                 contentType: "json;charset=utf-8",
                 success: function (response) {
                 followMeData = response.followMeData;
-                for (var data in response.followMeData){
+                for (var data in followMeData){
                     console.log(data);
                     var newCoordinate = [data.lat,data.lng];
                     coordinates.push(newCoordinate);
