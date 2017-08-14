@@ -32,9 +32,9 @@
                         </ol>
                     </div>
                 </div>
-                <div class="row">
-                    <div id="results" class="col-xs-12"></div>
-                </div>
+          <div class="row">
+                        <div id="results" class="col-xs-12"></div>
+          </div>
                 <div class="row">
                     <div id="routes" class="col-md-8 col-lg-9">
                         <div class="box">
@@ -87,10 +87,10 @@
                                 <b>Route length: </b>
                                 <c:choose> 
                                     <c:when test="${routeBean.getRouteLength()>1}">
-                                        <fmt:formatNumber type="number" maxFractionDigits="2" value="0" /> km
+                                        <fmt:formatNumber type="number" maxFractionDigits="2" value="<%= routeBean.getRouteLength()%>" /> km
                                     </c:when>
                                     <c:otherwise>
-                                        <fmt:formatNumber type="number" maxFractionDigits="2" value="0" /> m
+                                        <fmt:formatNumber type="number" maxFractionDigits="2" value="<%= routeBean.getRouteLength() * 1000%>" /> m
                                     </c:otherwise>
                                 </c:choose>   
                                 <br>
@@ -195,24 +195,22 @@
                                             $.ajax({url: link, success: function (result) {
 
                                                     var info = JSON.parse(result);
-                                                    //        $("#divResult").html(info.result);
+                                            //        $("#divResult").html(info.result);
 
                                                     console.log(info.result);
 
                                                     if (info.result === "success") {
                                                         $('#btn').prop('disabled', true);
                                                         $("#results").html("<div class=\"alert alert-success fade in\" class=\"col-xs-12\"><a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a><strong>Success!</strong> Route successfully exported to MapMyRide servers.</div>");
-                                                    } else {
+                                                    }else{
                                                         $("#results").html("<div class=\"alert alert-danger fade in\" class=\"col-xs-12\"><a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a><strong>Warning!</strong> There was an error during route export process.</div>");
-                                                    }
-                                                }});
+                                                }}});
 
                                         }
                                         ;
 
     </script>
     <script type="text/javascript">
-
 
         var speedChart;
         var altitudeChart;
@@ -228,7 +226,7 @@
 
         function init() {
             myMap = new ymaps.Map("yandex", {
-                //    center: 
+                //    center: <jsp:getProperty name="routeBean" property="routeStartPoint"/>
                 //    zoom: 15,
                 bounds:<jsp:getProperty name="routeBean" property="mapBounds"/>
             }),
@@ -236,9 +234,11 @@
                     myPolyline = new ymaps.Polyline([
                         // The coordinates of polyline vertices.
 
+
+        <jsp:getProperty name="routeBean" property="routePoints"/>
                     ], {
                         // The balloon content
-                        balloonContent: "FollowMe Device Route for device:"
+                        balloonContent: "FollowMe Device Route for device: <jsp:getProperty name="routeBean" property="routeId"/>"
                     }, {
                         // Balloon options
                         // Disabling the "Close" button
@@ -252,27 +252,31 @@
                     });
 
             myStartPoint = new ymaps.GeoObject({
-            geometry: {
-            type: "Point",
-                    coordinates:
-            },
-                    properties: {
+                geometry: {
+                    type: "Point",
+                    coordinates: <jsp:getProperty name="routeBean" property="routeStartPoint"/>
+                },
+                properties: {
                     iconContent: "Başlangıç"}
             }, {preset: 'twirl#greenStretchyIcon'});
-                    myEndPoint = new ymaps.GeoObject({
-                    geometry: {
-                    type: "Point",
-                            coordinates:
-                    },
-                            properties: {
-                            iconContent: "Bitiş"}
-                    }, {preset: 'twirl#redStretchyIcon'});
-                    // Adds geo objects to the map 
 
-                    myMap.geoObjects
+            myEndPoint = new ymaps.GeoObject({
+                geometry: {
+                    type: "Point",
+                    coordinates: <jsp:getProperty name="routeBean" property="routeEndPoint"/>
+                },
+                properties: {
+                    iconContent: "Bitiş"}
+            }, {preset: 'twirl#redStretchyIcon'});
+
+            // Adds geo objects to the map 
+
+            myMap.geoObjects
                     .add(myPolyline)
                     .add(myStartPoint)
                     .add(myEndPoint);
+
+
 
 
 
@@ -308,7 +312,7 @@
 
         function kmhConv() {
 
-            var speedJSON;
+            var speedJSON = <jsp:getProperty name="routeBean" property = "routeSpeedKmhValues"/>
 
             speedChart = new Highcharts.Chart({
                 chart: {
@@ -384,7 +388,7 @@
         function msecConv() {
 //alert("denemedir");
 
-            var speedJSON;
+            var speedJSON = <jsp:getProperty name="routeBean" property = "routeSpeedValues"/>
 
             speedChart = new Highcharts.Chart({
                 chart: {
@@ -445,7 +449,7 @@
                                     myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
                                     //altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
                                     altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
-                                    var str;
+                                    var str = "[" + "<jsp:getProperty name="routeBean" property = "routePoints"/>";
                                     str = str.substring(0, str.length - 1) + "]";
                                     var routePoints = JSON.parse(str);
                                     if (mapMarker != null) {
@@ -478,8 +482,7 @@
 
 
     </script>
-    <script>
-        function deleteRoute(routeId) {
+    <script>function deleteRoute(routeId) {
             console.log("delete clicked for route: " + routeId);
             var link = "../DeleteRoute?routeId=" + routeId;
             console.log(link);
@@ -499,9 +502,7 @@
     <script>
         $(document).ready(function () {
             // Load required scripts and callback to draw
-            var routeId = <% out.println(Integer.parseInt(request.getParameter("routeId")));%>;
-            getRouteDetails(routeId);
-            
+
             DrawAllxCharts();
             //   LoadXChartScript(DrawAllxCharts);
             // Required for correctly resize charts, when boxes expand
@@ -517,7 +518,7 @@
     </script>
     <script>
         function drawAltitudeChart() {
-            var altitudeJSON;
+            var altitudeJSON = <jsp:getProperty name="routeBean" property = "routeAltitudeValues"/>;
 //            var yData = altitudeJSON.y;
 //            (function (H) {
 //                H.wrap(H.Tooltip.prototype, 'hide', function () {
@@ -603,28 +604,6 @@
         function HideAllToolTips() {
 //            myTooltip.hide();
 //            altitudeTooltip.hide();
-        }
-        function getRouteDetails(routeId) {
-            $.ajax({
-                url: '../api/GetRouteDetails?routeId=' + routeId,
-                type: 'GET',
-                dataType: 'json',
-                contentType: "json;charset=utf-8",
-                success: function (response) {
-
-                    console.log(response);
-
-
-                },
-                error: function (error) {
-                    alert('Hata!' + error.description);
-                },
-                beforeSend: setHeader
-
-            });
-        }
-        function setHeader(xhr) {
-            xhr.setRequestHeader('Authorization', 'Bearer ' + sessionStorage.getItem("access_token"));
         }
 
     </script>
