@@ -604,12 +604,29 @@
                     coordinates = [];
                     altitudeJSON = [];
                     followMeData = response.followMeData;
+                    var minBounds = [999,999 ];
+                    var maxBounds = [-100,-100];
 
                     followMeData.forEach(function (entry) {
                         //console.log(entry);
                         var newCoordinate = [entry.lat, entry.lng];
+                        if(entry.lat < minBounds[0]){
+                            minBounds[0] = entry.lat;
+                        }
+                        if(entry.lat > maxBounds[0]){
+                            maxBounds[0] = entry.lat;
+                        }
+                        if(entry.lng < minBounds[1]){
+                            minBounds[1] = entry.lng;
+                        }
+                        if(entry.lng > maxBounds[1]){
+                            maxBounds[1] = entry.lng;
+                        }
+                        
                         coordinates.push(newCoordinate);
                         altitudeJSON.push(entry.altitude);
+                        bounds=[minBounds,maxBounds];
+                        
                     });
                     ymaps.ready(init);
                     routeData = response;
