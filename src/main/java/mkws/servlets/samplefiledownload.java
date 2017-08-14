@@ -61,7 +61,7 @@ public class samplefiledownload extends HttpServlet {
             outputStream.write(outputResult.getBytes());
             for (FollowMeDataModel fm : model.getFollowMeData()) {
                 String timeStamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(fm.getTime());
-                outputResult = "<trkpt lat=" + fm.getLat() + " lon=" + fm.getLng() + ">\n"
+                outputResult = "<trkpt lon=\"" + fm.getLng() +"\" lat=\"" + fm.getLat() + "\">\n"
                         + "        <ele>" + fm.getAltitude() + "</ele>\n"
                         //   + "        <speed>" + fm.getSpeed() + " </speed>\n"
                         + "        <time>" + timeStamp + "</time>\n"
@@ -69,7 +69,8 @@ public class samplefiledownload extends HttpServlet {
                         + "   <gpxtpx:TrackPointExtension><gpxtpx:speed>"+fm.getSpeed()+"</gpxtpx:speed> \n"
                         + "   <gpxtpx:course>"+fm.getBearing()+"</gpxtpx:course>\n"
                         + "   </gpxtpx:TrackPointExtension>\n"
-                        + "   </extensions>      </trkpt>";
+                        + "   </extensions>\n"
+                        + "</trkpt>";
                 outputStream.write(outputResult.getBytes());
             }
 
