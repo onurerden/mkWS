@@ -8,6 +8,7 @@ package mkws.Model;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import mkws.FollowMeData;
 
 /**
  *
@@ -157,7 +158,7 @@ public class RouteModel {
     /**
      * @return the followMeData
      */
-    public ArrayList getFollowMeData() {
+    public ArrayList<FollowMeData> getFollowMeData() {
         return followMeData;
     }
 
