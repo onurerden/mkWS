@@ -65,12 +65,12 @@ public class samplefiledownload extends HttpServlet {
                         + "        <ele>" + fm.getAltitude() + "</ele>\n"
                         //   + "        <speed>" + fm.getSpeed() + " </speed>\n"
                         + "        <time>" + timeStamp + "</time>\n"
-                        + "<extensions>\n"
-                        + "   <gpxtpx:TrackPointExtension><gpxtpx:speed>"+fm.getSpeed()+"</gpxtpx:speed> \n"
-                        + "   <gpxtpx:course>"+fm.getBearing()+"</gpxtpx:course>\n"
-                        + "   </gpxtpx:TrackPointExtension>\n"
-                        + "   </extensions>\n"
-                        + "</trkpt>";
+                     //   + "<extensions>\n"
+                     //   + "   <gpxtpx:TrackPointExtension><gpxtpx:speed>"+fm.getSpeed()+"</gpxtpx:speed> \n"
+                     //   + "   <gpxtpx:course>"+fm.getBearing()+"</gpxtpx:course>\n"
+                     //   + "   </gpxtpx:TrackPointExtension>\n"
+                     //   + "   </extensions>\n"
+                        + "</trkpt>\n";
                 outputStream.write(outputResult.getBytes());
             }
 
