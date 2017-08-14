@@ -34,13 +34,15 @@ public class samplefiledownload extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/gpx");
         response.setHeader("Content-Disposition", "attachment; filename=\"sampleFile.gpx\"");
-        try (PrintWriter out = response.getWriter()) {
+        try {
             /* TODO output your page here. You may use following sample code. */
         OutputStream outputStream = response.getOutputStream();
         String outputResult = "xxxx, yyyy, zzzz, aaaa, bbbb, ccccc, dddd, eeee, ffff, gggg\n";
         outputStream.write(outputResult.getBytes());
         outputStream.flush();
         outputStream.close();
+        }catch (Exception ex){
+            System.out.println("exception:" + ex.getMessage());
         }
     }
 
