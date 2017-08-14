@@ -227,7 +227,7 @@
         var routeData;
 
         // Initializes the map as soon as the API is loaded and DOM is ready
-        
+
         function init() {
             myMap = new ymaps.Map("yandex", {
                 //    center: 
@@ -236,12 +236,12 @@
             }),
                     // A polyline
                     myPolyline = new ymaps.Polyline(
-                       coordinates
+                            coordinates
 
-                    , {
-                        // The balloon content
-                        balloonContent: "FollowMe Device Route for device:"
-                    }, {
+                            , {
+                                // The balloon content
+                                balloonContent: "FollowMe Device Route for device:"
+                            }, {
                         // Balloon options
                         // Disabling the "Close" button
                         balloonHasCloseButton: false,
@@ -254,24 +254,24 @@
                     });
 
             myStartPoint = new ymaps.GeoObject({
-            geometry: {
-            type: "Point",
-                    coordinates:coordinates[0]
-            },
-                    properties: {
+                geometry: {
+                    type: "Point",
+                    coordinates: coordinates[0]
+                },
+                properties: {
                     iconContent: "Başlangıç"}
             }, {preset: 'twirl#greenStretchyIcon'});
-                    myEndPoint = new ymaps.GeoObject({
-                    geometry: {
+            myEndPoint = new ymaps.GeoObject({
+                geometry: {
                     type: "Point",
-                            coordinates:coordinates[coordinates.length-1]
-                    },
-                            properties: {
-                            iconContent: "Bitiş"}
-                    }, {preset: 'twirl#redStretchyIcon'});
-                    // Adds geo objects to the map 
+                    coordinates: coordinates[coordinates.length - 1]
+                },
+                properties: {
+                    iconContent: "Bitiş"}
+            }, {preset: 'twirl#redStretchyIcon'});
+            // Adds geo objects to the map 
 
-                    myMap.geoObjects
+            myMap.geoObjects
                     .add(myPolyline)
                     .add(myStartPoint)
                     .add(myEndPoint);
@@ -602,12 +602,12 @@
         function DrawAllToolTips(event) {
 
         }
-        
+
         function HideAllToolTips() {
 //            myTooltip.hide();
 //            altitudeTooltip.hide();
         }
-        
+
         function getRouteDetails(routeId) {
             $.ajax({
                 url: '../api/GetRouteDetails?routeId=' + routeId,
@@ -615,14 +615,15 @@
                 dataType: 'json',
                 contentType: "json;charset=utf-8",
                 success: function (response) {
-                followMeData = response.followMeData;
-                for (var data in followMeData){
-                    console.log(data);
-                    var newCoordinate = [data.lat,data.lng];
-                    coordinates.push(newCoordinate);
-                }
-                routeData = response;
-                //console.log(response);
+                    coordinates=[];
+                    followMeData = response.followMeData;
+                    followMeData.forEach(function (entry) {
+                        console.log(entry);
+                        var newCoordinate = [entry.lat, entry.lng];
+                        coordinates.push(newCoordinate);
+                    };
+                            routeData = response;
+                    //console.log(response);
 
 
                 },
