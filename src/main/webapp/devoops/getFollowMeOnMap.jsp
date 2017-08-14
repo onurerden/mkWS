@@ -216,6 +216,7 @@
         var routeData;
         var bounds = [[0,0],[20,20]];
         var altitudeJSON = [];
+        var speedJSON = [];
 
         // Initializes the map as soon as the API is loaded and DOM is ready
 
@@ -375,10 +376,7 @@
         }
 
         function msecConv() {
-//alert("denemedir");
-
-            var speedJSON;
-
+  
             speedChart = new Highcharts.Chart({
                 chart: {
                     renderTo: 'speedChart',
@@ -625,6 +623,7 @@
                         
                         coordinates.push(newCoordinate);
                         altitudeJSON.push(entry.altitude);
+                        speedJSON.push(entry.speed);
                         bounds=[minBounds,maxBounds];
                         
                     });
