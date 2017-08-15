@@ -77,15 +77,15 @@
                                 </div>
                                 <div class="no-move"></div>
                             </div>
-                            <div class="box-content" style="width:auto; height:430px">
+                            <div id=routeDetails class="box-content" style="width:auto; height:430px">
                                 <h2>Route Id: <% out.println(Integer.parseInt(request.getParameter("routeId")));%> </h2>
-                                <b>Device Name :</b> <i> </i><br/>
-                                <b>Route Date : </b> <i> </i><br/>
+                                <b>Device Name :</b> <i>Gathering Data</i><br/>
+                                <b>Route Date : </b> <i>Gathering Data</i><br/>
 
                                 <br>
-                                <b>Max Speed : </b> <i></i><br/>
-                                <b>Max Altitude : </b><i> m </i><br/>
-                                <b>Min Altitude : </b> <i> m </i><br/>
+                                <b>Max Speed : </b> <i>Gathering Data</i><br/>
+                                <b>Max Altitude : </b><i>Gathering Data</i><br/>
+                                <b>Min Altitude : </b> <i>Gathering Data</i><br/>
 
                                 <br>
                                 <button id="btn" class="btn btn-danger"  onclick="sendMMR()"> Upload to MMR</button>
@@ -627,6 +627,7 @@
                         bounds=[minBounds,maxBounds];
                         
                     });
+                    $('#routeDetails').html("Detaylar");
                     ymaps.ready(init);
                     routeData = response;
                     //console.log(response);
