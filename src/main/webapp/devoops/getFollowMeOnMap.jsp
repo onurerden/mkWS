@@ -624,11 +624,11 @@
                     });
                     var duration ="";
                     if(routeData.duration<60){
-                        duration=routeData.duration+"";
+                        duration=routeData.duration+" seconds";
                     }else if (routeData.duration<3600){
-                        duration = "" + routeData.duration/60 + ":"+ routeData.duration%60;
+                        duration = "" + Math.floor(routeData.duration/60) + ":"+ timeFormatter(routeData.duration%60);
                     }else {
-                        duration = "" + routeData.duration/3600 + ":"+ (routeData.duration%3600)/60 + ":" + routeData.duration%60;
+                        duration = "" + Math.floor(routeData.duration/3600) + ":"+ timeFormatter(Math.floor((routeData.duration%3600)/60)) + ":" + timeFormatter(routeData.duration%60);
                           }
                     
                     var details = "<h2>Route Id: " + routeData.id +"</h2>\n\
@@ -660,7 +660,9 @@
         function setHeader(xhr) {
             xhr.setRequestHeader('Authorization', 'Bearer ' + sessionStorage.getItem("access_token"));
         }
-
+function timeFormatter(n){
+    return n > 9 ? "" + n: "0" + n;
+}
     </script>
 
 </body>
