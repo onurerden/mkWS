@@ -629,7 +629,7 @@
                         
                     });
                     var duration ="";
-                    if(routeData.duration>60){
+                    if(routeData.duration<60){
                         duration=routeData.duration+"";
                     }else if (routeData.duration<3600){
                         duration = "" + routeData.duration/60 + ":"+ routeData.duration%60;
@@ -638,8 +638,8 @@
                           }
                     
                     var details = "<h2>Route Id: " + routeData.id +"</h2>\n\
-                                    <b>Route Length: </b> <i>" + routeData.routeLength + "</i><br>\n\
-                                    <b>Route Date:</b><i> " + routeData.time +" km</i><br>\n\
+                                    <b>Route Length: </b> <i>" + routeData.routeLength + " km</i><br>\n\
+                                    <b>Route Date:</b><i> " + routeData.time +" </i><br>\n\
                                    <b>Duration:</b> <i>" + duration + " </i><br>" ;
             
                                 
