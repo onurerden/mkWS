@@ -602,6 +602,7 @@
                     coordinates = [];
                     altitudeJSON = [];
                     followMeData = response.followMeData;
+                    routeData = response;
                     var minBounds = [999,999 ];
                     var maxBounds = [-100,-100];
 
@@ -627,9 +628,24 @@
                         bounds=[minBounds,maxBounds];
                         
                     });
-                    $('#routeDetails').html("Detaylar");
+                    var duration ="";
+                    if(route.duration>60){
+                        duration=route.duration+"";
+                    }else if (route.duration<3600){
+                        duration = "" + route.duration/60 + ":"+ route.duration%60;
+                    }else {
+                        duration = "" + route.duration/3600 + ":"+ (route.duration%3600)/60 + ":" + route.duration%60;
+                          }
+                    
+                    var details = "<h2>Route Id: " + route.id +"</h2>\n\
+                                    <b>Route Length: </b> <i>" + route.routeLength + "</i><br>\n\
+                                    <b>Route Date:</b><i> " + route.time " km</i><br>\n\
+                                   <b>Duration:</b> <i>" + duration + " </i><br>" ;
+            
+                                
+                    $('#routeDetails').html(details);
                     ymaps.ready(init);
-                    routeData = response;
+                    
                     //console.log(response);
                     DrawAllxCharts();
                     var graphxChartsResize;
