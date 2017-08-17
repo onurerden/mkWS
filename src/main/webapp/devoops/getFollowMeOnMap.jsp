@@ -79,13 +79,7 @@
                             </div>
                             <div id=routeDetails class="box-content" style="width:auto; height:430px">
                                 <h2>Route Id: <% out.println(Integer.parseInt(request.getParameter("routeId")));%> </h2>
-                                <b>Device Name :</b> <i>Gathering Data</i><br/>
-                                <b>Route Date : </b> <i>Gathering Data</i><br/>
-
-                                <br>
-                                <b>Max Speed : </b> <i>Gathering Data</i><br/>
-                                <b>Max Altitude : </b><i>Gathering Data</i><br/>
-                                <b>Min Altitude : </b> <i>Gathering Data</i><br/>
+                                <b>Gathering data </b>
 
                                 <br>
                                 <button id="btn" class="btn btn-danger"  onclick="sendMMR()"> Upload to MMR</button>
