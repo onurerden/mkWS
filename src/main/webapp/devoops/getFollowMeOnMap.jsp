@@ -629,17 +629,17 @@
                         
                     });
                     var duration ="";
-                    if(route.duration>60){
-                        duration=route.duration+"";
-                    }else if (route.duration<3600){
-                        duration = "" + route.duration/60 + ":"+ route.duration%60;
+                    if(routeData.duration>60){
+                        duration=routeData.duration+"";
+                    }else if (routeData.duration<3600){
+                        duration = "" + routeData.duration/60 + ":"+ routeData.duration%60;
                     }else {
-                        duration = "" + route.duration/3600 + ":"+ (route.duration%3600)/60 + ":" + route.duration%60;
+                        duration = "" + routeData.duration/3600 + ":"+ (routeData.duration%3600)/60 + ":" + routeData.duration%60;
                           }
                     
-                    var details = "<h2>Route Id: " + route.id +"</h2>\n\
-                                    <b>Route Length: </b> <i>" + route.routeLength + "</i><br>\n\
-                                    <b>Route Date:</b><i> " + route.time +" km</i><br>\n\
+                    var details = "<h2>Route Id: " + routeData.id +"</h2>\n\
+                                    <b>Route Length: </b> <i>" + routeData.routeLength + "</i><br>\n\
+                                    <b>Route Date:</b><i> " + routeData.time +" km</i><br>\n\
                                    <b>Duration:</b> <i>" + duration + " </i><br>" ;
             
                                 
