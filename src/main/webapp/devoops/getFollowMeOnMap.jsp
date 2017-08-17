@@ -77,11 +77,13 @@
                                 </div>
                                 <div class="no-move"></div>
                             </div>
-                            <div id=routeDetails class="box-content" style="width:auto; height:430px">
-                                <h2>Route Id: <% out.println(Integer.parseInt(request.getParameter("routeId")));%> </h2>
-                                <b>Gathering data </b>
+                            <div class="box-content" style="width:auto; height:430px">
+                                <div id=routeDetails>
+                                     <h2>Route Id: <% out.println(Integer.parseInt(request.getParameter("routeId")));%> </h2>
+                                <b>Gathering data... </b>
 
                                 <br>
+                                </div>
                                 <button id="btn" class="btn btn-danger"  onclick="sendMMR()"> Upload to MMR</button>
                                 <button id="deletebutton" class="btn btn-danger" onClick="deleteRoute(<% out.println(Integer.parseInt(request.getParameter("routeId")));%>)">Delete Route</button>
                                 <div id="divResult"></div>
@@ -631,7 +633,7 @@
                         duration = "" + Math.floor(routeData.duration/3600) + ":"+ timeFormatter(Math.floor((routeData.duration%3600)/60)) + ":" + timeFormatter(routeData.duration%60);
                           }
                     
-                    var details = "<h2>Route Id: " + routeData.id +"</h2>\n\
+                    var details = "<h2>Route Id: " + routeData.routeId +"</h2>\n\
                                     <b>Route Length: </b> <i>" + routeData.routeLength + " km</i><br>\n\
                                     <b>Route Date:</b><i> " + routeData.time +" </i><br>\n\
                                    <b>Duration:</b> <i>" + duration + " </i><br>" ;
