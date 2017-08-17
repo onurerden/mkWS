@@ -639,7 +639,7 @@
                     
                     var details = "<h2>Route Id: " + route.id +"</h2>\n\
                                     <b>Route Length: </b> <i>" + route.routeLength + "</i><br>\n\
-                                    <b>Route Date:</b><i> " + route.time " km</i><br>\n\
+                                    <b>Route Date:</b><i> " + route.time +" km</i><br>\n\
                                    <b>Duration:</b> <i>" + duration + " </i><br>" ;
             
                                 
