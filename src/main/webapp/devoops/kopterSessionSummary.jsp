@@ -271,7 +271,7 @@
     </div>       
 
     <%@include file="foot.jsp" %>
-    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
     <script>
         var map;
