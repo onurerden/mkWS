@@ -11,10 +11,10 @@ package mkws;
  */
 public class Credentials {
 
-    String server = "127.5.211.2:3306"; //mk
+    //String server = "127.5.211.2:3306"; //mk
  //   String server = "127.2.57.130:3306";//mknew
-  //  String server = "localhost:3306";
-//    String server = "onur-mac-mini.local:3306";
+    String server = "localhost:3306";
+ //   String server = "onur-mac-mini.local:3306";
     String database = "mk";
 //    String dbUserName = "adminGStcLXX";
 //    String dbPassword = "Wc_flbnyklZt";
@@ -23,7 +23,8 @@ public class Credentials {
     
       private String emailHost="smtp.yandex.com";
     private String emailUserName="no-reply@followmeapp.xyz";
-    private String emailUserPassword = "19861986";
+    //private String emailUserPassword = "19861986";
+    private String emailUserPassword = "lkpzkcoaeivkcwcg";
     
     
     private String jjwtKey = "3zciEFR2rf+beofy3rh0Ak/2L8NOLS0GGnNODeSBNUI=";
