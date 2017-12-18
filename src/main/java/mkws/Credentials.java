@@ -24,7 +24,7 @@ public class Credentials {
       private String emailHost="smtp.yandex.com";
     private String emailUserName="no-reply@followmeapp.xyz";
     //private String emailUserPassword = "19861986";
-    private String emailUserPassword = "lkpzkcoaeivkcwcg";
+    private String emailUserPassword = "tvjmmnuwacatamua";
     
     
     private String jjwtKey = "3zciEFR2rf+beofy3rh0Ak/2L8NOLS0GGnNODeSBNUI=";
