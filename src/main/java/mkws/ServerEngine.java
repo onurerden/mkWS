@@ -110,8 +110,8 @@ public class ServerEngine implements IDeviceServer {
         Statement st_1 = null;
         ResultSet rs_1 = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
 
             rs_1 = st_1.executeQuery(queryString);
@@ -166,7 +166,7 @@ public class ServerEngine implements IDeviceServer {
                 }
             }
             con_1.close();
-        } catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
         sessionInfo.setSessionId(createSession(sessionInfo.getDeviceId(), sessionInfo.getDeviceType()));
@@ -212,15 +212,15 @@ public class ServerEngine implements IDeviceServer {
             Statement st_1;
             //ResultSet rs_1 = null;
             try {
-                Class.forName("com.mysql.jdbc.Driver").newInstance();
-                con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+                
+                con_1 = getConnection();
                 st_1 = con_1.createStatement();
 
                 st_1.executeUpdate(queryString, Statement.RETURN_GENERATED_KEYS);
                 deviceId = jsonObject.fromJson(touchServer(uid, deviceType), MKSession.class).getDeviceId();
 
                 con_1.close();
-            } catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException ex) {
+            } catch (SQLException ex) {
                 Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
             }
 
@@ -2398,6 +2398,19 @@ public class ServerEngine implements IDeviceServer {
         }
         return fbUser;
     }
+    
+    Connection getConnection(){
+        Connection con_1 = null;
+        try {
+            
+            Credentials cr = new Credentials();
+            Class.forName("com.mysql.jdbc.Driver");
+            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+        } catch ( SQLException | ClassNotFoundException  ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return con_1;
+    }
 
     String randomString(int len) {
         StringBuilder sb = new StringBuilder(len);
@@ -2414,12 +2427,12 @@ public class ServerEngine implements IDeviceServer {
 
         String query = "INSERT INTO `feedback` (`memberId`, `message`) VALUES (" + this.userId + ", \"" + feedbackMessage + "\")";
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             st_1.executeUpdate(query);
 
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+        } catch (SQLException ex) {
             LogMessage message = new LogMessage();
             message.setLogLevel(1);
             message.setLogMessage("Feedback cannot be saved. " + ex.getLocalizedMessage());
@@ -2438,8 +2451,8 @@ public class ServerEngine implements IDeviceServer {
             Connection con_1 = null;
             Statement st_1 = null;
             ResultSet rs_1 = null;
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "SELECT * FROM mk.v_feedback";
 
@@ -2460,7 +2473,7 @@ public class ServerEngine implements IDeviceServer {
 
             }
 
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+        } catch (SQLException ex) {
 
         }
 
