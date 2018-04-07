@@ -9,8 +9,8 @@
 <%@page import="mkws.LogMessage"%>
 <%@page import="mkws.ServerEngine"%>
 <%
-    if ((Boolean)session.getAttribute("isAdmin")){
     ServerEngine server = new ServerEngine();
+    if ((Boolean)session.getAttribute("isAdmin")){    
     String first_name = request.getParameter("first_name"); 
     String last_name = request.getParameter("last_name"); 
     String uname = request.getParameter("uname"); 
@@ -27,7 +27,7 @@
     
     System.out.println("isAdmin value is: " + request.getParameter("isAdmin"));
     
-    boolean result = server.addMkwsUser(first_name, last_name, email, uname, password, isAdmin);
+    boolean result = server.addMkwsUser(first_name, last_name, email, uname, password, isAdmin,false);
     if (result){
          LogMessage msg = new LogMessage();
          msg.setDeviceType(DeviceTypes.SERVER.getName());

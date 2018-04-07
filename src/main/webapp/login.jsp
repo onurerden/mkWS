@@ -34,4 +34,5 @@
     } else {
         out.println("Invalid login credentials. <a href='index.html'>Try again</a>.");
     }
+    con.close();
 %>

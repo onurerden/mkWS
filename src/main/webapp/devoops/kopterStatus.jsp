@@ -98,7 +98,7 @@
                             </div>
                             <div class="box-content"> 
 
-                                <% Class.forName("com.mysql.jdbc.Driver").newInstance(); %>
+                                <% Class.forName("com.mysql.jdbc.Driver"); %>
                                 <%
                                     Credentials cr = new Credentials();
                                     Connection connection = DriverManager.getConnection(

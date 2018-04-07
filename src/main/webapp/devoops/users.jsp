@@ -94,7 +94,7 @@
             <div id="content" class="col-xs-12 col-sm-10">
 
                 <%// Class.forName("sun.jdbc.odbc.JdbcOdbcDriver"); %>
-                <% Class.forName("com.mysql.jdbc.Driver").newInstance(); %>
+                <% Class.forName("com.mysql.jdbc.Driver"); %>
                 <% 
                     Credentials cr = new Credentials();
                     Connection connection = DriverManager.getConnection(
