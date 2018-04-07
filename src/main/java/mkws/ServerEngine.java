@@ -105,12 +105,12 @@ public class ServerEngine implements IDeviceServer {
             }
         }
 
-        Credentials cr = new Credentials();
+        
         Connection con_1 = null;
         Statement st_1 = null;
         ResultSet rs_1 = null;
         try {
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
 
@@ -207,12 +207,12 @@ public class ServerEngine implements IDeviceServer {
                 }
             }
 
-            Credentials cr = new Credentials();
+            
             Connection con_1;
             Statement st_1;
             //ResultSet rs_1 = null;
             try {
-                
+
                 con_1 = getConnection();
                 st_1 = con_1.createStatement();
 
@@ -231,7 +231,7 @@ public class ServerEngine implements IDeviceServer {
     @Override
     public int sendStatus(String jsonStatus) {
         int result = -1;
-        Credentials cr = new Credentials();
+        
         Connection con_1 = null;
         Statement st_1 = null;
         System.out.println(jsonStatus);
@@ -279,15 +279,15 @@ public class ServerEngine implements IDeviceServer {
                 + ")";
         System.out.println(queryString);
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             System.out.println(queryString);
             result = -2;
             result = st_1.executeUpdate(queryString);
             con_1.close();
 
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
         return result;
@@ -300,7 +300,7 @@ public class ServerEngine implements IDeviceServer {
         String output = "-1";
         String queryString;
 
-        Credentials cr = new Credentials();
+        
         Connection con_1;
         Statement st_1;
         ResultSet rs_1;
@@ -308,9 +308,8 @@ public class ServerEngine implements IDeviceServer {
         switch (matchedDevice) {
             case -3: {
                 try {
-                    Class.forName("com.mysql.jdbc.Driver").newInstance();
 
-                    con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+                    con_1 = getConnection();
                     st_1 = con_1.createStatement();
 
                     queryString = "SELECT * from waypoints "
@@ -356,7 +355,7 @@ public class ServerEngine implements IDeviceServer {
                         }
                     }
 
-                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+                } catch (SQLException ex) {
                     Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
@@ -365,8 +364,8 @@ public class ServerEngine implements IDeviceServer {
 
             default: {
                 try {
-                    Class.forName("com.mysql.jdbc.Driver").newInstance();
-                    con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+
+                    con_1 = getConnection();
                     st_1 = con_1.createStatement();
 
                     queryString = "SELECT * from followme WHERE followMeDeviceId = " + matchedDevice
@@ -397,7 +396,7 @@ public class ServerEngine implements IDeviceServer {
                     output = json.toJson(data);
                     System.out.println(output);
                     con_1.close();
-                } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+                } catch (SQLException ex) {
                     output = "-2";
                     Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -443,15 +442,15 @@ public class ServerEngine implements IDeviceServer {
 
     public int sendFollowMeData(FollowMeData data) {
 
-        Credentials cr = new Credentials();
+        
         Connection con_1;
         Statement st_1;
         ResultSet rs_1;
         String queryString;
         //String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
 
             queryString = "INSERT INTO followme "
@@ -481,9 +480,6 @@ public class ServerEngine implements IDeviceServer {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Exception: " + ex.getMessage());
             return -1;
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Exception: " + ex.getMessage());
         }
 
         return 0;
@@ -493,7 +489,7 @@ public class ServerEngine implements IDeviceServer {
         int matchedFollowMeDevice = -1;
         boolean hasMission = false;
 
-        Credentials cr = new Credentials();
+        
         Connection con_1;
         Statement st_1;
         ResultSet rs_1;
@@ -502,8 +498,8 @@ public class ServerEngine implements IDeviceServer {
                 + "where id=(SELECT max(id) from devicematching where kopterId=" + deviceId + ")";
 
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
 
             rs_1 = st_1.executeQuery(queryString);
@@ -516,7 +512,7 @@ public class ServerEngine implements IDeviceServer {
             System.out.println("Follow followMeDevice: " + matchedFollowMeDevice);
             con_1.close();
 
-        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
         if (hasMission) {
@@ -531,14 +527,14 @@ public class ServerEngine implements IDeviceServer {
         String kopterStatusString = "-2";
         KopterStatus status = new KopterStatus();
 
-        Credentials cr = new Credentials();
+        
         Connection con_1;
         Statement st_1;
         ResultSet rs_1;
         String queryString = "SELECT * from kopterstatus WHERE kopterId = " + deviceId + " ORDER BY `kopterstatus`.`id` DESC LIMIT 1";
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             System.out.println(queryString);
             rs_1 = st_1.executeQuery(queryString);
@@ -576,8 +572,6 @@ public class ServerEngine implements IDeviceServer {
         } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
             return "-1";
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return kopterStatusString;
@@ -589,7 +583,7 @@ public class ServerEngine implements IDeviceServer {
         String jsonString = "";
         System.out.println("Looking for FollowMeData " + deviceId);
         FollowMeData data = new FollowMeData();
-        Credentials cr = new Credentials();
+        
         Connection con_1 = null;
         Statement st_1;
         ResultSet rs_1;
@@ -613,8 +607,8 @@ public class ServerEngine implements IDeviceServer {
                     + " ORDER BY followme.`id` DESC LIMIT 1";
         }
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             System.out.println(queryString);
             rs_1 = st_1.executeQuery(queryString);
@@ -658,15 +652,6 @@ public class ServerEngine implements IDeviceServer {
         } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
             return "-1";
-        } catch (InstantiationException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-            return "-2";
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-            return "-3";
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-            return "-4";
         } finally {
             try {
                 con_1.close();
@@ -680,16 +665,16 @@ public class ServerEngine implements IDeviceServer {
     @Override
     public int getRouteId(int deviceId, int type) {
         int routeId = -1;
-        Credentials cr = new Credentials();
+        
         Connection con_1 = null;
         Statement st_1;
         String queryString = "INSERT INTO route SET followMeDeviceId = " + deviceId + " , time = NOW() , userId = " + userId
                 + ", type = " + type;
         //Statement st_2;
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
+
             //System.out.println("Instance Created");
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            con_1 = getConnection();
             //System.out.println("Connection Created");
             st_1 = con_1.createStatement();
 
@@ -716,9 +701,6 @@ public class ServerEngine implements IDeviceServer {
             System.out.println(ex.getMessage());
             return -1;
 
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-            return -2;
         } finally {
             try {
                 con_1.close();
@@ -731,7 +713,7 @@ public class ServerEngine implements IDeviceServer {
     }
 
     public RouteModel getRouteInfo(int routeId) {
-        Credentials cr = new Credentials();
+        
         Connection con_1 = null;
         Statement st_1;
         ResultSet rs_1;
@@ -739,8 +721,7 @@ public class ServerEngine implements IDeviceServer {
         RouteModel route = new RouteModel();
         try {
 
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "SELECT * FROM mk.route WHERE id= " + routeId;
             System.out.println(query);
@@ -760,7 +741,7 @@ public class ServerEngine implements IDeviceServer {
 
             con_1.close();
 
-        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
         return route;
@@ -769,21 +750,20 @@ public class ServerEngine implements IDeviceServer {
     @Override
     public int setTask(int kopterId, int followMeDeviceId) {
 
-        Credentials cr = new Credentials();
         Connection con_1 = null;
         Statement st_1;
         ResultSet rs_1;
         String queryString;
         //String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             queryString = "INSERT INTO devicematching SET kopterId =" + kopterId + ", followMeDeviceId =" + followMeDeviceId;
 
             st_1.executeUpdate(queryString);
 
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+        } catch (SQLException ex) {
 
         } finally {
             try {
@@ -809,7 +789,7 @@ public class ServerEngine implements IDeviceServer {
             return -2;
         }
 
-        Credentials cr = new Credentials();
+        
         Connection con_1 = null;
         Statement st_1 = null;
 
@@ -843,14 +823,14 @@ public class ServerEngine implements IDeviceServer {
         }
 
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             System.out.println(query);
             st_1.execute(query);
             status = 0;
 
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
+        } catch (SQLException ex) {
             System.out.println("Exception while sendLog: " + ex.toString());
             status = -1;
         } finally {
@@ -870,7 +850,7 @@ public class ServerEngine implements IDeviceServer {
 //    }
     @Override
     public int endRoute(int routeId) {
-        Credentials cr = new Credentials();
+        
         Connection con_1 = null;
         Statement st_1 = null;
         GetRouteDetails routeDetails = getRouteDetailsWithBean(routeId);
@@ -882,12 +862,12 @@ public class ServerEngine implements IDeviceServer {
         double average = length * 1000.0 / duration;
         String query = "UPDATE  `route` SET isEnded =1, length = " + length + ", meanSpeed= " + average + " WHERE id =" + routeId;
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             st_1.executeUpdate(query);
 
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
             return -1;
         }
@@ -897,7 +877,7 @@ public class ServerEngine implements IDeviceServer {
 
     @Override
     public int endRoute(int routeId, double length) {
-        Credentials cr = new Credentials();
+
         Connection con_1 = null;
         Statement st_1 = null;
         GetRouteDetails routeDetails = getRouteDetailsWithBean(routeId);
@@ -911,12 +891,12 @@ public class ServerEngine implements IDeviceServer {
         double average = length * 1000.0 / duration;
         String query = "UPDATE  `route` SET isEnded =1, length = " + length + ", meanSpeed= " + average + " WHERE id =" + routeId;
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             st_1.executeUpdate(query);
 
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
             return -1;
         }
@@ -926,7 +906,7 @@ public class ServerEngine implements IDeviceServer {
 
     @Override
     public int endRoute(int routeId, int duration) {
-        Credentials cr = new Credentials();
+        
         Connection con_1 = null;
         Statement st_1 = null;
         GetRouteDetails routeDetails = getRouteDetailsWithBean(routeId);
@@ -935,12 +915,12 @@ public class ServerEngine implements IDeviceServer {
         double average = length * 1000.0 / duration;
         String query = "UPDATE  `route` SET isEnded =1, length = " + length + ", meanSpeed= " + average + " , duration = " + duration + " WHERE id =" + routeId;
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             st_1.executeUpdate(query);
 
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
             return -1;
         }
@@ -950,7 +930,7 @@ public class ServerEngine implements IDeviceServer {
 
     @Override
     public int endRoute(int routeId, int duration, double length) {
-        Credentials cr = new Credentials();
+
         Connection con_1 = null;
         Statement st_1 = null;
         GetRouteDetails routeDetails = getRouteDetailsWithBean(routeId);
@@ -962,12 +942,12 @@ public class ServerEngine implements IDeviceServer {
         double average = length * 1000.0 / duration;
         String query = "UPDATE  `route` SET isEnded =1, length = " + length + ", meanSpeed= " + average + " , duration = " + duration + " WHERE id =" + routeId;
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             st_1.executeUpdate(query);
 
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
             return -1;
         }
@@ -977,7 +957,7 @@ public class ServerEngine implements IDeviceServer {
 
     private int createSession(int deviceId, DeviceTypes type) {
         int sessionId = -1;
-        Credentials cr = new Credentials();
+        
         Connection con_1 = null;
         Statement st_1;
         boolean isKopter = type.equals(DeviceTypes.MK);
@@ -988,12 +968,12 @@ public class ServerEngine implements IDeviceServer {
         System.out.println(query);
 
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             st_1.executeUpdate(query);
 
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException ex) {
+        } catch (SQLException ex) {
             System.out.println("Error: " + ex.getMessage());
         } finally {
             try {
@@ -1007,14 +987,13 @@ public class ServerEngine implements IDeviceServer {
         System.out.println(query);
         Connection con_2 = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
 
-            con_2 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            con_2 = getConnection();
             Statement st_2 = con_2.createStatement();
             ResultSet rs_2 = st_2.executeQuery(query);
             rs_2.next();
             sessionId = rs_2.getInt("id");
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+        } catch (SQLException ex) {
             sessionId = -2;
 
         } finally {
@@ -1050,14 +1029,14 @@ public class ServerEngine implements IDeviceServer {
 
     public ArrayList<KopterStatus> getKopterSessionData(int sessionId) {
         ArrayList<KopterStatus> sessionList = new ArrayList<>();
-        Credentials cr = new Credentials();
+
         Connection con_1 = null;
         Statement st_1;
 
         String query = "SELECT * from kopterstatus WHERE sessionId=" + sessionId;
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             ResultSet rs_1 = st_1.executeQuery(query);
             while (rs_1.next()) {
@@ -1082,7 +1061,7 @@ public class ServerEngine implements IDeviceServer {
 
                 sessionList.add(newStatus);
             }
-
+            con_1.close();
         } catch (Exception ex) {
             System.out.println("Error at collecting session data");
         }
@@ -1205,7 +1184,7 @@ public class ServerEngine implements IDeviceServer {
             System.out.println("DeviceType alınamadı.");
         }
 
-        Credentials cr = new Credentials();
+        
         Connection con_1 = null;
         Statement st_1;
         String query;
@@ -1228,11 +1207,11 @@ public class ServerEngine implements IDeviceServer {
             }
         }
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             st_1.executeUpdate(query);
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+        } catch (SQLException ex) {
             System.out.println("Error while saving MMR Authorization code: " + ex.getMessage());
             return -1;
         }
@@ -1241,7 +1220,7 @@ public class ServerEngine implements IDeviceServer {
 
     public int saveMMRauthorizationCodeForUser(Integer userId, String code) {
 
-        Credentials cr = new Credentials();
+        
         Connection con_1 = null;
         Statement st_1;
         String query;
@@ -1251,11 +1230,11 @@ public class ServerEngine implements IDeviceServer {
                 + userId + ")";
 
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             st_1.executeUpdate(query);
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+        } catch (SQLException ex) {
             System.out.println("Error while saving MMR Authorization code: " + ex.getMessage());
             return -1;
         }
@@ -1272,7 +1251,7 @@ public class ServerEngine implements IDeviceServer {
             System.out.println("DeviceType alınamadı.");
         }
 
-        Credentials cr = new Credentials();
+        
         Connection con_1 = null;
         Statement st_1;
         String query;
@@ -1305,11 +1284,11 @@ public class ServerEngine implements IDeviceServer {
         }
         try {
             System.out.println(query);
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             st_1.executeUpdate(query);
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+        } catch (SQLException ex) {
             System.out.println("Error while saving MMR Authorization code: " + ex.getMessage());
             return -1;
         }
@@ -1318,7 +1297,7 @@ public class ServerEngine implements IDeviceServer {
 
     public int saveMMRauthorizationTokenForUser(int userId, OAuthToken token) {
 
-        Credentials cr = new Credentials();
+        
         Connection con_1 = null;
         Statement st_1;
         String query;
@@ -1333,11 +1312,11 @@ public class ServerEngine implements IDeviceServer {
 
         try {
             System.out.println(query);
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             st_1.executeUpdate(query);
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+        } catch (SQLException ex) {
             System.out.println("Error while saving MMR Authorization code: " + ex.getMessage());
             return -1;
         }
@@ -1353,8 +1332,8 @@ public class ServerEngine implements IDeviceServer {
         Connection con_1 = null;
         Statement st_1 = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             ResultSet rs = st_1.executeQuery(queryString);
 
@@ -1367,7 +1346,7 @@ public class ServerEngine implements IDeviceServer {
             } else {
                 System.out.println("no authorization record found for userId: " + userId);
             }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+        } catch (SQLException ex) {
             System.out.println("Error on querying MMR OAuth2 Code");
             return "Error on querying MMR OAuth2 Code";
         }
@@ -1419,8 +1398,8 @@ public class ServerEngine implements IDeviceServer {
         Connection con_1 = null;
         Statement st_1 = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             ResultSet rs = st_1.executeQuery(queryString);
 
@@ -1433,7 +1412,7 @@ public class ServerEngine implements IDeviceServer {
             } else {
                 System.out.println("no authorization record found for device" + deviceId);
             }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+        } catch (SQLException ex) {
             System.out.println("Error on querying MMR OAuth2 Code");
             return "Error on querying MMR OAuth2 Code";
         }
@@ -1678,7 +1657,7 @@ public class ServerEngine implements IDeviceServer {
     @Override
     public int saveMission(MKMission mission, String name, String comments) {
 
-        Credentials cr = new Credentials();
+        
         Connection con_1 = null;
         Statement st_1;
         String query;
@@ -1707,17 +1686,14 @@ public class ServerEngine implements IDeviceServer {
         }
 
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             st_1.execute(query);
             con_1.close();
         } catch (SQLException ex) {
             return -1;
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-            return -2;
-        }
+        } 
 
         return 1;
     }
@@ -1730,35 +1706,29 @@ public class ServerEngine implements IDeviceServer {
 
     private void setMissionSent(int missionId) {
         try {
-            Credentials cr = new Credentials();
+            
             Connection con_1 = null;
             Statement st_1 = null;
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "UPDATE koptermission SET isSent = 1 WHERE missionId = " + missionId;
             st_1.execute(query);
             con_1.close();
         } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
 
     }
 
     public boolean deleteRoute(int routeId) {
 
         try {
-            Credentials cr = new Credentials();
+            
             Connection con_1 = null;
             Statement st_1 = null;
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "UPDATE route SET isDeleted = TRUE WHERE id = " + routeId;
             st_1.execute(query);
@@ -1770,7 +1740,7 @@ public class ServerEngine implements IDeviceServer {
             Gson gson = new Gson();
             sendLog(gson.toJson(msg));
 
-        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
@@ -1781,11 +1751,11 @@ public class ServerEngine implements IDeviceServer {
     public boolean editRoute(RouteModel route) {
 
         try {
-            Credentials cr = new Credentials();
+            
             Connection con_1 = null;
             Statement st_1 = null;
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "UPDATE route SET time = \"" + route.getTime() + "\" , length = " + route.getRouteLength() + ", duration = " + route.getDuration() + ", type = " + route.getType() + ", isEnded = TRUE WHERE id = " + route.getRouteId();
             st_1.execute(query);
@@ -1796,7 +1766,7 @@ public class ServerEngine implements IDeviceServer {
             msg.setLogMessage("Route " + route.getRouteId() + " is edited.");
             Gson gson = new Gson();
             sendLog(gson.toJson(msg));
-        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
@@ -1805,22 +1775,22 @@ public class ServerEngine implements IDeviceServer {
 
     private boolean isMissionSent(int missionId) {
         boolean isSent = false;
-        Credentials cr = new Credentials();
+        
         Connection con_1;
         Statement st_1;
         ResultSet rs_1;
         String queryString = "SELECT isSent from koptermission WHERE missionId = " + missionId;
 
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
 
             rs_1 = st_1.executeQuery(queryString);
             while (rs_1.next()) {
                 isSent = rs_1.getBoolean("isSent");
             }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+        } catch (SQLException ex) {
 
         }
         return isSent;
@@ -1846,7 +1816,7 @@ public class ServerEngine implements IDeviceServer {
             return false;
         }
 
-        Credentials cr = new Credentials();
+        
         Connection con_1 = null;
         Statement st_1 = null;
 
@@ -1860,29 +1830,25 @@ public class ServerEngine implements IDeviceServer {
         System.out.println(query);
 
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             st_1.execute(query);
             con_1.close();
         } catch (SQLException ex) {
             return false;
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
-
+        } 
         return true;
     }
 
     public boolean deleteUser(int userId) {
 
         try {
-            Credentials cr = new Credentials();
+            
             Connection con_1 = null;
             Statement st_1 = null;
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "DELETE FROM mk.members WHERE id = " + userId;
             st_1.execute(query);
@@ -1894,7 +1860,7 @@ public class ServerEngine implements IDeviceServer {
             Gson gson = new Gson();
             sendLog(gson.toJson(msg));
 
-        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -1904,11 +1870,11 @@ public class ServerEngine implements IDeviceServer {
     public MkwsUser editMkwsUser(int id, String first_name, String last_name, String email, String password, boolean isAdmin) {
 
         try {
-            Credentials cr = new Credentials();
+            
             Connection con_1 = null;
             Statement st_1 = null;
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "UPDATE mk.members SET ";
             if (first_name != null) {
@@ -1930,9 +1896,7 @@ public class ServerEngine implements IDeviceServer {
             st_1.execute(query);
             con_1.close();
         } catch (SQLException ex) {
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
 
         return getUserInfoById(id);
     }
@@ -1942,12 +1906,12 @@ public class ServerEngine implements IDeviceServer {
         MkwsUser user = new MkwsUser();
 
         try {
-            Credentials cr = new Credentials();
+            
             Connection con_1 = null;
             Statement st_1 = null;
             ResultSet rs_1 = null;
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "SELECT * FROM mk.members WHERE id= " + id;
             //System.out.println(query);
@@ -1975,7 +1939,7 @@ public class ServerEngine implements IDeviceServer {
 //            Gson gson = new Gson();
 //            sendLog(gson.toJson(msg));
 //            
-        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -1986,12 +1950,12 @@ public class ServerEngine implements IDeviceServer {
         MkwsUser user = new MkwsUser();
 
         try {
-            Credentials cr = new Credentials();
+            
             Connection con_1 = null;
             Statement st_1 = null;
             ResultSet rs_1 = null;
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "SELECT * FROM mk.members WHERE uname=\"" + userName + "\" AND pass= MD5(\"" + password + "\")";
             //System.out.println(query);
@@ -2012,7 +1976,7 @@ public class ServerEngine implements IDeviceServer {
 
             con_1.close();
 
-        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -2026,12 +1990,12 @@ public class ServerEngine implements IDeviceServer {
         MkwsUser user = new MkwsUser();
 
         try {
-            Credentials cr = new Credentials();
+            
             Connection con_1 = null;
             Statement st_1 = null;
             ResultSet rs_1 = null;
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "SELECT * FROM mk.members WHERE email=\"" + email + "\"";
             //System.out.println(query);
@@ -2052,7 +2016,7 @@ public class ServerEngine implements IDeviceServer {
 
             con_1.close();
 
-        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -2089,12 +2053,12 @@ public class ServerEngine implements IDeviceServer {
         ArrayList<RouteModel> list = new ArrayList<>();
 
         try {
-            Credentials cr = new Credentials();
+            
             Connection con_1 = null;
             Statement st_1 = null;
             ResultSet rs_1 = null;
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "SELECT * FROM mk.route WHERE isDeleted=false AND userId=" + this.userId;
             if (lowerThan != 0) {
@@ -2157,12 +2121,12 @@ public class ServerEngine implements IDeviceServer {
         RouteModel route = new RouteModel();
 
         try {
-            Credentials cr = new Credentials();
+            
             Connection con_1 = null;
             Statement st_1 = null;
             ResultSet rs_1 = null;
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "SELECT * FROM mk.route WHERE isDeleted=false AND id=" + routeId;
             if (!isAdmin) {
@@ -2192,8 +2156,8 @@ public class ServerEngine implements IDeviceServer {
             con_1 = null;
             st_1 = null;
             rs_1 = null;
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             query = "SELECT * FROM mk.followme WHERE routeId=" + routeId
                     + " ORDER BY time ASC";
@@ -2216,7 +2180,7 @@ public class ServerEngine implements IDeviceServer {
             }
             route.setFollowMeData(followMeData);
 
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+        } catch (SQLException ex) {
             System.out.println("Error while getting route details: " + ex.getLocalizedMessage());
             return null;
         }
@@ -2224,18 +2188,18 @@ public class ServerEngine implements IDeviceServer {
     }
 
     public boolean activateUser(int userId) {
-        Credentials cr = new Credentials();
+        
         Connection con_1 = null;
         Statement st_1 = null;
 
         String query = "UPDATE  `members` SET isActivated =1 WHERE id = " + userId;
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             st_1.executeUpdate(query);
 
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+        } catch (SQLException ex) {
             LogMessage message = new LogMessage();
             message.setLogLevel(1);
             message.setLogMessage("User cannot be activated. " + ex.getLocalizedMessage());
@@ -2269,12 +2233,12 @@ public class ServerEngine implements IDeviceServer {
     public MailTemplate getMailTemplate(int templateId) {
         MailTemplate template = new MailTemplate();
         try {
-            Credentials cr = new Credentials();
+            
             Connection con_1 = null;
             Statement st_1 = null;
             ResultSet rs_1 = null;
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "SELECT * FROM mk.mailtemplates WHERE id=" + templateId;
             rs_1 = st_1.executeQuery(query);
@@ -2287,7 +2251,7 @@ public class ServerEngine implements IDeviceServer {
                 template.setSubject(rs_1.getString("subject"));
             }
 
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+        } catch (SQLException ex) {
 
         }
         return template;
@@ -2354,18 +2318,18 @@ public class ServerEngine implements IDeviceServer {
     }
 
     public boolean changeUserPasswordTo(int userId, String newPassword) {
-        Credentials cr = new Credentials();
+        
         Connection con_1 = null;
         Statement st_1 = null;
 
         String query = "UPDATE  `members` SET pass =MD5(\"" + newPassword + "\") WHERE id = " + userId;
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            
+            con_1 = getConnection();
             st_1 = con_1.createStatement();
             st_1.executeUpdate(query);
 
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException ex) {
+        } catch (SQLException ex) {
             LogMessage message = new LogMessage();
             message.setLogLevel(1);
             message.setLogMessage("User password cannot be updated. " + ex.getLocalizedMessage());
@@ -2380,7 +2344,7 @@ public class ServerEngine implements IDeviceServer {
         FacebookUserModel fbUser = null;
         try {
 
-            Credentials cr = new Credentials();
+            
             HttpClient httpclient = new DefaultHttpClient();
             httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
 
@@ -2398,15 +2362,15 @@ public class ServerEngine implements IDeviceServer {
         }
         return fbUser;
     }
-    
-    Connection getConnection(){
+
+    Connection getConnection() {
         Connection con_1 = null;
         try {
-            
+
             Credentials cr = new Credentials();
             Class.forName("com.mysql.jdbc.Driver");
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
-        } catch ( SQLException | ClassNotFoundException  ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
         return con_1;
@@ -2421,13 +2385,13 @@ public class ServerEngine implements IDeviceServer {
     }
 
     public boolean sendFeedback(String feedbackMessage) {
-        Credentials cr = new Credentials();
+        
         Connection con_1 = null;
         Statement st_1 = null;
 
         String query = "INSERT INTO `feedback` (`memberId`, `message`) VALUES (" + this.userId + ", \"" + feedbackMessage + "\")";
         try {
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             st_1.executeUpdate(query);
@@ -2447,11 +2411,11 @@ public class ServerEngine implements IDeviceServer {
         ArrayList<FeedbackModel> list = new ArrayList<>();
 
         try {
-            Credentials cr = new Credentials();
+            
             Connection con_1 = null;
             Statement st_1 = null;
             ResultSet rs_1 = null;
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "SELECT * FROM mk.v_feedback";
@@ -2482,9 +2446,11 @@ public class ServerEngine implements IDeviceServer {
 }
 
 class FollowMeDataStorerThread implements Runnable {
-private FollowMeData data;
+
+    private FollowMeData data;
+
     public FollowMeDataStorerThread(FollowMeData data) {
-       this.data = data;
+        this.data = data;
 
     }
 
