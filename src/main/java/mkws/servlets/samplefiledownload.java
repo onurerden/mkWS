@@ -42,9 +42,15 @@ public class samplefiledownload extends HttpServlet {
         response.setHeader("Content-Disposition", "attachment; filename=\"sampleFile.gpx\"");
         try {
             /* TODO output your page here. You may use following sample code. */
+            int routeId =-1; 
+                    try {
+                        Integer.valueOf(request.getParameter("routeId"));
+                    }catch (Exception ex){
+                        
+                    }
             OutputStream outputStream = response.getOutputStream();
             ServerEngine server = new ServerEngine();
-            RouteModel model = server.getRouteDetails(920, true);
+            RouteModel model = server.getRouteDetails(routeId, true);
 
             String outputResult = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n"
                     + "\n"
@@ -56,7 +62,7 @@ public class samplefiledownload extends HttpServlet {
                     + "    <time>2009-10-17T22:58:43Z</time>\n"
                     + "  </metadata>\n"
                     + "  <trk>\n"
-                    + "    <name>Example GPX Document</name>\n"
+                    + "    <name>Route: "+routeId+"</name>\n"
                     + "    <trkseg>";
             outputStream.write(outputResult.getBytes());
             for (FollowMeDataModel fm : model.getFollowMeData()) {

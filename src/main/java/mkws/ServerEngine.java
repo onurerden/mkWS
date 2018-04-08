@@ -1439,7 +1439,8 @@ public class ServerEngine implements IDeviceServer {
             httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
 
             //HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/activity_type/");
-            HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/user/self/");
+            //HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/user/self/");
+            HttpGet httpget = new HttpGet("https://api.ua.com/v7.1/user/self/");
 
             httpget.addHeader("Api-Key", cr.getMmrClientId());
             httpget.addHeader("Content-Type", cr.getMmrClientId());
@@ -1478,7 +1479,8 @@ public class ServerEngine implements IDeviceServer {
             httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
 
             //HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/activity_type/");
-            HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/user_profile_photo/" + mmrUserId + "/");
+            //HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/user_profile_photo/" + mmrUserId + "/");
+            HttpGet httpget = new HttpGet("https://api.ua.com/v7.1/user_profile_photo/" + mmrUserId + "/");
 
             httpget.addHeader("Api-Key", cr.getMmrClientIdForWeb());
             httpget.addHeader("Content-Type", cr.getMmrClientIdForWeb());
@@ -1519,7 +1521,8 @@ public class ServerEngine implements IDeviceServer {
             httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
 
             //HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/activity_type/");
-            HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/user/self/");
+            //HttpGet httpget = new HttpGet("https://oauth2-api.mapmyapi.com/v7.1/user/self/");
+            HttpGet httpget = new HttpGet("https://api.ua.com/v7.1/user/self/");
 
             httpget.addHeader("Api-Key", cr.getMmrClientIdForWeb());
             httpget.addHeader("Content-Type", cr.getMmrClientIdForWeb());
@@ -1577,7 +1580,8 @@ public class ServerEngine implements IDeviceServer {
             HttpClient httpclient = new DefaultHttpClient();
             httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
 
-            HttpPost httppost = new HttpPost("https://oauth2-api.mapmyapi.com/v7.1/workout/");
+            //HttpPost httppost = new HttpPost("https://oauth2-api.mapmyapi.com/v7.1/workout/");
+            HttpPost httppost = new HttpPost("https://api.ua.com/v7.1/workout/");
             httppost.addHeader("Api-Key", cr.getMmrClientId());
             httppost.addHeader("Content-Type", "application/json");
             httppost.addHeader("Authorization", "Bearer " + mmrAccessToken(workout.getDeviceId(), "MP"));
@@ -1621,7 +1625,8 @@ public class ServerEngine implements IDeviceServer {
             HttpClient httpclient = new DefaultHttpClient();
             httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
 
-            HttpPost httppost = new HttpPost("https://oauth2-api.mapmyapi.com/v7.1/workout/");
+           // HttpPost httppost = new HttpPost("https://oauth2-api.mapmyapi.com/v7.1/workout/");
+            HttpPost httppost = new HttpPost("https://api.ua.com/v7.1/workout/");
             httppost.addHeader("Api-Key", cr.getMmrClientIdForWeb());
             httppost.addHeader("Content-Type", "application/json");
             httppost.addHeader("Authorization", "Bearer " + mmrAccessTokenForUser(userId));
