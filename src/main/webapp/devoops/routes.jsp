@@ -43,7 +43,8 @@
                     } catch(Exception ex){
                         System.out.println("Log: " + ex.getLocalizedMessage());
                     }
-                    if(isAdmin){
+                    if(isAdmin){                        
+                        
                      resultset       = statement.executeQuery("SELECT followme.routeId, followmedevices.name, route.time, route.isEnded FROM  followme "
                                     + "INNER JOIN followmedevices ON followme.followMeDeviceId = followmedevices.id "
                                     + "INNER JOIN route ON followme.routeId = route.id "

@@ -79,12 +79,13 @@
                             </div>
                             <div class="box-content" style="width:auto; height:430px">
                                 <div id=routeDetails>
-                                     <h2>Route Id: <% out.println(Integer.parseInt(request.getParameter("routeId")));%> </h2>
-                                <b>Gathering data... </b>
+                                    <h2>Route Id: <% out.println(Integer.parseInt(request.getParameter("routeId")));%> </h2>
+                                    <b>Gathering data... </b>
 
-                                <br>
+                                    <br>
                                 </div>
                                 <button id="btn" class="btn btn-danger"  onclick="sendMMR()"> Upload to MMR</button>
+                                <button id="btn" class="btn btn-primary"  onclick="downloadGPX(<% out.println(Integer.parseInt(request.getParameter("routeId")));%>)">Download GPX</button>
                                 <button id="deletebutton" class="btn btn-danger" onClick="deleteRoute(<% out.println(Integer.parseInt(request.getParameter("routeId")));%>)">Delete Route</button>
                                 <div id="divResult"></div>
                             </div>
@@ -210,7 +211,7 @@
         var followMeData;
         var coordinates = [];
         var routeData;
-        var bounds = [[0,0],[20,20]];
+        var bounds = [[0, 0], [20, 20]];
         var altitudeJSON = [];
         var speedJSON = [];
 
@@ -372,7 +373,7 @@
         }
 
         function msecConv() {
-  
+
             speedChart = new Highcharts.Chart({
                 chart: {
                     renderTo: 'speedChart',
@@ -480,6 +481,16 @@
                         window.location.replace("./routes.jsp?message=dr");
                     }
                 }});
+
+        }
+        function downloadGPX(routeId) {
+            console.log("downloading route: " + routeId);
+            var linkUri = "../DownloadGPX?routeId=" + routeId;
+            console.log(linkUri);
+            var link = document.createElement("a");
+            link.download = "route" + routeId;
+            link.href = linkUri;
+            link.click();
 
         }
     </script>
@@ -599,49 +610,49 @@
                     altitudeJSON = [];
                     followMeData = response.followMeData;
                     routeData = response;
-                    var minBounds = [999,999 ];
-                    var maxBounds = [-100,-100];
+                    var minBounds = [999, 999];
+                    var maxBounds = [-100, -100];
 
                     followMeData.forEach(function (entry) {
                         //console.log(entry);
                         var newCoordinate = [entry.lat, entry.lng];
-                        if(entry.lat < minBounds[0]){
+                        if (entry.lat < minBounds[0]) {
                             minBounds[0] = entry.lat;
                         }
-                        if(entry.lat > maxBounds[0]){
+                        if (entry.lat > maxBounds[0]) {
                             maxBounds[0] = entry.lat;
                         }
-                        if(entry.lng < minBounds[1]){
+                        if (entry.lng < minBounds[1]) {
                             minBounds[1] = entry.lng;
                         }
-                        if(entry.lng > maxBounds[1]){
+                        if (entry.lng > maxBounds[1]) {
                             maxBounds[1] = entry.lng;
                         }
-                        
+
                         coordinates.push(newCoordinate);
                         altitudeJSON.push(entry.altitude);
                         speedJSON.push(entry.speed);
-                        bounds=[minBounds,maxBounds];
-                        
+                        bounds = [minBounds, maxBounds];
+
                     });
-                    var duration ="";
-                    if(routeData.duration<60){
-                        duration=routeData.duration+" seconds";
-                    }else if (routeData.duration<3600){
-                        duration = "" + Math.floor(routeData.duration/60) + ":"+ timeFormatter(routeData.duration%60);
-                    }else {
-                        duration = "" + Math.floor(routeData.duration/3600) + ":"+ timeFormatter(Math.floor((routeData.duration%3600)/60)) + ":" + timeFormatter(routeData.duration%60);
-                          }
-                    
-                    var details = "<h2>Route Id: " + routeData.routeId +"</h2>\n\
+                    var duration = "";
+                    if (routeData.duration < 60) {
+                        duration = routeData.duration + " seconds";
+                    } else if (routeData.duration < 3600) {
+                        duration = "" + Math.floor(routeData.duration / 60) + ":" + timeFormatter(routeData.duration % 60);
+                    } else {
+                        duration = "" + Math.floor(routeData.duration / 3600) + ":" + timeFormatter(Math.floor((routeData.duration % 3600) / 60)) + ":" + timeFormatter(routeData.duration % 60);
+                    }
+
+                    var details = "<h2>Route Id: " + routeData.routeId + "</h2>\n\
                                     <b>Route Length: </b> <i>" + routeData.routeLength + " km</i><br>\n\
-                                    <b>Route Date:</b><i> " + routeData.time +" </i><br>\n\
-                                   <b>Duration:</b> <i>" + duration + " </i><br>" ;
-            
-                                
+                                    <b>Route Date:</b><i> " + routeData.time + " </i><br>\n\
+                                   <b>Duration:</b> <i>" + duration + " </i><br>";
+
+
                     $('#routeDetails').html(details);
                     ymaps.ready(init);
-                    
+
                     //console.log(response);
                     DrawAllxCharts();
                     var graphxChartsResize;
@@ -662,9 +673,9 @@
         function setHeader(xhr) {
             xhr.setRequestHeader('Authorization', 'Bearer ' + sessionStorage.getItem("access_token"));
         }
-function timeFormatter(n){
-    return n > 9 ? "" + n: "0" + n;
-}
+        function timeFormatter(n) {
+            return n > 9 ? "" + n : "0" + n;
+        }
     </script>
 
 </body>

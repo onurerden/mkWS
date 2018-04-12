@@ -21,6 +21,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLSyntaxErrorException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -105,7 +106,6 @@ public class ServerEngine implements IDeviceServer {
             }
         }
 
-        
         Connection con_1 = null;
         Statement st_1 = null;
         ResultSet rs_1 = null;
@@ -207,7 +207,6 @@ public class ServerEngine implements IDeviceServer {
                 }
             }
 
-            
             Connection con_1;
             Statement st_1;
             //ResultSet rs_1 = null;
@@ -231,7 +230,7 @@ public class ServerEngine implements IDeviceServer {
     @Override
     public int sendStatus(String jsonStatus) {
         int result = -1;
-        
+
         Connection con_1 = null;
         Statement st_1 = null;
         System.out.println(jsonStatus);
@@ -300,7 +299,6 @@ public class ServerEngine implements IDeviceServer {
         String output = "-1";
         String queryString;
 
-        
         Connection con_1;
         Statement st_1;
         ResultSet rs_1;
@@ -442,7 +440,6 @@ public class ServerEngine implements IDeviceServer {
 
     public int sendFollowMeData(FollowMeData data) {
 
-        
         Connection con_1;
         Statement st_1;
         ResultSet rs_1;
@@ -489,7 +486,6 @@ public class ServerEngine implements IDeviceServer {
         int matchedFollowMeDevice = -1;
         boolean hasMission = false;
 
-        
         Connection con_1;
         Statement st_1;
         ResultSet rs_1;
@@ -527,7 +523,6 @@ public class ServerEngine implements IDeviceServer {
         String kopterStatusString = "-2";
         KopterStatus status = new KopterStatus();
 
-        
         Connection con_1;
         Statement st_1;
         ResultSet rs_1;
@@ -583,7 +578,7 @@ public class ServerEngine implements IDeviceServer {
         String jsonString = "";
         System.out.println("Looking for FollowMeData " + deviceId);
         FollowMeData data = new FollowMeData();
-        
+
         Connection con_1 = null;
         Statement st_1;
         ResultSet rs_1;
@@ -665,7 +660,7 @@ public class ServerEngine implements IDeviceServer {
     @Override
     public int getRouteId(int deviceId, int type) {
         int routeId = -1;
-        
+
         Connection con_1 = null;
         Statement st_1;
         String queryString = "INSERT INTO route SET followMeDeviceId = " + deviceId + " , time = NOW() , userId = " + userId
@@ -713,7 +708,7 @@ public class ServerEngine implements IDeviceServer {
     }
 
     public RouteModel getRouteInfo(int routeId) {
-        
+
         Connection con_1 = null;
         Statement st_1;
         ResultSet rs_1;
@@ -776,6 +771,60 @@ public class ServerEngine implements IDeviceServer {
         return 1;
     }
 
+    public int sendLog(LogMessage msg) {
+        Connection con_1 = null;
+        Statement st_1 = null;
+        int status = -2;
+        msg.setLogMessage(msg.getLogMessage().replace("'", "\\'"));
+        String query = "INSERT INTO mk.logs SET logLevel = '" + msg.getLogLevel()
+                + "', logMessage = '" + msg.getLogMessage() + "'";
+
+        try {
+            DeviceTypes deviceType = DeviceTypes.valueOf(msg.getDeviceType().toUpperCase());
+            switch (deviceType) {
+                case MK: {
+                    query = query + ", " + "kopterId = '" + msg.getDeviceId() + "'";
+                    break;
+                }
+                case MP: {
+                    query = query + ", " + "followMeDeviceId = '" + msg.getDeviceId() + "'";
+                    break;
+                }
+                case SERVER: {
+                    query = query + "";
+                    break;
+                }
+                default: {
+                    query = query + "";
+                    break;
+                }
+            }
+
+        } catch (NullPointerException ex) {
+            System.out.println("NullPointerException at sendLog: " + ex.toString());
+        }
+
+        try {
+
+            con_1 = getConnection();
+            st_1 = con_1.createStatement();
+            System.out.println(query);
+            st_1.execute(query);
+            status = 0;
+
+        } catch (SQLException ex) {
+            System.out.println("Exception while sendLog: " + ex.toString());
+            status = -1;
+        } finally {
+            try {
+                con_1.close();
+            } catch (SQLException ex) {
+                System.out.println("Exception while closing connection on sendLog method: " + ex.toString());
+            }
+        }
+        return status;
+    }
+
     @Override
     public int sendLog(String logJson) {
         int status = -2;
@@ -789,7 +838,6 @@ public class ServerEngine implements IDeviceServer {
             return -2;
         }
 
-        
         Connection con_1 = null;
         Statement st_1 = null;
 
@@ -850,7 +898,7 @@ public class ServerEngine implements IDeviceServer {
 //    }
     @Override
     public int endRoute(int routeId) {
-        
+
         Connection con_1 = null;
         Statement st_1 = null;
         GetRouteDetails routeDetails = getRouteDetailsWithBean(routeId);
@@ -858,8 +906,11 @@ public class ServerEngine implements IDeviceServer {
         double length = routeDetails.getRouteLength();
 
         long duration = routeDetails.getTimeList().get(routeDetails.getTimeList().size() - 1).getTime() / 1000 - routeDetails.getTimeList().get(0).getTime() / 1000;
+        double average = 0;
+        if (duration != 0) {
+            average = length * 1000.0 / duration;
+        }
 
-        double average = length * 1000.0 / duration;
         String query = "UPDATE  `route` SET isEnded =1, length = " + length + ", meanSpeed= " + average + " WHERE id =" + routeId;
         try {
 
@@ -868,7 +919,7 @@ public class ServerEngine implements IDeviceServer {
             st_1.executeUpdate(query);
 
         } catch (SQLException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("End route failed." + ex.getMessage());
             return -1;
         }
 
@@ -906,7 +957,7 @@ public class ServerEngine implements IDeviceServer {
 
     @Override
     public int endRoute(int routeId, int duration) {
-        
+
         Connection con_1 = null;
         Statement st_1 = null;
         GetRouteDetails routeDetails = getRouteDetailsWithBean(routeId);
@@ -957,7 +1008,7 @@ public class ServerEngine implements IDeviceServer {
 
     private int createSession(int deviceId, DeviceTypes type) {
         int sessionId = -1;
-        
+
         Connection con_1 = null;
         Statement st_1;
         boolean isKopter = type.equals(DeviceTypes.MK);
@@ -1184,7 +1235,6 @@ public class ServerEngine implements IDeviceServer {
             System.out.println("DeviceType alınamadı.");
         }
 
-        
         Connection con_1 = null;
         Statement st_1;
         String query;
@@ -1207,7 +1257,7 @@ public class ServerEngine implements IDeviceServer {
             }
         }
         try {
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             st_1.executeUpdate(query);
@@ -1220,7 +1270,6 @@ public class ServerEngine implements IDeviceServer {
 
     public int saveMMRauthorizationCodeForUser(Integer userId, String code) {
 
-        
         Connection con_1 = null;
         Statement st_1;
         String query;
@@ -1230,7 +1279,7 @@ public class ServerEngine implements IDeviceServer {
                 + userId + ")";
 
         try {
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             st_1.executeUpdate(query);
@@ -1251,7 +1300,6 @@ public class ServerEngine implements IDeviceServer {
             System.out.println("DeviceType alınamadı.");
         }
 
-        
         Connection con_1 = null;
         Statement st_1;
         String query;
@@ -1284,7 +1332,7 @@ public class ServerEngine implements IDeviceServer {
         }
         try {
             System.out.println(query);
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             st_1.executeUpdate(query);
@@ -1297,7 +1345,6 @@ public class ServerEngine implements IDeviceServer {
 
     public int saveMMRauthorizationTokenForUser(int userId, OAuthToken token) {
 
-        
         Connection con_1 = null;
         Statement st_1;
         String query;
@@ -1312,7 +1359,7 @@ public class ServerEngine implements IDeviceServer {
 
         try {
             System.out.println(query);
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             st_1.executeUpdate(query);
@@ -1332,7 +1379,7 @@ public class ServerEngine implements IDeviceServer {
         Connection con_1 = null;
         Statement st_1 = null;
         try {
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             ResultSet rs = st_1.executeQuery(queryString);
@@ -1398,7 +1445,7 @@ public class ServerEngine implements IDeviceServer {
         Connection con_1 = null;
         Statement st_1 = null;
         try {
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             ResultSet rs = st_1.executeQuery(queryString);
@@ -1625,7 +1672,7 @@ public class ServerEngine implements IDeviceServer {
             HttpClient httpclient = new DefaultHttpClient();
             httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
 
-           // HttpPost httppost = new HttpPost("https://oauth2-api.mapmyapi.com/v7.1/workout/");
+            // HttpPost httppost = new HttpPost("https://oauth2-api.mapmyapi.com/v7.1/workout/");
             HttpPost httppost = new HttpPost("https://api.ua.com/v7.1/workout/");
             httppost.addHeader("Api-Key", cr.getMmrClientIdForWeb());
             httppost.addHeader("Content-Type", "application/json");
@@ -1662,7 +1709,6 @@ public class ServerEngine implements IDeviceServer {
     @Override
     public int saveMission(MKMission mission, String name, String comments) {
 
-        
         Connection con_1 = null;
         Statement st_1;
         String query;
@@ -1691,14 +1737,14 @@ public class ServerEngine implements IDeviceServer {
         }
 
         try {
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             st_1.execute(query);
             con_1.close();
         } catch (SQLException ex) {
             return -1;
-        } 
+        }
 
         return 1;
     }
@@ -1711,10 +1757,10 @@ public class ServerEngine implements IDeviceServer {
 
     private void setMissionSent(int missionId) {
         try {
-            
+
             Connection con_1 = null;
             Statement st_1 = null;
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "UPDATE koptermission SET isSent = 1 WHERE missionId = " + missionId;
@@ -1722,17 +1768,17 @@ public class ServerEngine implements IDeviceServer {
             con_1.close();
         } catch (SQLException ex) {
             Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
 
     }
 
     public boolean deleteRoute(int routeId) {
 
         try {
-            
+
             Connection con_1 = null;
             Statement st_1 = null;
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "UPDATE route SET isDeleted = TRUE WHERE id = " + routeId;
@@ -1756,10 +1802,10 @@ public class ServerEngine implements IDeviceServer {
     public boolean editRoute(RouteModel route) {
 
         try {
-            
+
             Connection con_1 = null;
             Statement st_1 = null;
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "UPDATE route SET time = \"" + route.getTime() + "\" , length = " + route.getRouteLength() + ", duration = " + route.getDuration() + ", type = " + route.getType() + ", isEnded = TRUE WHERE id = " + route.getRouteId();
@@ -1780,14 +1826,14 @@ public class ServerEngine implements IDeviceServer {
 
     private boolean isMissionSent(int missionId) {
         boolean isSent = false;
-        
+
         Connection con_1;
         Statement st_1;
         ResultSet rs_1;
         String queryString = "SELECT isSent from koptermission WHERE missionId = " + missionId;
 
         try {
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
 
@@ -1821,7 +1867,6 @@ public class ServerEngine implements IDeviceServer {
             return false;
         }
 
-        
         Connection con_1 = null;
         Statement st_1 = null;
 
@@ -1835,24 +1880,24 @@ public class ServerEngine implements IDeviceServer {
         System.out.println(query);
 
         try {
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             st_1.execute(query);
             con_1.close();
         } catch (SQLException ex) {
             return false;
-        } 
+        }
         return true;
     }
 
     public boolean deleteUser(int userId) {
 
         try {
-            
+
             Connection con_1 = null;
             Statement st_1 = null;
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "DELETE FROM mk.members WHERE id = " + userId;
@@ -1875,10 +1920,10 @@ public class ServerEngine implements IDeviceServer {
     public MkwsUser editMkwsUser(int id, String first_name, String last_name, String email, String password, boolean isAdmin) {
 
         try {
-            
+
             Connection con_1 = null;
             Statement st_1 = null;
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "UPDATE mk.members SET ";
@@ -1901,7 +1946,7 @@ public class ServerEngine implements IDeviceServer {
             st_1.execute(query);
             con_1.close();
         } catch (SQLException ex) {
-        } 
+        }
 
         return getUserInfoById(id);
     }
@@ -1911,11 +1956,11 @@ public class ServerEngine implements IDeviceServer {
         MkwsUser user = new MkwsUser();
 
         try {
-            
+
             Connection con_1 = null;
             Statement st_1 = null;
             ResultSet rs_1 = null;
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "SELECT * FROM mk.members WHERE id= " + id;
@@ -1955,11 +2000,11 @@ public class ServerEngine implements IDeviceServer {
         MkwsUser user = new MkwsUser();
 
         try {
-            
+
             Connection con_1 = null;
             Statement st_1 = null;
             ResultSet rs_1 = null;
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "SELECT * FROM mk.members WHERE uname=\"" + userName + "\" AND pass= MD5(\"" + password + "\")";
@@ -1995,11 +2040,11 @@ public class ServerEngine implements IDeviceServer {
         MkwsUser user = new MkwsUser();
 
         try {
-            
+
             Connection con_1 = null;
             Statement st_1 = null;
             ResultSet rs_1 = null;
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "SELECT * FROM mk.members WHERE email=\"" + email + "\"";
@@ -2058,11 +2103,11 @@ public class ServerEngine implements IDeviceServer {
         ArrayList<RouteModel> list = new ArrayList<>();
 
         try {
-            
+
             Connection con_1 = null;
             Statement st_1 = null;
             ResultSet rs_1 = null;
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "SELECT * FROM mk.route WHERE isDeleted=false AND userId=" + this.userId;
@@ -2126,11 +2171,11 @@ public class ServerEngine implements IDeviceServer {
         RouteModel route = new RouteModel();
 
         try {
-            
+
             Connection con_1 = null;
             Statement st_1 = null;
             ResultSet rs_1 = null;
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "SELECT * FROM mk.route WHERE isDeleted=false AND id=" + routeId;
@@ -2161,7 +2206,7 @@ public class ServerEngine implements IDeviceServer {
             con_1 = null;
             st_1 = null;
             rs_1 = null;
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             query = "SELECT * FROM mk.followme WHERE routeId=" + routeId
@@ -2193,13 +2238,13 @@ public class ServerEngine implements IDeviceServer {
     }
 
     public boolean activateUser(int userId) {
-        
+
         Connection con_1 = null;
         Statement st_1 = null;
 
         String query = "UPDATE  `members` SET isActivated =1 WHERE id = " + userId;
         try {
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             st_1.executeUpdate(query);
@@ -2238,11 +2283,11 @@ public class ServerEngine implements IDeviceServer {
     public MailTemplate getMailTemplate(int templateId) {
         MailTemplate template = new MailTemplate();
         try {
-            
+
             Connection con_1 = null;
             Statement st_1 = null;
             ResultSet rs_1 = null;
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             String query = "SELECT * FROM mk.mailtemplates WHERE id=" + templateId;
@@ -2323,13 +2368,13 @@ public class ServerEngine implements IDeviceServer {
     }
 
     public boolean changeUserPasswordTo(int userId, String newPassword) {
-        
+
         Connection con_1 = null;
         Statement st_1 = null;
 
         String query = "UPDATE  `members` SET pass =MD5(\"" + newPassword + "\") WHERE id = " + userId;
         try {
-            
+
             con_1 = getConnection();
             st_1 = con_1.createStatement();
             st_1.executeUpdate(query);
@@ -2349,7 +2394,6 @@ public class ServerEngine implements IDeviceServer {
         FacebookUserModel fbUser = null;
         try {
 
-            
             HttpClient httpclient = new DefaultHttpClient();
             httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
 
@@ -2390,7 +2434,7 @@ public class ServerEngine implements IDeviceServer {
     }
 
     public boolean sendFeedback(String feedbackMessage) {
-        
+
         Connection con_1 = null;
         Statement st_1 = null;
 
@@ -2416,7 +2460,7 @@ public class ServerEngine implements IDeviceServer {
         ArrayList<FeedbackModel> list = new ArrayList<>();
 
         try {
-            
+
             Connection con_1 = null;
             Statement st_1 = null;
             ResultSet rs_1 = null;
@@ -2447,6 +2491,50 @@ public class ServerEngine implements IDeviceServer {
         }
 
         return list;
+    }
+
+    public void clearifyNotEndedRoutes() {
+        String routesQuery = "select route.id,route.time from route "
+                + "Inner JOIN followme "
+                + "ON route.id =followme.routeId "
+                + "WHERE route.isEnded=false AND route.isDeleted=false AND (select COUNT(*) from followme where followme.routeId=route.id AND followme.time > DATE_SUB(NOW(), INTERVAL 1 HOUR))=0 "
+                + "GROUP BY route.id";
+        ArrayList<RouteModel> routeList = new ArrayList<>();
+
+        try {
+            Connection con_1 = null;
+            Statement st_1 = null;
+            ResultSet rs_1 = null;
+
+            con_1 = getConnection();
+            st_1 = con_1.createStatement();
+
+            //System.out.println(query);
+            rs_1 = st_1.executeQuery(routesQuery);
+
+            while (rs_1.next()) {
+                RouteModel model;
+                model = getRouteInfo(rs_1.getInt("id"));
+                routeList.add(model);
+
+            }
+            con_1.close();
+
+        } catch (SQLException ex) {
+            System.out.println("clearifyNotEndedRoutes sql sorgusu yapılamadı." + ex.getMessage());
+        }
+
+        for (RouteModel route : routeList) {
+            endRoute(route.getRouteId());
+            System.out.println("Route " + route.getRouteId() + " is ended by hourly job.");
+            LogMessage msg = new LogMessage();
+            msg.setDeviceType("SERVER");
+            msg.setLogLevel(2);
+            msg.setLogMessage("Route " + route.getRouteId() + "is ended by hourly job.");
+            sendLog(msg);
+
+        }
+
     }
 }
 
