@@ -33,7 +33,7 @@ public class MMRWorkout {
     private Aggregates aggregates;
     private transient int deviceId;
     private transient int userId;
-    private String activity_type="/v7.1/activity_type/11/";
+    private String activity_type="/v7.1/activity_type/11/"; //11 ride, 16 run, 772 driving
 
     /**
      * @return the userId
@@ -151,6 +151,21 @@ public int getDeviceId(){
         this.name = "FollowMeRoute: " + gatherer.getRouteId();
         this.reference_key = "v004_"+gatherer.getRouteId();//increase if anything changes
         this.notes = this.notes + "\nRouteId: " + gatherer.getRouteId();
+        switch (gatherer.getRouteType()){
+            case 1:{
+                activity_type="/v7.1/activity_type/16/"; //11 ride, 16 run, 772 driving
+                break;}
+            case 2:{
+                activity_type="/v7.1/activity_type/11/"; //11 ride, 16 run, 772 driving
+                break;}
+            case 3:{
+                activity_type="/v7.1/activity_type/772/"; //11 ride, 16 run, 772 driving
+                break;}
+            default:{
+                activity_type="/v7.1/activity_type/11/"; //11 ride, 16 run, 772 driving
+                break;}
+        }
+        
         
         System.out.println(new Gson().toJson(this));
         

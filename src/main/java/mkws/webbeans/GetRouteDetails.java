@@ -36,6 +36,7 @@ public class GetRouteDetails {
     private double maxSpeed = 0.0;
     private double maxAltitude = 0.0;
     private double minAltitude = 10000;
+    private int routeType =0;
     
     private double userId = 1;
 
@@ -229,6 +230,20 @@ public class GetRouteDetails {
         this.userId = userId;
     }
 
+    /**
+     * @return the routeType
+     */
+    public int getRouteType() {
+        return routeType;
+    }
+
+    /**
+     * @param routeType the routeType to set
+     */
+    public void setRouteType(int routeType) {
+        this.routeType = routeType;
+    }
+
     class Koordinat {
 
         public double enlem = 0;
@@ -276,7 +291,7 @@ public class GetRouteDetails {
         try {
             /* TODO output your page here. You may use following sample code. */
 
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            Class.forName("com.mysql.jdbc.Driver");
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             String query = "SELECT latitude, longitude, speed, altitude, followMeDeviceId, time from followme WHERE routeId = " + routeId + " "
@@ -402,8 +417,10 @@ public class GetRouteDetails {
             }
             
 
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e) {
+        } catch ( SQLException e) {
 
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GetRouteDetails.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
 
@@ -529,12 +546,13 @@ public class GetRouteDetails {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
-            String query = "SELECT followMeDeviceId, time from route where id = " + id;
+            String query = "SELECT followMeDeviceId, time, type from route where id = " + id;
             rs_1 = st_1.executeQuery(query);
 
             while (rs_1.next()) {
                 this.deviceId = rs_1.getInt("followMeDeviceId");
                 this.routeCreationDate = rs_1.getTimestamp("time");
+                this.setRouteType(rs_1.getInt("type"));
             }
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException e) {
 
