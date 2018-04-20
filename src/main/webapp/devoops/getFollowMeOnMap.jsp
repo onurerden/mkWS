@@ -173,509 +173,485 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script>
 
-                                        function sendMMR() {
-                                            console.log("clicked");
-                                            //$("#divResult").html("");
-                                            var routeId = <% out.println(Integer.parseInt(request.getParameter("routeId")));%>;
-                                            var link = "../SendWorkoutToMMR?routeId=" + routeId;
-                                            $.ajax({url: link, success: function (result) {
+                                                function sendMMR() {
+                                                console.log("clicked");
+                                                        //$("#divResult").html("");
+                                                        var routeId = <% out.println(Integer.parseInt(request.getParameter("routeId")));%>;
+                                                        var link = "../SendWorkoutToMMR?routeId=" + routeId;
+                                                        $.ajax({url: link, success: function (result) {
 
-                                                    var info = JSON.parse(result);
-                                                    //        $("#divResult").html(info.result);
+                                                        var info = JSON.parse(result);
+                                                                //        $("#divResult").html(info.result);
 
-                                                    console.log(info.result);
-
-                                                    if (info.result === "success") {
+                                                                console.log(info.result);
+                                                                if (info.result === "success") {
                                                         $('#btn').prop('disabled', true);
-                                                        $("#results").html("<div class=\"alert alert-success fade in\" class=\"col-xs-12\"><a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a><strong>Success!</strong> Route successfully exported to MapMyRide servers.</div>");
-                                                    } else {
+                                                                $("#results").html("<div class=\"alert alert-success fade in\" class=\"col-xs-12\"><a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a><strong>Success!</strong> Route successfully exported to MapMyRide servers.</div>");
+                                                        } else {
                                                         $("#results").html("<div class=\"alert alert-danger fade in\" class=\"col-xs-12\"><a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a><strong>Warning!</strong> There was an error during route export process.</div>");
-                                                    }
-                                                }});
-
-                                        }
-                                        ;
-
-    </script>
+                                                        }
+                                                        }});
+                                                }
+                                        ;    </script>
     <script type="text/javascript">
 
 
-        var speedChart;
-        var altitudeChart;
-        var myTooltip;
-        var altitudeTooltip;
-        var speedButton;
-        var altitudeButton;
-        var myMap;
-        var mapMarker;
-        var followMeData;
-        var coordinates = [];
-        var routeData;
-        var bounds = [[0, 0], [20, 20]];
-        var altitudeJSON = [];
-        var speedJSON = [];
+                var speedChart;
+                var altitudeChart;
+                var myTooltip;
+                var altitudeTooltip;
+                var speedButton;
+                var altitudeButton;
+                var myMap;
+                var mapMarker;
+                var followMeData;
+                var coordinates = [];
+                var routeData;
+                var bounds = [[0, 0], [20, 20]];
+                var altitudeJSON = [];
+                var speedJSON = [];
+                // Initializes the map as soon as the API is loaded and DOM is ready
 
-        // Initializes the map as soon as the API is loaded and DOM is ready
+                        function init() {
+                        myMap = new ymaps.Map("yandex", {
+                        //    center: 
+                        //    zoom: 15,
+                        bounds: bounds
+                        }),
+                                // A polyline
+                                myPolyline = new ymaps.Polyline(
+                                        coordinates
 
-        function init() {
-            myMap = new ymaps.Map("yandex", {
-                //    center: 
-                //    zoom: 15,
-                bounds: bounds
-            }),
-                    // A polyline
-                    myPolyline = new ymaps.Polyline(
-                            coordinates
+                                        , {
+                                        // The balloon content
+                                        balloonContent: "FollowMe Device Route for device:"
+                                        }, {
+                                // Balloon options
+                                // Disabling the "Close" button
+                                balloonHasCloseButton: false,
+                                        // The line width
+                                        strokeWidth: 4,
+                                        // The line transparency
+                                        strokeOpacity: 0.8,
+                                        // Defines the color of the line - white
+                                        strokeColor: "#FF0000"
+                                });
+                                myStartPoint = new ymaps.GeoObject({
+                                geometry: {
+                                type: "Point",
+                                        coordinates: coordinates[0]
+                                },
+                                        properties: {
+                                        iconContent: "Start"}
+                                }, {preset: 'twirl#greenStretchyIcon'});
+                                myEndPoint = new ymaps.GeoObject({
+                                geometry: {
+                                type: "Point",
+                                        coordinates: coordinates[coordinates.length - 1]
+                                },
+                                        properties: {
+                                        iconContent: "Finish"}
+                                }, {preset: 'twirl#redStretchyIcon'});
+                                // Adds geo objects to the map 
 
-                            , {
-                                // The balloon content
-                                balloonContent: "FollowMe Device Route for device:"
-                            }, {
-                        // Balloon options
-                        // Disabling the "Close" button
-                        balloonHasCloseButton: false,
-                        // The line width
-                        strokeWidth: 4,
-                        // The line transparency
-                        strokeOpacity: 0.8,
-                        // Defines the color of the line - white
-                        strokeColor: "#FF0000"
-                    });
+                                myMap.geoObjects
+                                .add(myPolyline)
+                                .add(myStartPoint)
+                                .add(myEndPoint);
+                                var button = new ymaps.control.Button({
+                                data: {
+                                // Setting an icon for the button.
+                                //image: 'images/button.jpg',
+                                // Text on the icon.
+                                content: 'Save',
+                                        // Text for the popup hint.
+                                        title: 'Click to save the route'
+                                }
+                                }, {
+                                // Setting options for the button.
+                                selectOnClick: false
 
-            myStartPoint = new ymaps.GeoObject({
-                geometry: {
-                    type: "Point",
-                    coordinates: coordinates[0]
-                },
-                properties: {
-                    iconContent: "Start"}
-            }, {preset: 'twirl#greenStretchyIcon'});
-            myEndPoint = new ymaps.GeoObject({
-                geometry: {
-                    type: "Point",
-                    coordinates: coordinates[coordinates.length - 1]
-                },
-                properties: {
-                    iconContent: "Finish"}
-            }, {preset: 'twirl#redStretchyIcon'});
-            // Adds geo objects to the map 
+                                });
+                                myMap.controls.add(button, {bottom: 10, left: 5});
+                                myMap.controls.add('mapTools');
+                                myMap.controls.add('typeSelector');
+                                myMap.controls.add('smallZoomControl');
+                                myMap.copyrights.add('&copy; Belkopter Team');
+                                myMap.setZoom(myMap.getZoom() - 1);
+                        }
 
-            myMap.geoObjects
-                    .add(myPolyline)
-                    .add(myStartPoint)
-                    .add(myEndPoint);
+                function DrawAllxCharts() {
 
-
-
-            var button = new ymaps.control.Button({
-                data: {
-                    // Setting an icon for the button.
-                    //image: 'images/button.jpg',
-                    // Text on the icon.
-                    content: 'Save',
-                    // Text for the popup hint.
-                    title: 'Click to save the route'
+                drawAltitudeChart();
+                        msecConv();
                 }
-            }, {
-                // Setting options for the button.
-                selectOnClick: false
 
-            });
-            myMap.controls.add(button, {bottom: 10, left: 5});
+                function kmhConv() {
 
-            myMap.controls.add('mapTools');
-            myMap.controls.add('typeSelector');
-            myMap.controls.add('smallZoomControl');
-            myMap.copyrights.add('&copy; Belkopter Team');
-            myMap.setZoom(myMap.getZoom() - 1);
-        }
-
-        function DrawAllxCharts() {
-
-            drawAltitudeChart();
-            msecConv();
-
-        }
-
-        function kmhConv() {
-
-            var speedJSON;
-
-            speedChart = new Highcharts.Chart({
-                chart: {
-                    renderTo: 'speedChart',
-                    type: 'area',
-                    zoomType: "x",
-                    events: {
-                        load: function () {
-                            myTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
-                        }
-                    }
-                },
-                title: {
-                    text: 'Speed (km/h)'
-                },
-                xAxis: {
-                    title: {
-                        text: "Speed (km/h)"
-                    },
-                    events: {
-                        afterSetExtremes: function (evt) {
+                var speedJSON;
+                        speedChart = new Highcharts.Chart({
+                        chart: {
+                        renderTo: 'speedChart',
+                                type: 'area',
+                                zoomType: "x",
+                                events: {
+                                load: function () {
+                                myTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
+                                }
+                                }
+                        },
+                                title: {
+                                text: 'Speed (km/h)'
+                                },
+                                xAxis: {
+                                title: {
+                                text: "Speed (km/h)"
+                                },
+                                        events: {
+                                        afterSetExtremes: function (evt) {
 //                            console.log(altitudeChart.xAxis[0].getExtremes());
 
-                            altitudeChart.xAxis[0].setExtremes(speedChart.xAxis[0].getExtremes().min, speedChart.xAxis[0].getExtremes().max);
-                            if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
-                                console.log('speedChart reset zoom');
-                                $('.highcharts-button').hide();
-
-                            } else {
-                                altitudeButton = altitudeChart.showResetZoom();
-                                console.log('speedChart zoom-in');
-
-                            }
-                        }
-                    }
-                },
-                credits: {
-                    enabled: false
-                },
-                animation: true,
-                tooltip: {
-                    enabled: false
-                },
-                series: [{
-                        name: 'Speed (km/h)',
-                        data: speedJSON,
-                        color: '#3880aa',
-                        fillOpacity: 0.1,
-                        lineWidth: 3,
-                        turboThreshold: 0,
-                        point: {
-                            events: {
-                                mouseOver: function (evt) {
+                                        altitudeChart.xAxis[0].setExtremes(speedChart.xAxis[0].getExtremes().min, speedChart.xAxis[0].getExtremes().max);
+                                                if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
+                                        console.log('speedChart reset zoom');
+                                                $('.highcharts-button').hide();
+                                        } else {
+                                        altitudeButton = altitudeChart.showResetZoom();
+                                                console.log('speedChart zoom-in');
+                                        }
+                                        }
+                                        }
+                                },
+                                credits: {
+                                enabled: false
+                                },
+                                animation: true,
+                                tooltip: {
+                                enabled: false
+                                },
+                                series: [{
+                                name: 'Speed (km/h)',
+                                        data: speedJSON,
+                                        color: '#3880aa',
+                                        fillOpacity: 0.1,
+                                        lineWidth: 3,
+                                        turboThreshold: 0,
+                                        point: {
+                                        events: {
+                                        mouseOver: function (evt) {
 //                                    console.log('mouseOver');
-                                    //   myTooltip.enabled = false;
-                                    //myTooltip.enabled = false;
-                                    // myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
-                                    myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
-                                    //altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
-                                    altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
+                                        //   myTooltip.enabled = false;
+                                        //myTooltip.enabled = false;
+                                        // myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
+                                        myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
+                                                //altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
+                                                altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
+                                        }}}
+                                }]
+                        });
+                        document.getElementById("kmhButton").className = 'btn btn-primary';
+                        document.getElementById("kmhButton").disabled = true;
+                        document.getElementById("msecButton").className = 'btn btn-default';
+                        document.getElementById("msecButton").disabled = false;
+                }
 
-                                }}}
-                    }]
-            });
+                function msecConv() {
 
-            document.getElementById("kmhButton").className = 'btn btn-primary';
-            document.getElementById("kmhButton").disabled = true;
-            document.getElementById("msecButton").className = 'btn btn-default';
-            document.getElementById("msecButton").disabled = false;
-
-        }
-
-        function msecConv() {
-
-            speedChart = new Highcharts.Chart({
+                speedChart = new Highcharts.Chart({
                 chart: {
-                    renderTo: 'speedChart',
-                    type: 'area',
-                    zoomType: "x",
-                    events: {
+                renderTo: 'speedChart',
+                        type: 'area',
+                        zoomType: "x",
+                        events: {
                         load: function () {
-                            myTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
+                        myTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
                         }
-                    }
+                        }
                 },
-                title: {
-                    text: 'Speed (m/sec)'
-                },
-                credits: {
-                    enabled: false
-                },
-                xAxis: {
-                    title: {
+                        title: {
+                        text: 'Speed (m/sec)'
+                        },
+                        credits: {
+                        enabled: false
+                        },
+                        xAxis: {
+                        title: {
                         text: "Speed (m/sec)"
-                    },
-                    events: {
-                        afterSetExtremes: function (evt) {
+                        },
+                                events: {
+                                afterSetExtremes: function (evt) {
 //                            console.log(altitudeChart.xAxis[0].getExtremes());
 
-                            altitudeChart.xAxis[0].setExtremes(speedChart.xAxis[0].getExtremes().min, speedChart.xAxis[0].getExtremes().max);
-                            if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
+                                altitudeChart.xAxis[0].setExtremes(speedChart.xAxis[0].getExtremes().min, speedChart.xAxis[0].getExtremes().max);
+                                        if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
                                 console.log('speedChart reset zoom');
-                                $('.highcharts-button').hide();
-
-                            } else {
+                                        $('.highcharts-button').hide();
+                                } else {
                                 altitudeButton = altitudeChart.showResetZoom();
-                                console.log('speedChart zoom-in');
+                                        console.log('speedChart zoom-in');
+                                }
 
-                            }
-
-                        }
-                    }
-                },
-                tooltip: {
-                    enabled: false
-                },
-                animation: true,
-                series: [{
+                                }
+                                }
+                        },
+                        tooltip: {
+                        enabled: false
+                        },
+                        animation: true,
+                        series: [{
                         name: 'Speed (m/sec)',
-                        data: speedJSON,
-                        color: '#3880aa',
-                        fillOpacity: 0.1,
-                        lineWidth: 3,
-                        turboThreshold: 0,
-                        point: {
-                            events: {
+                                data: speedJSON,
+                                color: '#3880aa',
+                                fillOpacity: 0.1,
+                                lineWidth: 3,
+                                turboThreshold: 0,
+                                point: {
+                                events: {
                                 mouseOver: function (evt) {
 //                                    console.log('mouseOver');
-                                    //    myTooltip.enabled = false;
-                                    // myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
-                                    myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
-                                    //altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
-                                    altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
-                                    var str;
-                                    str = str.substring(0, str.length - 1) + "]";
-                                    var routePoints = JSON.parse(str);
-                                    if (mapMarker != null) {
-                                        // myMap.geoObjects.remove(mapMarker);
-                                        myMap.geoObjects.remove(mapMarker);
+                                //    myTooltip.enabled = false;
+                                // myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
+                                myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
+                                        //altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
+                                        altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
+                                        var str;
+                                        str = str.substring(0, str.length - 1) + "]";
+                                        var routePoints = JSON.parse(str);
+                                        if (mapMarker != null) {
+                                // myMap.geoObjects.remove(mapMarker);
+                                myMap.geoObjects.remove(mapMarker);
                                         mapMarker = new ymaps.GeoObject({
-                                            geometry: {
-                                                type: "Point",
+                                        geometry: {
+                                        type: "Point",
                                                 coordinates: routePoints[evt.target.index]
-                                            }});
+                                        }});
                                         myMap.geoObjects.add(mapMarker);
-                                    } else {
-                                        //myMap.geoObjects.remove(mapMarker);
-                                        mapMarker = new ymaps.GeoObject({
-                                            geometry: {
-                                                type: "Point",
-                                                coordinates: routePoints[evt.target.index]
-                                            }});
+                                } else {
+                                //myMap.geoObjects.remove(mapMarker);
+                                mapMarker = new ymaps.GeoObject({
+                                geometry: {
+                                type: "Point",
+                                        coordinates: routePoints[evt.target.index]
+                                }});
                                         myMap.geoObjects.add(mapMarker);
-                                    }
+                                }
                                 }}}
-                    }]
-            });
-            document.getElementById("kmhButton").className = 'btn btn-default';
-            document.getElementById("kmhButton").disabled = false;
-            document.getElementById("msecButton").className = 'btn btn-primary';
-            document.getElementById("msecButton").disabled = true;
-
-        }
+                        }]
+                });
+                        document.getElementById("kmhButton").className = 'btn btn-default';
+                        document.getElementById("kmhButton").disabled = false;
+                        document.getElementById("msecButton").className = 'btn btn-primary';
+                        document.getElementById("msecButton").disabled = true;
+                }
 
 
     </script>
     <script>
-        function deleteRoute(routeId) {
-            console.log("delete clicked for route: " + routeId);
-            var link = "../DeleteRoute?routeId=" + routeId;
-            console.log(link);
-            $.ajax({url: link, success: function (result) {
+                function deleteRoute(routeId) {
+                console.log("delete clicked for route: " + routeId);
+                        var link = "../DeleteRoute?routeId=" + routeId;
+                        console.log(link);
+                        $.ajax({url: link, success: function (result) {
 
-                    var info = JSON.parse(result);
-
-                    console.log(info);
-
-                    if (info.result === "success") {
+                        var info = JSON.parse(result);
+                                console.log(info);
+                                if (info.result === "success") {
                         window.location.replace("./routes.jsp?message=dr");
-                    }
-                }});
-
-        }
-        function downloadGPX(routeId) {
-            console.log("downloading route: " + routeId);
-            var linkUri = "../DownloadGPX?routeId=" + routeId;
-            console.log(linkUri);
-            var link = document.createElement("a");
-            link.download = "route" + routeId;
-            link.href = linkUri;
-            link.click();
-
-        }
+                        }
+                        }});
+                }
+                function downloadGPX(routeId) {
+                console.log("downloading route: " + routeId);
+                        var linkUri = "../DownloadGPX?routeId=" + routeId;
+                        console.log(linkUri);
+                        var link = document.createElement("a");
+                        link.download = "route" + routeId;
+                        link.href = linkUri;
+                        link.click();
+                }
     </script>
     <script>
-        $(document).ready(function () {
-            // Load required scripts and callback to draw
-            var routeId = <% out.println(Integer.parseInt(request.getParameter("routeId")));%>;
-            getRouteDetails(routeId);
+                $(document).ready(function () {
+                // Load required scripts and callback to draw
+                var routeId = <% out.println(Integer.parseInt(request.getParameter("routeId")));%>;
+                        getRouteDetails(routeId);
+                        //   LoadXChartScript(DrawAllxCharts);
+                        // Required for correctly resize charts, when boxes expand
 
-
-            //   LoadXChartScript(DrawAllxCharts);
-            // Required for correctly resize charts, when boxes expand
-
-            WinMove();
+                        WinMove();
 //            kmhConv();            
-        });
-    </script>
+                });    </script>
     <script>
-        function drawAltitudeChart() {
-            //var altitudeJSON;
+                        function drawAltitudeChart() {
+                        //var altitudeJSON;
 //            var yData = altitudeJSON.y;
 //            (function (H) {
 //                H.wrap(H.Tooltip.prototype, 'hide', function () {
 //                });
 //            }(Highcharts));
-            altitudeChart = new Highcharts.Chart({
-                chart: {
-                    renderTo: 'altitudeChart',
-                    type: 'area',
-                    zoomType: "x",
-                    events: {
-                        load: function () {
-                            altitudeTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
+                        altitudeChart = new Highcharts.Chart({
+                        chart: {
+                        renderTo: 'altitudeChart',
+                                type: 'area',
+                                zoomType: "x",
+                                events: {
+                                load: function () {
+                                altitudeTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
 //                            console.log("chart loaded");
-                        }
-                    }
-                },
-                title: {
-                    text: 'Altitude'
-                },
-                credits: {
-                    enabled: false
-                },
-                xAxis: {
-                    title: {
-                        text: "Altitude"
-
-                    },
-                    events: {
-                        afterSetExtremes: function (evt) {
-//                            console.log(altitudeChart.xAxis[0].getExtremes());
-
-                            speedChart.xAxis[0].setExtremes(altitudeChart.xAxis[0].getExtremes().min, altitudeChart.xAxis[0].getExtremes().max);
-
-                            if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
-                                console.log('altitudechart reset zoom');
-                                $('.highcharts-button').hide();
-
-                            } else {
-                                speedButton = speedChart.showResetZoom();
-                                console.log('altitude chart zoom-in');
-
-                            }
-
-                        }
-                    }
-                },
-                animation: true,
-                tooltip: {
-                    enabled: false
-                },
-                series: [{
-                        name: 'Altitude',
-                        data: altitudeJSON,
-                        color: '#3880aa',
-                        fillOpacity: 0.1,
-                        lineWidth: 3,
-                        turboThreshold: 0,
-                        point: {
-                            events: {
-                                mouseOver: function (evt) {
-//                                    console.log('mouseOver');
-                                    //   myTooltip.enabled = false;
-                                    // myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
-                                    myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
-                                    //altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
-                                    altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
-
+                                }
+                                }
+                        },
+                                title: {
+                                text: 'Altitude'
+                                },
+                                credits: {
+                                enabled: false
+                                },
+                                xAxis: {
+                                title: {
+                                text: "Altitude"
 
                                 },
-                                mouseOut: function () {
+                                        events: {
+                                        afterSetExtremes: function (evt) {
+//                            console.log(altitudeChart.xAxis[0].getExtremes());
+
+                                        speedChart.xAxis[0].setExtremes(altitudeChart.xAxis[0].getExtremes().min, altitudeChart.xAxis[0].getExtremes().max);
+                                                if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
+                                        console.log('altitudechart reset zoom');
+                                                $('.highcharts-button').hide();
+                                        } else {
+                                        speedButton = speedChart.showResetZoom();
+                                                console.log('altitude chart zoom-in');
+                                        }
+
+                                        }
+                                        }
+                                },
+                                animation: true,
+                                tooltip: {
+                                enabled: false
+                                },
+                                series: [{
+                                name: 'Altitude',
+                                        data: altitudeJSON,
+                                        color: '#3880aa',
+                                        fillOpacity: 0.1,
+                                        lineWidth: 3,
+                                        turboThreshold: 0,
+                                        point: {
+                                        events: {
+                                        mouseOver: function (evt) {
+//                                    console.log('mouseOver');
+                                        //   myTooltip.enabled = false;
+                                        // myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
+                                        myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
+                                                //altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
+                                                altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
+                                        },
+                                                mouseOut: function () {
 //                                    HideAllToolTips();
-                                }
-                            }
+                                                }
+                                        }
+                                        }
+                                }]
+                        });
                         }
-                    }]
-            });
+                function DrawAllToolTips(event) {
 
-        }
-        function DrawAllToolTips(event) {
+                }
 
-        }
-
-        function HideAllToolTips() {
+                function HideAllToolTips() {
 //            myTooltip.hide();
 //            altitudeTooltip.hide();
-        }
+                }
 
-        function getRouteDetails(routeId) {
-            $.ajax({
+                function getRouteDetails(routeId) {
+                $.ajax({
                 url: '../api/GetRouteDetails?routeId=' + routeId,
-                type: 'GET',
-                dataType: 'json',
-                contentType: "json;charset=utf-8",
-                success: function (response) {
-                    coordinates = [];
-                    altitudeJSON = [];
-                    followMeData = response.followMeData;
-                    routeData = response;
-                    var minBounds = [999, 999];
-                    var maxBounds = [-100, -100];
+                        type: 'GET',
+                        dataType: 'json',
+                        contentType: "json;charset=utf-8",
+                        success: function (response) {
+                        coordinates = [];
+                                altitudeJSON = [];
+                                followMeData = response.followMeData;
+                                routeData = response;
+                                var minBounds = [999, 999];
+                                var maxBounds = [ - 100, - 100];
+                                followMeData.forEach(function (entry) {
+                                //console.log(entry);
+                                var newCoordinate = [entry.lat, entry.lng];
+                                        if (entry.lat < minBounds[0]) {
+                                minBounds[0] = entry.lat;
+                                }
+                                if (entry.lat > maxBounds[0]) {
+                                maxBounds[0] = entry.lat;
+                                }
+                                if (entry.lng < minBounds[1]) {
+                                minBounds[1] = entry.lng;
+                                }
+                                if (entry.lng > maxBounds[1]) {
+                                maxBounds[1] = entry.lng;
+                                }
 
-                    followMeData.forEach(function (entry) {
-                        //console.log(entry);
-                        var newCoordinate = [entry.lat, entry.lng];
-                        if (entry.lat < minBounds[0]) {
-                            minBounds[0] = entry.lat;
-                        }
-                        if (entry.lat > maxBounds[0]) {
-                            maxBounds[0] = entry.lat;
-                        }
-                        if (entry.lng < minBounds[1]) {
-                            minBounds[1] = entry.lng;
-                        }
-                        if (entry.lng > maxBounds[1]) {
-                            maxBounds[1] = entry.lng;
-                        }
-
-                        coordinates.push(newCoordinate);
-                        altitudeJSON.push(entry.altitude);
-                        speedJSON.push(entry.speed);
-                        bounds = [minBounds, maxBounds];
-
-                    });
-                    var duration = "";
-                    if (routeData.duration < 60) {
+                                coordinates.push(newCoordinate);
+                                        altitudeJSON.push(entry.altitude);
+                                        speedJSON.push(entry.speed);
+                                        bounds = [minBounds, maxBounds];
+                                });
+                                var duration = "";
+                                if (routeData.duration < 60) {
                         duration = routeData.duration + " seconds";
-                    } else if (routeData.duration < 3600) {
+                        } else if (routeData.duration < 3600) {
                         duration = "" + Math.floor(routeData.duration / 60) + ":" + timeFormatter(routeData.duration % 60);
-                    } else {
+                        } else {
                         duration = "" + Math.floor(routeData.duration / 3600) + ":" + timeFormatter(Math.floor((routeData.duration % 3600) / 60)) + ":" + timeFormatter(routeData.duration % 60);
-                    }
-
-                    var details = "<h2>Route Id: " + routeData.routeId + "</h2>\n\
+                        }
+                        var activityType = "Run";
+                                switch (routeData.routeType){
+                                    case 1: {
+                                    activityType = "Run";
+                                            break; }
+                                    case 2:{
+                                    activityType = "Ride";
+                                            break; }
+                                    case 3:{
+                                    activityType = "Drive";
+                                            break; }
+                                    default:{
+                                    activityType = "Run";
+                                            break; }
+                                        }
+                        var details = "<h2>Route Id: " + routeData.routeId + "</h2>\n\
                                     <b>Route Length: </b> <i>" + routeData.routeLength + " km</i><br>\n\
                                     <b>Route Date:</b><i> " + routeData.time + " </i><br>\n\
-                                   <b>Duration:</b> <i>" + duration + " </i><br>";
-
-
-                    $('#routeDetails').html(details);
-                    ymaps.ready(init);
-
-                    //console.log(response);
-                    DrawAllxCharts();
-                    var graphxChartsResize;
-                    $(".box").resize(function (event) {
+                                   <b>Duration:</b> <i>" + duration + " </i><br>\n\
+                                   <b>Activity Type:</b> <i>" + activityType +"</i><br>";
+                                $('#routeDetails').html(details);
+                                ymaps.ready(init);
+                                //console.log(response);
+                                DrawAllxCharts();
+                                var graphxChartsResize;
+                                $(".box").resize(function (event) {
                         event.preventDefault();
-                        clearTimeout(graphxChartsResize);
-                        graphxChartsResize = setTimeout(DrawAllxCharts, 500);
-                    });
+                                clearTimeout(graphxChartsResize);
+                                graphxChartsResize = setTimeout(DrawAllxCharts, 500);
+                        });
+                        },
+                        error: function (error) {
+                        alert('Hata!' + error.description);
+                        },
+                        beforeSend: setHeader
 
-                },
-                error: function (error) {
-                    alert('Hata!' + error.description);
-                },
-                beforeSend: setHeader
-
-            });
-        }
-        function setHeader(xhr) {
-            xhr.setRequestHeader('Authorization', 'Bearer ' + sessionStorage.getItem("access_token"));
-        }
-        function timeFormatter(n) {
-            return n > 9 ? "" + n : "0" + n;
-        }
+                });
+                }
+                function setHeader(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + sessionStorage.getItem("access_token"));
+                }
+                function timeFormatter(n) {
+                return n > 9 ? "" + n : "0" + n;
+                }
     </script>
 
 </body>
