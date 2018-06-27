@@ -2536,6 +2536,34 @@ public class ServerEngine implements IDeviceServer {
         }
 
     }
+
+    public Integer getUsersLastRouteId() {
+        int routeId = 0;
+        try {
+
+            Connection con_1 = null;
+            Statement st_1 = null;
+            ResultSet rs_1 = null;
+
+            con_1 = getConnection();
+            st_1 = con_1.createStatement();
+            String query = "SELECT id FROM mk.route WHERE userId=" + userId + " ORDER BY id DESC LIMIT 1";
+            //System.out.println(query);
+            rs_1 = st_1.executeQuery(query);
+
+            while (rs_1.next()) {
+                routeId = rs_1.getInt("id");
+
+            }
+
+            con_1.close();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return routeId;
+    }
 }
 
 class FollowMeDataStorerThread implements Runnable {
