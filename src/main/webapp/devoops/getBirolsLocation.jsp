@@ -16,11 +16,13 @@
     //  System.out.println("UserId: " + session.getAttribute("userid"));
     if (session.getAttribute("userid") == null) {
         session.setAttribute("userid","birolGuest");
-        session.setAttribute("id", -1);
+        session.setAttribute("id", "410");
         session.setAttribute("first_name","Birol'un");
         session.setAttribute("last_name","Misafiri");
         session.setAttribute("isAdmin",false);
-    }
+    }else{
+        System.out.println("session is valid.");
+ }
 %>
     <%@ include file="head.jsp" %> 
 

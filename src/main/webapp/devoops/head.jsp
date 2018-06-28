@@ -10,6 +10,31 @@
     }
 %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<style>
+    .wrapperAvatar {
+        width: 40px;
+        height: 40px;
+        overflow: hidden;
+        background-size: cover;
+        border-radius:10%;
+    }
+    .centered {
+        display:block;
+        margin:auto;
+    }
+    .fill {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden
+    }
+    .fill img {
+        flex-shrink: 0;
+        min-width: 100%;
+        min-height: 100%
+    }
+
+</style>
 
 <head>
     <meta charset="utf-8">
@@ -67,6 +92,8 @@
                         <div class="col-xs-8 col-sm-4">
                             <a href="#" class="show-sidebar">
                                 <i class="fa fa-bars"></i>
+                                
+                                
                             </a>
                             <div id="search">
                                 <input type="text" placeholder="search"/>
@@ -96,7 +123,11 @@
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle account" data-toggle="dropdown">
                                         <div class="avatar">
-                                            <img src="img/avatar.jpg" class="img-rounded" alt="avatar" />
+                                            <%-- <img src="img/avatar.jpg" class="img-rounded" alt="avatar" /> --%>
+                                            <%--  <img src="../api/GetUserProfilePhoto?userId=<% out.println(session.getAttribute("id"));%>" class="img-rounded" alt="LabMan Kullanıcı" />
+                                            --%>
+                                            <div class="wrapperAvatar img-rounded" style="background-image: url(../api/GetUserProfilePhoto?userId=<% out.println(session.getAttribute("id"));%>);"></div>
+
                                         </div>
                                         <i class="fa fa-angle-down pull-right"></i>
                                         <div class="user-mini pull-right">
