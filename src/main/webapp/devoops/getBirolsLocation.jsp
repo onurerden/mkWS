@@ -11,38 +11,70 @@
 <%@ page import="java.sql.*" %>
 
 <c:set var="selectedMenu" value="birol"/>
+<c:set var="isGuest" value="true"/>
 <html>
-   <%
-    //  System.out.println("UserId: " + session.getAttribute("userid"));
-    if (session.getAttribute("userid") == null) {
-        session.setAttribute("userid","birolGuest");
-        session.setAttribute("id", "410");
-        session.setAttribute("first_name","Birol'un");
-        session.setAttribute("last_name","Misafiri");
-        session.setAttribute("isAdmin",false);
-    }else{
-        System.out.println("session is valid.");
- }
-%>
+    <%
+        //  System.out.println("UserId: " + session.getAttribute("userid"));
+        if (session.getAttribute("userid") == null) {
+            session.setAttribute("isGuest", true);
+            session.setAttribute("userid", "birolGuest");
+            session.setAttribute("id", "410");
+            session.setAttribute("first_name", "Birol'un");
+            session.setAttribute("last_name", "Misafiri");
+            session.setAttribute("isAdmin", false);
+        } else {
+            System.out.println("session is valid.");
+        }
+    %>
     <%@ include file="head.jsp" %> 
 
     <div id="main" class="container-fluid">
         <div class="row">
-                                                          
+
             <div id="content" class="col-xs-12 col-sm-12">
 
 
                 <div class="row">
                     <div id="breadcrumb" class="col-xs-12">
-                        <ol class="breadcrumb">
-                            <li><a href="../index.html">Home</a></li>
-                            <li><a href="routes.jsp">Routes</a></li>
-                            <li><a href="#">Birol's last Route</a></li>
+                        <ol class="breadcrumb">                            
+                            <li><a href="#">Birol's Last Route</a></li>
                         </ol>
                     </div>
                 </div>
                 <div class="row">
                     <div id="results" class="col-xs-12"></div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <div class="box-name">
+                                    <i class="fa fa-table"></i>
+                                    <span>Ads</span>
+                                </div>
+                                <div class="box-icons">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+
+                                </div>
+                                <div class="no-move"></div>
+                            </div>
+
+                            <div class="box-content" style="height:50px">
+                                <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                                <!-- BirolsLocation -->
+                                <ins class="adsbygoogle"
+                                     style="display:block"
+                                     data-ad-client="ca-pub-3002886887391013"
+                                     data-ad-slot="4132961566"
+                                     data-ad-format="auto"></ins>
+                                <script>
+                                    (adsbygoogle = window.adsbygoogle || []).push({});
+                                </script>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div id="routes" class="col-md-8 col-lg-9">
@@ -143,9 +175,7 @@
                             <div class="box-header">
                                 <div class="box-name">
                                     <i class="fa fa-table"></i>
-                                    <span id="speedLabel" style="display:inline-block; width:125px;">Speed (m/sec)</span>
-                                    <button id="kmhButton" onclick="kmhConv()" type="button" class="btn btn-primary">km/h</button>
-                                    <button id= "msecButton" onclick="msecConv()" type="button" class="btn btn-primary">m/sec</button>
+                                    <span id="speedLabel" style="display:inline-block; width:125px;">Speed (kmh)</span>                                   
                                 </div>
                                 <div class="box-icons">
                                     <a class="collapse-link">
@@ -199,6 +229,8 @@
         var bounds = [[0, 0], [20, 20]];
         var altitudeJSON = [];
         var speedJSON = [];
+        var speedJSONkmh = [];
+        var refreshCount = 0;
 
         // Initializes the map as soon as the API is loaded and DOM is ready
 
@@ -278,13 +310,10 @@
         function DrawAllxCharts() {
 
             drawAltitudeChart();
-            msecConv();
-
+            kmhConv();
         }
 
         function kmhConv() {
-
-            var speedJSON;
 
             speedChart = new Highcharts.Chart({
                 chart: {
@@ -330,7 +359,7 @@
                 },
                 series: [{
                         name: 'Speed (km/h)',
-                        data: speedJSON,
+                        data: speedJSONkmh,
                         color: '#3880aa',
                         fillOpacity: 0.1,
                         lineWidth: 3,
@@ -342,110 +371,14 @@
                                     //   myTooltip.enabled = false;
                                     //myTooltip.enabled = false;
                                     // myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
-                                    myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
+                                    //  myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
                                     //altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
-                                    altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
+                                    //  altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
 
                                 }}}
                     }]
             });
 
-            document.getElementById("kmhButton").className = 'btn btn-primary';
-            document.getElementById("kmhButton").disabled = true;
-            document.getElementById("msecButton").className = 'btn btn-default';
-            document.getElementById("msecButton").disabled = false;
-
-        }
-
-        function msecConv() {
-
-            speedChart = new Highcharts.Chart({
-                chart: {
-                    renderTo: 'speedChart',
-                    type: 'area',
-                    zoomType: "x",
-                    events: {
-                        load: function () {
-                            myTooltip = new Highcharts.Tooltip(this, this.options.tooltip);
-                        }
-                    }
-                },
-                title: {
-                    text: 'Speed (m/sec)'
-                },
-                credits: {
-                    enabled: false
-                },
-                xAxis: {
-                    title: {
-                        text: "Speed (m/sec)"
-                    },
-                    events: {
-                        afterSetExtremes: function (evt) {
-//                            console.log(altitudeChart.xAxis[0].getExtremes());
-
-                            altitudeChart.xAxis[0].setExtremes(speedChart.xAxis[0].getExtremes().min, speedChart.xAxis[0].getExtremes().max);
-                            if (typeof evt.userMax === 'undefined' && typeof evt.userMin === 'undefined') {
-                                console.log('speedChart reset zoom');
-                                $('.highcharts-button').hide();
-
-                            } else {
-                                altitudeButton = altitudeChart.showResetZoom();
-                                console.log('speedChart zoom-in');
-
-                            }
-
-                        }
-                    }
-                },
-                tooltip: {
-                    enabled: false
-                },
-                animation: true,
-                series: [{
-                        name: 'Speed (m/sec)',
-                        data: speedJSON,
-                        color: '#3880aa',
-                        fillOpacity: 0.1,
-                        lineWidth: 3,
-                        turboThreshold: 0,
-                        point: {
-                            events: {
-                                mouseOver: function (evt) {
-//                                    console.log('mouseOver');
-                                    //    myTooltip.enabled = false;
-                                    // myTooltip.refresh(speedChart.series[0].searchPoint(event, true));
-                                    myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
-                                    //altitudeTooltip.refresh(altitudeChart.series[0].searchPoint(event, true));
-                                    altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
-                                    var str;
-                                    str = str.substring(0, str.length - 1) + "]";
-                                    var routePoints = JSON.parse(str);
-                                    if (mapMarker != null) {
-                                        // myMap.geoObjects.remove(mapMarker);
-                                        myMap.geoObjects.remove(mapMarker);
-                                        mapMarker = new ymaps.GeoObject({
-                                            geometry: {
-                                                type: "Point",
-                                                coordinates: routePoints[evt.target.index]
-                                            }});
-                                        myMap.geoObjects.add(mapMarker);
-                                    } else {
-                                        //myMap.geoObjects.remove(mapMarker);
-                                        mapMarker = new ymaps.GeoObject({
-                                            geometry: {
-                                                type: "Point",
-                                                coordinates: routePoints[evt.target.index]
-                                            }});
-                                        myMap.geoObjects.add(mapMarker);
-                                    }
-                                }}}
-                    }]
-            });
-            document.getElementById("kmhButton").className = 'btn btn-default';
-            document.getElementById("kmhButton").disabled = false;
-            document.getElementById("msecButton").className = 'btn btn-primary';
-            document.getElementById("msecButton").disabled = true;
 
         }
 
@@ -467,8 +400,8 @@
         $(document).ready(function () {
             // Load required scripts and callback to draw
             getBirolsLastRoute();
-            
 
+            refreshData();
 
             //   LoadXChartScript(DrawAllxCharts);
             // Required for correctly resize charts, when boxes expand
@@ -476,6 +409,11 @@
             WinMove();
 //            kmhConv();            
         });
+        function refreshData() {
+            setInterval(function () {
+                window.location.reload();
+            }, 60000);
+        }
     </script>
     <script>
         function drawAltitudeChart() {
@@ -542,8 +480,8 @@
                             events: {
                                 mouseOver: function (evt) {
 //                                
-                                    myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
-                                    altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
+                                    //       myTooltip.refresh(speedChart.series[0].points[evt.target.index]);
+                                    //       altitudeTooltip.refresh(altitudeChart.series[0].points[evt.target.index]);
 
 
                                 },
@@ -564,23 +502,26 @@
 //            myTooltip.hide();
 //            altitudeTooltip.hide();
         }
-function getBirolsLastRoute() {
+        function getBirolsLastRoute() {
             $.ajax({
                 url: '../api/GetBirolsLastRoute',
                 type: 'GET',
                 dataType: 'json',
                 contentType: "json;charset=utf-8",
                 success: function (response) {
-                    console.log("Last route is: "+response.routeId);
-                    token=response.token;
+                    console.log("Last route is: " + response.routeId);
+                    token = response.token;
                     getRouteDetails(response.routeId);
+
                 },
                 error: function (error) {
                     alert('Hata!' + error.description);
+
                 },
                 beforeSend: setHeader
 
             });
+
         }
         function getRouteDetails(routeId) {
             $.ajax({
@@ -589,9 +530,11 @@ function getBirolsLastRoute() {
                 dataType: 'json',
                 contentType: "json;charset=utf-8",
                 success: function (response) {
-                    token="";
+                    token = "";
                     coordinates = [];
                     altitudeJSON = [];
+                    speedJSON = [];
+                    speedJSONkmh = [];
                     followMeData = response.followMeData;
                     routeData = response;
                     var minBounds = [999, 999];
@@ -616,6 +559,7 @@ function getBirolsLastRoute() {
                         coordinates.push(newCoordinate);
                         altitudeJSON.push(entry.altitude);
                         speedJSON.push(entry.speed);
+                        speedJSONkmh.push(entry.speed * 3.6);
                         bounds = [minBounds, maxBounds];
 
                     });
@@ -646,6 +590,7 @@ function getBirolsLastRoute() {
                         graphxChartsResize = setTimeout(DrawAllxCharts, 500);
                     });
 
+
                 },
                 error: function (error) {
                     alert('Hata!' + error.description);
@@ -655,7 +600,7 @@ function getBirolsLastRoute() {
             });
         }
         function setHeader(xhr) {
-           xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
         }
         function timeFormatter(n) {
             return n > 9 ? "" + n : "0" + n;

@@ -3,9 +3,10 @@
     Created on : 19.Mar.2015, 14:25:21
     Author     : oerden
 --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     //  System.out.println("UserId: " + session.getAttribute("userid"));
-    if (session.getAttribute("userid") == null) {
+    if ((session.getAttribute("userid") == null)) {
         response.sendRedirect("../index.html");
     }
 %>
@@ -102,6 +103,8 @@
                         </div>
                         <div class="col-xs-4 col-sm-8 top-panel-right">
                             <ul class="nav navbar-nav pull-right panel-menu">
+                                <c:choose>
+                                            <c:when test="$(isGuest==true)">
                                 <li class="hidden-xs">
                                     <a href="index.jsp" class="modal-link">
                                         <i class="fa fa-bell"></i>
@@ -120,6 +123,8 @@
                                         <span class="badge">7</span>
                                     </a>
                                 </li>
+                                            </c:when>
+                                </c:choose>
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle account" data-toggle="dropdown">
                                         <div class="avatar">
@@ -136,6 +141,8 @@
                                         </div>
                                     </a>
                                     <ul class="dropdown-menu">
+                                        <c:choose>
+                                            <c:when test="$(isGuest==true)">
                                         <li>
                                             <a href="./mapmyride.jsp">
                                                 <i class="fa fa-bicycle"></i>
@@ -148,6 +155,8 @@
                                                 <span>Logout</span>
                                             </a>
                                         </li>
+                                        </c:when>
+                                        </c:choose>
                                     </ul>
                                 </li>
                             </ul>
