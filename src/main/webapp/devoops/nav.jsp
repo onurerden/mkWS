@@ -10,7 +10,7 @@
 <div id="sidebar-left" class="col-xs-2 col-sm-2">
     <ul class="nav main-menu">
         <c:choose>
-            <c:when test = "$(isGuest==true)">
+            <c:when test = "${isGuest!=true}">
                 <li>
                     <c:choose>
                         <c:when test="${selectedMenu=='kopters'}">

@@ -104,7 +104,7 @@
                         <div class="col-xs-4 col-sm-8 top-panel-right">
                             <ul class="nav navbar-nav pull-right panel-menu">
                                 <c:choose>
-                                            <c:when test="$(isGuest==true)">
+                                            <c:when test="${isGuest==false}">
                                 <li class="hidden-xs">
                                     <a href="index.jsp" class="modal-link">
                                         <i class="fa fa-bell"></i>
@@ -142,7 +142,7 @@
                                     </a>
                                     <ul class="dropdown-menu">
                                         <c:choose>
-                                            <c:when test="$(isGuest==true)">
+                                            <c:when test="${isGuest==false}">
                                         <li>
                                             <a href="./mapmyride.jsp">
                                                 <i class="fa fa-bicycle"></i>

@@ -38,22 +38,26 @@ public class GetBirolsLastRouteApi extends HttpServlet {
         response.setContentType("text/json");
         PrintWriter out = response.getWriter();
         //TokenEvaluator te = new TokenEvaluator();
-               
-        
 
         try {
             ServerEngine server = new ServerEngine();
-          server.setUserId(410);
-Integer routeId=-1;
-try{
-   routeId= server.getUsersLastRouteId();
-}catch (Exception ex){
-    
-}
-            if(routeId<0){
+            server.setUserId(410);
+            Integer routeId = -1;
+            try {
+                routeId = server.getUsersLastRouteId();
+            } catch (Exception ex) {
+
+            }
+            if (routeId < 0) {
                 response.setStatus(401);
             }
-            out.print("{\"routeId\": "+routeId+" , \"token\":\""+server.createTokenForUser(410)+"\"}");
+            //response.addHeader("Access-Control-Allow-Origin", "*");
+            response.addHeader("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, HEAD, OPTIONS");
+            response.addHeader("Access-Control-Allow-Credentials","true");
+            response.addHeader("Access-Control-Allow-Headers"
+            , "Origin, X-Requested-With, Content-Type, Accept, Authorization, 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range");
+            response.setStatus(HttpServletResponse.SC_ACCEPTED);
+            out.print("{\"routeId\": " + routeId + " , \"token\":\"" + server.createTokenForUser(410) + "\"}");
 
         } catch (NumberFormatException e) {
             response.setStatus(500);

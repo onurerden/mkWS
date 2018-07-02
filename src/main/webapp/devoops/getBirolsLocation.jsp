@@ -504,9 +504,10 @@
         }
         function getBirolsLastRoute() {
             $.ajax({
-                url: '../api/GetBirolsLastRoute',
+                url: 'https://onurerden.com:8080/mk/api/GetBirolsLastRoute',
                 type: 'GET',
                 dataType: 'json',
+                crossDomain : true,
                 contentType: "json;charset=utf-8",
                 success: function (response) {
                     console.log("Last route is: " + response.routeId);
@@ -525,9 +526,10 @@
         }
         function getRouteDetails(routeId) {
             $.ajax({
-                url: '../api/GetRouteDetails?routeId=' + routeId,
+                url: 'https://onurerden.com:8080/mk/api/GetRouteDetails?routeId=' + routeId,
                 type: 'GET',
                 dataType: 'json',
+                crossDomain : true,
                 contentType: "json;charset=utf-8",
                 success: function (response) {
                     token = "";
