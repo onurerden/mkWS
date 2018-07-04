@@ -7,6 +7,7 @@
 <%
 session.setAttribute("userid", null);
 session.setAttribute("isAdmin", false);
+session.setAttribute("isGuest", null);
 session.setAttribute("access_token", "");
 session.invalidate();
 response.sendRedirect("index.html?logout=yes");

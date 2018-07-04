@@ -3,13 +3,39 @@
     Created on : 19.Mar.2015, 14:25:21
     Author     : oerden
 --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     //  System.out.println("UserId: " + session.getAttribute("userid"));
-    if (session.getAttribute("userid") == null) {
+    if ((session.getAttribute("userid") == null)) {
         response.sendRedirect("../index.html");
     }
 %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<style>
+    .wrapperAvatar {
+        width: 40px;
+        height: 40px;
+        overflow: hidden;
+        background-size: cover;
+        border-radius:10%;
+    }
+    .centered {
+        display:block;
+        margin:auto;
+    }
+    .fill {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden
+    }
+    .fill img {
+        flex-shrink: 0;
+        min-width: 100%;
+        min-height: 100%
+    }
+
+</style>
 
 <head>
     <meta charset="utf-8">
@@ -67,6 +93,8 @@
                         <div class="col-xs-8 col-sm-4">
                             <a href="#" class="show-sidebar">
                                 <i class="fa fa-bars"></i>
+                                
+                                
                             </a>
                             <div id="search">
                                 <input type="text" placeholder="search"/>
@@ -75,6 +103,8 @@
                         </div>
                         <div class="col-xs-4 col-sm-8 top-panel-right">
                             <ul class="nav navbar-nav pull-right panel-menu">
+                                <c:choose>
+                                            <c:when test="${isGuest==false}">
                                 <li class="hidden-xs">
                                     <a href="index.jsp" class="modal-link">
                                         <i class="fa fa-bell"></i>
@@ -93,10 +123,16 @@
                                         <span class="badge">7</span>
                                     </a>
                                 </li>
+                                            </c:when>
+                                </c:choose>
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle account" data-toggle="dropdown">
                                         <div class="avatar">
-                                            <img src="img/avatar.jpg" class="img-rounded" alt="avatar" />
+                                            <%-- <img src="img/avatar.jpg" class="img-rounded" alt="avatar" /> --%>
+                                            <%--  <img src="../api/GetUserProfilePhoto?userId=<% out.println(session.getAttribute("id"));%>" class="img-rounded" alt="LabMan Kullanıcı" />
+                                            --%>
+                                            <div class="wrapperAvatar img-rounded" style="background-image: url(../api/GetUserProfilePhoto?userId=<% out.println(session.getAttribute("id"));%>);"></div>
+
                                         </div>
                                         <i class="fa fa-angle-down pull-right"></i>
                                         <div class="user-mini pull-right">
@@ -105,6 +141,8 @@
                                         </div>
                                     </a>
                                     <ul class="dropdown-menu">
+                                        <c:choose>
+                                            <c:when test="${isGuest==false}">
                                         <li>
                                             <a href="./mapmyride.jsp">
                                                 <i class="fa fa-bicycle"></i>
@@ -117,6 +155,8 @@
                                                 <span>Logout</span>
                                             </a>
                                         </li>
+                                        </c:when>
+                                        </c:choose>
                                     </ul>
                                 </li>
                             </ul>

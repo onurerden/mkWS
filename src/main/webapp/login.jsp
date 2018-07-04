@@ -22,6 +22,7 @@
         String last_name = rs.getString("last_name");
         boolean isAdmin = rs.getBoolean("isAdmin");
         session.setAttribute("userid", userid);
+        session.setAttribute("isGuest",false);
         session.setAttribute("id", rs.getInt("id"));
         session.setAttribute("first_name",first_name);
         session.setAttribute("last_name",last_name);

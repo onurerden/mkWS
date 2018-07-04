@@ -2547,12 +2547,12 @@ public class ServerEngine implements IDeviceServer {
 
             con_1 = getConnection();
             st_1 = con_1.createStatement();
-            String query = "SELECT id FROM mk.route WHERE userId=" + userId + " ORDER BY id DESC LIMIT 1";
+            String query = "SELECT routeId FROM mk.v_routes WHERE userId=" + userId + " ORDER BY routeId DESC LIMIT 1";
             //System.out.println(query);
             rs_1 = st_1.executeQuery(query);
 
             while (rs_1.next()) {
-                routeId = rs_1.getInt("id");
+                routeId = rs_1.getInt("routeId");
 
             }
 
