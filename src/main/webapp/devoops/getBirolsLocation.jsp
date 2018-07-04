@@ -231,6 +231,7 @@
         var speedJSON = [];
         var speedJSONkmh = [];
         var refreshCount = 0;
+        var isEnded=false;
 
         // Initializes the map as soon as the API is loaded and DOM is ready
 
@@ -267,13 +268,17 @@
                 properties: {
                     iconContent: "Start"}
             }, {preset: 'twirl#greenStretchyIcon'});
+        var lastPointName="Last Position";    
+        if(isEnded){
+            lastPointName="Finish";
+        }
             myEndPoint = new ymaps.GeoObject({
                 geometry: {
                     type: "Point",
                     coordinates: coordinates[coordinates.length - 1]
                 },
                 properties: {
-                    iconContent: "Finish"}
+                    iconContent: lastPointName}
             }, {preset: 'twirl#redStretchyIcon'});
             // Adds geo objects to the map 
 
@@ -504,7 +509,7 @@
         }
         function getBirolsLastRoute() {
             $.ajax({
-                url: 'https://onurerden.com:8080/mk/api/GetBirolsLastRoute',
+                url: 'https://onurerden.com:8443/mk/api/GetBirolsLastRoute',
                 type: 'GET',
                 dataType: 'json',
                 crossDomain : true,
@@ -526,7 +531,7 @@
         }
         function getRouteDetails(routeId) {
             $.ajax({
-                url: 'https://onurerden.com:8080/mk/api/GetRouteDetails?routeId=' + routeId,
+                url: 'https://onurerden.com:8443/mk/api/GetRouteDetails?routeId=' + routeId,
                 type: 'GET',
                 dataType: 'json',
                 crossDomain : true,
@@ -538,10 +543,13 @@
                     speedJSON = [];
                     speedJSONkmh = [];
                     followMeData = response.followMeData;
+                    
                     routeData = response;
                     var minBounds = [999, 999];
+                    
                     var maxBounds = [-100, -100];
-
+                        console.log(routeData);
+                        
                     followMeData.forEach(function (entry) {
                         //console.log(entry);
                         var newCoordinate = [entry.lat, entry.lng];
@@ -577,9 +585,10 @@
                     var details = "<h2>Route Id: " + routeData.routeId + "</h2>\n\
                                     <b>Route Length: </b> <i>" + routeData.routeLength + " km</i><br>\n\
                                     <b>Route Date:</b><i> " + routeData.time + " </i><br>\n\
-                                   <b>Duration:</b> <i>" + duration + " </i><br>";
+                                    <b>Last Seen:</b><i> " + followMeData[followMeData.length-1].time + " </i><br>\n\
+                                    <b>Duration:</b> <i>" + duration + " </i><br>";
 
-
+                                    isEnded = routeData.isEnded;
                     $('#routeDetails').html(details);
                     ymaps.ready(init);
 
