@@ -70,9 +70,33 @@ public class SendFollowMeDataApi extends HttpServlet {
             
           //  System.out.println(jsonString);
             
+            String ip = request.getHeader("X-Forwarded-For");
+    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        ip = request.getHeader("Proxy-Client-IP");
+        //  System.out.println("forwerdedfor");
+    }
+    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        ip = request.getHeader("WL-Proxy-Client-IP");
+        //  System.out.println("proxyclientip");
+    }
+    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        ip = request.getHeader("HTTP_CLIENT_IP");
+        //  System.out.println("http client");
+    }
+    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+        //  System.out.println("http x forwarded for");
+    }
+    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        ip = request.getRemoteAddr();
+        //  System.out.println("remote addr");
+    }
+            
             ServerEngine server = new ServerEngine();
             server.setUserId(token.getUserId());
-            i = server.sendFollowMeData(jsonString);
+            //i = server.sendFollowMeData(jsonString);
+            i=server.sendFollowMeDataToMabeyn(jsonString, ip , server.getUserId());
+            
             if (i < 0) {
                 response.setStatus(401);
             }

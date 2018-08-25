@@ -19,5 +19,6 @@ public void run() {
 //    System.out.println("Hourly Job triggered by scheduler");
     ServerEngine server = new ServerEngine();
     server.clearifyNotEndedRoutes();
+    server.clearProcessedRoutes();
   }
 }

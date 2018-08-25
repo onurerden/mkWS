@@ -142,4 +142,11 @@ public interface IDeviceServer {
     //kopterId için kayıt edilen en son görevi JSON serialize ederek gönderir.
     //-3 ise yeni görev yok demektir.
     
+    int sendFollowMeDataToMabeyn(String mabeyn, String ip, int userid);
+    //Send followmedata'nın datayı işlemeden mabeyn veritabanına atan metodudur.
+    //Yalnızca followMeDevice tarafından kullanılır.
+    //FollowMeData sınıfındaki objeyi json olarak (parametre adı jsonfollowme) gonderir.
+    //Başarılı gönderim halinde 0, hatalı json -2, db erişim hatası -1
+    
+    
 }
