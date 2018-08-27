@@ -954,7 +954,7 @@ public class ServerEngine implements IDeviceServer {
             
             con_1 = getConnection();
             st_1 = con_1.createStatement();
-            System.out.println(query);
+           // System.out.println(query);
             st_1.execute(query);
             status = 0;
             
