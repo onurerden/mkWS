@@ -58,6 +58,7 @@ import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.BasicConfigurator;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -74,6 +75,10 @@ public class ServerEngine implements IDeviceServer {
     private int userId = 1;
     static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     static SecureRandom rnd = new SecureRandom();
+    
+    public ServerEngine(){
+        BasicConfigurator.configure();
+    }
     
     @Override
     public String touchServer(String uid, String deviceType) {
@@ -1020,7 +1025,7 @@ public class ServerEngine implements IDeviceServer {
             
             con_1 = getConnection();
             st_1 = con_1.createStatement();
-            System.out.println(query);
+           // System.out.println(query);
             st_1.execute(query);
             status = 0;
             
