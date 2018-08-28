@@ -6,7 +6,6 @@
 package mkws;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -35,12 +34,14 @@ public class ServerInfoCollector {
  
     private int getUserCount() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException{
         int userCount= 0;
-        Credentials cr = new Credentials();
+        //Credentials cr = new Credentials();
             Connection con_1 = null;
             Statement st_1 = null;
             ResultSet rs_1 = null;
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            ServerEngine server = new ServerEngine();
+            con_1=server.getConnection();
+            //Class.forName("com.mysql.jdbc.Driver").newInstance();
+            //con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             String query = "SELECT COUNT(id) from members";
             //System.out.println(query);
@@ -57,12 +58,14 @@ public class ServerInfoCollector {
     
     private int getRouteCount() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException{
         int userCount= 0;
-        Credentials cr = new Credentials();
+       // Credentials cr = new Credentials();
             Connection con_1 = null;
             Statement st_1 = null;
             ResultSet rs_1 = null;
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            ServerEngine server = new ServerEngine();
+            con_1=server.getConnection();
+          //  Class.forName("com.mysql.jdbc.Driver").newInstance();
+          //  con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             String query = "SELECT COUNT(id) from route where isDeleted=FALSE";
             //System.out.println(query);
@@ -79,12 +82,14 @@ public class ServerInfoCollector {
  
     private double getDBSize() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException{
         double dbSize=0.0;
-      Credentials cr = new Credentials();
+      //Credentials cr = new Credentials();
             Connection con_1 = null;
             Statement st_1 = null;
             ResultSet rs_1 = null;
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
+            ServerEngine server = new ServerEngine();
+            con_1=server.getConnection();
+            //Class.forName("com.mysql.jdbc.Driver").newInstance();
+            //con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
             String query = "SELECT table_schema \"DB Name\", " +
 "Round(Sum(data_length + index_length) / 1024 / 1024, 1) \"DB Size in MB\" " +

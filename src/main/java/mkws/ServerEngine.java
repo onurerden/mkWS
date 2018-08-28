@@ -94,7 +94,7 @@ public class ServerEngine implements IDeviceServer {
         try {
             device = DeviceTypes.valueOf(deviceType.toUpperCase());
             sessionInfo.setDeviceType(device);
-            System.out.println(device.getName());
+         //   System.out.println(device.getName());
         } catch (Exception ex) {
             System.out.println("DeviceType alınamadı.");
         }
@@ -102,12 +102,12 @@ public class ServerEngine implements IDeviceServer {
         switch (device) {
             case MK: {
                 queryString = "SELECT * from kopter where UID = '" + uid + "'";
-                System.out.println("Case MK");
+              //  System.out.println("Case MK");
                 break;
             }
             case MP: {
                 queryString = "SELECT * from followmedevices where UID = '" + uid + "'";
-                System.out.println("Case MP");
+              //  System.out.println("Case MP");
                 break;
             }
         }
@@ -134,7 +134,7 @@ public class ServerEngine implements IDeviceServer {
                         kopter.isActive = rs_1.getBoolean("active");
                         kopter.uid = rs_1.getString("uid");
                         
-                        System.out.println("query device uid = " + kopter.uid + " device type mk");
+                //        System.out.println("query device uid = " + kopter.uid + " device type mk");
                         //String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
                         Statement st_2 = con_1.createStatement();
                         st_2.executeUpdate("UPDATE kopter SET latestTouch = NOW() WHERE id = " + kopter.id);
@@ -145,7 +145,7 @@ public class ServerEngine implements IDeviceServer {
                     break;
                 }
                 case MP: {
-                    System.out.println("Case MP");
+                   // System.out.println("Case MP");
                     deviceId = -3;
                     sessionInfo.setDeviceId(-3);
                     if (rs_1.next()) {
@@ -158,7 +158,7 @@ public class ServerEngine implements IDeviceServer {
                         Statement st_2 = con_1.createStatement();
                         st_2.executeUpdate("UPDATE members SET latestTouch = NOW() WHERE id = " + this.userId);
                         
-                        System.out.println("query device uid = " + phone.uid + " device type phone");
+                       // System.out.println("query device uid = " + phone.uid + " device type phone");
                         
                         deviceId = phone.id;
                         sessionInfo.setDeviceId(deviceId);
@@ -177,7 +177,7 @@ public class ServerEngine implements IDeviceServer {
         }
         sessionInfo.setSessionId(createSession(sessionInfo.getDeviceId(), sessionInfo.getDeviceType()));
         Gson json = new Gson();
-        System.out.println(json.toJson(sessionInfo).toString());
+       // System.out.println(json.toJson(sessionInfo).toString());
         return json.toJson(sessionInfo);
     }
     
@@ -282,12 +282,12 @@ public class ServerEngine implements IDeviceServer {
                 + status.getTargetLatitude() + ","
                 + status.getTargetLongitude() + ""
                 + ")";
-        System.out.println(queryString);
+       // System.out.println(queryString);
         try {
             
             con_1 = getConnection();
             st_1 = con_1.createStatement();
-            System.out.println(queryString);
+           // System.out.println(queryString);
             result = -2;
             result = st_1.executeUpdate(queryString);
             con_1.close();
@@ -319,7 +319,7 @@ public class ServerEngine implements IDeviceServer {
                     queryString = "SELECT * from waypoints "
                             + "WHERE missionId = (SELECT max(missionId) from koptermission WHERE kopterId = " + deviceId
                             + ")ORDER BY waypoints.id DESC";
-                    System.out.println(queryString);
+                 //   System.out.println(queryString);
                     rs_1 = st_1.executeQuery(queryString);
                     MKMission mission = new MKMission();
                     mission.mkId = deviceId;
@@ -376,7 +376,7 @@ public class ServerEngine implements IDeviceServer {
                             + " AND sent = 0 "
                             + " AND followme.time > DATE_SUB(NOW(), INTERVAL 1 MINUTE)"
                             + " ORDER BY time DESC LIMIT 1";
-                    System.out.println(queryString);
+                 //   System.out.println(queryString);
                     rs_1 = st_1.executeQuery(queryString);
                     FollowMeData data = new FollowMeData();
                     
@@ -412,7 +412,7 @@ public class ServerEngine implements IDeviceServer {
     }
     
     public ArrayList<Integer> getRoutesToBeProcessed() {
-        ArrayList list = new ArrayList<Integer>();
+        ArrayList list = new ArrayList<>();
         
         Connection con_1;
         Statement st_1;
@@ -1167,7 +1167,7 @@ public class ServerEngine implements IDeviceServer {
         String query = "INSERT INTO mk.session SET deviceId= '" + deviceId + "',"
                 + " deviceType = '" + type.getName().toString() + "',"
                 + " isKopter = " + isKopter;
-        System.out.println(query);
+      //  System.out.println(query);
         
         try {
             
@@ -1186,7 +1186,7 @@ public class ServerEngine implements IDeviceServer {
         }
         query = "SELECT * from mk.session WHERE deviceId='" + deviceId + "'" + " AND deviceType = '" + type.getName().toString()
                 + "' ORDER BY id DESC LIMIT 1";
-        System.out.println(query);
+     //   System.out.println(query);
         Connection con_2 = null;
         try {
             
