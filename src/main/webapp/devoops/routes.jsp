@@ -4,6 +4,7 @@
     Author     : oerden
 --%>
 
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="mkws.Credentials"%>
 <%@ page import="java.sql.*" %>
@@ -132,7 +133,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <% while (resultset.next()) {%>
+                                        <% while (resultset.next()) {
+                                        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+                                        
+                                        %>
                                         <tr>
                                             <td><a href="getFollowMeOnMap.jsp?routeId=<%= resultset.getInt("routeId")%>">
                                                     <%= resultset.getInt("routeId")%></a></td>
@@ -140,7 +144,7 @@
                                             <td><%= resultset.getString("name")%></td>
                                             <%} %>
                                             
-                                            <td><%= resultset.getTimestamp("time")%></td>
+                                            <td><%= sdf.format(resultset.getTimestamp("time"))%></td>
                                             <td style="width: 60px">
                                                 <% if (resultset.getInt("isEnded") == 0) {%>
                                                 <a href="getFollowMeOnMap.jsp?routeId=<%= resultset.getInt("routeId")%>" role="button" class="btn btn-primary">Live</a>

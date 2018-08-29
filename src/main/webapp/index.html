@@ -29,32 +29,115 @@
                     <div class="box">
                         <div class="box-content">
                             <div class="text-center">
-                                <h3 class="page-header">mkWS Portal Login Page</h3>
+                                <h3 class="page-header">Follow Me App Login Page</h3>
                             </div>
+                            <div id=alert>
+
+                            </div>
+                            <div class="row">
+                                
+                            <div id="loginDiv" class="col-xs-12">
                             <form method="post" action="login.jsp">
                                 <div class="form-group">
                                     <label class="control-label">Username</label>
-                                    <input type="text" class="form-control" name="username" />
+                                    <input type="text" class="form-control" name="username" id="username"/>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label">Password</label>
-                                    <input type="password" class="form-control" name="password" />
+                                    <input type="password" class="form-control" name="password" id="password"/>
                                 </div>
-                                <div class="text-center">
+                                <div class="row">
+                                <div class="text-center col-lg-6 col-lg-offset-3 col-xs-12" style="margin-top: 20px">
                                     <!--		<a href="../index.html" class="btn btn-primary">Sign in</a>-->
-                                    <input type="submit" value="Login" />
+                                    <input class="btn btn-info col-xs-12" type="submit" value="Login" style="white-space: normal"/>
                                 </div>
-
+                                </div>
+                                <div class="row">
+                                <div class="text-center col-lg-6 col-lg-offset-3 col-xs-12" style="margin-top: 5px">
+                                    <!--		<a href="../index.html" class="btn btn-primary">Sign in</a>-->
+                                    <input class="btn btn-default col-xs-12" onClick="showForgotPassword()" style="white-space: normal" value="Forgot My Password" />
+                                </div>
+                                </div>
                             </form>
-
+                        </div>
+                            </div>
+                            <div class="row">
+                            <div id="forgotDiv" class="col-xs-12" style="display: none;">
+                                 <div class="form-group">
+                                    <label class="control-label">Enter your e-mail address:</label>
+                                    <input type="text" class="form-control" name="email" id="email" />
+                                </div>
+                                <div class="row">
+                                <div class="text-center col-lg-6 col-lg-offset-3 col-xs-12" style="margin-top: 20px">
+                                    <!--		<a href="../index.html" class="btn btn-primary">Sign in</a>-->
+                                    <input class="btn btn-info col-xs-12" onClick="forgotPassword()" style="white-space: normal" type="submit" value="Forgot My Password" />
+                                </div>
+                                </div>
+                                <div class="row">
+                                <div class="text-center col-lg-6 col-lg-offset-3 col-xs-12 " style="margin-top: 5px">
+                                    <!--		<a href="../index.html" class="btn btn-primary">Sign in</a>-->
+                                    <input class="btn btn-default col-xs-12" onClick="hideForgotPassword()" style="white-space: normal" type="submit" value="Cancel" />
+                                </div>
+                                </div>
+                                
+                                
+                            </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="devoops/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="devoops/plugins/bootstrap/bootstrap.min.js"></script>
         <script>
-            if (getUrlParameter("logout") === 'yes') { 
+            $(document).ready(function () {
+                if (getUrlParameter("logout") === 'yes') {
+                    //sessionStorage.setItem('access_token', "");
+                    sessionStorage.clear();
+                    $('#alert').html("<div class=\'alert alert-success alert-dismissable fade in\'><button type=\'button\' class=\'close\' data-dismiss=\"alert\"><span aria-hidden=\'true\'>&times;</span><span class=\'sr-only\'>Close</span></button><strong>Success!</strong> Logged out successfully.</div>");
+                }
+
+
+                if (getUrlParameter("referrer") || null) {
+                    //sessionStorage.setItem('access_token', "");
+                    var frm = document.getElementById('loginForm');
+                    frm.action = 'login.jsp?' + decodeURIComponent(window.location.search.substring(1));
+                    console.log(decodeURIComponent(window.location.search.substring(1)));
+
+                }
+
+                if (getUrlParameter("errorMessage") === 'invalidCredentials') {
+                    $('#alert').html("<div class=\'alert alert-danger alert-dismissable fade in\'><button type=\'button\' class=\'close\' data-dismiss=\"alert\"><span aria-hidden=\'true\'>&times;</span><span class=\'sr-only\'>Close</span></button><strong>Error!</strong> Wrong user name or password.</div>");
+                }
+            });
+
+            function forgotPassword() {
+                var email = document.getElementById("email").value;
+                $.ajax({
+                    url: './api/SendPasswordResetEmail',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: 'email=' + email,
+                    contentType: "json;charset=utf-8",
+                    success: function (response) {
+                        //console.log(response);
+                        $('#alert').html("<div class=\'alert alert-success alert-dismissable fade in\'><button type=\'button\' class=\'close\' data-dismiss=\"alert\"><span aria-hidden=\'true\'>&times;</span><span class=\'sr-only\'>Close</span></button><strong>Error!</strong> "+response.description+".</div>");
+                        hideForgotPassword();
+                        $('#email').val('');
+                        
+                    },
+                    error: function (error) {
+                       $('#alert').html("<div class=\'alert alert-danger alert-dismissable fade in\'><button type=\'button\' class=\'close\' data-dismiss=\"alert\"><span aria-hidden=\'true\'>&times;</span><span class=\'sr-only\'>Close</span></button><strong>Error!</strong> "+error.description+".</div>");
+                    }
+
+                });
+
+
+            }
+
+            if (getUrlParameter("logout") === 'yes') {
                 //sessionStorage.setItem('access_token', "");
                 sessionStorage.clear();
             }
@@ -71,7 +154,15 @@
                         return sParameterName[1] === undefined ? true : sParameterName[1];
                     }
                 }
-            };
+            }
+            function hideForgotPassword(){
+                $('#loginDiv').show();
+                $('#forgotDiv').hide();
+            }
+            function showForgotPassword(){
+                $('#loginDiv').hide();
+                $('#forgotDiv').show();
+            }
         </script>
     </body>
 </html>

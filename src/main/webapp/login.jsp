@@ -33,6 +33,8 @@
         String token = server.createTokenForUser(rs.getInt("id"));
         response.sendRedirect("homepage.jsp?token="+token);
     } else {
+
+        response.sendRedirect("index.html?errorMessage=invalidCredentials");
         out.println("Invalid login credentials. <a href='index.html'>Try again</a>.");
     }
     con.close();

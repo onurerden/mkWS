@@ -2477,10 +2477,10 @@ public class ServerEngine implements IDeviceServer {
         MkwsUser user = getUserByEmail(email);
         if (user == null) {
             LogMessage message = new LogMessage();
+            message.setDeviceType(DeviceTypes.SERVER.getName());
             message.setLogLevel(2);
-            message.setLogMessage("There is no user with email: " + email);
-            Gson gson = new Gson();
-            sendLog(gson.toJson(message));
+            message.setLogMessage("There is no user with email: " + email);            
+            sendLog(message);
             return true;
         }
         MailTemplate mail = getMailTemplate(2);
