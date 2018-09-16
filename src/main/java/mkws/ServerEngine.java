@@ -517,6 +517,7 @@ public class ServerEngine implements IDeviceServer {
             
         } catch (SQLException ex) {
             LogMessage msg = new LogMessage();
+            msg.setDeviceType("SERVER");
             msg.setLogLevel(2);
             msg.setLogMessage("Route in mabeyn cannot be marked as failed.");
             sendLog(msg);
@@ -625,7 +626,7 @@ public class ServerEngine implements IDeviceServer {
             con_1.close();
             
         } catch (SQLException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.WARNING, "Exception at sendfollowmedata. " + ex.getMessage(), ex);
             System.out.println("Exception: " + ex.getMessage());
             return -1;
         }
