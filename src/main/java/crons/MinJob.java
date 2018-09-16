@@ -25,6 +25,7 @@ public class MinJob implements Runnable {
     }
     
     private void processRoutes(){
+        try{
         ServerEngine server = new ServerEngine();
         ArrayList<Integer> routeList = server.getRoutesToBeProcessed();
         
@@ -36,11 +37,16 @@ public class MinJob implements Runnable {
             }else{
             server.markRouteAsFailed(i);
             LogMessage msg = new LogMessage();
+            msg.setDeviceType("SERVER");
             msg.setLogLevel(2);
             msg.setLogMessage("Route in mabeyn cannot be processed. Id is " +i);
             server.sendLog(msg);
             }
         }
+        }catch (Exception ex){
+            System.out.println("Exception at Minutely Job: " +ex.getMessage());
+        }
+        
     }
     
     
