@@ -494,6 +494,7 @@ public class ServerEngine implements IDeviceServer {
             if(ps.getUpdateCount()>0){
                 LogMessage msg = new LogMessage();
                 msg.setLogLevel(2);
+                msg.setDeviceType(DeviceTypes.SERVER.getName());
                 msg.setLogMessage(ps.getUpdateCount()+" item deleted from mabeyn database.");
                 sendLog(msg);
             }
@@ -797,13 +798,13 @@ public class ServerEngine implements IDeviceServer {
             }
             con_1.close();
         } catch (SQLException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, "Exception at getFollowMeData. " + ex.getMessage(), ex);
             return "-1";
         } finally {
             try {
                 con_1.close();
             } catch (SQLException ex) {
-                Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, "Exception at getFollowMeData. " +ex.getMessage(), ex);
             }
         }
         return jsonString;
@@ -953,7 +954,7 @@ public class ServerEngine implements IDeviceServer {
             }
             
         } catch (NullPointerException ex) {
-            System.out.println("NullPointerException at sendLog: " + ex.toString());
+            System.out.println("NullPointerException at sendLog. Possibly no deviceType declared. Exception:" + ex.getMessage());
         }
         
         try {
@@ -1020,6 +1021,7 @@ public class ServerEngine implements IDeviceServer {
             
         } catch (NullPointerException ex) {
             System.out.println("NullPointerException at sendLog: " + ex.toString());
+            System.out.println("NullPointerException at sendLog. Possibly no deviceType declared. Exception:" + ex.getMessage());
         }
         
         try {
@@ -2133,7 +2135,7 @@ public class ServerEngine implements IDeviceServer {
             }
             
             con_1.close();
-            LogMessage msg = new LogMessage();
+//         LogMessage msg = new LogMessage();
 
 //            msg.setDeviceType(DeviceTypes.SERVER.getName());
 //            msg.setLogLevel(2);
@@ -2404,6 +2406,7 @@ public class ServerEngine implements IDeviceServer {
         } catch (SQLException ex) {
             LogMessage message = new LogMessage();
             message.setLogLevel(1);
+            message.setDeviceType(DeviceTypes.SERVER.getName());
             message.setLogMessage("User cannot be activated. " + ex.getLocalizedMessage());
             Gson gson = new Gson();
             sendLog(gson.toJson(message));
@@ -2534,6 +2537,7 @@ public class ServerEngine implements IDeviceServer {
         } catch (SQLException ex) {
             LogMessage message = new LogMessage();
             message.setLogLevel(1);
+            message.setDeviceType(DeviceTypes.SERVER.getName());
             message.setLogMessage("User password cannot be updated. " + ex.getLocalizedMessage());
             Gson gson = new Gson();
             sendLog(gson.toJson(message));
@@ -2600,6 +2604,7 @@ public class ServerEngine implements IDeviceServer {
         } catch (SQLException ex) {
             LogMessage message = new LogMessage();
             message.setLogLevel(1);
+            message.setDeviceType(DeviceTypes.SERVER.getName());
             message.setLogMessage("Feedback cannot be saved. " + ex.getLocalizedMessage());
             Gson gson = new Gson();
             sendLog(gson.toJson(message));
@@ -2680,7 +2685,7 @@ public class ServerEngine implements IDeviceServer {
             endRoute(route.getRouteId());
             System.out.println("Route " + route.getRouteId() + " is ended by hourly job.");
             LogMessage msg = new LogMessage();
-            msg.setDeviceType("SERVER");
+            msg.setDeviceType(DeviceTypes.SERVER.getName());
             msg.setLogLevel(2);
             msg.setLogMessage("Route " + route.getRouteId() + "is ended by hourly job.");
             sendLog(msg);
