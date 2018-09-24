@@ -9,16 +9,19 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import mkws.Credentials;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
 
 /**
  *
  * @author onurerden
  */
 public class GetRouteDetails {
-
+public GetRouteDetails(){
+    //BasicConfigurator.configure();
+}
     private int routeId = -1;
     private String routePoints = "";
     private String routeAltitudeValues = "";
@@ -318,6 +321,8 @@ public class GetRouteDetails {
                 } catch (Exception ex) {
 
                     System.out.println("Exception while preparing altitude graph data: " + ex.getMessage());
+                           LogManager.getLogger(GetRouteDetails.class
+                        .getName()).log(Level.INFO, "LogManager: Exception while preparing altitude graph data: "+ ex.getMessage());
                 } finally {
                     getDistanceList().add(0.0);
                     AltitudeChartValues value = new AltitudeChartValues();
@@ -420,7 +425,8 @@ public class GetRouteDetails {
         } catch ( SQLException e) {
 
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(GetRouteDetails.class.getName()).log(Level.SEVERE, null, ex);
+                    LogManager.getLogger(GetRouteDetails.class
+                        .getName()).log(Level.INFO, ex.getMessage());
         } finally {
             try {
 
@@ -526,8 +532,8 @@ public class GetRouteDetails {
                 con_1.close();
 
             } catch (SQLException ex) {
-                Logger.getLogger(GetRouteDetails.class
-                        .getName()).log(Level.SEVERE, null, ex);
+                      LogManager.getLogger(GetRouteDetails.class
+                        .getName()).log(Level.INFO, ex.getMessage());
             }
         }
         return name;
@@ -561,8 +567,8 @@ public class GetRouteDetails {
                 con_1.close();
 
             } catch (SQLException ex) {
-                Logger.getLogger(GetRouteDetails.class
-                        .getName()).log(Level.SEVERE, null, ex);
+                LogManager.getLogger(GetRouteDetails.class
+                        .getName()).log(Level.INFO, ex.getMessage());
             }
         }
         calculateRouteLength();

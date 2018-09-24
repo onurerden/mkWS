@@ -22,15 +22,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLSyntaxErrorException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -58,7 +56,7 @@ import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.util.EntityUtils;
-import org.apache.log4j.BasicConfigurator;
+import org.apache.logging.log4j.Level;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -77,7 +75,7 @@ public class ServerEngine implements IDeviceServer {
     static SecureRandom rnd = new SecureRandom();
     
     public ServerEngine(){
-        BasicConfigurator.configure();
+       // BasicConfigurator.configure();
     }
     
     @Override
@@ -173,7 +171,7 @@ public class ServerEngine implements IDeviceServer {
             }
             con_1.close();
         } catch (SQLException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, ex.getMessage());
         }
         sessionInfo.setSessionId(createSession(sessionInfo.getDeviceId(), sessionInfo.getDeviceType()));
         Gson json = new Gson();
@@ -226,7 +224,7 @@ public class ServerEngine implements IDeviceServer {
                 
                 con_1.close();
             } catch (SQLException ex) {
-                Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+                LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, ex);
             }
             
         }
@@ -293,7 +291,7 @@ public class ServerEngine implements IDeviceServer {
             con_1.close();
             
         } catch (SQLException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO,  ex);
         }
         return result;
     }
@@ -360,7 +358,7 @@ public class ServerEngine implements IDeviceServer {
                     }
                     
                 } catch (SQLException ex) {
-                    Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+                    LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, ex);
                 }
                 
             }
@@ -402,7 +400,7 @@ public class ServerEngine implements IDeviceServer {
                     con_1.close();
                 } catch (SQLException ex) {
                     output = "-2";
-                    Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+                    LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, ex);
                 }
                 break;
             }
@@ -550,7 +548,7 @@ public class ServerEngine implements IDeviceServer {
             con_1.close();
             
         } catch (SQLException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, ex);
             System.out.println("Exception: " + ex.getMessage());
             return -1;
         }
@@ -627,7 +625,7 @@ public class ServerEngine implements IDeviceServer {
             con_1.close();
             
         } catch (SQLException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.WARNING, "Exception at sendfollowmedata. " + ex.getMessage(), ex);
+            LogManager.getLogger(ServerEngine.class.getName()).log(Level.WARN, "Exception at sendfollowmedata. " + ex.getMessage(), ex);
             System.out.println("Exception: " + ex.getMessage());
             return -1;
         }
@@ -662,7 +660,7 @@ public class ServerEngine implements IDeviceServer {
             con_1.close();
             
         } catch (SQLException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, ex);
         }
         if (hasMission) {
             return -3;
@@ -718,7 +716,7 @@ public class ServerEngine implements IDeviceServer {
             }
             con_1.close();
         } catch (SQLException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, ex);
             return "-1";
         }
         
@@ -798,13 +796,13 @@ public class ServerEngine implements IDeviceServer {
             }
             con_1.close();
         } catch (SQLException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, "Exception at getFollowMeData. " + ex.getMessage(), ex);
+            LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, "Exception at getFollowMeData. " + ex.getMessage(), ex);
             return "-1";
         } finally {
             try {
                 con_1.close();
             } catch (SQLException ex) {
-                Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, "Exception at getFollowMeData. " +ex.getMessage(), ex);
+                LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, "Exception at getFollowMeData. " +ex.getMessage(), ex);
             }
         }
         return jsonString;
@@ -853,7 +851,7 @@ public class ServerEngine implements IDeviceServer {
             try {
                 con_1.close();
             } catch (SQLException ex) {
-                Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+                LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, ex);
             }
         }
         
@@ -890,7 +888,7 @@ public class ServerEngine implements IDeviceServer {
             con_1.close();
             
         } catch (SQLException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, ex);
         }
         return route;
     }
@@ -917,7 +915,7 @@ public class ServerEngine implements IDeviceServer {
             try {
                 con_1.close();
             } catch (SQLException ex) {
-                Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+                LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, ex);
             }
         }
         
@@ -1102,7 +1100,7 @@ public class ServerEngine implements IDeviceServer {
             st_1.executeUpdate(query);
             
         } catch (SQLException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, ex);
             return -1;
         }
         
@@ -1126,7 +1124,7 @@ public class ServerEngine implements IDeviceServer {
             st_1.executeUpdate(query);
             
         } catch (SQLException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, ex);
             return -1;
         }
         
@@ -1153,7 +1151,7 @@ public class ServerEngine implements IDeviceServer {
             st_1.executeUpdate(query);
             
         } catch (SQLException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, ex);
             return -1;
         }
         
@@ -1370,7 +1368,7 @@ public class ServerEngine implements IDeviceServer {
             }
             
         } catch (SAXException | IOException | ParserConfigurationException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, ex);
             System.out.println("Exception thrown while GPX import: " + ex.getMessage());
             return -3;
         }
@@ -1921,7 +1919,7 @@ public class ServerEngine implements IDeviceServer {
             st_1.execute(query);
             con_1.close();
         } catch (SQLException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, ex);
         }
         
     }
@@ -1946,7 +1944,7 @@ public class ServerEngine implements IDeviceServer {
             sendLog(gson.toJson(msg));
             
         } catch (SQLException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, ex);
             return false;
         }
         
@@ -1972,7 +1970,7 @@ public class ServerEngine implements IDeviceServer {
             Gson gson = new Gson();
             sendLog(gson.toJson(msg));
         } catch (SQLException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, ex);
             return false;
         }
         return true;
@@ -2065,7 +2063,7 @@ public class ServerEngine implements IDeviceServer {
             sendLog(gson.toJson(msg));
             
         } catch (SQLException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, ex);
         }
         
         return true;
@@ -2144,7 +2142,7 @@ public class ServerEngine implements IDeviceServer {
 //            sendLog(gson.toJson(msg));
 //            
         } catch (SQLException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, ex);
         }
         
         return user;
@@ -2181,7 +2179,7 @@ public class ServerEngine implements IDeviceServer {
             con_1.close();
             
         } catch (SQLException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, ex);
         }
         
         if (user.getUname() == null) {
@@ -2221,7 +2219,7 @@ public class ServerEngine implements IDeviceServer {
             con_1.close();
             
         } catch (SQLException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, ex);
         }
         
         if (user.getUname() == null) {
@@ -2576,7 +2574,7 @@ public class ServerEngine implements IDeviceServer {
             Class.forName("com.mysql.jdbc.Driver");
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
         } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, ex);
         }
         return con_1;
     }
@@ -2716,7 +2714,7 @@ public class ServerEngine implements IDeviceServer {
             con_1.close();
             
         } catch (SQLException ex) {
-            Logger.getLogger(ServerEngine.class.getName()).log(Level.SEVERE, null, ex);
+            LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, ex);
         }
         
         return routeId;
