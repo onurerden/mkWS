@@ -9,10 +9,7 @@
 	<filter-name>CORS</filter-name>
 	<filter-class>com.thetransactioncompany.cors.CORSFilter</filter-class>
 </filter>
-    <context-param>
-		<param-name>log4jConfigLocation</param-name>
-		<param-value>/WEB-INF/log4j.properties</param-value>
-	</context-param>
+   
   <filter-mapping>
     <filter-name>CORS</filter-name>
     <url-pattern>/*</url-pattern>
