@@ -26,6 +26,8 @@ import javax.servlet.http.HttpServletResponse;
 import mkws.Model.Token;
 import mkws.ServerEngine;
 import mkws.TokenEvaluator;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
 
 /**
  *
@@ -95,6 +97,9 @@ public class SendFollowMeDataApi extends HttpServlet {
             ServerEngine server = new ServerEngine();
             server.setUserId(token.getUserId());
             //i = server.sendFollowMeData(jsonString);
+
+            LogManager.getLogger(ServerEngine.class.getName()).log(Level.INFO, "FollowMeData Array alındı. Mabeyn'e atılacak.");
+
             i=server.sendFollowMeDataToMabeyn(jsonString, ip , server.getUserId());
             
             if (i < 0) {
