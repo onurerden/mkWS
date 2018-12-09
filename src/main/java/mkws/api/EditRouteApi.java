@@ -88,7 +88,7 @@ boolean tokenExists = true;
                 ServerEngine engine = new ServerEngine();
                 engine.setUserId(token.getUserId());
                 Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                .setDateFormat("yyyy-MM-dd' 'HH:mm:ss")
                 .create();
                 RouteModel route = gson.fromJson(routeString, RouteModel.class);
                 if (token.isIsAdmin() || (engine.getRouteInfo(route.getRouteId()).getUserId() == token.getUserId())) {

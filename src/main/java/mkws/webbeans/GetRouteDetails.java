@@ -34,6 +34,7 @@ public GetRouteDetails(){
     private String deviceName = "";
     private int deviceId = -1;
     private Timestamp routeCreationDate;
+    private Timestamp updateTime;
     private double routeLength = 0;
     private String mapBounds = "";
     private double maxSpeed = 0.0;
@@ -552,12 +553,13 @@ public GetRouteDetails(){
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con_1 = DriverManager.getConnection(cr.getMysqlConnectionString(), cr.getDbUserName(), cr.getDbPassword());
             st_1 = con_1.createStatement();
-            String query = "SELECT followMeDeviceId, time, type from route where id = " + id;
+            String query = "SELECT followMeDeviceId, time, type, updateTime from route where id = " + id;
             rs_1 = st_1.executeQuery(query);
 
             while (rs_1.next()) {
                 this.deviceId = rs_1.getInt("followMeDeviceId");
                 this.routeCreationDate = rs_1.getTimestamp("time");
+                this.updateTime=rs_1.getTimestamp("updateTime");
                 this.setRouteType(rs_1.getInt("type"));
             }
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException e) {

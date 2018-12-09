@@ -64,7 +64,7 @@ public class GetRouteDetailsApi extends HttpServlet {
             RouteModel route = server.getRouteDetails(routeId, token.isIsAdmin());
             
             Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd hh:mm:ss")
+                .setDateFormat("yyyy-MM-dd' 'HH:mm:ss")
                 .create();
             
             out.print(gson.toJson(route));

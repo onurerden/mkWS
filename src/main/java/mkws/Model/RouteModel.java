@@ -28,6 +28,8 @@ public class RouteModel {
     private int duration=0;
     private ArrayList followMeData;
     private int type;
+    private Timestamp updateTime; 
+    
 
     /**
      * @return the routeId
@@ -195,5 +197,19 @@ public class RouteModel {
      */
     public void setType(int type) {
         this.type = type;
+    }
+
+    /**
+     * @return the updateTime
+     */
+    public Timestamp getUpdateTime() {
+        return updateTime;
+    }
+
+    /**
+     * @param updateTime the updateTime to set
+     */
+    public void setUpdateTime(Timestamp updateTime) {
+        this.updateTime = updateTime;
     }
 }
