@@ -839,6 +839,7 @@ public class ServerEngine implements IDeviceServer {
             ResultSet rs = st_1.getGeneratedKeys();
             rs.next();
             routeId = rs.getInt(1);
+            
             System.out.println("generated key is: " + routeId);
 
         } catch (SQLException ex) {
@@ -880,6 +881,7 @@ public class ServerEngine implements IDeviceServer {
                 route.setRouteMeanSpeed(rs_1.getDouble("meanSpeed"));
                 route.setTime(rs_1.getTimestamp("time"));
                 route.setUserId(rs_1.getInt("userId"));
+                route.setTitle(rs_1.getString("title"));
                 route.setType(rs_1.getInt("type"));
 
             }
@@ -1062,7 +1064,11 @@ public class ServerEngine implements IDeviceServer {
             average = length * 1000.0 / duration;
         }
 
-        String query = "UPDATE  `route` SET isEnded =1, length = " + length + ", meanSpeed= " + average + " WHERE id =" + routeId;
+        String query = "UPDATE  `route` SET isEnded =1, "
+                + "length = " + length + ", "
+                + "title = \"Route: " + routeId + "\", "
+                + "meanSpeed= " + average + " "
+                + "WHERE id =" + routeId;
         try {
 
             con_1 = getConnection();
@@ -1091,7 +1097,11 @@ public class ServerEngine implements IDeviceServer {
         long duration = routeDetails.getTimeList().get(routeDetails.getTimeList().size() - 1).getTime() / 1000 - routeDetails.getTimeList().get(0).getTime() / 1000;
 
         double average = length * 1000.0 / duration;
-        String query = "UPDATE  `route` SET isEnded =1, length = " + length + ", meanSpeed= " + average + " WHERE id =" + routeId;
+        String query = "UPDATE  `route` SET isEnded =1, "
+                + "length = " + length + ", "
+                + "title = \"Route: " + routeId + "\", "
+                + "meanSpeed= " + average + " "
+                + "WHERE id =" + routeId;
         try {
 
             con_1 = getConnection();
@@ -1142,7 +1152,12 @@ public class ServerEngine implements IDeviceServer {
         }
 
         double average = length * 1000.0 / duration;
-        String query = "UPDATE  `route` SET isEnded =1, length = " + length + ", meanSpeed= " + average + " , duration = " + duration + " WHERE id =" + routeId;
+        String query = "UPDATE  `route` SET isEnded =1, "
+                + "length = " + length + ", "
+                + "title = \"Route: " + routeId + "\", "
+                + "meanSpeed= " + average + " , "
+                + "duration = " + duration + " "
+                + "WHERE id =" + routeId;
         try {
 
             con_1 = getConnection();
@@ -1959,7 +1974,14 @@ public class ServerEngine implements IDeviceServer {
 
             con_1 = getConnection();
             st_1 = con_1.createStatement();
-            String query = "UPDATE route SET time = \"" + route.getTime() + "\" , length = " + route.getRouteLength() + ", duration = " + route.getDuration() + ", type = " + route.getType() + ", isEnded = TRUE WHERE id = " + route.getRouteId();
+            String query = "UPDATE route SET time = "
+                    + "\"" + route.getTime() + "\" , "
+                    + "length = " + route.getRouteLength() + ", "
+                    + "title = \"" + route.getTitle()+ "\", "
+                    + "duration = " + route.getDuration() + ", "
+                    + "type = " + route.getType() + ", "
+                    + "isEnded = TRUE "
+                    + "WHERE id = " + route.getRouteId();
             st_1.execute(query);
             con_1.close();
             LogMessage msg = new LogMessage();
@@ -2282,6 +2304,7 @@ public class ServerEngine implements IDeviceServer {
                 model.setRouteMeanSpeed(rs_1.getDouble("meanSpeed"));
                 model.setDuration(rs_1.getInt("duration"));
                 model.setUpdateTime(rs_1.getTimestamp("updateTime"));
+                model.setTitle(rs_1.getString("title"));
                 model.setType(rs_1.getInt("type"));
                 //model.setSessionId(rs_1.getInt("sessionId"));
 
@@ -2351,6 +2374,7 @@ public class ServerEngine implements IDeviceServer {
                 route.setRouteMeanSpeed(rs_1.getDouble("meanSpeed"));
                 route.setDuration(rs_1.getInt("duration"));
                 route.setType(rs_1.getInt("type"));
+                route.setTitle(rs_1.getString("title"));
                 route.setUpdateTime(rs_1.getTimestamp("updateTime"));
 
             }

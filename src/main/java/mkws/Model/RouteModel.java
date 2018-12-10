@@ -28,6 +28,7 @@ public class RouteModel {
     private int duration=0;
     private ArrayList followMeData;
     private int type;
+    private String title;
     private Timestamp updateTime; 
     
 
@@ -211,5 +212,19 @@ public class RouteModel {
      */
     public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
+    }
+
+    /**
+     * @return the title
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * @param title the title to set
+     */
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
