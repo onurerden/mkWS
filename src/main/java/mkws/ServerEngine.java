@@ -1066,7 +1066,6 @@ public class ServerEngine implements IDeviceServer {
 
         String query = "UPDATE  `route` SET isEnded =1, "
                 + "length = " + length + ", "
-                + "title = \"Route: " + routeId + "\", "
                 + "meanSpeed= " + average + " "
                 + "WHERE id =" + routeId;
         try {
@@ -1099,7 +1098,6 @@ public class ServerEngine implements IDeviceServer {
         double average = length * 1000.0 / duration;
         String query = "UPDATE  `route` SET isEnded =1, "
                 + "length = " + length + ", "
-                + "title = \"Route: " + routeId + "\", "
                 + "meanSpeed= " + average + " "
                 + "WHERE id =" + routeId;
         try {
@@ -1154,7 +1152,6 @@ public class ServerEngine implements IDeviceServer {
         double average = length * 1000.0 / duration;
         String query = "UPDATE  `route` SET isEnded =1, "
                 + "length = " + length + ", "
-                + "title = \"Route: " + routeId + "\", "
                 + "meanSpeed= " + average + " , "
                 + "duration = " + duration + " "
                 + "WHERE id =" + routeId;
