@@ -567,9 +567,12 @@ public class ServerEngine implements IDeviceServer {
 
         try {
             dataArray = gson.fromJson(json, FollowMeData[].class);
+            int routeId=0;
             for (FollowMeData d : dataArray) {
                 result = sendFollowMeData(d);
+                routeId=d.getRouteId();
             }
+            updateRouteNow(routeId);
             return result;
         } catch (JsonSyntaxException ex) {
             System.out.println("It is not FollowMeData Array: " + ex.toString());
@@ -2760,6 +2763,23 @@ public class ServerEngine implements IDeviceServer {
             return -1;
         }
         return 0;
+    }
+
+    private void updateRouteNow(int routeId) {
+ Connection con = getConnection();
+        String updateSQL = "UPDATE mk.route SET updateTime = NOW() WHERE id=?";
+        
+        try {
+            PreparedStatement pstmt = con.prepareStatement(updateSQL);
+            pstmt.setInt(1, routeId);
+          
+            pstmt.executeUpdate();
+
+        } catch (SQLException ex) {
+            LogManager.getLogger(ServerEngine.class.getName()).log(Level.WARN, ex);
+            return;
+        }
+            
     }
 
     class FollowMeDataStorerThread implements Runnable {
