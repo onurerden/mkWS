@@ -41,6 +41,7 @@ public GetRouteDetails(){
     private double maxAltitude = 0.0;
     private double minAltitude = 10000;
     private int routeType =0;
+    private String title;
     
     private double userId = 1;
 
@@ -246,6 +247,20 @@ public GetRouteDetails(){
      */
     public void setRouteType(int routeType) {
         this.routeType = routeType;
+    }
+
+    /**
+     * @return the title
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * @param title the title to set
+     */
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     class Koordinat {

@@ -27,7 +27,7 @@ public class RouteModel {
     private int followMeDeviceId;
     private int duration=0;
     private ArrayList followMeData;
-    private int type;
+    private int type; //1 koşu, 2 bisiklet, 3 araba
     private String title;
     private Timestamp updateTime; 
     
