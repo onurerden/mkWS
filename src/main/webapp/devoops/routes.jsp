@@ -46,15 +46,15 @@
                     }
                     if(isAdmin){                        
                         
-                     resultset       = statement.executeQuery("SELECT followme.routeId, followmedevices.name, route.time, route.isEnded FROM  followme "
-                                    + "INNER JOIN followmedevices ON followme.followMeDeviceId = followmedevices.id "
-                                    + "INNER JOIN route ON followme.routeId = route.id "
+                     resultset       = statement.executeQuery("SELECT followme.routeId, route.userId, route.time, route.isEnded, route.title, members.uname FROM route "
+                                    +  "INNER JOIN followme ON followme.routeId = route.id "
+                                    +  "INNER JOIN members ON route.userId = members.id "
                                     + "WHERE route.isDeleted=FALSE "
                                     + "GROUP BY followme.routeId "
                                     + "ORDER BY time DESC");}else{
-                        resultset       = statement.executeQuery("SELECT followme.routeId, followmedevices.name, route.time, route.isEnded FROM  followme "
-                                    + "INNER JOIN followmedevices ON followme.followMeDeviceId = followmedevices.id "
-                                    + "INNER JOIN route ON followme.routeId = route.id "
+                        resultset       = statement.executeQuery("SELECT followme.routeId, route.userId, route.time, route.title, route.isEnded members.uname FROM route "
+                                    + "INNER JOIN followme ON followme.routeId = route.id "
+                                    +  "INNER JOIN members ON route.userId = members.id "
                                     + "WHERE route.isDeleted=FALSE AND route.userId=" + i + " "
                                     + "GROUP BY followme.routeId "
                                     + "ORDER BY time DESC");
@@ -141,7 +141,7 @@
                                             <td><a href="getFollowMeOnMap.jsp?routeId=<%= resultset.getInt("routeId")%>">
                                                     <%= resultset.getInt("routeId")%></a></td>
                                             <% if(isAdmin){%>
-                                            <td><%= resultset.getString("name")%></td>
+                                            <td><%= resultset.getString("uname")%></td>
                                             <%} %>
                                             
                                             <td><%= sdf.format(resultset.getTimestamp("time"))%></td>

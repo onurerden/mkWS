@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +31,7 @@ import static mkws.servlets.SaveGpxFile.slurp;
  * @author onurerden
  */
 @WebServlet(name = "SaveGpxDataApi", urlPatterns = {"/api/SaveGpxData"})
+@MultipartConfig    
 public class SaveGpxDataApi extends HttpServlet {
 
     /**
@@ -77,7 +79,7 @@ public class SaveGpxDataApi extends HttpServlet {
 
         } catch (SignatureException | IncorrectClaimException | MissingClaimException ex) {
             response.setStatus(401);
-            out.println("{\"result\": \"failed\", \"description\" : \"" + ex.getLocalizedMessage() + "\"");
+            out.println("{\"result\": \"failed\", \"description\" : \"" + ex.getLocalizedMessage() + "\"}");
         }
     }
 

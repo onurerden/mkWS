@@ -88,7 +88,7 @@ boolean tokenExists = true;
                 ServerEngine engine = new ServerEngine();
                 engine.setUserId(token.getUserId());
                 Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                .setDateFormat("yyyy-MM-dd' 'HH:mm:ss")
                 .create();
                 RouteModel route = gson.fromJson(routeString, RouteModel.class);
                 if (token.isIsAdmin() || (engine.getRouteInfo(route.getRouteId()).getUserId() == token.getUserId())) {
@@ -182,7 +182,8 @@ System.out.println(ex.getLocalizedMessage());
     try {
         InputStream inputStream = request.getInputStream();
         if (inputStream != null) {
-            bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+           // bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"UTF8"),8);
             char[] charBuffer = new char[128];
             int bytesRead = -1;
             while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {

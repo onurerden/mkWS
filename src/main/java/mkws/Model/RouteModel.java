@@ -27,7 +27,10 @@ public class RouteModel {
     private int followMeDeviceId;
     private int duration=0;
     private ArrayList followMeData;
-    private int type;
+    private int type; //1 koşu, 2 bisiklet, 3 araba
+    private String title;
+    private Timestamp updateTime; 
+    
 
     /**
      * @return the routeId
@@ -195,5 +198,33 @@ public class RouteModel {
      */
     public void setType(int type) {
         this.type = type;
+    }
+
+    /**
+     * @return the updateTime
+     */
+    public Timestamp getUpdateTime() {
+        return updateTime;
+    }
+
+    /**
+     * @param updateTime the updateTime to set
+     */
+    public void setUpdateTime(Timestamp updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    /**
+     * @return the title
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * @param title the title to set
+     */
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
