@@ -8,20 +8,20 @@
     <version>1.0</version>
     <repositories>
         <repository>
-            <id>eap</id>
-            <url>http://maven.repository.redhat.com/techpreview/all</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
+            <id>central</id>
+            <name>Central Repository</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+            <layout>default</layout>
             <snapshots>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
             </snapshots>
         </repository>
+        
     </repositories>
     <pluginRepositories>
         <pluginRepository>
             <id>eap</id>
-            <url>http://maven.repository.redhat.com/techpreview/all</url>
+            <url>https://maven.repository.redhat.com/techpreview/all</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -51,8 +51,8 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.25</version>
-        </dependency>     
+            <version>[8.0.16,)</version>
+        </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -96,16 +96,16 @@
             <artifactId>cors-filter</artifactId>
             <version>2.6</version>
         </dependency>
-<dependency>
-    <groupId>org.apache.logging.log4j</groupId>
-    <artifactId>log4j-api</artifactId>
-    <version>2.11.1</version>
-  </dependency>
-  <dependency>
-    <groupId>org.apache.logging.log4j</groupId>
-    <artifactId>log4j-core</artifactId>
-    <version>2.11.1</version>
-  </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>[2.13.2,)</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.11.1</version>
+        </dependency>
     </dependencies>
     <profiles>
         <profile>

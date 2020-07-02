@@ -22,7 +22,7 @@
         <a href="devoops/index.jsp">devoops</a><br>
 
         <script>
-            window.location = "devoops";
+            window.location = "./devoops";
 
             sessionStorage.setItem('access_token', getUrlParameter("token"));
 
